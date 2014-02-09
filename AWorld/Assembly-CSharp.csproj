@@ -52,6 +52,7 @@
      <Compile Include="Assets\Script\Enums\GameState.cs" />
      <Compile Include="Assets\Script\Enums\TileTypeEnum.cs" />
      <Compile Include="Assets\Script\Ground.cs" />
+     <Compile Include="Assets\Script\Test.cs" />
      <Compile Include="Assets\Script\TileCreation.cs" />
      <Compile Include="Assets\iTween\Plugins\iTween.cs" />
      <Compile Include="Assets\iTween\Sample\MoveSample.cs" />
