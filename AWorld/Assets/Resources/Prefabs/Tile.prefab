@@ -493,9 +493,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d063660315356e40b27932e7ed169ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  qudHoverLayer: {fileID: 0}
-  qudSelectedLayer: {fileID: 0}
-  qudHighlightLayer: {fileID: 0}
+  qudHoverLayer: {fileID: 100006}
+  qudSelectedLayer: {fileID: 100000}
+  qudHighlightLayer: {fileID: 100002}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
