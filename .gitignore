@@ -42,7 +42,6 @@ local.properties
 *.sln.docstates
 *.sln
 *.csproj
-*.unityproj
 
 # Build results
 
