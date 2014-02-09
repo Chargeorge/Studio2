@@ -192,9 +192,11 @@ public class BaseTile : MonoBehaviour {
 		
 		switch (et){
 			case TileTypeEnum.regular:
+				currentTile.renderer.material = (Material)Resources.Load("Sprites/Materials/Regular");
 			break;
 
 			case TileTypeEnum.water:
+				currentTile.renderer.material = (Material)Resources.Load("Sprites/Materials/Water");
 			break;
 		}
 			

@@ -25,12 +25,12 @@ public class TileCreation : MonoBehaviour {
 			for(int y=0; y< boardY; y++ ){
 				Debug.Log(string.Format("In board Creation x:{0} y:{1}", x, y));
 				tilesGameBoard[x,y] = (GameObject)Instantiate(prfbTile, new Vector3(x,y,0), Quaternion.identity);
-				TileTypeEnum TT = (TileTypeEnum)Random.Range(1,3);
+				//TileTypeEnum TT = (TileTypeEnum)Random.Range(1,3);
 				tilesGameBoard[x,y].GetComponent<BaseTile>().IsHover = false;
 				tilesGameBoard[x,y].GetComponent<BaseTile>().MoveCost = 2;		
 				//Debug.Log (Resources.Load("Sprites/Materials/River").name);
 				
-				tilesGameBoard[x,y].renderer.material = textureResources[(int)TT];
+				tilesGameBoard[x,y].renderer.material = textureResources[1];
 				//tilesGameBoard[x,y].renderer.material= matTest;
 				//tilesGameBoard[x,y].renderer.material =(Material)Resources.Load("Sprites/Materials/River");
 			}
@@ -54,6 +54,10 @@ public class TileCreation : MonoBehaviour {
 				}
 			}
 		}
+
+		//Perlin Pass to generate terrrain
+
+		perlinPass (TileTypeEnum.water, 1000);
 		/*
 		Character test = HeroFactory.CreateHero(HeroType.warrior, gm);
 		Character enemyTest = HeroFactory.CreateEnemy(EnemyType.dragon, gm);
@@ -66,4 +70,24 @@ public class TileCreation : MonoBehaviour {
 	void Update () {
 		
 		}
+
+	public  void perlinPass(TileTypeEnum tte, int threshold	){
+		float RandomChange  = Random.value;
+		for(int x= 0;x < boardX; x++ ){
+			for(int y=0; y< boardY; y++ ){
+				float xVal  = (x+RandomChange)*2.5f;
+				float yVal = (y+RandomChange)*2.5f;
+				float perlinVal = Mathf.PerlinNoise(xVal,yVal)*10;
+				
+				//if(perlinVal*perlinVal > 60 && perlinVal*perlinVal < 80){
+				if(perlinVal*perlinVal*perlinVal*perlinVal > threshold){
+					Debug.Log(perlinVal);
+					BaseTile.createTile(tte, tilesGameBoard[x,y]);
+					
+				}
+				//tilesGameBoard[x,y].renderer.material= matTest;
+				//tilesGameBoard[x,y].renderer.material =(Material)Resources.Load("Sprites/Materials/River");
+			}
+		}
+	}
 }
