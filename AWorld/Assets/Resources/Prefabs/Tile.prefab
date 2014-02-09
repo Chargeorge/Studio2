@@ -490,12 +490,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 100010}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc90da18a31d4dc4688588b901d868cf, type: 3}
+  m_Script: {fileID: 11500000, guid: 1d063660315356e40b27932e7ed169ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  qudHoverLayer: {fileID: 100006}
-  qudSelectedLayer: {fileID: 100000}
-  qudHighlightLayer: {fileID: 100002}
+  qudHoverLayer: {fileID: 0}
+  qudSelectedLayer: {fileID: 0}
+  qudHighlightLayer: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
