@@ -240,14 +240,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1669248504}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3bf3d7f8398e3e4a8a223f1d831d326, type: 3}
+  m_Script: {fileID: 11500000, guid: af47e7007f8e2ba43ae942c46f8c16e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prfbTile: {fileID: 100010, guid: c0161d909016fa249b10ebd8a5eb405f, type: 2}
+  prfbTile: {fileID: 100010, guid: 3b2cf668f10c6384dbdb39cb95da27fc, type: 2}
   matTest: {fileID: 0}
   manager: {fileID: 0}
-  boardX: 10
-  boardY: 10
+  boardX: 20
+  boardY: 20
 --- !u!4 &1669248506
 Transform:
   m_ObjectHideFlags: 0
