@@ -243,7 +243,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af47e7007f8e2ba43ae942c46f8c16e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prfbTile: {fileID: 100010, guid: 3b2cf668f10c6384dbdb39cb95da27fc, type: 2}
+  prfbTile: {fileID: 100010, guid: 87f9a789346b544448cbc9bac6e40707, type: 2}
   matTest: {fileID: 0}
   manager: {fileID: 0}
   boardX: 20
