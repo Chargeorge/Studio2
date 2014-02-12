@@ -164,7 +164,7 @@ public class BaseTile : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
-		qudHighlightLayer.GetComponent<MeshRenderer>().enabled = (IsHighlighted) ? true : false ;
+		qudHighlightLayer.GetComponent<MeshRenderer> ().enabled = IsHighlighted;
 		
 		
 		qudHighlightLayer.renderer.material.color = _highlightColor;
@@ -189,7 +189,7 @@ public class BaseTile : MonoBehaviour {
 		currentTile.GetComponent<BaseTile>().IsHover = false;
 		currentTile.GetComponent<BaseTile>().IsSelected = false;
 		currentTile.GetComponent<BaseTile>().IsHighlighted = false;
-		
+
 		switch (et){
 			case TileTypeEnum.regular:
 				currentTile.renderer.material = (Material)Resources.Load("Sprites/Materials/Regular");
