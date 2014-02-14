@@ -54,7 +54,7 @@ public class TileCreation : MonoBehaviour {
 
 		//Perlin Pass to generate terrrain
 
-		perlinPass (TileTypeEnum.water, 1000);
+		perlinPass (TileTypeEnum.water, 1300);
 		/*
 		Character test = HeroFactory.CreateHero(HeroType.warrior, gm);
 		Character enemyTest = HeroFactory.CreateEnemy(EnemyType.dragon, gm);
