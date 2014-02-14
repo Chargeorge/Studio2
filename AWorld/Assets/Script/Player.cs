@@ -9,7 +9,7 @@ public class Player : MonoBehaviour {
 	/// <summary>
 	/// Gets or sets the grd location.  Sets transform to corresponding center square of tile.  
 	/// </summary>
-	/// <value>Int Vector 2 of grid coordinates.  The grd location.</value>
+	/// <value>Int Vector 2 of grid coordinates.  	The grd location.</value>
 	public Vector2 grdLocation{
 		get{
 			return _grdLocation;

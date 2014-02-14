@@ -9,6 +9,10 @@
 //------------------------------------------------------------------------------
 using System;
 
+/// <summary>
+/// Mode.  Gameplay mode:  1 vs. 1, 2 vs, 2 4 player FFA?
+/// 
+/// </summary>
 public enum Mode
 {
 	OneVOne,
