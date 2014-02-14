@@ -77,8 +77,8 @@ NavMeshSettings:
 --- !u!1 &55438869
 GameObject:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabParentObject: {fileID: 100000, guid: e39d03a4130efc4428bb1a902ba29847, type: 2}
+  m_PrefabInternal: {fileID: 1675311422}
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 55438873}
@@ -95,8 +95,9 @@ GameObject:
 --- !u!23 &55438870
 Renderer:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabParentObject: {fileID: 2300000, guid: e39d03a4130efc4428bb1a902ba29847,
+    type: 2}
+  m_PrefabInternal: {fileID: 1675311422}
   m_GameObject: {fileID: 55438869}
   m_Enabled: 1
   m_CastShadows: 1
@@ -104,7 +105,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 1bad5f2aa047db248844ef3242f84d49, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -116,8 +117,9 @@ Renderer:
 --- !u!64 &55438871
 MeshCollider:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabParentObject: {fileID: 6400000, guid: e39d03a4130efc4428bb1a902ba29847,
+    type: 2}
+  m_PrefabInternal: {fileID: 1675311422}
   m_GameObject: {fileID: 55438869}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -129,19 +131,20 @@ MeshCollider:
 --- !u!33 &55438872
 MeshFilter:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabParentObject: {fileID: 3300000, guid: e39d03a4130efc4428bb1a902ba29847,
+    type: 2}
+  m_PrefabInternal: {fileID: 1675311422}
   m_GameObject: {fileID: 55438869}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!4 &55438873
 Transform:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabParentObject: {fileID: 400000, guid: e39d03a4130efc4428bb1a902ba29847, type: 2}
+  m_PrefabInternal: {fileID: 1675311422}
   m_GameObject: {fileID: 55438869}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 9.79344845, y: 6.06284857, z: -3.47509766}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: .5, y: .5, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
 --- !u!1 &478547186
@@ -367,3 +370,43 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+--- !u!1001 &1675311422
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 400000, guid: e39d03a4130efc4428bb1a902ba29847, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 9.79344845
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: e39d03a4130efc4428bb1a902ba29847, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 6.06284857
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: e39d03a4130efc4428bb1a902ba29847, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: -3.47509766
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: e39d03a4130efc4428bb1a902ba29847, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: e39d03a4130efc4428bb1a902ba29847, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: e39d03a4130efc4428bb1a902ba29847, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: e39d03a4130efc4428bb1a902ba29847, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: e39d03a4130efc4428bb1a902ba29847, type: 2}
+  m_RootGameObject: {fileID: 55438869}
+  m_IsPrefabParent: 0
+  m_IsExploded: 1
