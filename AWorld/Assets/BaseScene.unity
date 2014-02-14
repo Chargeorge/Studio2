@@ -85,6 +85,7 @@ GameObject:
   - 33: {fileID: 55438872}
   - 64: {fileID: 55438871}
   - 23: {fileID: 55438870}
+  - 114: {fileID: 55438874}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -147,6 +148,17 @@ Transform:
   m_LocalScale: {x: .5, y: .5, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+--- !u!114 &55438874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 55438869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 728e5af4b01c4074c81ec79c7f98b261, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &478547186
 GameObject:
   m_ObjectHideFlags: 0
@@ -254,6 +266,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e33dabbeb93ecbf4ebe96982f5acbd10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Team1Color:
+    serializedVersion: 2
+    rgba: 13535744
+  Team2Color:
+    serializedVersion: 2
+    rgba: 43988
+  Team3Color:
+    serializedVersion: 2
+    rgba: 0
+  Team4Color:
+    serializedVersion: 2
+    rgba: 0
 --- !u!4 &842739088
 Transform:
   m_ObjectHideFlags: 0

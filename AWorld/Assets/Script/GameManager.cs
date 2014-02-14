@@ -3,6 +3,14 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour {
 
+	#region Statics
+	public  Color32 Team1Color;
+	public  Color32 Team2Color;
+	public  Color32 Team3Color;
+	public  Color32 Team4Color;
+
+	#endregion
+
 	// Use this for initialization
 	void Start () {
 	
@@ -12,4 +20,6 @@ public class GameManager : MonoBehaviour {
 	void Update () {
 	
 	}
+
+
 }
