@@ -46,6 +46,7 @@ public class Player : MonoBehaviour {
 	void Start () {
 		_currentState = PlayerState.standing;
 		sRef = GameObject.Find ("Settings").GetComponent<Settings>();
+		gm = GameObject.Find ("GameManager").GetComponent<GameManager>();
 	}
 	
 	// Update is called once per frame
@@ -58,19 +59,27 @@ public class Player : MonoBehaviour {
 			case PlayerState.standing:
 			//If we are standinga nd we get an input, handle it.
 			///TODO: add building.
-				Debug.Log(string.Format("Player {0} currently pressing: {1}", PlayerNumber, x));
+				
 				if(x.HasValue && !buildButtonDown){
-					BaseTile MovingInto = currentTile.GetDirection(x.Value);
-					float vpsRate = MovingInto.GetRate(this) * sRef.vpsBaseMove;
-					addProgressToAction(vpsRate);
-					setDirection(x.Value);
-					_currentState = PlayerState.moving;
+					if(currentTile.GetDirection(x.Value) != null){
+						BaseTile MovingInto = currentTile.GetDirection(x.Value);
+						Debug.Log(string.Format("x:{0}, y: {1}", MovingInto.brdXPos, MovingInto.brdYPos));
+						float vpsRate = MovingInto.GetRate(this) * sRef.vpsBaseMove;
+						addProgressToAction(vpsRate);
+						setDirection(x.Value);
+						_currentState = PlayerState.moving;
+					}
+					else{
+						setDirection(x.Value);
+					}
 					
 					
 				}
 				
 				if( buildButtonDown){
-					
+//					if(currentTile.tower == null){
+//						if(currentTile.tower
+//					}
 				}
 				
 			break;
@@ -199,8 +208,11 @@ public class Player : MonoBehaviour {
 	private void setDirection(DirectionEnum N){
 		
 		float rotAngle = getAngleForDir(N);
+		float currentRotAngle = getAngleForDir(facing);
+		
 		facing = N;
-		transform.RotateAround(new Vector3(0,0,0), new Vector3(0,0,1), rotAngle);
+		transform.RotateAround(transform.position, new Vector3(0,0,1), currentRotAngle);
+		transform.RotateAround(transform.position, new Vector3(0,0,-1), rotAngle);
 	}
 
 	private void addProgressToAction(float rate){

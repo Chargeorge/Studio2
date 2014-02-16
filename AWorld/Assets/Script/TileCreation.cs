@@ -26,7 +26,10 @@ public class TileCreation : MonoBehaviour {
 				Debug.Log(string.Format("In board Creation x:{0} y:{1}", x, y));
 				tilesGameBoard[x,y] = (GameObject)Instantiate(prfbTile, new Vector3(x,y,0), Quaternion.identity);
 				tilesGameBoard[x,y].GetComponent<BaseTile>().IsHover = false;
-				tilesGameBoard[x,y].GetComponent<BaseTile>().MoveCost = 2;	
+				tilesGameBoard[x,y].GetComponent<BaseTile>().MoveCost =1;	
+				tilesGameBoard[x,y].GetComponent<BaseTile>().brdXPos = x;
+				tilesGameBoard[x,y].GetComponent<BaseTile>().brdYPos = y;
+				
 				tilesGameBoard[x,y].renderer.material = textureResources[1];
 				//tilesGameBoard[x,y].renderer.material= matTest;
 				//tilesGameBoard[x,y].renderer.material =(Material)Resources.Load("Sprites/Materials/River");
@@ -54,7 +57,7 @@ public class TileCreation : MonoBehaviour {
 
 		//Perlin Pass to generate terrrain
 
-		perlinPass (TileTypeEnum.water, 1300);
+		perlinPass (TileTypeEnum.water, 5000);
 		/*
 		Character test = HeroFactory.CreateHero(HeroType.warrior, gm);
 		Character enemyTest = HeroFactory.CreateEnemy(EnemyType.dragon, gm);

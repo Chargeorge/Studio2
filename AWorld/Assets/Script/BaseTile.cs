@@ -8,7 +8,9 @@ public class BaseTile : MonoBehaviour {
 	public GameObject qudHoverLayer;
 	public GameObject qudSelectedLayer;
 	public GameObject qudHighlightLayer;
-	public TeamInfo controllingTeam;	
+	public TeamInfo controllingTeam;
+	public float percControlled;
+	public GameObject tower;
 	
 	private int _brdXPos;
 	private int _brdYPos;
@@ -164,10 +166,20 @@ public class BaseTile : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
-		qudHighlightLayer.GetComponent<MeshRenderer>().enabled = (IsHighlighted) ? true : false ;
 		
 		
-		qudHighlightLayer.renderer.material.color = _highlightColor;
+		if(controllingTeam != null){
+			Color32 controllingTeamColor = controllingTeam.teamColor;
+		
+			controllingTeamColor.a = (byte) (255*(percControlled/100f));
+		
+		
+			qudHighlightLayer.renderer.material.color = controllingTeamColor;
+			qudHighlightLayer.GetComponent<MeshRenderer>().enabled = true;
+		}
+		else{
+			qudHoverLayer.GetComponent<MeshRenderer>().enabled = false;
+		}
 		qudHoverLayer.GetComponent<MeshRenderer>().enabled = (IsHover) ? true : false ;
 		if(IsHover){
 	

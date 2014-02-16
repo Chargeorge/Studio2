@@ -326,7 +326,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: fbab2232cae5e52428fa43a14882ddc8, type: 2}
+  - {fileID: 2100000, guid: 1dcd6b7c528e2d342b2981a07ca69018, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -497,6 +497,7 @@ MonoBehaviour:
   qudHoverLayer: {fileID: 100006}
   qudSelectedLayer: {fileID: 100000}
   qudHighlightLayer: {fileID: 100002}
+  percControlled: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
