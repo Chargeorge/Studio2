@@ -77,9 +77,21 @@ public class Player : MonoBehaviour {
 				}
 				
 				if( buildButtonDown){
-//					if(currentTile.tower == null){
-//						if(currentTile.tower
-//					}
+					if(currentTile.tower == null){
+						if(currentTile.controllingTeam != null){
+							if(currentTile.controllingTeam.teamNumber == team.teamNumber){
+								//Start building tower
+							}
+							else{
+								
+							}
+						}
+						else
+						{
+							float vpsInfluenceRate = sRef.vpsBaseInfluence;
+ 							addProgressToAction(vpsInfluenceRate);
+						}
+					}
 				}
 				
 			break;
@@ -107,7 +119,25 @@ public class Player : MonoBehaviour {
 				}
 			break;	
 			
-			
+			case PlayerState.building:
+				
+				if(currentTile.tower == null){
+					if(currentTile.controllingTeam != null){
+						if(currentTile.controllingTeam.teamNumber == team.teamNumber){
+							//Start building tower
+						}
+						else{
+							
+						}
+					}
+					else
+					{
+						float vpsInfluenceRate = sRef.vpsBaseInfluence;
+						addProgressToAction(vpsInfluenceRate);
+						
+					}
+				}
+			break;
 		}	
 	}
 	
