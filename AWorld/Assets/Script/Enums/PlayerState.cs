@@ -12,10 +12,7 @@ public enum PlayerState
 {
 	standing,
 	building,
-	movingN,
-	movingS,
-	movingE,
-	movingW
+	moving
 
 }
 

@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour {
 	public static Mode gameMode = Mode.OneVOne;
 	public List<GameObject> players = new List<GameObject>();
 	public GameObject playerPrefab;
+	
 	// Use this for initialization
 	void Start () {
 		
@@ -38,7 +39,8 @@ public class GameManager : MonoBehaviour {
 					Player p2 = Player2.GetComponent<Player>();
 					p1.SetTeam(TeamInfo.GetTeamInfo(1));
 					p2.SetTeam(TeamInfo.GetTeamInfo(2));
-					
+					p1.PlayerNumber = 1;
+					p2.PlayerNumber = 2;
 					break;
 				case Mode.TwoVTwo:
 					

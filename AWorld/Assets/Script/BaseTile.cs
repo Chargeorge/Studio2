@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -8,7 +8,7 @@ public class BaseTile : MonoBehaviour {
 	public GameObject qudHoverLayer;
 	public GameObject qudSelectedLayer;
 	public GameObject qudHighlightLayer;
-	
+	public TeamInfo controllingTeam;	
 	
 	private int _brdXPos;
 	private int _brdYPos;
@@ -406,6 +406,15 @@ public class BaseTile : MonoBehaviour {
 			if(ToCheck.calcHueristic(ToCheck, obj) < minVal){ returnable = obj; minVal = ToCheck.calcHueristic(ToCheck, obj);}
 		});
 		return returnable;
+	}
+	
+	/// <summary>
+	/// Protyping stub for now.
+	/// </summary>
+	/// <returns>The rate.</returns>
+	/// <param name="testing">Testing.</param>
+	public float GetRate(Player testing){
+		return 1;
 	}
 	
 }

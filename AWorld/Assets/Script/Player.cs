@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class Player : MonoBehaviour {
@@ -7,6 +7,12 @@ public class Player : MonoBehaviour {
 	private Vector2 _grdLocation;
 	private PlayerState _currentState;
 	public int PlayerNumber;
+	public GameManager gm; 
+	private float currentActionProgress;
+	public Settings sRef;
+	public DirectionEnum facing;
+	
+	
 
 	public PlayerState currentState {
 		get {
@@ -16,6 +22,7 @@ public class Player : MonoBehaviour {
 
 	/// <summary>
 	/// Gets or sets the grd location.  Sets transform to corresponding center square of tile.  
+	/// I'm not sure if I like that it does this, maybe we should break into seperate calls?  
 	/// </summary>
 	/// <value>Int Vector 2 of grid coordinates.  	The grd location.</value>
 	public Vector2 grdLocation{
@@ -24,6 +31,7 @@ public class Player : MonoBehaviour {
 		}
 		set{
 			transform.position = GameManager.wrldPositionFromGrdPosition(value);
+
 			_grdLocation = value;
 		}
 	}
@@ -36,20 +44,69 @@ public class Player : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		currentState = PlayerState.standing;
+		_currentState = PlayerState.standing;
+		sRef = GameObject.Find ("Settings").GetComponent<Settings>();
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update (){ 
+		DirectionEnum? x = getStickDirection();
+		BaseTile currentTile = gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>();
+		bool buildButtonDown = getPlayerBuild();
 		switch( currentState){
-			float xStick = 
-
+			
 			case PlayerState.standing:
-				if(Input.GetAxis(
+			//If we are standinga nd we get an input, handle it.
+			///TODO: add building.
+				Debug.Log(string.Format("Player {0} currently pressing: {1}", PlayerNumber, x));
+				if(x.HasValue && !buildButtonDown){
+					BaseTile MovingInto = currentTile.GetDirection(x.Value);
+					float vpsRate = MovingInto.GetRate(this) * sRef.vpsBaseMove;
+					addProgressToAction(vpsRate);
+					setDirection(x.Value);
+					_currentState = PlayerState.moving;
+					
+					
+				}
+				
+				if( buildButtonDown){
+					
+				}
+				
 			break;
-		}
+			
+			//IF stick holds the same direction keep doing move
+			//IF it changes, remove all progress (PLACEHOLDER, feel free to nuke)
+			//if it completes, move to next tile, set state to standing
+			case PlayerState.moving:
+				
+			
+				if(x.HasValue && x.Value == facing){
+					BaseTile MovingInto = currentTile.GetComponent<BaseTile>().GetDirection(x.Value);
+					float vpsRate = MovingInto.GetRate(this) * sRef.vpsBaseMove;
+					addProgressToAction(vpsRate);
+					
+					if(currentActionProgress > sRef.baseRequired){
+						DoMove(MovingInto);
+						currentActionProgress = 0f;
+						_currentState = PlayerState.standing;	
+					}
+				}
+				else{
+					_currentState= PlayerState.standing; 
+					currentActionProgress = 0f;
+				}
+			break;	
+			
+			
+		}	
 	}
-	/// <summary>
+	
+	public void DoMove(BaseTile MoveTo){
+		grdLocation = new Vector2(MoveTo.brdXPos, MoveTo.brdYPos);
+	}
+	
+	/// <summary>;
 	/// Change teams, part of the setup process
 	/// </summary>
 	/// <param name="t">T.</param>
@@ -59,21 +116,95 @@ public class Player : MonoBehaviour {
 		MoveToTeamStart ();
 	}
 
+/// <summary>
+/// Moves to team start.
+/// </summary>
 	public void MoveToTeamStart(){
 		if (team != null) {
 			grdLocation = team.startingLocation;		
 		}
 	}
 
+	/// <summary>
+	/// Gets the correct X axis of the stick based on player number
+	/// </summary>
+	/// <returns>The player X axis.</returns>
 	private float getPlayerXAxis(){
+		//Input.GetAxis("HorizontalPlayer"+PlayerNumber);
 		return Input.GetAxis("HorizontalPlayer"+PlayerNumber);	
 	}
 				
+	/// <summary>
+	/// Gets the correct Y axis of the stick based on player number
+	/// </summary>
+	/// <returns>The player X axis.</returns>
 	private float getPlayerYAxis(){
+		//Debug.Log(Input.GetAxis("VerticalPlayer"+PlayerNumber));
 		return Input.GetAxis("VerticalPlayer"+PlayerNumber);	
 	}
 
-	private float getPlayerBuild(){
-		return Input.GetAxis("BuildPlayer"+PlayerNumber);	
+	/// <summary>
+	/// Gets the Build aixs based on player number
+	/// </summary>
+	/// <returns>The player X axis.</returns>
+	private bool getPlayerBuild(){
+		return Input.GetButton("BuildPlayer"+PlayerNumber);	
 	}
+
+	/// <summary>
+	/// return which direction the stick is being held in
+	/// </summary>
+	/// <returns>The stick direction.</returns>
+	private DirectionEnum? getStickDirection(){
+		float xStick = getPlayerXAxis();
+		float yStick = getPlayerYAxis();
+
+		if ((Mathf.Abs (xStick) + Mathf.Abs (yStick)) > 0) {
+			if (Mathf.Abs (xStick) > Mathf.Abs (yStick)) {
+					if (xStick > 0) {
+							return DirectionEnum.East;
+					} else {
+							return DirectionEnum.West;
+					}
+			} else {
+					if (yStick > 0) {
+							return DirectionEnum.North;
+					} else {
+							return DirectionEnum.South;
+				} 
+			}
+		}else {
+			return null;
+		}
+	}
+	
+	
+	private float getAngleForDir(DirectionEnum N){
+		switch (N){
+			case DirectionEnum.North:
+			return 0f;
+			
+		case DirectionEnum.East:
+			return 90f;
+			
+		case DirectionEnum.South:
+			return 180f;
+			
+		case DirectionEnum.West:
+			return 270f;
+			
+		}
+		return 0;
+	} 
+	private void setDirection(DirectionEnum N){
+		
+		float rotAngle = getAngleForDir(N);
+		facing = N;
+		transform.RotateAround(new Vector3(0,0,0), new Vector3(0,0,1), rotAngle);
+	}
+
+	private void addProgressToAction(float rate){
+		currentActionProgress+= rate*Time.deltaTime;
+		
+	}	
 }

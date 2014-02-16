@@ -19,6 +19,7 @@ public class Settings : MonoBehaviour {
 	public float coefMoveEnemy = .33f;
 	public float coefConvert = .5f;
 	public float coefBuildTower = .25f; 
+	public float baseRequired = 100f;
 	// Use this for initialization
 	void Start () {
 	
