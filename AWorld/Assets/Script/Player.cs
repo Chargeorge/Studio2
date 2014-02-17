@@ -54,6 +54,7 @@ public class Player : MonoBehaviour {
 		DirectionEnum? x = getStickDirection();
 		BaseTile currentTile = gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>();
 		bool buildButtonDown = getPlayerBuild();
+		if(PlayerNumber == 1) Debug.Log(currentState);
 		switch( currentState){
 			
 			case PlayerState.standing:
@@ -102,9 +103,7 @@ public class Player : MonoBehaviour {
 								
 							}
 						}
-						else {
-							
-						}
+						else
 						{
 							float vpsInfluenceRate = sRef.vpsBaseInfluence;
  							addProgressToAction(vpsInfluenceRate);
@@ -140,31 +139,53 @@ public class Player : MonoBehaviour {
 			break;	
 			
 			case PlayerState.building:
-				
-				if(currentTile.tower == null){
-					if(currentTile.controllingTeam != null){
-						if(currentTile.controllingTeam.teamNumber == team.teamNumber){
-							//Start building tower
+				if(buildButtonDown){
+					if(currentTile.tower == null){
+						if(currentTile.controllingTeam != null){
+							if(currentTile.controllingTeam.teamNumber == team.teamNumber){
+								//Start building tower
+							}
+							else{
+								
+							}
 						}
-						else{
-							
+						else
+						{
+							float vpsInfluenceRate = sRef.vpsBaseInfluence;
+							addProgressToAction(vpsInfluenceRate);
 						}
 					}
-					else
-					{
-						float vpsInfluenceRate = sRef.vpsBaseInfluence;
-						addProgressToAction(vpsInfluenceRate);
-					}
+				}
+				else{
+					_currentState .standing;
 				}
 			break;
 			
 			case PlayerState.influencing:
-				if(currentTile.controllingTeam != null){
-				
-				} else{
+				if(buildButtonDown){
+					if(currentTile.controllingTeam != null){
+						float modifier = (currentTile.controllingTeam.teamNumber  == teamNumber) ? 1 : -1;
+						float vpsInfluenceRate = sRef.vpsBaseInfluence * modifier;
+						addProgressToAction(vpsInfluenceRate);
+						currentTile.addProgressToInfluence(vpsInfluenceRate);
+						if(currentTile.percControlled >= 100f){
+							currentTile.finishInfluence();
+							_currentState = PlayerState.standing;
+						}
+						
+						if(currentTile.percControlled <= 0f){
+							currentTile.clearInfluence();
+						}
 					
+						
+					} else{
+					///TODOC catch fully influenced Tile!
+					}
 				}
-				
+				else{
+				///TODO: add reset to tile in case of change
+					//need to reset currenttile to previousState
+				}	
 			break;
 		}	
 	}

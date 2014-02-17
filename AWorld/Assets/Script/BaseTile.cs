@@ -170,10 +170,12 @@ public class BaseTile : MonoBehaviour {
 		
 		
 		if(controllingTeam != null){
+			
+			qudHighlightLayer.SetActive(true);
 			Color32 controllingTeamColor = controllingTeam.teamColor;
 		
 			controllingTeamColor.a = (byte) (255*(percControlled/100f));
-		
+			
 		
 			qudHighlightLayer.renderer.material.color = controllingTeamColor;
 			qudHighlightLayer.GetComponent<MeshRenderer>().enabled = true;
@@ -431,15 +433,30 @@ public class BaseTile : MonoBehaviour {
 	}
 	
 	public void startInfluence(float initialProgress, TeamInfo team){
-		
+		///TODO: add start semaphore stuff here
 		currentState = TileState.beingInfluenced;
 		controllingTeam = team;
 		percControlled = initialProgress;
 		Debug.Log ("Influence Started " + initialProgress);
 	}
 	
-	private void addProgressToAction(float rate){
+	public void addProgressToInfluence(float rate){
 		percControlled += rate*Time.deltaTime;
-		
+		Debug.Log(percControlled);
+	}
+	public void flipInfluence(TeamInfo newTeam){
+		controllingTeam = newTeam;
+		percControlled = 0;
+	}
+	public void finishInfluence(){
+		///TODO: add end semaphore stuff her
+		if(percControlled > 100f){
+			percControlled = 100f;
+			currentState = TileState.normal;
+		}
+	}
+	public void clearInfluence(){
+		percControlled = 0;
+		controllingTeam = null;
 	}
 }
