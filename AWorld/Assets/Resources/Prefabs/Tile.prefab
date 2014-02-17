@@ -30,7 +30,7 @@ GameObject:
   - 64: {fileID: 6400002}
   - 23: {fileID: 2300002}
   m_Layer: 0
-  m_Name: HighlightLayer
+  m_Name: InfluenceLayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -65,7 +65,7 @@ GameObject:
   - 33: {fileID: 3300006}
   - 23: {fileID: 2300006}
   m_Layer: 8
-  m_Name: SelectOverlay
+  m_Name: TowerLayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -168,8 +168,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100006}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.391004562, y: .336912155, z: -.0350000001}
-  m_LocalScale: {x: .400000006, y: .400000006, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400010}
 --- !u!4 &400008
@@ -284,7 +284,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: 612253cc85b060e45913d2290668e187, type: 2}
+  - {fileID: 2100000, guid: 15b215b3d86267a458b8af158f10ff57, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -494,9 +494,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 326ad4a4b2333394e919e1eecb2c2b9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  qudHoverLayer: {fileID: 100006}
+  qudTowerLayer: {fileID: 100006}
   qudSelectedLayer: {fileID: 100000}
-  qudHighlightLayer: {fileID: 100002}
+  qudInfluenceLayer: {fileID: 100002}
   percControlled: 0
   tower: {fileID: 0}
   currentState: 0

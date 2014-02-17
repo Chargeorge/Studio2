@@ -157,7 +157,7 @@ public class Player : MonoBehaviour {
 					}
 				}
 				else{
-					_currentState .standing;
+					_currentState =  PlayerState.standing;
 				}
 			break;
 			

@@ -134,9 +134,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 326ad4a4b2333394e919e1eecb2c2b9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  qudHoverLayer: {fileID: 279747025}
+  qudTowerLayer: {fileID: 279747025}
   qudSelectedLayer: {fileID: 2101879849}
-  qudHighlightLayer: {fileID: 213380088}
+  qudInfluenceLayer: {fileID: 213380088}
   percControlled: 0
   tower: {fileID: 0}
   currentState: 0
@@ -182,7 +182,7 @@ GameObject:
   - 64: {fileID: 213380091}
   - 23: {fileID: 213380090}
   m_Layer: 0
-  m_Name: HighlightLayer
+  m_Name: InfluenceLayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -254,7 +254,7 @@ GameObject:
   - 33: {fileID: 279747028}
   - 23: {fileID: 279747027}
   m_Layer: 8
-  m_Name: SelectOverlay
+  m_Name: TowerLayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -267,8 +267,8 @@ Transform:
   m_PrefabInternal: {fileID: 418979038}
   m_GameObject: {fileID: 279747025}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.391004562, y: .336912155, z: -.0350000001}
-  m_LocalScale: {x: .400000006, y: .400000006, z: 1}
+  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 87610404}
 --- !u!23 &279747027
@@ -284,7 +284,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: 612253cc85b060e45913d2290668e187, type: 2}
+  - {fileID: 2100000, guid: 15b215b3d86267a458b8af158f10ff57, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -334,6 +334,26 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400010, guid: 87f9a789346b544448cbc9bac6e40707, type: 2}
       propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: 87f9a789346b544448cbc9bac6e40707, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: 87f9a789346b544448cbc9bac6e40707, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: 87f9a789346b544448cbc9bac6e40707, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: 87f9a789346b544448cbc9bac6e40707, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: 87f9a789346b544448cbc9bac6e40707, type: 2}
+      propertyPath: m_LocalScale.y
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

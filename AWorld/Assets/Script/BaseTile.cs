@@ -5,9 +5,9 @@ using System.Collections.Generic;
 public class BaseTile : MonoBehaviour {
 	
 	
-	public GameObject qudHoverLayer;
+	public GameObject qudTowerLayer;
 	public GameObject qudSelectedLayer;
-	public GameObject qudHighlightLayer;
+	public GameObject qudInfluenceLayer;
 	public TeamInfo controllingTeam;
 	public float percControlled;
 	public GameObject tower;
@@ -171,19 +171,19 @@ public class BaseTile : MonoBehaviour {
 		
 		if(controllingTeam != null){
 			
-			qudHighlightLayer.SetActive(true);
+			qudInfluenceLayer.SetActive(true);
 			Color32 controllingTeamColor = controllingTeam.teamColor;
 		
 			controllingTeamColor.a = (byte) (255*(percControlled/100f));
 			
 		
-			qudHighlightLayer.renderer.material.color = controllingTeamColor;
-			qudHighlightLayer.GetComponent<MeshRenderer>().enabled = true;
+			qudInfluenceLayer.renderer.material.color = controllingTeamColor;
+			qudInfluenceLayer.GetComponent<MeshRenderer>().enabled = true;
 		}
 		else{
-			qudHoverLayer.GetComponent<MeshRenderer>().enabled = false;
+			qudTowerLayer.GetComponent<MeshRenderer>().enabled = false;
 		}
-		qudHoverLayer.GetComponent<MeshRenderer>().enabled = (IsHover) ? true : false ;
+		qudTowerLayer.GetComponent<MeshRenderer>().enabled = (IsHover) ? true : false ;
 		if(IsHover){
 	
 		}
