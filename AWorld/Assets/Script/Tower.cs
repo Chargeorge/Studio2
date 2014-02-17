@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 public class Tower : MonoBehaviour {
 
 	private List<InfluencePatternHolder> _pattern;
@@ -9,7 +10,9 @@ public class Tower : MonoBehaviour {
 	private TowerState _currentState;
 	public float percActionComplete = 0;
 	public float percInlfluenceComplete= 0;	//Countdown till another influence is popped
-	
+	public GameManager gm;	
+	public GameObject tileBeingConverted;
+	private InfluencePatternHolder patternConverting;
 	public TowerState currentState{
 		get{
 			return _currentState;
@@ -19,12 +22,38 @@ public class Tower : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		///TODO ADD PATTERN STATICS
-		
+		gm = GameObject.Find ("GameManager").GetComponent<GameManager>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+		int brdX; int brdY;
+		brdX = transform.parent.gameObject.GetComponent<BaseTile>().brdXPos;
+		brdY = transform.parent.gameObject.GetComponent<BaseTile>().brdYPos;
+		if(_currentState == TowerState.Basic){
+			//find nearest convertable block
+			if(tileBeingConverted == null){
+				 tileBeingConverted = null;
+				//FIND The first convertable tile, list is ordeed by distance
+				_pattern.ForEach(delegate (InfluencePatternHolder p){
+					if(tileBeingConverted == null){
+						GameObject Tile = gm.tiles[(int)brdX + (int)p.relCoord.x, brdY + (int)p.relCoord.y];
+						if(Tile != null){
+							BaseTile Bt =  Tile.GetComponent<BaseTile>();
+							if(Bt.controllingTeam != null && Bt.controllingTeam.teamNumber != controllingTeam.teamNumber){
+								tileBeingConverted = Bt.gameObject;
+								patternConverting = p;
+							}
+						}
+						
+					}
+				 });
+			 }
+			 else{
+			 	//Apply pattern to tile in question
+			 }
+		}
+		
 	}
 	
 	//START BUILDING:
@@ -82,10 +111,22 @@ public class Tower : MonoBehaviour {
 			
 			if(_currentState == TowerState.BuildingBasic){
 				_currentState = TowerState.Basic;
+				_pattern = Tower.createBasicInfluenceList();
 			}
 			if(_currentState == TowerState.BuildingAdvanced){
 				_currentState = TowerState.Advanced;
+				_pattern = Tower.createBasicInfluenceList();
 			}			
 		}
+	}
+	
+	public static List<InfluencePatternHolder> createBasicInfluenceList(){
+		List<InfluencePatternHolder> returanble = new List<InfluencePatternHolder>();
+		returanble.Add(new InfluencePatternHolder(new Vector2(0,1), 100f));
+		returanble.Add(new InfluencePatternHolder(new Vector2(0,2), 50f));
+		returanble.Add(new InfluencePatternHolder(new Vector2(0,3), 33.4f));
+		returanble.Add(new InfluencePatternHolder(new Vector2(0,3), 25f));
+		
+		return returanble.OrderBy(o=>o.relCoord.magnitude).ToList();
 	}
 }
