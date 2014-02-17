@@ -41,6 +41,20 @@ public class Tower : MonoBehaviour {
 		this.gameObject.transform.parent = tileLocation.transform;
 		this.facing = player.GetComponent<Player>().facing;
 		this._currentState	= TowerState.BuildingBasic;
+		controllingTeam = player.GetComponent<Player>().team;
+		this.setTeam();
+		
+		this.transform.localPosition = new Vector3(0f,0f,-.5f);
+		tileLocation.GetComponent<BaseTile>().tower = this.gameObject;
+	}
+	
+	public void setTeam(){
+		Color32 controllingTeamColor = controllingTeam.teamColor;		
+		controllingTeamColor.a = 255;
+		controllingTeamColor.r += 30;
+		controllingTeamColor.g += 30;
+		controllingTeamColor.b += 30;
+		renderer.material.color = controllingTeamColor;
 		
 	}
 	

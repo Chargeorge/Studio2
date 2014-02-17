@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Player : MonoBehaviour {
 
-	private TeamInfo team;
+	public TeamInfo team;
 	private Vector2 _grdLocation;
 	private PlayerState _currentState;
 	public int PlayerNumber;
@@ -56,6 +56,7 @@ public class Player : MonoBehaviour {
 		DirectionEnum? x = getStickDirection();
 		BaseTile currentTile = gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>();
 		bool buildButtonDown = getPlayerBuild();
+		
 		switch( currentState){
 			
 			case PlayerState.standing:
@@ -69,6 +70,7 @@ public class Player : MonoBehaviour {
 						addProgressToAction(vpsRate);
 						setDirection(x.Value);
 						_currentState = PlayerState.moving;
+						
 					}
 					else{
 						setDirection(x.Value);
@@ -104,6 +106,7 @@ public class Player : MonoBehaviour {
 								GameObject towerBeingBuild = (GameObject)GameObject.Instantiate(_prfbTower, new Vector3(0,0,0), Quaternion.identity);
 								towerInProgress = towerBeingBuild.GetComponent<Tower>();
 								towerInProgress.startBuilding(currentTile.gameObject, this.gameObject, vpsBuildRate);
+								
 							}
 						
 							//Start removing influence
@@ -149,29 +152,34 @@ public class Player : MonoBehaviour {
 			
 			case PlayerState.building:
 				if(buildButtonDown){
-					if(currentTile.tower == null){
-						if(currentTile.controllingTeam != null){
-							if(currentTile.controllingTeam.teamNumber == team.teamNumber){
-								//Check for a tower in progress and start building!s
-								if(towerInProgress != null){
-									float vpsBuildRate = sRef.vpsBaseBuild;
-									towerInProgress.addBuildingProgress(vpsBuildRate);
-									if(towerInProgress.percActionComplete > 100f){
-										towerInProgress.finishAction();
-										_currentState = PlayerState.standing;
-									}
+					Debug.Log ("In Build");
+					if(currentTile.controllingTeam != null){
+						Debug.Log ("curent Team");
+						if(currentTile.controllingTeam.teamNumber == team.teamNumber){
+							//Check for a tower in progress and start building!s
+							if(towerInProgress != null){
+								Debug.Log("attempting to build");
+								float vpsBuildRate = sRef.vpsBaseBuild;
+								towerInProgress.addBuildingProgress(vpsBuildRate);
+								if(towerInProgress.percActionComplete > 100f){
+								
+									Debug.Log("Finished?");
+									towerInProgress.finishAction();
+									_currentState = PlayerState.standing;
+									currentActionProgress = 0f;
 								}
 							}
-							else{
-								
-							}
 						}
-						else
-						{
-							float vpsInfluenceRate = sRef.vpsBaseInfluence;
-							addProgressToAction(vpsInfluenceRate);
+						else{
+							
 						}
 					}
+					else
+					{
+						float vpsInfluenceRate = sRef.vpsBaseInfluence;
+						addProgressToAction(vpsInfluenceRate);
+					}
+					
 				}
 				else{
 					_currentState =  PlayerState.standing;
@@ -191,10 +199,12 @@ public class Player : MonoBehaviour {
 							///Shoudl this be here or in the BaseTileObject?
 							currentTile.finishInfluence();
 							_currentState = PlayerState.standing;
+							currentActionProgress = 0;
 						}
 						
 						if(currentTile.percControlled <= 0f){
 							currentTile.clearInfluence();
+							currentActionProgress = 0;
 						}
 					
 						
@@ -318,4 +328,14 @@ public class Player : MonoBehaviour {
 		currentActionProgress+= rate*Time.deltaTime;
 		
 	}	
+	
+	/// <summary>
+	/// ONLY used for debug for player
+	/// </summary>
+	private void OnGUI(){
+	
+		if(sRef.debugMode){
+			GUI.Box (new Rect (10+200*(PlayerNumber-1),10,200,90), string.Format("Player {0}\r\nState: {1}\r\npercentcomplete{2}",PlayerNumber, currentState,currentActionProgress));	
+		}
+	}
 }
