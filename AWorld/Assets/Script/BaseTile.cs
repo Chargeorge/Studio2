@@ -11,7 +11,7 @@ public class BaseTile : MonoBehaviour {
 	public TeamInfo controllingTeam;
 	public float percControlled;
 	public GameObject tower;
-	
+	public TileState currentState;
 	private int _brdXPos;
 	private int _brdYPos;
 	
@@ -152,6 +152,7 @@ public class BaseTile : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		_ident = Random.Range(1, 10000000);
+		currentState = TileState.normal;
 	}
 	
 	public BaseTile GetDirection(DirectionEnum dir){
@@ -429,4 +430,16 @@ public class BaseTile : MonoBehaviour {
 		return 1;
 	}
 	
+	public void startInfluence(float initialProgress, TeamInfo team){
+		
+		currentState = TileState.beingInfluenced;
+		controllingTeam = team;
+		percControlled = initialProgress;
+		Debug.Log ("Influence Started " + initialProgress);
+	}
+	
+	private void addProgressToAction(float rate){
+		percControlled += rate*Time.deltaTime;
+		
+	}
 }

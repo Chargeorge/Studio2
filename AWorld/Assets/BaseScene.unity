@@ -139,6 +139,7 @@ MonoBehaviour:
   qudHighlightLayer: {fileID: 213380088}
   percControlled: 0
   tower: {fileID: 0}
+  currentState: 0
 --- !u!23 &87610407
 Renderer:
   m_ObjectHideFlags: 0
@@ -813,7 +814,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   vpsBaseBuild: 100
   vpsBaseMove: 100
-  vpsBaseInfluence: 0
+  vpsBaseInfluence: 50
   coefAlliedMove: 1
   coefMoveAllied: 2
   coefMoveEnemy: .330000013

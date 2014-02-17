@@ -93,6 +93,10 @@ public class Player : MonoBehaviour {
 						if(currentTile.controllingTeam != null){
 							if(currentTile.controllingTeam.teamNumber == team.teamNumber){
 								//Start building tower
+								_currentState = PlayerState.building;
+								float vpsBuildRate = sRef.vpsBaseBuild;
+								addProgressToAction(vpsBuildRate);
+								
 							}
 							else{
 								
@@ -104,6 +108,8 @@ public class Player : MonoBehaviour {
 						{
 							float vpsInfluenceRate = sRef.vpsBaseInfluence;
  							addProgressToAction(vpsInfluenceRate);
+ 							_currentState = PlayerState.influencing;
+ 							currentTile.startInfluence(currentActionProgress, team);
 						}
 					}
 				}
@@ -148,9 +154,17 @@ public class Player : MonoBehaviour {
 					{
 						float vpsInfluenceRate = sRef.vpsBaseInfluence;
 						addProgressToAction(vpsInfluenceRate);
-						
 					}
 				}
+			break;
+			
+			case PlayerState.influencing:
+				if(currentTile.controllingTeam != null){
+				
+				} else{
+					
+				}
+				
 			break;
 		}	
 	}
