@@ -11,7 +11,8 @@ public class Player : MonoBehaviour {
 	private float currentActionProgress;
 	public Settings sRef;
 	public DirectionEnum facing;
-	
+	private GameObject _prfbTower;
+	private Tower towerInProgress;
 	
 
 	public PlayerState currentState {
@@ -45,6 +46,7 @@ public class Player : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		_currentState = PlayerState.standing;
+		_prfbTower = (GameObject)Resources.Load("Prefabs/Tower");
 		sRef = GameObject.Find ("Settings").GetComponent<Settings>();
 		gm = GameObject.Find ("GameManager").GetComponent<GameManager>();
 	}
@@ -59,7 +61,6 @@ public class Player : MonoBehaviour {
 			
 			case PlayerState.standing:
 			//If we are standinga nd we get an input, handle it.
-			///TODO: add building.
 				
 				if(x.HasValue && !buildButtonDown){
 					if(currentTile.GetDirection(x.Value) != null){
@@ -90,19 +91,27 @@ public class Player : MonoBehaviour {
 					// if us 
 						//start building tower				
 				if( buildButtonDown){
+		
 					if(currentTile.tower == null){
+		
 						if(currentTile.controllingTeam != null){
+						//Start building tower
 							if(currentTile.controllingTeam.teamNumber == team.teamNumber){
-								//Start building tower
+								
 								_currentState = PlayerState.building;
 								float vpsBuildRate = sRef.vpsBaseBuild;
 								addProgressToAction(vpsBuildRate);
 								
+								GameObject towerBeingBuild = (GameObject)GameObject.Instantiate(_prfbTower, new Vector3(0,0,0), Quaternion.identity);
+								towerInProgress = towerBeingBuild.GetComponent<Tower>();
+								towerInProgress.startBuilding(currentTile.gameObject, this.gameObject, vpsBuildRate);
 							}
+						//Start removing influence
 							else{
 								
 							}
 						}
+						//Start influencing Tower
 						else
 						{
 							float vpsInfluenceRate = sRef.vpsBaseInfluence;
@@ -143,7 +152,15 @@ public class Player : MonoBehaviour {
 					if(currentTile.tower == null){
 						if(currentTile.controllingTeam != null){
 							if(currentTile.controllingTeam.teamNumber == team.teamNumber){
-								//Start building tower
+								//Check for a tower in progress and start building!s
+								if(towerInProgress != null){
+									float vpsBuildRate = sRef.vpsBaseBuild;
+									towerInProgress.addBuildingProgress(vpsBuildRate);
+									if(towerInProgress.percActionComplete > 100f){
+										towerInProgress.finishAction();
+										_currentState = PlayerState.standing;
+									}
+								}
 							}
 							else{
 								
@@ -158,6 +175,8 @@ public class Player : MonoBehaviour {
 				}
 				else{
 					_currentState =  PlayerState.standing;
+					
+					//TODO: figure out what happens when we abandon the tile
 				}
 			break;
 			
@@ -169,6 +188,7 @@ public class Player : MonoBehaviour {
 						addProgressToAction(vpsInfluenceRate);
 						currentTile.addProgressToInfluence(vpsInfluenceRate);
 						if(currentTile.percControlled >= 100f){
+							///Shoudl this be here or in the BaseTileObject?
 							currentTile.finishInfluence();
 							_currentState = PlayerState.standing;
 						}
