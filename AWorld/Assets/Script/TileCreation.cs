@@ -23,7 +23,6 @@ public class TileCreation : MonoBehaviour {
 
 		for(int x= 0;x < boardX; x++ ){
 			for(int y=0; y< boardY; y++ ){
-				Debug.Log(string.Format("In board Creation x:{0} y:{1}", x, y));
 				tilesGameBoard[x,y] = (GameObject)Instantiate(prfbTile, new Vector3(x,y,0), Quaternion.identity);
 				tilesGameBoard[x,y].GetComponent<BaseTile>().IsHover = false;
 				tilesGameBoard[x,y].GetComponent<BaseTile>().MoveCost =1;	
@@ -82,7 +81,6 @@ public class TileCreation : MonoBehaviour {
 				
 				//if(perlinVal*perlinVal > 60 && perlinVal*perlinVal < 80){
 				if(perlinVal*perlinVal*perlinVal*perlinVal > threshold){
-					Debug.Log(perlinVal);
 					BaseTile.createTile(tte, tilesGameBoard[x,y]);
 					
 				}

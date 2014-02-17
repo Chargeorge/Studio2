@@ -56,7 +56,6 @@ public class Player : MonoBehaviour {
 		DirectionEnum? x = getStickDirection();
 		BaseTile currentTile = gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>();
 		bool buildButtonDown = getPlayerBuild();
-		if(PlayerNumber == 1) Debug.Log(currentState);
 		switch( currentState){
 			
 			case PlayerState.standing:
@@ -91,11 +90,11 @@ public class Player : MonoBehaviour {
 					// if us 
 						//start building tower				
 				if( buildButtonDown){
-		
+					//NO TOWER HERE, GOTTA DO STUFF.
 					if(currentTile.tower == null){
 		
 						if(currentTile.controllingTeam != null){
-						//Start building tower
+							//Start building tower
 							if(currentTile.controllingTeam.teamNumber == team.teamNumber){
 								
 								_currentState = PlayerState.building;
@@ -106,7 +105,8 @@ public class Player : MonoBehaviour {
 								towerInProgress = towerBeingBuild.GetComponent<Tower>();
 								towerInProgress.startBuilding(currentTile.gameObject, this.gameObject, vpsBuildRate);
 							}
-						//Start removing influence
+						
+							//Start removing influence
 							else{
 								
 							}
