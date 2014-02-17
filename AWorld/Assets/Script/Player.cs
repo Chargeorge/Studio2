@@ -75,7 +75,19 @@ public class Player : MonoBehaviour {
 					
 					
 				}
-				
+				//If tower
+					//if stick
+						//begin rotate build
+					//else
+						//if level 1
+							// begin upgade
+				//else 
+					//if no control
+						//Start  adding control
+					//if other team
+						//start removing 
+					// if us 
+						//start building tower				
 				if( buildButtonDown){
 					if(currentTile.tower == null){
 						if(currentTile.controllingTeam != null){
@@ -86,7 +98,9 @@ public class Player : MonoBehaviour {
 								
 							}
 						}
-						else
+						else {
+							
+						}
 						{
 							float vpsInfluenceRate = sRef.vpsBaseInfluence;
  							addProgressToAction(vpsInfluenceRate);

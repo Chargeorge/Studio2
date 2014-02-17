@@ -138,6 +138,7 @@ MonoBehaviour:
   qudSelectedLayer: {fileID: 2101879849}
   qudHighlightLayer: {fileID: 213380088}
   percControlled: 0
+  tower: {fileID: 0}
 --- !u!23 &87610407
 Renderer:
   m_ObjectHideFlags: 0
