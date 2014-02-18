@@ -444,6 +444,21 @@ public class BaseTile : MonoBehaviour {
 		percControlled += rate*Time.deltaTime;
 		Debug.Log(percControlled);
 	}
+	
+	public void addProgressToInfluence(float rate, TeamInfo newTeam){
+		if(controllingTeam != null && controllingTeam.teamNumber != newTeam.teamNumber){
+			percControlled -= rate*Time.deltaTime;
+			if(percControlled <=0) {
+				percControlled = 0;
+				flipInfluence(newTeam);
+			}
+		}else{
+			percControlled += rate*Time.deltaTime;
+			if(percControlled >= 100) {
+				finishInfluence();
+			}
+		}
+	}
 	public void flipInfluence(TeamInfo newTeam){
 		controllingTeam = newTeam;
 		percControlled = 0;
@@ -459,4 +474,6 @@ public class BaseTile : MonoBehaviour {
 		percControlled = 0;
 		controllingTeam = null;
 	}
+	
+	
 }

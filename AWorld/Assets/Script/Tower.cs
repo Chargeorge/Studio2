@@ -30,6 +30,7 @@ public class Tower : MonoBehaviour {
 		int brdX; int brdY;
 		brdX = transform.parent.gameObject.GetComponent<BaseTile>().brdXPos;
 		brdY = transform.parent.gameObject.GetComponent<BaseTile>().brdYPos;
+		
 		if(_currentState == TowerState.Basic){
 			//find nearest convertable block
 			if(tileBeingConverted == null){
@@ -40,7 +41,7 @@ public class Tower : MonoBehaviour {
 						GameObject Tile = gm.tiles[(int)brdX + (int)p.relCoord.x, brdY + (int)p.relCoord.y];
 						if(Tile != null){
 							BaseTile Bt =  Tile.GetComponent<BaseTile>();
-							if(Bt.controllingTeam != null && Bt.controllingTeam.teamNumber != controllingTeam.teamNumber){
+							if(Bt.controllingTeam != null && Bt.controllingTeam.teamNumber != controllingTeam.teamNumber && Bt.percControlled < 100){
 								tileBeingConverted = Bt.gameObject;
 								patternConverting = p;
 							}
@@ -50,7 +51,7 @@ public class Tower : MonoBehaviour {
 				 });
 			 }
 			 else{
-			 	//Apply pattern to tile in question
+				tileBeingConverted.GetComponent<BaseTile>().addProgressToInfluence(patternConverting.vpsInfluence, controllingTeam);
 			 }
 		}
 		
@@ -129,4 +130,6 @@ public class Tower : MonoBehaviour {
 		
 		return returanble.OrderBy(o=>o.relCoord.magnitude).ToList();
 	}
+	
+	
 }
