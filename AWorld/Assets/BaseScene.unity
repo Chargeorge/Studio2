@@ -181,8 +181,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e33dabbeb93ecbf4ebe96982f5acbd10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sRef: {fileID: 0}
   players: []
   playerPrefab: {fileID: 100000, guid: e39d03a4130efc4428bb1a902ba29847, type: 2}
+  debugMouse: {fileID: 0}
 --- !u!4 &842739088
 Transform:
   m_ObjectHideFlags: 0

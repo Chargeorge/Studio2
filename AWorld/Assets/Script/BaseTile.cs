@@ -444,8 +444,14 @@ public class BaseTile : MonoBehaviour {
 		percControlled += rate*Time.deltaTime;
 		Debug.Log(percControlled);
 	}
-	
-	public void addProgressToInfluence(float rate, TeamInfo newTeam){
+	/// <summary>
+	/// adds influence, if influence is maxed it returns true
+	/// </summary>
+	/// <returns><c>true</c>, if progress to influence was added, <c>false</c> otherwise.</returns>
+	/// <param name="rate">Rate.</param>
+	/// <param name="newTeam">New team.</param>
+	public bool addProgressToInfluence(float rate, TeamInfo newTeam){
+		bool returnable  = false;
 		if(controllingTeam != null && controllingTeam.teamNumber != newTeam.teamNumber){
 			percControlled -= rate*Time.deltaTime;
 			if(percControlled <=0) {
@@ -453,11 +459,18 @@ public class BaseTile : MonoBehaviour {
 				flipInfluence(newTeam);
 			}
 		}else{
-			percControlled += rate*Time.deltaTime;
-			if(percControlled >= 100) {
-				finishInfluence();
+			if(controllingTeam == null){
+				startInfluence(rate*Time.deltaTime, newTeam);
+			}
+			else{
+				percControlled += rate*Time.deltaTime;
+				if(percControlled >= 100) {
+					finishInfluence();
+					returnable = true;
+				}
 			}
 		}
+		return returnable;
 	}
 	public void flipInfluence(TeamInfo newTeam){
 		controllingTeam = newTeam;
@@ -475,5 +488,8 @@ public class BaseTile : MonoBehaviour {
 		controllingTeam = null;
 	}
 	
+	void OnMouseOver() {
+		GameObject.Find("GameManager").GetComponent<GameManager>().debugMouse = this;
+	}
 	
 }

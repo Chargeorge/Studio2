@@ -41,9 +41,15 @@ public class Tower : MonoBehaviour {
 						GameObject Tile = gm.tiles[(int)brdX + (int)p.relCoord.x, brdY + (int)p.relCoord.y];
 						if(Tile != null){
 							BaseTile Bt =  Tile.GetComponent<BaseTile>();
-							if(Bt.controllingTeam != null && Bt.controllingTeam.teamNumber != controllingTeam.teamNumber && Bt.percControlled < 100){
+							if(Bt.controllingTeam == null){
 								tileBeingConverted = Bt.gameObject;
 								patternConverting = p;
+								Debug.Log("found my dude");
+							}
+							else if(Bt.controllingTeam.teamNumber != controllingTeam.teamNumber || Bt.percControlled < 100f){
+								tileBeingConverted = Bt.gameObject;
+								patternConverting = p;
+								Debug.Log("found my dude");
 							}
 						}
 						
@@ -51,7 +57,11 @@ public class Tower : MonoBehaviour {
 				 });
 			 }
 			 else{
-				tileBeingConverted.GetComponent<BaseTile>().addProgressToInfluence(patternConverting.vpsInfluence, controllingTeam);
+				Debug.Log("Tying to influence at rate " + patternConverting.vpsInfluence );
+				if(tileBeingConverted.GetComponent<BaseTile>().addProgressToInfluence(patternConverting.vpsInfluence, controllingTeam)){
+					tileBeingConverted = null;
+					patternConverting= null;
+				}
 			 }
 		}
 		
@@ -113,6 +123,7 @@ public class Tower : MonoBehaviour {
 			if(_currentState == TowerState.BuildingBasic){
 				_currentState = TowerState.Basic;
 				_pattern = Tower.createBasicInfluenceList();
+				
 			}
 			if(_currentState == TowerState.BuildingAdvanced){
 				_currentState = TowerState.Advanced;
@@ -126,10 +137,12 @@ public class Tower : MonoBehaviour {
 		returanble.Add(new InfluencePatternHolder(new Vector2(0,1), 100f));
 		returanble.Add(new InfluencePatternHolder(new Vector2(0,2), 50f));
 		returanble.Add(new InfluencePatternHolder(new Vector2(0,3), 33.4f));
-		returanble.Add(new InfluencePatternHolder(new Vector2(0,3), 25f));
+		returanble.Add(new InfluencePatternHolder(new Vector2(0,4), 25f));
 		
 		return returanble.OrderBy(o=>o.relCoord.magnitude).ToList();
 	}
-	
+	void OnMouseOver() {
+		GameObject.Find("GameManager").GetComponent<GameManager>().debugTower = this;
+	}
 	
 }

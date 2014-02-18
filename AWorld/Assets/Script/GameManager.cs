@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour {
 
+	public Settings sRef;
 	#region Statics
 	/// <summary>
 	/// Converts the grd position into the absolute Unity world position
@@ -20,10 +21,11 @@ public class GameManager : MonoBehaviour {
 	public static Mode gameMode = Mode.OneVOne;
 	public List<GameObject> players = new List<GameObject>();
 	public GameObject playerPrefab;
-	
+	public BaseTile debugMouse;
+	public Tower debugTower;
 	// Use this for initialization
 	void Start () {
-		
+		sRef = GameObject.Find ("Settings").GetComponent<Settings>();
 		playerPrefab = (GameObject)Resources.Load("Prefabs/Player");
 	}
 	
@@ -52,8 +54,16 @@ public class GameManager : MonoBehaviour {
 
 	}
 
-	public void onGUI(){
-		
+	void OnGUI(){
+		if(sRef.debugMode){
+			if(debugMouse!=null){
+				GUI.Box (new Rect (10,100,200,90), string.Format("Mouse Over x:{0} y:{1}\r\nState: {2}\r\nPercentControlled: not yet ", debugMouse.brdXPos, debugMouse.brdYPos, debugMouse.currentState));
+				
+			}
+			if(debugTower !=null){
+				GUI.Box (new Rect (10,200,200,90), string.Format(" team {0} controlling\r\nstate: {1}", debugTower.controllingTeam.teamNumber, debugTower.currentState));
+			}
+		}
 	}
 
 }
