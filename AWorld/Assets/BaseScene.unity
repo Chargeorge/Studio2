@@ -185,6 +185,7 @@ MonoBehaviour:
   players: []
   playerPrefab: {fileID: 100000, guid: e39d03a4130efc4428bb1a902ba29847, type: 2}
   debugMouse: {fileID: 0}
+  debugTower: {fileID: 0}
 --- !u!4 &842739088
 Transform:
   m_ObjectHideFlags: 0
