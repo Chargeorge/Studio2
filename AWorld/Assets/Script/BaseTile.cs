@@ -14,8 +14,10 @@ public class BaseTile : MonoBehaviour {
 	public TileState currentState;
 	private int _brdXPos;
 	private int _brdYPos;
-	
+	public TileTypeEnum currentType;
 	private int _ident;
+	
+
 
 	private Color _highlightColor = new Color(0f,0f, 0f);
 
@@ -208,10 +210,12 @@ public class BaseTile : MonoBehaviour {
 		switch (et){
 			case TileTypeEnum.regular:
 				currentTile.renderer.material = (Material)Resources.Load("Sprites/Materials/Regular");
+				currentTile.GetComponent<BaseTile>().currentType = TileTypeEnum.regular;
 			break;
 
 			case TileTypeEnum.water:
 				currentTile.renderer.material = (Material)Resources.Load("Sprites/Materials/Water");
+				currentTile.GetComponent<BaseTile>().currentType = TileTypeEnum.water;
 			break;
 		}
 			
@@ -429,6 +433,17 @@ public class BaseTile : MonoBehaviour {
 	/// <returns>The rate.</returns>
 	/// <param name="testing">Testing.</param>
 	public float GetRate(Player testing){
+		if(currentType == TileTypeEnum.water){
+			return 0f;
+		}
+		if(controllingTeam != null){
+			if(controllingTeam.teamNumber == testing.teamNumber){
+				return 2f; 
+			}
+			else{
+				return .5f;
+			}
+		}
 		return 1;
 	}
 	

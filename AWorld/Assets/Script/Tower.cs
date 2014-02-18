@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +38,7 @@ public class Tower : MonoBehaviour {
 				//FIND The first convertable tile, list is ordeed by distance
 				_pattern.ForEach(delegate (InfluencePatternHolder p){
 					if(tileBeingConverted == null){
+					
 						GameObject Tile = gm.tiles[(int)brdX + (int)p.relCoordRotated.x, brdY + (int)p.relCoordRotated.y];
 						if(Tile != null){
 							BaseTile Bt =  Tile.GetComponent<BaseTile>();
