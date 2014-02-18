@@ -38,7 +38,7 @@ public class Tower : MonoBehaviour {
 				//FIND The first convertable tile, list is ordeed by distance
 				_pattern.ForEach(delegate (InfluencePatternHolder p){
 					if(tileBeingConverted == null){
-						GameObject Tile = gm.tiles[(int)brdX + (int)p.relCoord.x, brdY + (int)p.relCoord.y];
+						GameObject Tile = gm.tiles[(int)brdX + (int)p.relCoordRotated.x, brdY + (int)p.relCoordRotated.y];
 						if(Tile != null){
 							BaseTile Bt =  Tile.GetComponent<BaseTile>();
 							if(Bt.controllingTeam == null){
@@ -90,6 +90,7 @@ public class Tower : MonoBehaviour {
 	
 	public void setTeam(){
 		Color32 controllingTeamColor = controllingTeam.teamColor;		
+		//TODO: custom sprites and colors per team
 		controllingTeamColor.a = 255;
 		controllingTeamColor.r += 30;
 		controllingTeamColor.g += 30;
@@ -122,24 +123,24 @@ public class Tower : MonoBehaviour {
 			
 			if(_currentState == TowerState.BuildingBasic){
 				_currentState = TowerState.Basic;
-				_pattern = Tower.createBasicInfluenceList();
+				_pattern = Tower.createBasicInfluenceList(getAngleForDir(facing));
 				
 			}
 			if(_currentState == TowerState.BuildingAdvanced){
 				_currentState = TowerState.Advanced;
-				_pattern = Tower.createBasicInfluenceList();
+				_pattern = Tower.createBasicInfluenceList(getAngleForDir(facing));
 			}			
 		}
 	}
 	
-	public static List<InfluencePatternHolder> createBasicInfluenceList(){
+	public static List<InfluencePatternHolder> createBasicInfluenceList(float degreeRotated){
 		List<InfluencePatternHolder> returanble = new List<InfluencePatternHolder>();
-		returanble.Add(new InfluencePatternHolder(new Vector2(0,1), 100f));
-		returanble.Add(new InfluencePatternHolder(new Vector2(0,2), 50f));
-		returanble.Add(new InfluencePatternHolder(new Vector2(0,3), 33.4f));
-		returanble.Add(new InfluencePatternHolder(new Vector2(0,4), 25f));
+		returanble.Add(new InfluencePatternHolder(new Vector2(0,1), 100f, degreeRotated));
+		returanble.Add(new InfluencePatternHolder(new Vector2(0,2), 50f, degreeRotated));
+		returanble.Add(new InfluencePatternHolder(new Vector2(0,3), 33.4f, degreeRotated));
+		returanble.Add(new InfluencePatternHolder(new Vector2(0,4), 25f, degreeRotated));
 		
-		return returanble.OrderBy(o=>o.relCoord.magnitude).ToList();
+		return returanble.OrderBy(o=>o.relCoordRotated.magnitude).ToList();
 	}
 	void OnMouseOver() {
 		GameObject.Find("GameManager").GetComponent<GameManager>().debugTower = this;
