@@ -31,6 +31,8 @@ public class Tower : MonoBehaviour {
 		brdX = transform.parent.gameObject.GetComponent<BaseTile>().brdXPos;
 		brdY = transform.parent.gameObject.GetComponent<BaseTile>().brdYPos;
 		
+		setVisualDirection();
+		
 		if(_currentState == TowerState.Basic){
 			//find nearest convertable block
 			if(tileBeingConverted == null){
@@ -58,6 +60,7 @@ public class Tower : MonoBehaviour {
 				 });
 			 }
 			 else{
+			 //TODO: Handle situations where other tiles are influencing.  
 				Debug.Log("Tying to influence at rate " + patternConverting.vpsInfluence );
 				if(tileBeingConverted.GetComponent<BaseTile>().addProgressToInfluence(patternConverting.vpsInfluence, controllingTeam)){
 					tileBeingConverted = null;
@@ -174,5 +177,15 @@ public class Tower : MonoBehaviour {
 		transform.RotateAround(transform.position, new Vector3(0,0,1), currentRotAngle);
 		transform.RotateAround(transform.position, new Vector3(0,0,-1), rotAngle);
 	}
+	
+	public void setVisualDirection(){
+		float rotAngle = getAngleForDir(facing);
+		float currentRotAngle = getAngleForDir(facing);
+		
+		transform.RotateAround(transform.position, new Vector3(0,0,1), currentRotAngle);
+		transform.RotateAround(transform.position, new Vector3(0,0,-1), rotAngle);
+	}
+	
+	
 	
 }
