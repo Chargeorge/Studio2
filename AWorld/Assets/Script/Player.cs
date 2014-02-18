@@ -106,7 +106,7 @@ public class Player : MonoBehaviour {
 								GameObject towerBeingBuild = (GameObject)GameObject.Instantiate(_prfbTower, new Vector3(0,0,0), Quaternion.identity);
 								towerInProgress = towerBeingBuild.GetComponent<Tower>();
 								towerInProgress.startBuilding(currentTile.gameObject, this.gameObject, vpsBuildRate);
-								
+								towerInProgress.setDirection(facing);
 							}
 						
 							//Start removing influence
@@ -122,6 +122,11 @@ public class Player : MonoBehaviour {
  							_currentState = PlayerState.influencing;
  							currentTile.startInfluence(currentActionProgress, team);
 						}
+					}
+					else{
+						//TOWER HERE KEEP BUILDING
+						
+						
 					}
 				}
 				
@@ -161,6 +166,10 @@ public class Player : MonoBehaviour {
 								Debug.Log("attempting to build");
 								float vpsBuildRate = sRef.vpsBaseBuild;
 								towerInProgress.addBuildingProgress(vpsBuildRate);
+								if(x.HasValue){
+									setDirection(x.Value);
+									towerInProgress.setDirection(x.Value);
+								}
 								if(towerInProgress.percActionComplete > 100f){
 								
 									Debug.Log("Finished?");

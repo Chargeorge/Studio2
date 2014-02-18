@@ -145,4 +145,32 @@ public class Tower : MonoBehaviour {
 		GameObject.Find("GameManager").GetComponent<GameManager>().debugTower = this;
 	}
 	
+	private float getAngleForDir(DirectionEnum N){
+		switch (N){
+		case DirectionEnum.North:
+			return 0f;
+			
+		case DirectionEnum.East:
+			return 90f;
+			
+		case DirectionEnum.South:
+			return 180f;
+			
+		case DirectionEnum.West:
+			return 270f;
+			
+		}
+		return 0;
+	} 
+	
+	public void setDirection(DirectionEnum N){
+		
+		float rotAngle = getAngleForDir(N);
+		float currentRotAngle = getAngleForDir(facing);
+		
+		facing = N;
+		transform.RotateAround(transform.position, new Vector3(0,0,1), currentRotAngle);
+		transform.RotateAround(transform.position, new Vector3(0,0,-1), rotAngle);
+	}
+	
 }
