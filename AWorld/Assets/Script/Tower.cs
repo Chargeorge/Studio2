@@ -29,7 +29,7 @@ public class Tower : MonoBehaviour {
 	void Update () {
 		int brdX; int brdY;
 		brdX = transform.parent.gameObject.GetComponent<BaseTile>().brdXPos;
-		brdY = transform.parent.gameObject.GetComponent<BaseTile>().brdYPos;
+		 brdY = transform.parent.gameObject.GetComponent<BaseTile>().brdYPos;
 		
 		setVisualDirection();
 		
@@ -40,8 +40,9 @@ public class Tower : MonoBehaviour {
 				//FIND The first convertable tile, list is ordeed by distance
 				_pattern.ForEach(delegate (InfluencePatternHolder p){
 					if(tileBeingConverted == null){
-					
-						GameObject Tile = gm.tiles[(int)brdX + (int)p.relCoordRotated.x, brdY + (int)p.relCoordRotated.y];
+						int x = (int)brdX + (int)Mathf.RoundToInt(p.relCoordRotated.x);
+						int y = (int)brdY + (int)Mathf.RoundToInt(p.relCoordRotated.y);
+						GameObject Tile = gm.tiles[x, y];
 						if(Tile != null){
 							BaseTile Bt =  Tile.GetComponent<BaseTile>();
 							if(Bt.controllingTeam == null){
