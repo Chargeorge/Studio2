@@ -179,11 +179,7 @@ public class Tower : MonoBehaviour {
 	}
 	
 	public void setVisualDirection(){
-		float rotAngle = getAngleForDir(facing);
-		float currentRotAngle = getAngleForDir(facing);
-		
-		transform.RotateAround(transform.position, new Vector3(0,0,1), currentRotAngle);
-		transform.RotateAround(transform.position, new Vector3(0,0,-1), rotAngle);
+		transform.localEulerAngles = new Vector3(0,0,-1*getAngleForDir(facing));
 	}
 	
 	
