@@ -10,7 +10,8 @@ public class TileCreation : MonoBehaviour {
 	private GameManager gm;
 	public GameObject manager;
 	public int boardX, boardY;
-
+	public int numberOfAltars;
+	public string ranjitRangeTileTypes;
 	// Use this for initialization
 	void Start () {
 		//Eventually procedural, for now random. Wee
@@ -19,7 +20,7 @@ public class TileCreation : MonoBehaviour {
 		textureResources.Add((int)TileTypeEnum.water, (Material)Resources.Load("Sprites/Materials/Water"));
 		gm = manager.GetComponent<GameManager>();
 		tilesGameBoard = new GameObject[boardX ,boardY];
-
+		
 
 		for(int x= 0;x < boardX; x++ ){
 			for(int y=0; y< boardY; y++ ){
@@ -54,6 +55,8 @@ public class TileCreation : MonoBehaviour {
 			}
 		}
 
+	
+		
 		//Perlin Pass to generate terrrain
 
 		perlinPass (TileTypeEnum.water, 5000);
