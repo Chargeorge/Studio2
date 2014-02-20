@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -20,13 +20,20 @@ public class GameManager : MonoBehaviour {
 	private bool setup = true;
 	public static Mode gameMode = Mode.OneVOne;
 	public List<GameObject> players = new List<GameObject>();
-	public GameObject playerPrefab;
+	public GameObject prfbPlayer;
 	public BaseTile debugMouse;
 	public Tower debugTower;
+	public GameObject prfbAltar;
+	public List<GameObject> altars;
+	public int numAltars;
 	// Use this for initialization
 	void Start () {
 		sRef = GameObject.Find ("Settings").GetComponent<Settings>();
-		playerPrefab = (GameObject)Resources.Load("Prefabs/Player");
+		prfbPlayer = (GameObject)Resources.Load("Prefabs/Player");
+		prfbAltar = (GameObject)Resources.Load("Prefabs/Altar");
+		
+		
+		
 	}
 	
 	// Update is called once per frame
@@ -35,19 +42,34 @@ public class GameManager : MonoBehaviour {
 		if (setup){
 			switch (gameMode){
 				case Mode.OneVOne:
-					GameObject Player1 = (GameObject)Instantiate(playerPrefab, new Vector3(0,0,0), Quaternion.identity);
-					GameObject Player2 = (GameObject)Instantiate(playerPrefab, new Vector3(0,0,0), Quaternion.identity);
+					GameObject Player1 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
+					GameObject Player2 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
 					Player p1 = Player1.GetComponent<Player>();
 					Player p2 = Player2.GetComponent<Player>();
 					p1.SetTeam(TeamInfo.GetTeamInfo(1));
 					p2.SetTeam(TeamInfo.GetTeamInfo(2));
 					p1.PlayerNumber = 1;
 					p2.PlayerNumber = 2;
+					
+					
 					break;
 				case Mode.TwoVTwo:
 					
 				break;
 
+			}
+			
+			
+			for (int i=0; i<numAltars; i++){
+				Debug.Log ("in Altar");		
+				GameObject a = (GameObject)Instantiate(prfbAltar, Vector3.zero, Quaternion.identity);
+				Altar aObj = a.GetComponent<Altar>();
+				aObj.brdX = Random.Range(0, tiles.GetLength(0));
+				aObj.brdY = Random.Range(0, tiles.GetLength(1));
+				
+				aObj.setType(null);
+				aObj.transform.parent = tiles[aObj.brdX, aObj.brdY].transform;
+				aObj.transform.localPosition = new Vector3(0,0,-1);
 			}
 			setup = false;
 		}
