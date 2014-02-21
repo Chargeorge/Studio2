@@ -5,7 +5,7 @@ public class Player : MonoBehaviour {
 
 	public TeamInfo team;
 	private Vector2 _grdLocation;
-//	private Vector2 _positionOffset;	//Offsets position based on how far along move action is 
+	private Vector2 _positionOffset;	//Offsets position based on how far along move action is 
 	private PlayerState _currentState;
 	public int PlayerNumber;
 	public GameManager gm; 
@@ -32,7 +32,6 @@ public class Player : MonoBehaviour {
 			return _grdLocation;
 		}
 		set{
-//			transform.position = (Vector2) GameManager.wrldPositionFromGrdPosition(value) + _positionOffset;
 			transform.position = GameManager.wrldPositionFromGrdPosition(value);
 			
 			_grdLocation = value;
@@ -58,7 +57,9 @@ public class Player : MonoBehaviour {
 		DirectionEnum? x = getStickDirection();
 		BaseTile currentTile = gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>();
 		bool buildButtonDown = getPlayerBuild();
-		
+
+		_positionOffset = new Vector2 (0,0);	//This can't possibly be the right way to do this - Josh
+				
 		switch( currentState){
 			
 			case PlayerState.standing:
@@ -150,7 +151,7 @@ public class Player : MonoBehaviour {
 						currentActionProgress = 0f;
 						_currentState = PlayerState.standing;	
 					}
-/**
+
 					else{ 
 					//Move avatar according to how far along the action is
 
@@ -173,9 +174,9 @@ public class Player : MonoBehaviour {
 								break;
 								
 						}
-								
+						
 					}
-					*/
+					
 				}
 				else{
 					_currentState= PlayerState.standing; 
@@ -254,7 +255,12 @@ public class Player : MonoBehaviour {
 					//need to reset currenttile to previousState
 				}	
 			break;
-		}	
+		}
+		
+		transform.position = new Vector3 
+			(GameManager.wrldPositionFromGrdPosition(grdLocation).x + _positionOffset.x / 2,
+			 GameManager.wrldPositionFromGrdPosition(grdLocation).y + _positionOffset.y / 2, -1);
+		
 	}
 	
 	public void DoMove(BaseTile MoveTo){
@@ -278,7 +284,7 @@ public class Player : MonoBehaviour {
 		if (team != null) {
 			grdLocation = team.startingLocation;		
 		}
-//		_positionOffset = new Vector2 (0,0);
+		_positionOffset = new Vector2 (0,0);
 	}
 
 	/// <summary>
