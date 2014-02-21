@@ -7,7 +7,7 @@ public class Settings : MonoBehaviour {
 
 	//USage:  Anytime we build every action takes 100 points.  Every frame (Update) we add vpsBase * coef * Time.deltaTime and add it to the current counter
 
-	//Right now trhis i an object we can instantiate.  Left as is for future iterations that read from the file system.  
+	//Right now this is an object we can instantiate.  Left as is for future iterations that read from the file system.  
 
 
 	//Char: starting with settings where everything takes 1 second.  

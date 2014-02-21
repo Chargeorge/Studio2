@@ -5,6 +5,7 @@ public class Player : MonoBehaviour {
 
 	public TeamInfo team;
 	private Vector2 _grdLocation;
+//	private Vector2 _positionOffset;	//Offsets position based on how far along move action is 
 	private PlayerState _currentState;
 	public int PlayerNumber;
 	public GameManager gm; 
@@ -31,8 +32,9 @@ public class Player : MonoBehaviour {
 			return _grdLocation;
 		}
 		set{
+//			transform.position = (Vector2) GameManager.wrldPositionFromGrdPosition(value) + _positionOffset;
 			transform.position = GameManager.wrldPositionFromGrdPosition(value);
-
+			
 			_grdLocation = value;
 		}
 	}
@@ -60,7 +62,7 @@ public class Player : MonoBehaviour {
 		switch( currentState){
 			
 			case PlayerState.standing:
-			//If we are standinga nd we get an input, handle it.
+			//If we are standing and we get an input, handle it.
 				
 				if(x.HasValue && !buildButtonDown){
 					if(currentTile.GetDirection(x.Value) != null){
@@ -148,6 +150,32 @@ public class Player : MonoBehaviour {
 						currentActionProgress = 0f;
 						_currentState = PlayerState.standing;	
 					}
+/**
+					else{ 
+					//Move avatar according to how far along the action is
+
+						switch (facing) {
+
+							case DirectionEnum.East: 
+								_positionOffset = new Vector2 (currentActionProgress / sRef.baseRequired, 0);
+								break;
+							
+							case DirectionEnum.West:
+								_positionOffset = new Vector2 (-1 * currentActionProgress / sRef.baseRequired, 0);
+								break;
+
+							case DirectionEnum.North:
+								_positionOffset = new Vector2 (0, currentActionProgress / sRef.baseRequired);
+								break;
+										
+							case DirectionEnum.South:
+								_positionOffset = new Vector2 (0, -1 * currentActionProgress / sRef.baseRequired);
+								break;
+								
+						}
+								
+					}
+					*/
 				}
 				else{
 					_currentState= PlayerState.standing; 
@@ -250,6 +278,7 @@ public class Player : MonoBehaviour {
 		if (team != null) {
 			grdLocation = team.startingLocation;		
 		}
+//		_positionOffset = new Vector2 (0,0);
 	}
 
 	/// <summary>
