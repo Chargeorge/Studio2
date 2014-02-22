@@ -48,12 +48,12 @@ public class Tower : MonoBehaviour {
 							if(Bt.controllingTeam == null){
 								tileBeingConverted = Bt.gameObject;
 								patternConverting = p;
-								Debug.Log("found my dude");
+								//Debug.Log("found my dude");
 							}
 							else if(Bt.controllingTeam.teamNumber != controllingTeam.teamNumber || Bt.percControlled < 100f){
 								tileBeingConverted = Bt.gameObject;
 								patternConverting = p;
-								Debug.Log("found my dude");
+								//Debug.Log("found my dude");
 							}
 						}
 						
@@ -62,7 +62,7 @@ public class Tower : MonoBehaviour {
 			 }
 			 else{
 			 //TODO: Handle situations where other tiles are influencing.  
-				Debug.Log("Tying to influence at rate " + patternConverting.vpsInfluence );
+				//Debug.Log("Tying to influence at rate " + patternConverting.vpsInfluence );
 				if(tileBeingConverted.GetComponent<BaseTile>().addProgressToInfluence(patternConverting.vpsInfluence, controllingTeam)){
 					tileBeingConverted = null;
 					patternConverting= null;
@@ -111,14 +111,14 @@ public class Tower : MonoBehaviour {
 	public void addBuildingProgress(float rate){
 		percActionComplete += rate*Time.deltaTime;
 		
-		/** Doesn't work, no idea why
+		// Doesn't work, no idea why
 		
 		Color32 towerColor = renderer.material.color;
 		towerColor.a = (byte) (255f * (percActionComplete/100f));		
 		renderer.material.color = towerColor;
 		Debug.Log(renderer.material.color.a);
 		
-		*/
+		
 	}
 	
 	public void addInfluenceProgress(float rate){

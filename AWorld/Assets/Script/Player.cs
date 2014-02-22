@@ -68,7 +68,7 @@ public class Player : MonoBehaviour {
 				if(x.HasValue && !buildButtonDown){
 					if(currentTile.GetDirection(x.Value) != null){
 						BaseTile MovingInto = currentTile.GetDirection(x.Value);
-						Debug.Log(string.Format("x:{0}, y: {1}", MovingInto.brdXPos, MovingInto.brdYPos));
+						//Debug.Log(string.Format("x:{0}, y: {1}", MovingInto.brdXPos, MovingInto.brdYPos));
 						float vpsRate = MovingInto.GetRate(this) * sRef.vpsBaseMove;
 						addProgressToAction(vpsRate);
 						setDirection(x.Value);
@@ -186,13 +186,13 @@ public class Player : MonoBehaviour {
 			
 			case PlayerState.building:
 				if(buildButtonDown){
-					Debug.Log ("In Build");
+					//Debug.Log ("In Build");
 					if(currentTile.controllingTeam != null){
-						Debug.Log ("curent Team");
+						//Debug.Log ("curent Team");
 						if(currentTile.controllingTeam.teamNumber == team.teamNumber){
 							//Check for a tower in progress and start building!s
 							if(towerInProgress != null){
-								Debug.Log("attempting to build");
+								//Debug.Log("attempting to build");
 								float vpsBuildRate = sRef.vpsBaseBuild;
 								towerInProgress.addBuildingProgress(vpsBuildRate);
 								if(x.HasValue){
@@ -201,7 +201,7 @@ public class Player : MonoBehaviour {
 								}
 								if(towerInProgress.percActionComplete > 100f){
 								
-									Debug.Log("Finished?");
+									//Debug.Log("Finished?");
 									towerInProgress.finishAction();
 									_currentState = PlayerState.standing;
 									currentActionProgress = 0f;

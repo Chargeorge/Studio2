@@ -452,7 +452,7 @@ public class BaseTile : MonoBehaviour {
 		currentState = TileState.beingInfluenced;
 		controllingTeam = team;
 		percControlled = initialProgress;
-		Debug.Log ("Influence Started " + initialProgress);
+		//Debug.Log ("Influence Started " + initialProgress);
 	}
 	
 	public void addProgressToInfluence(float rate){
