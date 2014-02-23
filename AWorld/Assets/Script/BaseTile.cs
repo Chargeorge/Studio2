@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+using System;
 public class BaseTile : MonoBehaviour {
 	
 	
@@ -17,7 +17,8 @@ public class BaseTile : MonoBehaviour {
 	public TileTypeEnum currentType;
 	private int _ident;
 	
-
+	//Delegate used for different A* methods
+	public delegate List<BaseTile> GetLocalTiles(BaseTile Base, TeamInfo T);
 
 	private Color _highlightColor = new Color(0f,0f, 0f);
 
@@ -153,7 +154,7 @@ public class BaseTile : MonoBehaviour {
 	}
 	// Use this for initialization
 	void Start () {
-		_ident = Random.Range(1, 10000000);
+		_ident = UnityEngine.Random.Range(1, 10000000);
 		currentState = TileState.normal;
 	}
 	
@@ -307,6 +308,8 @@ public class BaseTile : MonoBehaviour {
 			return returnable;
 	
 	}*/
+	
+	
 
 
 	/// <summary>
@@ -314,11 +317,21 @@ public class BaseTile : MonoBehaviour {
 	/// </summary>
 	/// <returns>The local open tiles.</returns>
 	/// <param name="currentAp">Current ap.</param>
-	public List<BaseTile> getLocalOpenTiles(int currentAp){
+	public static List<BaseTile> getLocalTraversableTiles(BaseTile current, TeamInfo T){
+	//	if(
 		return null;
 	}
 		
-	public static List<AStarholder> aStarSearch(BaseTile start, BaseTile end, int currentAp){
+	public static List<BaseTile> getLocalSameTeamTiles(BaseTile current, TeamInfo T){	
+		return null;
+	}
+	
+	public static List<BaseTile> getLocalNonTiles(BaseTile current, TeamInfo T){
+		return null;
+	}
+
+		
+	public static List<AStarholder> aStarSearch(BaseTile start, BaseTile end, int currentAp, GetLocalTiles LocalMethod, TeamInfo team){
 		Dictionary<int, AStarholder> closedSet  = new Dictionary<int, AStarholder>();		
 		Dictionary<int, AStarholder> openSet = new Dictionary<int, AStarholder>();
 		
@@ -335,7 +348,7 @@ public class BaseTile : MonoBehaviour {
 			
 			if(current.current.Ident == end.Ident){ BaseTile.reconstructPath(start, current, returnable); return returnable;}
 			
-			List<BaseTile> listies = current.current.getLocalOpenTiles(int.MaxValue);
+			List<BaseTile> listies =LocalMethod(current, team);
 			listies.ForEach(delegate (BaseTile bt){
 				if(!closedSet.ContainsKey(bt.Ident)){
 					AStarholder newOpen = new AStarholder(bt, current);

@@ -20,6 +20,8 @@ public class Settings : MonoBehaviour {
 	public float coefConvert = .5f;
 	public float coefBuildTower = .25f; 
 	public float baseRequired = 100f;
+	public float scoreOnCapture = 50f;
+	public float vpsScorePerSecond = 3f;
 	
 	public bool debugMode = true;
 	// Use this for initialization
