@@ -8,9 +8,14 @@ public class BaseTile : MonoBehaviour {
 	public GameObject qudTowerLayer;
 	public GameObject qudSelectedLayer;
 	public GameObject qudInfluenceLayer;
-	public TeamInfo controllingTeam;
+	
+	public TeamInfo controllingTeam;  //LOGIC TO ADD owningTeam ONLY CHANGES when controlling team reaches 100 or 0
 	public float percControlled;
+	public TeamInfo owningTeam;  //OWNING team is the official owning team, use it for defining networks and movement cost.
+	
 	public GameObject tower;
+	
+	
 	public TileState currentState;
 	private int _brdXPos;
 	private int _brdYPos;
@@ -348,7 +353,7 @@ public class BaseTile : MonoBehaviour {
 			
 			if(current.current.Ident == end.Ident){ BaseTile.reconstructPath(start, current, returnable); return returnable;}
 			
-			List<BaseTile> listies =LocalMethod(current, team);
+			List<BaseTile> listies =LocalMethod(current.current, team);
 			listies.ForEach(delegate (BaseTile bt){
 				if(!closedSet.ContainsKey(bt.Ident)){
 					AStarholder newOpen = new AStarholder(bt, current);
@@ -430,8 +435,8 @@ public class BaseTile : MonoBehaviour {
 		return null;
 	}
 	
-	public BaseTile getClosestOpenTile(BaseTile ToCheck){
-		List<BaseTile> open = getLocalOpenTiles(int.MaxValue);
+	public BaseTile getClosestOpenTile(BaseTile ToCheck, TeamInfo T, GetLocalTiles locals){
+		List<BaseTile> open = locals(ToCheck, T);
 		BaseTile returnable = null;
 		int minVal = int.MaxValue;
 		open.ForEach(delegate(BaseTile obj) {
@@ -503,6 +508,7 @@ public class BaseTile : MonoBehaviour {
 	public void flipInfluence(TeamInfo newTeam){
 		controllingTeam = newTeam;
 		percControlled = 0;
+		owningTeam = null;
 	}
 	public void finishInfluence(){
 		///TODO: add end semaphore stuff her
@@ -510,10 +516,12 @@ public class BaseTile : MonoBehaviour {
 			percControlled = 100f;
 			currentState = TileState.normal;
 		}
+		owningTeam = controllingTeam;
 	}
 	public void clearInfluence(){
 		percControlled = 0;
 		controllingTeam = null;
+		owningTeam = null;
 	}
 	
 	void OnMouseOver() {
