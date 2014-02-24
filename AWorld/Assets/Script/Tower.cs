@@ -110,17 +110,11 @@ public class Tower : MonoBehaviour {
 	/// <param name="rate">Rate.</param>
 	public void addBuildingProgress(float rate){
 		percActionComplete += rate*Time.deltaTime;
-<<<<<<< HEAD
 				
 		Color32 towerColor = renderer.material.color;
 		towerColor.a = (byte) (255f * (percActionComplete/100f));
 		renderer.material.color = towerColor;		
 		
-<<<<<<< HEAD
-=======
-		
-=======
->>>>>>> parent of d56218e... Fixed tower weird fucking pop in phenomenomnom
 		/** Doesn't work, no idea why
 		
 		Color32 towerColor = renderer.material.color;
@@ -129,10 +123,6 @@ public class Tower : MonoBehaviour {
 		Debug.Log(renderer.material.color.a);
 		
 		*/
-<<<<<<< HEAD
->>>>>>> parent of d56218e... Fixed tower weird fucking pop in phenomenomnom
-=======
->>>>>>> parent of d56218e... Fixed tower weird fucking pop in phenomenomnom
 	}
 	
 	public void addInfluenceProgress(float rate){

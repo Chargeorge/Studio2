@@ -202,18 +202,10 @@ public class Player : MonoBehaviour {
 			
 			case PlayerState.building:
 				if(buildButtonDown){
-<<<<<<< HEAD
-<<<<<<< HEAD
 				//	Jiggle ();	//Gotta jiggle
 					Pulsate (); 
 					
 					//Debug.Log ("In Build");
-=======
-					Debug.Log ("In Build");
->>>>>>> parent of d56218e... Fixed tower weird fucking pop in phenomenomnom
-=======
-					Debug.Log ("In Build");
->>>>>>> parent of d56218e... Fixed tower weird fucking pop in phenomenomnom
 					if(currentTile.controllingTeam != null){
 						Debug.Log ("curent Team");
 						if(currentTile.controllingTeam.teamNumber == team.teamNumber){
