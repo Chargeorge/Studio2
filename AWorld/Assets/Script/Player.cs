@@ -24,6 +24,7 @@ public class Player : MonoBehaviour {
 	private float _minScale = 0.5f;
 	private float _expandRate = 0.007f;
 	private float _contractRate = 0.04f;
+	
 
 	public PlayerState currentState {
 		get {
