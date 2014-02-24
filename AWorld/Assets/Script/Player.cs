@@ -5,7 +5,7 @@ public class Player : MonoBehaviour {
 
 	public TeamInfo team;
 	private Vector2 _grdLocation;
-	private Vector2 _positionOffset;	//Offsets position based on how far along move action is 
+	private Vector2 _positionOffset;	//Offsets position based on how far along move action is
 	private PlayerState _currentState;
 	public int PlayerNumber;
 	public GameManager gm; 
@@ -14,7 +14,16 @@ public class Player : MonoBehaviour {
 	public DirectionEnum facing;
 	private GameObject _prfbTower;
 	private Tower towerInProgress;
+
+	private float _jiggleRange = 0.1f;			//Max distance from center of grid the player will jiggle
 	
+	private bool _pulsating;	//Set to false every Update function; Pulsate sets it to true; if false at end of update, resets scale and _expanding
+	private bool _expanding;	//Used during pulsating
+	private Vector3 _defaultScale = new Vector3 (0.5f, 0.5f, 1f);
+	private float _maxScale = 0.9f;
+	private float _minScale = 0.5f;
+	private float _expandRate = 0.007f;
+	private float _contractRate = 0.04f;
 
 	public PlayerState currentState {
 		get {
@@ -54,9 +63,12 @@ public class Player : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update (){ 
+		
 		DirectionEnum? x = getStickDirection();
 		BaseTile currentTile = gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>();
 		bool buildButtonDown = getPlayerBuild();
+		
+		_pulsating = false;	//Pulsate () sets this to true; if false at the end of this method, reset scale and _expanding
 
 		_positionOffset = new Vector2 (0,0);	//This can't possibly be the right way to do this - Josh
 				
@@ -97,6 +109,9 @@ public class Player : MonoBehaviour {
 				if( buildButtonDown){
 					//NO TOWER HERE, GOTTA DO STUFF.
 					if(currentTile.tower == null){
+		
+					//	Jiggle ();	//Gotta jiggle
+						Pulsate ();
 		
 						if(currentTile.controllingTeam != null){
 							//Start building tower
@@ -186,6 +201,9 @@ public class Player : MonoBehaviour {
 			
 			case PlayerState.building:
 				if(buildButtonDown){
+				//	Jiggle ();	//Gotta jiggle
+					Pulsate (); 
+					
 					//Debug.Log ("In Build");
 					if(currentTile.controllingTeam != null){
 						//Debug.Log ("curent Team");
@@ -228,6 +246,8 @@ public class Player : MonoBehaviour {
 			
 			case PlayerState.influencing:
 				if(buildButtonDown){
+			//		Jiggle ();	//Gotta jiggle
+					Pulsate (); 
 					if(currentTile.controllingTeam != null){
 						float modifier = (currentTile.controllingTeam.teamNumber  == teamNumber) ? 1 : -1;
 						float vpsInfluenceRate = sRef.vpsBaseInfluence * modifier;
@@ -247,7 +267,7 @@ public class Player : MonoBehaviour {
 					
 						
 					} else{
-					///TODOC catch fully influenced Tile!
+					///TODO catch fully influenced Tile!
 					}
 				}
 				else{
@@ -257,10 +277,17 @@ public class Player : MonoBehaviour {
 			break;
 		}
 		
+		//Set position based on offset
 		transform.position = new Vector3 
 			(GameManager.wrldPositionFromGrdPosition(grdLocation).x + _positionOffset.x / 2,
 			 GameManager.wrldPositionFromGrdPosition(grdLocation).y + _positionOffset.y / 2, -1);
-		
+			
+		//If not pulsating, reset scale and _expanding
+		if (!_pulsating) {
+			transform.localScale = new Vector3 (_defaultScale.x, _defaultScale.y, _defaultScale.z);
+			_expanding = false;
+		}
+						
 	}
 	
 	public void DoMove(BaseTile MoveTo){
@@ -367,11 +394,54 @@ public class Player : MonoBehaviour {
 		transform.RotateAround(transform.position, new Vector3(0,0,1), currentRotAngle);
 		transform.RotateAround(transform.position, new Vector3(0,0,-1), rotAngle);
 	}
-
+/// <summary>
+/// 
+/// </summary>
+/// <param name="rate"></param>
 	private void addProgressToAction(float rate){
 		currentActionProgress+= rate*Time.deltaTime;
 		
-	}	
+	}
+	
+	/// <summary>
+	/// Jiggle this instance.
+	/// </summary>
+	private void Jiggle () {
+	
+//		_positionOffset = new Vector2 (Random.Range (-1 * _jiggleRange, _jiggleRange), Random.Range(-1 * _jiggleRange, _jiggleRange));
+//		_positionOffset = new Vector2 (Random.Range (-1 * _jiggleRange, _jiggleRange), 0);
+		
+	}
+	
+	/// <summary>
+	/// Pulsate this instance.
+	/// </summary>
+	private void Pulsate () {
+	
+		_pulsating = true;
+	
+		if (_expanding) {
+		
+			transform.localScale = new Vector3 (transform.localScale.x + _expandRate, transform.localScale.y + _expandRate, 1);
+		
+			if (transform.localScale.x >= _maxScale) {
+			
+				_expanding = false;
+				transform.localScale = new Vector3 (_maxScale, _maxScale, 1);			
+			}
+		}
+		
+		else {
+	
+			transform.localScale = new Vector3 (transform.localScale.x - _contractRate, transform.localScale.y - _contractRate, 1);
+
+			if (transform.localScale.x <= _minScale) {
+			
+				_expanding = true;
+				transform.localScale = new Vector3 (_minScale, _minScale, 1);		
+			}
+		}		
+	}
 	
 	/// <summary>
 	/// ONLY used for debug for player

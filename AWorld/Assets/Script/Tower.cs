@@ -110,13 +110,10 @@ public class Tower : MonoBehaviour {
 	/// <param name="rate">Rate.</param>
 	public void addBuildingProgress(float rate){
 		percActionComplete += rate*Time.deltaTime;
-		
-		// Doesn't work, no idea why
-		
+				
 		Color32 towerColor = renderer.material.color;
-		towerColor.a = (byte) (255f * (percActionComplete/100f));		
-		renderer.material.color = towerColor;
-		
+		towerColor.a = (byte) (255f * (percActionComplete/100f));
+		renderer.material.color = towerColor;		
 		
 	}
 	
