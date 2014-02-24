@@ -9,7 +9,7 @@ public class Tower : MonoBehaviour {
 	public TeamInfo controllingTeam;
 	private TowerState _currentState;
 	public float percActionComplete = 0;
-	public float percInlfluenceComplete= 0;	//Countdown till another influence is popped
+	public float percInfluenceComplete= 0;	//Countdown till another influence is popped
 	public GameManager gm;	
 	public GameObject tileBeingConverted;
 	private InfluencePatternHolder patternConverting;
@@ -96,7 +96,7 @@ public class Tower : MonoBehaviour {
 	public void setTeam(){
 		Color32 controllingTeamColor = controllingTeam.teamColor;		
 		//TODO: custom sprites and colors per team
-		controllingTeamColor.a = 255;
+		controllingTeamColor.a = 0;
 		controllingTeamColor.r += 30;
 		controllingTeamColor.g += 30;
 		controllingTeamColor.b += 30;
@@ -116,13 +116,12 @@ public class Tower : MonoBehaviour {
 		Color32 towerColor = renderer.material.color;
 		towerColor.a = (byte) (255f * (percActionComplete/100f));		
 		renderer.material.color = towerColor;
-		Debug.Log(renderer.material.color.a);
 		
 		
 	}
 	
 	public void addInfluenceProgress(float rate){
-		percInlfluenceComplete += rate*Time.deltaTime;
+		percInfluenceComplete += rate*Time.deltaTime;
 		//Debug.Log(percControlled);
 	}	
 	
