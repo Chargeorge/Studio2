@@ -22,8 +22,11 @@ public class Player : MonoBehaviour {
 	private Vector3 _defaultScale = new Vector3 (0.5f, 0.5f, 1f);
 	private float _maxScale = 0.9f;
 	private float _minScale = 0.5f;
-	private float _expandRate = 0.007f;
-	private float _contractRate = 0.04f;
+//	private float _expandRate = 0.007f;
+//	private float _contractRate = 0.04f;
+	private float _expandTime = 0.8f;
+	private float _contractTime = 0.2f;
+	private float pulsateProgress;
 	
 
 	public PlayerState currentState {
@@ -169,24 +172,29 @@ public class Player : MonoBehaviour {
 					}
 
 					else{ 
+					
 					//Move avatar according to how far along the action is
 
+					float offset = currentActionProgress / sRef.baseRequired;
+					offset = Mathf.Pow (10, offset);
+					offset = Mathf.Log10 (offset);
+					
 						switch (facing) {
-
+							
 							case DirectionEnum.East: 
-								_positionOffset = new Vector2 (currentActionProgress / sRef.baseRequired, 0);
+								_positionOffset = new Vector2 (offset, 0);
 								break;
 							
 							case DirectionEnum.West:
-								_positionOffset = new Vector2 (-1 * currentActionProgress / sRef.baseRequired, 0);
+								_positionOffset = new Vector2 (-1 * offset, 0);
 								break;
 
 							case DirectionEnum.North:
-								_positionOffset = new Vector2 (0, currentActionProgress / sRef.baseRequired);
+								_positionOffset = new Vector2 (0, offset);
 								break;
 										
 							case DirectionEnum.South:
-								_positionOffset = new Vector2 (0, -1 * currentActionProgress / sRef.baseRequired);
+								_positionOffset = new Vector2 (0, -1 * offset);
 								break;
 								
 						}
@@ -286,7 +294,8 @@ public class Player : MonoBehaviour {
 		//If not pulsating, reset scale and _expanding
 		if (!_pulsating) {
 			transform.localScale = new Vector3 (_defaultScale.x, _defaultScale.y, _defaultScale.z);
-			_expanding = false;
+			_expanding = true;
+			pulsateProgress = 0f;
 		}
 						
 	}
@@ -410,7 +419,7 @@ public class Player : MonoBehaviour {
 	private void Jiggle () {
 	
 //		_positionOffset = new Vector2 (Random.Range (-1 * _jiggleRange, _jiggleRange), Random.Range(-1 * _jiggleRange, _jiggleRange));
-//		_positionOffset = new Vector2 (Random.Range (-1 * _jiggleRange, _jiggleRange), 0);
+		_positionOffset = new Vector2 (Random.Range (-1 * _jiggleRange, _jiggleRange), 0);
 		
 	}
 	
@@ -423,24 +432,50 @@ public class Player : MonoBehaviour {
 	
 		if (_expanding) {
 		
-			transform.localScale = new Vector3 (transform.localScale.x + _expandRate, transform.localScale.y + _expandRate, 1);
-		
-			if (transform.localScale.x >= _maxScale) {
+			float expandRate = sRef.baseRequired / _expandTime;
+			pulsateProgress += expandRate * Time.deltaTime;
 			
-				_expanding = false;
+			
+			float expandAmount = (_maxScale - _minScale) * (expandRate * Time.deltaTime / sRef.baseRequired);
+			transform.localScale = new Vector3 (transform.localScale.x + expandAmount, transform.localScale.y + expandAmount, 1);
+
+			if (pulsateProgress >= sRef.baseRequired) {
 				transform.localScale = new Vector3 (_maxScale, _maxScale, 1);			
+				_expanding = false;
+				pulsateProgress = 0f;
+			}			
+			
+			/**	transform.localScale = new Vector3 (transform.localScale.x + _expandRate, transform.localScale.y + _expandRate, 1);		
+			
+			if (transform.localScale.x >= _maxScale) {
+				transform.localScale = new Vector3 (_maxScale, _maxScale, 1);						
+				_expanding = false;
 			}
+			*/
+			
 		}
 		
 		else {
 	
-			transform.localScale = new Vector3 (transform.localScale.x - _contractRate, transform.localScale.y - _contractRate, 1);
+			float contractRate = sRef.baseRequired / _contractTime;
+			pulsateProgress += contractRate * Time.deltaTime;
+	
+			float contractAmount = (_maxScale - _minScale) * (contractRate * Time.deltaTime / sRef.baseRequired);
+			transform.localScale = new Vector3 (transform.localScale.x - contractAmount, transform.localScale.y - contractAmount, 1);			
+			
+			if (pulsateProgress >= sRef.baseRequired) {
+				transform.localScale = new Vector3 (_minScale, _minScale, 1);			
+				_expanding = true;	
+				pulsateProgress = 0f;
+			}			
+			
+/**			transform.localScale = new Vector3 (transform.localScale.x - _contractRate, transform.localScale.y - _contractRate, 1);
 
 			if (transform.localScale.x <= _minScale) {
-			
-				_expanding = true;
 				transform.localScale = new Vector3 (_minScale, _minScale, 1);		
+				_expanding = true;
 			}
+			*/
 		}		
 	}
 	

@@ -457,7 +457,6 @@ public class BaseTile : MonoBehaviour {
 	
 	public void addProgressToInfluence(float rate){
 		percControlled += rate*Time.deltaTime;
-		Debug.Log(percControlled);
 	}
 	/// <summary>
 	/// adds influence, if influence is maxed it returns true
