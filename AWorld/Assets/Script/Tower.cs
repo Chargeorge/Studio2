@@ -19,6 +19,9 @@ public class Tower : MonoBehaviour {
 		}
 	}
 
+	public AudioClip towerInfluencing;
+	public AudioClip towerBuilt;
+
 	// Use this for initialization
 	void Start () {
 		///TODO ADD PATTERN STATICS
@@ -34,6 +37,7 @@ public class Tower : MonoBehaviour {
 		setVisualDirection();
 		
 		if(_currentState == TowerState.Basic){
+
 			//find nearest convertable block
 			if(tileBeingConverted == null){
 				 tileBeingConverted = null;
@@ -59,8 +63,10 @@ public class Tower : MonoBehaviour {
 						
 					}
 				 });
+
 			 }
 			 else{
+				gm.PlaySFX(towerInfluencing, 0.8f);
 			 //TODO: Handle situations where other tiles are influencing.  
 				Debug.Log("Tying to influence at rate " + patternConverting.vpsInfluence );
 				if(tileBeingConverted.GetComponent<BaseTile>().addProgressToInfluence(patternConverting.vpsInfluence, controllingTeam)){
@@ -88,9 +94,10 @@ public class Tower : MonoBehaviour {
 		this._currentState	= TowerState.BuildingBasic;
 		controllingTeam = player.GetComponent<Player>().team;
 		this.setTeam();
-		
+
 		this.transform.localPosition = new Vector3(0f,0f,-.5f);
 		tileLocation.GetComponent<BaseTile>().tower = this.gameObject;
+
 	}
 	
 	public void setTeam(){
@@ -110,10 +117,13 @@ public class Tower : MonoBehaviour {
 	/// <param name="rate">Rate.</param>
 	public void addBuildingProgress(float rate){
 		percActionComplete += rate*Time.deltaTime;
+
 				
 		Color32 towerColor = renderer.material.color;
 		towerColor.a = (byte) (255f * (percActionComplete/100f));
 		renderer.material.color = towerColor;		
+		
+
 		
 		/** Doesn't work, no idea why
 		
@@ -123,6 +133,7 @@ public class Tower : MonoBehaviour {
 		Debug.Log(renderer.material.color.a);
 		
 		*/
+
 	}
 	
 	public void addInfluenceProgress(float rate){
@@ -139,6 +150,7 @@ public class Tower : MonoBehaviour {
 			percActionComplete = 100f;
 			
 			if(_currentState == TowerState.BuildingBasic){
+
 				_currentState = TowerState.Basic;
 				_pattern = Tower.createBasicInfluenceList(getAngleForDir(facing));
 				
