@@ -72,8 +72,9 @@ public class GameManager : MonoBehaviour {
 				Altar aObj = a.GetComponent<Altar>();
 				aObj.brdX = Random.Range(0, tiles.GetLength(0));
 				aObj.brdY = Random.Range(0, tiles.GetLength(1));
-				
-				aObj.setType(null);
+				aObj.gm = this;
+				aObj.sRef = sRef;
+				aObj.setControl(null);
 				aObj.transform.parent = tiles[aObj.brdX, aObj.brdY].transform;
 				aObj.transform.localPosition = new Vector3(0,0,-1);
 			}
@@ -83,13 +84,16 @@ public class GameManager : MonoBehaviour {
 			setup = false;
 			
 		}
+
 		debugMouse = getHoveredTile().GetComponent<BaseTile>();
 		if(Input.GetButtonDown("Fire1")){
-			BaseTile finalDestination = tiles[(int)debugMouse.owningTeam.startingLocation.x,(int)debugMouse.owningTeam.startingLocation.y].GetComponent<BaseTile>();
 			if(debugMouse.owningTeam != null){
-			
-				List<AStarholder> As = 	BaseTile.aStarSearch(debugMouse, finalDestination,int.MaxValue, BaseTile.getLocalSameTeamTiles, debugMouse.owningTeam);
-				debugString = string.Format("A star len: {0}", As.Count);
+				BaseTile finalDestination = tiles[(int)debugMouse.owningTeam.startingLocation.x,(int)debugMouse.owningTeam.startingLocation.y].GetComponent<BaseTile>();
+				if(debugMouse.owningTeam != null){
+				
+					List<AStarholder> As = 	BaseTile.aStarSearch(debugMouse, finalDestination,int.MaxValue, BaseTile.getLocalSameTeamTiles, debugMouse.owningTeam);
+					debugString = string.Format("A star len: {0}", As.Count);
+				}
 			}
 		}
 		if(Input.GetButtonDown("Fire2")){
@@ -139,5 +143,10 @@ public class GameManager : MonoBehaviour {
 		//ToSet = tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].GetComponent<BaseTile>();
 		
 		return team1Home;
+	}
+	
+	public BaseTile getTeamBase(TeamInfo T){
+		BaseTile finalDestination = tiles[(int)T.startingLocation.x,(int)T.startingLocation.y].GetComponent<BaseTile>();
+		return finalDestination;
 	}
 }

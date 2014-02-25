@@ -519,6 +519,16 @@ public class BaseTile : MonoBehaviour {
 		controllingTeam = newTeam;
 		percControlled = 0;
 		owningTeam = null;
+		
+		Tower localTower = GetComponentInChildren<Tower>();
+		Altar localAltar = GetComponentInChildren<Altar>();
+		
+		if(localTower !=null){
+			
+		}
+		if(localAltar !=null){
+			localAltar.setControl(null);
+		}
 	}
 	public void finishInfluence(){
 		///TODO: add end semaphore stuff her
@@ -527,12 +537,23 @@ public class BaseTile : MonoBehaviour {
 			currentState = TileState.normal;
 		}
 		owningTeam = controllingTeam;
+		Tower localTower = GetComponentInChildren<Tower>();
+		Altar localAltar = GetComponentInChildren<Altar>();
+		
+		if(localAltar !=null){
+			localAltar.setControl(owningTeam);
+		}
 	}
 	public void clearInfluence(){
 		percControlled = 0;
 		controllingTeam = null;
 		owningTeam = null;
+		
+		Tower localTower = GetComponentInChildren<Tower>();
+		Altar localAltar = GetComponentInChildren<Altar>();
 	}
+	
+	
 	
 	/*void OnMouseOver() {
 		GameObject.Find("GameManager").GetComponent<GameManager>().debugMouse = this;
