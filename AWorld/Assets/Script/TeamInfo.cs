@@ -14,7 +14,7 @@ public class TeamInfo
 	public Color32 teamColor;
 	public Vector2 startingLocation;
 	public int teamNumber;
-
+	
 	public TeamInfo ()
 	{
 	}
@@ -35,6 +35,8 @@ public class TeamInfo
 				}
 		return returnable;
 	}
+	
+	
 	
 }
 

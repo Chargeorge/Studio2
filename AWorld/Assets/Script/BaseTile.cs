@@ -1,23 +1,30 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+using System;
+using System.Linq;
 public class BaseTile : MonoBehaviour {
 	
 	
 	public GameObject qudTowerLayer;
 	public GameObject qudSelectedLayer;
 	public GameObject qudInfluenceLayer;
-	public TeamInfo controllingTeam;
+	
+	public TeamInfo controllingTeam;  //LOGIC TO ADD owningTeam ONLY CHANGES when controlling team reaches 100 or 0
 	public float percControlled;
+	public TeamInfo owningTeam;  //OWNING team is the official owning team, use it for defining networks and movement cost.
+	
 	public GameObject tower;
+	
+	
 	public TileState currentState;
 	private int _brdXPos;
 	private int _brdYPos;
 	public TileTypeEnum currentType;
 	private int _ident;
 	
-
+	//Delegate used for different A* methods
+	public delegate List<BaseTile> GetLocalTiles(BaseTile Base, TeamInfo T);
 
 	private Color _highlightColor = new Color(0f,0f, 0f);
 
@@ -153,7 +160,7 @@ public class BaseTile : MonoBehaviour {
 	}
 	// Use this for initialization
 	void Start () {
-		_ident = Random.Range(1, 10000000);
+		_ident = UnityEngine.Random.Range(1, 10000000);
 		currentState = TileState.normal;
 	}
 	
@@ -167,10 +174,7 @@ public class BaseTile : MonoBehaviour {
 		}
 	}
 	// Update is called once per frame
-	void Update () {
-		
-		
-		
+	void Update () {		
 		if(controllingTeam != null){
 			
 			qudInfluenceLayer.SetActive(true);
@@ -307,6 +311,8 @@ public class BaseTile : MonoBehaviour {
 			return returnable;
 	
 	}*/
+	
+	
 
 
 	/// <summary>
@@ -314,17 +320,39 @@ public class BaseTile : MonoBehaviour {
 	/// </summary>
 	/// <returns>The local open tiles.</returns>
 	/// <param name="currentAp">Current ap.</param>
-	public List<BaseTile> getLocalOpenTiles(int currentAp){
+	public static List<BaseTile> getLocalTraversableTiles(BaseTile current, TeamInfo T){
+	//	if(
 		return null;
 	}
 		
-	public static List<AStarholder> aStarSearch(BaseTile start, BaseTile end, int currentAp){
+	public static List<BaseTile> getLocalSameTeamTiles(BaseTile current, TeamInfo T){	
+		List<BaseTile> returnable = current.getLocalTiles();
+		returnable.RemoveAll(x => x.owningTeam == null);
+		returnable.RemoveAll(x => x.owningTeam.teamNumber != T.teamNumber);
+		return returnable;
+		
+	}
+	
+	public static List<BaseTile> getLocalNonTiles(BaseTile current, TeamInfo T){
+		return null;
+	}
+
+	public List<BaseTile> getLocalTiles(){
+		List<BaseTile> returnable = new List<BaseTile>();
+		if(North!= null) returnable.Add(North);
+		if(South!= null) returnable.Add(South);
+		if(East!= null) returnable.Add(East);
+		if(West!= null) returnable.Add(West);
+		return returnable;
+	}
+		
+	public static List<AStarholder> aStarSearch(BaseTile start, BaseTile end, int currentAp, GetLocalTiles LocalMethod, TeamInfo team){
 		Dictionary<int, AStarholder> closedSet  = new Dictionary<int, AStarholder>();		
 		Dictionary<int, AStarholder> openSet = new Dictionary<int, AStarholder>();
 		
 		AStarholder current = new AStarholder(start, null);
 		current.hurVal = current.current.calcHueristic(current.current, end);
-		current.apAtThisTurn = currentAp;
+		//current.apAtThisTurn = currentAp;
 		current.pathCostToHere = 0;
 		
 		openSet.Add(current.current.Ident, current);
@@ -335,12 +363,12 @@ public class BaseTile : MonoBehaviour {
 			
 			if(current.current.Ident == end.Ident){ BaseTile.reconstructPath(start, current, returnable); return returnable;}
 			
-			List<BaseTile> listies = current.current.getLocalOpenTiles(int.MaxValue);
+			List<BaseTile> listies =LocalMethod(current.current, team);
 			listies.ForEach(delegate (BaseTile bt){
 				if(!closedSet.ContainsKey(bt.Ident)){
 					AStarholder newOpen = new AStarholder(bt, current);
 					newOpen.hurVal = newOpen.current.calcHueristic(newOpen.current, end);
-					newOpen.apAtThisTurn = current.apAtThisTurn - newOpen.current.MoveCost;
+					//newOpen.apAtThisTurn = current.apAtThisTurn - newOpen.current.MoveCost;
 					newOpen.pathCostToHere = newOpen.current.MoveCost + current.pathCostToHere;
 					if(openSet.ContainsKey(bt.Ident)){
 						if(openSet[bt.Ident].fVal > newOpen.fVal){
@@ -417,8 +445,8 @@ public class BaseTile : MonoBehaviour {
 		return null;
 	}
 	
-	public BaseTile getClosestOpenTile(BaseTile ToCheck){
-		List<BaseTile> open = getLocalOpenTiles(int.MaxValue);
+	public BaseTile getClosestOpenTile(BaseTile ToCheck, TeamInfo T, GetLocalTiles locals){
+		List<BaseTile> open = locals(ToCheck, T);
 		BaseTile returnable = null;
 		int minVal = int.MaxValue;
 		open.ForEach(delegate(BaseTile obj) {
@@ -489,6 +517,17 @@ public class BaseTile : MonoBehaviour {
 	public void flipInfluence(TeamInfo newTeam){
 		controllingTeam = newTeam;
 		percControlled = 0;
+		owningTeam = null;
+		
+		Tower localTower = GetComponentInChildren<Tower>();
+		Altar localAltar = GetComponentInChildren<Altar>();
+		
+		if(localTower !=null){
+			
+		}
+		if(localAltar !=null){
+			localAltar.setControl(null);
+		}
 	}
 	public void finishInfluence(){
 		///TODO: add end semaphore stuff her
@@ -496,14 +535,39 @@ public class BaseTile : MonoBehaviour {
 			percControlled = 100f;
 			currentState = TileState.normal;
 		}
+		owningTeam = controllingTeam;
+		Tower localTower = GetComponentInChildren<Tower>();
+		Altar localAltar = GetComponentInChildren<Altar>();
+		
+		if(localAltar !=null){
+			localAltar.setControl(owningTeam);
+		}
 	}
 	public void clearInfluence(){
 		percControlled = 0;
 		controllingTeam = null;
+		owningTeam = null;
+		
+		Tower localTower = GetComponentInChildren<Tower>();
+		Altar localAltar = GetComponentInChildren<Altar>();
 	}
 	
-	void OnMouseOver() {
+	
+	
+	/*void OnMouseOver() {
 		GameObject.Find("GameManager").GetComponent<GameManager>().debugMouse = this;
+	}*/
+	
+	TeamInfo getHomeTeam(TeamInfo t){
+		Home homeBase = GetComponentInChildren<Home>();
+		if (homeBase != null){
+			return homeBase.team;
+		}
+		else{
+			return null;
+		}
 	}
+	
+	
 	
 }
