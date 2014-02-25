@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour {
 				Altar aObj = a.GetComponent<Altar>();
 		//		aObj.brdX = Random.Range(0, tiles.GetLength(0));
 		//		aObj.brdY = Random.Range(0, tiles.GetLength(1));
-				aObj.brdX = (tiles.GetLength(0) - 1 - i*4) - 23;	//Temp
+				aObj.brdX = (tiles.GetLength(0) - 1 - i*8)-8;	//Temp
 				aObj.brdY = i*4+3;	//Temp
 				aObj.gm = this;
 				aObj.sRef = sRef;
