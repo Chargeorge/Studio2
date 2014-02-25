@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
-
+using System.Collections.Generic;
+using System.Linq;
 public class Player : MonoBehaviour {
 
 	public TeamInfo team;
@@ -27,7 +28,7 @@ public class Player : MonoBehaviour {
 	private float _expandTime = 0.8f;
 	private float _contractTime = 0.2f;
 	private float pulsateProgress;
-	
+	private List<AltarType> altars;
 
 	public PlayerState currentState {
 		get {
@@ -59,6 +60,7 @@ public class Player : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		altars = new List<AltarType>();
 		_currentState = PlayerState.standing;
 		_prfbTower = (GameObject)Resources.Load("Prefabs/Tower");
 		sRef = GameObject.Find ("Settings").GetComponent<Settings>();
@@ -84,7 +86,7 @@ public class Player : MonoBehaviour {
 				if(x.HasValue && !buildButtonDown){
 					if(currentTile.GetDirection(x.Value) != null){
 						BaseTile MovingInto = currentTile.GetDirection(x.Value);
-						Debug.Log(string.Format("x:{0}, y: {1}", MovingInto.brdXPos, MovingInto.brdYPos));
+						//Debug.Log(string.Format("x:{0}, y: {1}", MovingInto.brdXPos, MovingInto.brdYPos));
 						float vpsRate = MovingInto.GetRate(this) * sRef.vpsBaseMove;
 						addProgressToAction(vpsRate);
 						setDirection(x.Value);
@@ -162,7 +164,7 @@ public class Player : MonoBehaviour {
 			
 				if(x.HasValue && x.Value == facing){
 					BaseTile MovingInto = currentTile.GetComponent<BaseTile>().GetDirection(x.Value);
-					float vpsRate = MovingInto.GetRate(this) * sRef.vpsBaseMove;
+					float vpsRate = MovingInto.GetRate(this) * sRef.vpsBaseMove *getAltarSpeedBoost();
 					addProgressToAction(vpsRate);
 					
 					if(currentActionProgress > sRef.baseRequired){
@@ -486,6 +488,17 @@ public class Player : MonoBehaviour {
 	
 		if(sRef.debugMode){
 			GUI.Box (new Rect (10+200*(PlayerNumber-1),10,200,90), string.Format("Player {0}\r\nState: {1}\r\npercentcomplete{2}",PlayerNumber, currentState,currentActionProgress));	
+		}
+	}
+	
+	private float getAltarSpeedBoost(){
+		List<AltarType> a = gm.getNetworkedAltars(team);
+		if(a.Contains(AltarType.Choytzol)){
+			Debug.Log ("working");
+			return 2f;
+		}else{
+			Debug.Log ("not working");
+			return 1f;
 		}
 	}
 }

@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour {
 		prfbAltar = (GameObject)Resources.Load("Prefabs/Altar");
 		prfbHome = (GameObject)Resources.Load ("Prefabs/Home");
 		
-		
+		altars= new List<GameObject>();
 	}
 	
 	// Update is called once per frame
@@ -164,7 +164,19 @@ public class GameManager : MonoBehaviour {
 		return V;
 	}
 	
-	public IEnumerable<GameObject> getNetworkedAltars(TeamInfo t){
-		return altars.Where(a=>a.GetComponent<Altar>().currentControllingTeam.teamNumber == t.teamNumber);
+	public List<AltarType> getNetworkedAltars(TeamInfo t){
+		List<AltarType> returnable = new List<AltarType>();
+		altars.ForEach(delegate (GameObject ToCheckGO) {
+			Altar ToCheck = ToCheckGO.GetComponent<Altar>();
+			if(ToCheck.currentControllingTeam != null){
+				if(ToCheck.currentControllingTeam.teamNumber == t.teamNumber) {
+					returnable.Add(ToCheck.alterType);
+				}
+			}
+			
+		});
+		
+		
+		return returnable;
 	}
 }

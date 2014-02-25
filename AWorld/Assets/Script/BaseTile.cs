@@ -542,6 +542,9 @@ public class BaseTile : MonoBehaviour {
 		if(localAltar !=null){
 			localAltar.setControl(owningTeam);
 		}
+		if(localTower!= null){
+			localTower.controllingTeam = owningTeam;
+		}
 	}
 	public void clearInfluence(){
 		percControlled = 0;
