@@ -275,6 +275,10 @@ public class Player : MonoBehaviour {
 							currentTile.clearInfluence();
 							currentActionProgress = 0;
 						}
+						
+						if (x.HasValue) { 
+							setDirection (x.Value);
+						}
 					
 						
 					} else{
