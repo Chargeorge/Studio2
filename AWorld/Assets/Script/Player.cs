@@ -24,6 +24,11 @@ public class Player : MonoBehaviour {
 	private float _minScale = 0.5f;
 	private float _expandRate = 0.007f;
 	private float _contractRate = 0.04f;
+
+	public AudioClip playerMove;
+	public AudioClip influenceStart;
+	public AudioClip towerBuilding;
+	public AudioClip towerBuilt;
 	
 
 	public PlayerState currentState {
@@ -81,7 +86,7 @@ public class Player : MonoBehaviour {
 				if(x.HasValue && !buildButtonDown){
 					if(currentTile.GetDirection(x.Value) != null){
 						BaseTile MovingInto = currentTile.GetDirection(x.Value);
-						//Debug.Log(string.Format("x:{0}, y: {1}", MovingInto.brdXPos, MovingInto.brdYPos));
+						Debug.Log(string.Format("x:{0}, y: {1}", MovingInto.brdXPos, MovingInto.brdYPos));
 						float vpsRate = MovingInto.GetRate(this) * sRef.vpsBaseMove;
 						addProgressToAction(vpsRate);
 						setDirection(x.Value);
@@ -113,7 +118,7 @@ public class Player : MonoBehaviour {
 		
 					//	Jiggle ();	//Gotta jiggle
 						Pulsate ();
-		
+						gm.PlaySFX(influenceStart, 1.0f);
 						if(currentTile.controllingTeam != null){
 							//Start building tower
 							if(currentTile.controllingTeam.teamNumber == team.teamNumber){
@@ -123,6 +128,8 @@ public class Player : MonoBehaviour {
 								addProgressToAction(vpsBuildRate);
 								
 								GameObject towerBeingBuild = (GameObject)GameObject.Instantiate(_prfbTower, new Vector3(0,0,0), Quaternion.identity);
+							
+								gm.PlaySFX(towerBuilding, 1.0f);
 								towerInProgress = towerBeingBuild.GetComponent<Tower>();
 								towerInProgress.startBuilding(currentTile.gameObject, this.gameObject, vpsBuildRate);
 								towerInProgress.setDirection(facing);
@@ -158,6 +165,7 @@ public class Player : MonoBehaviour {
 				
 			
 				if(x.HasValue && x.Value == facing){
+					gm.PlaySFX(playerMove, 0.8f);
 					BaseTile MovingInto = currentTile.GetComponent<BaseTile>().GetDirection(x.Value);
 					float vpsRate = MovingInto.GetRate(this) * sRef.vpsBaseMove;
 					addProgressToAction(vpsRate);
@@ -195,23 +203,28 @@ public class Player : MonoBehaviour {
 					
 				}
 				else{
+					gm.StopSFX();
 					_currentState= PlayerState.standing; 
 					currentActionProgress = 0f;
 				}
 			break;	
 			
 			case PlayerState.building:
+
 				if(buildButtonDown){
+
 				//	Jiggle ();	//Gotta jiggle
 					Pulsate (); 
-					
 					//Debug.Log ("In Build");
+
+					Debug.Log ("In Build");
 					if(currentTile.controllingTeam != null){
-						//Debug.Log ("curent Team");
+						Debug.Log ("curent Team");
 						if(currentTile.controllingTeam.teamNumber == team.teamNumber){
 							//Check for a tower in progress and start building!s
 							if(towerInProgress != null){
-								//Debug.Log("attempting to build");
+
+								Debug.Log("attempting to build");
 								float vpsBuildRate = sRef.vpsBaseBuild;
 								towerInProgress.addBuildingProgress(vpsBuildRate);
 								if(x.HasValue){
@@ -220,7 +233,9 @@ public class Player : MonoBehaviour {
 								}
 								if(towerInProgress.percActionComplete > 100f){
 								
-									//Debug.Log("Finished?");
+									Debug.Log("Finished?");
+									gm.StopSFX();
+									gm.PlaySFX(towerBuilt, 1.0f);
 									towerInProgress.finishAction();
 									_currentState = PlayerState.standing;
 									currentActionProgress = 0f;
@@ -233,12 +248,14 @@ public class Player : MonoBehaviour {
 					}
 					else
 					{
+						gm.StopSFX();
 						float vpsInfluenceRate = sRef.vpsBaseInfluence;
 						addProgressToAction(vpsInfluenceRate);
 					}
 					
 				}
 				else{
+					gm.StopSFX();
 					_currentState =  PlayerState.standing;
 					
 					//TODO: figure out what happens when we abandon the tile
@@ -248,7 +265,8 @@ public class Player : MonoBehaviour {
 			case PlayerState.influencing:
 				if(buildButtonDown){
 			//		Jiggle ();	//Gotta jiggle
-					Pulsate (); 
+					Pulsate ();
+					gm.PlaySFX(influenceStart, 1.0f);
 					if(currentTile.controllingTeam != null){
 						float modifier = (currentTile.controllingTeam.teamNumber  == teamNumber) ? 1 : -1;
 						float vpsInfluenceRate = sRef.vpsBaseInfluence * modifier;
@@ -274,6 +292,7 @@ public class Player : MonoBehaviour {
 				else{
 				///TODO: add reset to tile in case of change
 					//need to reset currenttile to previousState
+					gm.StopSFX();
 				}	
 			break;
 		}

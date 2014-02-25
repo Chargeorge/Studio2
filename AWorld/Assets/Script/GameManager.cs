@@ -66,4 +66,13 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
+	public void PlaySFX(AudioClip clip, float volume){
+		audio.volume = volume;
+		audio.PlayOneShot(clip);
+	}
+
+	public void StopSFX(){
+		audio.Stop();
+	}
+
 }
