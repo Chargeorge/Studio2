@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour {
 	public GameObject prfbPlayer;
 	public BaseTile debugMouse;
 	public Tower debugTower;
-	public GameObject prfbAltar;
+	public GameObject prfbAltar, prfbHome;
 	public List<GameObject> altars;
 	public int numAltars;
 	// Use this for initialization
@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour {
 		sRef = GameObject.Find ("Settings").GetComponent<Settings>();
 		prfbPlayer = (GameObject)Resources.Load("Prefabs/Player");
 		prfbAltar = (GameObject)Resources.Load("Prefabs/Altar");
-		
+		prfbHome = (GameObject)Resources.Load ("Prefabs/Home");
 		
 		
 	}
@@ -50,8 +50,10 @@ public class GameManager : MonoBehaviour {
 					p2.SetTeam(TeamInfo.GetTeamInfo(2));
 					p1.PlayerNumber = 1;
 					p2.PlayerNumber = 2;
-					
-					
+					GameObject team1Home, team2Home;
+					team1Home = setUpTeamHome(p1);
+					team2Home = setUpTeamHome(p2);
+						
 					break;
 				case Mode.TwoVTwo:
 					
@@ -71,7 +73,11 @@ public class GameManager : MonoBehaviour {
 				aObj.transform.parent = tiles[aObj.brdX, aObj.brdY].transform;
 				aObj.transform.localPosition = new Vector3(0,0,-1);
 			}
+			
+			
+			
 			setup = false;
+			
 		}
 
 	}
@@ -88,4 +94,12 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
+	private GameObject setUpTeamHome(Player example){
+		GameObject team1Home = (GameObject)Instantiate(prfbHome, Vector3.zero, Quaternion.identity);
+		team1Home.transform.parent= tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].transform;
+		team1Home.transform.localPosition = new Vector3(0,0,-.5f);
+		team1Home.GetComponent<Home>().team = example.team;
+		
+		return team1Home;
+	}
 }
