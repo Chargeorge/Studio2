@@ -1,7 +1,7 @@
 
 public enum AltarType
 {
-	Tikumose = 1,
-	Choytzol = 1 >>1,
-	Onixtal = 1 >> 2
+	Tikumose = 0,
+	Choytzol = 1,
+	Onixtal = 2
 }

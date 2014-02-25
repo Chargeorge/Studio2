@@ -190,6 +190,7 @@ MonoBehaviour:
   prfbHome: {fileID: 0}
   altars: []
   numAltars: 4
+  debugString: 
 --- !u!4 &842739088
 Transform:
   m_ObjectHideFlags: 0

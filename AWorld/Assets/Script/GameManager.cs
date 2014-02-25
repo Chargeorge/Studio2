@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class GameManager : MonoBehaviour {
 
@@ -77,6 +78,7 @@ public class GameManager : MonoBehaviour {
 				aObj.setControl(null);
 				aObj.transform.parent = tiles[aObj.brdX, aObj.brdY].transform;
 				aObj.transform.localPosition = new Vector3(0,0,-1);
+				altars.Add (aObj.gameObject);
 			}
 			
 			
@@ -84,8 +86,10 @@ public class GameManager : MonoBehaviour {
 			setup = false;
 			
 		}
-
-		debugMouse = getHoveredTile().GetComponent<BaseTile>();
+		GameObject hoveredTile = getHoveredTile();
+		if(hoveredTile!= null){
+			debugMouse = getHoveredTile().GetComponent<BaseTile>();
+		}
 		if(Input.GetButtonDown("Fire1")){
 			if(debugMouse.owningTeam != null){
 				BaseTile finalDestination = tiles[(int)debugMouse.owningTeam.startingLocation.x,(int)debugMouse.owningTeam.startingLocation.y].GetComponent<BaseTile>();
@@ -148,5 +152,19 @@ public class GameManager : MonoBehaviour {
 	public BaseTile getTeamBase(TeamInfo T){
 		BaseTile finalDestination = tiles[(int)T.startingLocation.x,(int)T.startingLocation.y].GetComponent<BaseTile>();
 		return finalDestination;
+	}
+	
+	public static T GetRandomEnum<T>()
+	{
+		System.Array A = System.Enum.GetValues(typeof(T));
+		int debugVal  = UnityEngine.Random.Range(0,A.Length);
+
+		T V = (T)A.GetValue(debugVal);
+		
+		return V;
+	}
+	
+	public IEnumerable<GameObject> getNetworkedAltars(TeamInfo t){
+		return altars.Where(a=>a.GetComponent<Altar>().currentControllingTeam.teamNumber == t.teamNumber);
 	}
 }

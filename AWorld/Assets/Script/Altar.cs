@@ -14,7 +14,8 @@ public class Altar : MonoBehaviour {
 	public int brdY;
 	public List<AStarholder> networkToBase;
 	public GameManager gm;
-
+	
+	
 
 	#region accessors
 	public TeamInfo currentControllingTeam {
@@ -38,6 +39,12 @@ public class Altar : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		sRef = GameObject.Find ("Settings").GetComponent<Settings>();
+		//TODO OHH GOD THIS IS BAD I SHOULDN'T DO THIS
+		alterType = GameManager.GetRandomEnum<AltarType>();
+		Debug.Log("alter: " +alterType.ToString());
+		Material loaded =  (Material)Resources.Load(string.Format("Sprites/Materials/{0}", alterType.ToString()));
+		
+		transform.FindChild("Quad").renderer.material = loaded;
 	}
 	
 	// Update is called once per frame
@@ -55,7 +62,9 @@ public class Altar : MonoBehaviour {
 	
 	public void setControl(TeamInfo team){
 		if(team!=null) {
-			renderer.material.color = team.teamColor;
+			Color32 copy = new Color32((byte)(team.teamColor.r +30), (byte)(team.teamColor.g-30), (byte)(team.teamColor.b+30), (byte)255);
+			renderer.material.color = copy;
+			//renderer.material.color = team.teamColor;
 			_currentControllingTeam = team;
 			checkNetwork();
 		}else{
