@@ -239,7 +239,7 @@ public class Player : MonoBehaviour {
 							//Check for a tower in progress and start building!s
 							if(towerInProgress != null){
 								Debug.Log("attempting to build");
-								float vpsBuildRate = sRef.vpsBaseBuild;
+								float vpsBuildRate = sRef.vpsBaseBuild * getAltarBuildBoost ();
 								towerInProgress.addBuildingProgress(vpsBuildRate);
 								if(x.HasValue){
 									setDirection(x.Value);
@@ -522,11 +522,19 @@ public class Player : MonoBehaviour {
 	private float getAltarSpeedBoost(){
 		List<AltarType> a = gm.getNetworkedAltars(team);
 		if(a.Contains(AltarType.Choyutzol)){
-			Debug.Log ("working");
 			return 2f;
 		}else{
-			Debug.Log ("not working");
 			return 1f;
 		}
 	}
+	
+	private float getAltarBuildBoost(){
+		List <AltarType> a = gm.getNetworkedAltars(team);
+		if(a.Contains(AltarType.Tikumose)){
+			return 2f;
+		}else{
+			return 1f;
+		}
+	}
+	
 }
