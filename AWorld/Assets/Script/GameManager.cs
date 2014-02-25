@@ -144,5 +144,49 @@ public class GameManager : MonoBehaviour {
 	public void StopSFX(){
 		audio.Stop();
 	}
+	
+	private GameObject setUpTeamHome(Player example){
+		GameObject team1Home = (GameObject)Instantiate(prfbHome, Vector3.zero, Quaternion.identity);
+		team1Home.transform.parent= tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].transform;
+		tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].GetComponent<BaseTile>().controllingTeam = example.team;
+		tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].GetComponent<BaseTile>().owningTeam = example.team;
+		tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].GetComponent<BaseTile>().percControlled = 100f;
+		team1Home.transform.localPosition = new Vector3(0,0,-.5f);
+		team1Home.GetComponent<Home>().team = example.team;
+		//ToSet = tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].GetComponent<BaseTile>();
+		
+		return team1Home;
+	}
+	
+	public BaseTile getTeamBase(TeamInfo T){
+		BaseTile finalDestination = tiles[(int)T.startingLocation.x,(int)T.startingLocation.y].GetComponent<BaseTile>();
+		return finalDestination;
+	}
+	
+	public static T GetRandomEnum<T>()
+	{
+		System.Array A = System.Enum.GetValues(typeof(T));
+		int debugVal  = UnityEngine.Random.Range(0,A.Length);
+		
+		T V = (T)A.GetValue(debugVal);
+		
+		return V;
+	}
+	
+	public List<AltarType> getNetworkedAltars(TeamInfo t){
+		List<AltarType> returnable = new List<AltarType>();
+		altars.ForEach(delegate (GameObject ToCheckGO) {
+			Altar ToCheck = ToCheckGO.GetComponent<Altar>();
+			if(ToCheck.currentControllingTeam != null){
+				if(ToCheck.currentControllingTeam.teamNumber == t.teamNumber) {
+					returnable.Add(ToCheck.altarType);
+				}
+			}
+			
+		});
+		
+		
+		return returnable;
+	}
 
 }
