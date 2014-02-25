@@ -147,7 +147,7 @@ public class Player : MonoBehaviour {
 						//Start influencing Tower
 						else
 						{
-							float vpsInfluenceRate = sRef.vpsBaseInfluence;
+							float vpsInfluenceRate = sRef.vpsBaseInfluence * getAltarInfluenceBoost();
  							addProgressToAction(vpsInfluenceRate);
  							_currentState = PlayerState.influencing;
  							currentTile.startInfluence(currentActionProgress, team);
@@ -267,7 +267,7 @@ public class Player : MonoBehaviour {
 					Pulsate (); 
 					if(currentTile.controllingTeam != null){
 						float modifier = (currentTile.controllingTeam.teamNumber  == teamNumber) ? 1 : -1;
-						float vpsInfluenceRate = sRef.vpsBaseInfluence * modifier;
+						float vpsInfluenceRate = sRef.vpsBaseInfluence * modifier * getAltarInfluenceBoost();
 						addProgressToAction(vpsInfluenceRate);
 						currentTile.addProgressToInfluence(vpsInfluenceRate);
 						if(currentTile.percControlled >= 100f){
@@ -514,6 +514,15 @@ public class Player : MonoBehaviour {
 	private float getAltarBuildBoost(){
 		List <AltarType> a = gm.getNetworkedAltars(team);
 		if(a.Contains(AltarType.Tikumose)){
+			return 2f;
+		}else{
+			return 1f;
+		}
+	}
+	
+	private float getAltarInfluenceBoost(){
+		List <AltarType> a = gm.getNetworkedAltars(team);
+		if(a.Contains(AltarType.Khepru)){
 			return 2f;
 		}else{
 			return 1f;
