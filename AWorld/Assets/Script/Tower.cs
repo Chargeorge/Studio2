@@ -49,8 +49,9 @@ public class Tower : MonoBehaviour {
 						GameObject Tile;
 						try { Tile = gm.tiles[x, y]; }
 							catch { return; }
+//						if(Tile != null && Tile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
 						if(Tile != null){
-							BaseTile Bt =  Tile.GetComponent<BaseTile>();
+						BaseTile Bt =  Tile.GetComponent<BaseTile>();
 							if(Bt.controllingTeam == null){
 								tileBeingConverted = Bt.gameObject;
 								patternConverting = p;
