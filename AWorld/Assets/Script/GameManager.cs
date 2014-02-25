@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class GameManager : MonoBehaviour {
-
+	
 	public Settings sRef;
 	#region Statics
 	/// <summary>
@@ -20,40 +21,105 @@ public class GameManager : MonoBehaviour {
 	private bool setup = true;
 	public static Mode gameMode = Mode.OneVOne;
 	public List<GameObject> players = new List<GameObject>();
-	public GameObject playerPrefab;
+	public GameObject prfbPlayer;
 	public BaseTile debugMouse;
 	public Tower debugTower;
+	public GameObject prfbAltar, prfbHome;
+	public List<GameObject> altars;
+	public int numAltars;
+	public string debugString;
 	// Use this for initialization
 	void Start () {
 		sRef = GameObject.Find ("Settings").GetComponent<Settings>();
-		playerPrefab = (GameObject)Resources.Load("Prefabs/Player");
+		prfbPlayer = (GameObject)Resources.Load("Prefabs/Player");
+		prfbAltar = (GameObject)Resources.Load("Prefabs/Altar");
+		prfbHome = (GameObject)Resources.Load ("Prefabs/Home");
+		
+		altars= new List<GameObject>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-
 		if (setup){
 			switch (gameMode){
-				case Mode.OneVOne:
-					GameObject Player1 = (GameObject)Instantiate(playerPrefab, new Vector3(0,0,0), Quaternion.identity);
-					GameObject Player2 = (GameObject)Instantiate(playerPrefab, new Vector3(0,0,0), Quaternion.identity);
-					Player p1 = Player1.GetComponent<Player>();
-					Player p2 = Player2.GetComponent<Player>();
-					p1.SetTeam(TeamInfo.GetTeamInfo(1));
-					p2.SetTeam(TeamInfo.GetTeamInfo(2));
-					p1.PlayerNumber = 1;
-					p2.PlayerNumber = 2;
-					break;
-				case Mode.TwoVTwo:
-					
+			case Mode.OneVOne:
+				GameObject Player1 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
+				GameObject Player2 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
+				Player p1 = Player1.GetComponent<Player>();
+				Player p2 = Player2.GetComponent<Player>();
+				p1.SetTeam(TeamInfo.GetTeamInfo(1));
+				p2.SetTeam(TeamInfo.GetTeamInfo(2));
+				p1.PlayerNumber = 1;
+				p2.PlayerNumber = 2;
+				players.Add(Player1);
+				players.Add(Player2);
+				
+				GameObject team1Home, team2Home;
+				
+				team1Home = setUpTeamHome(p1);
+				team2Home = setUpTeamHome(p2);
+				
 				break;
-
+			case Mode.TwoVTwo:
+				
+				break;
+				
 			}
+			
+			
+			for (int i=0; i<numAltars; i++){
+				Debug.Log ("in Altar");		
+				GameObject a = (GameObject)Instantiate(prfbAltar, Vector3.zero, Quaternion.identity);
+				Altar aObj = a.GetComponent<Altar>();
+				aObj.brdX = Random.Range(0, tiles.GetLength(0));
+				aObj.brdY = Random.Range(0, tiles.GetLength(1));
+				aObj.gm = this;
+				aObj.sRef = sRef;
+				aObj.setControl(null);
+				aObj.transform.parent = tiles[aObj.brdX, aObj.brdY].transform;
+				aObj.transform.localPosition = new Vector3(0,0,-1);
+				altars.Add (aObj.gameObject);
+			}
+			
+			
+			
 			setup = false;
+			
 		}
-
+		GameObject hoveredTile = getHoveredTile();
+		if(hoveredTile!= null){
+			debugMouse = getHoveredTile().GetComponent<BaseTile>();
+		}
+		if(Input.GetButtonDown("Fire1")){
+			if(debugMouse.owningTeam != null){
+				BaseTile finalDestination = tiles[(int)debugMouse.owningTeam.startingLocation.x,(int)debugMouse.owningTeam.startingLocation.y].GetComponent<BaseTile>();
+				if(debugMouse.owningTeam != null){
+					
+					List<AStarholder> As = 	BaseTile.aStarSearch(debugMouse, finalDestination,int.MaxValue, BaseTile.getLocalSameTeamTiles, debugMouse.owningTeam);
+					debugString = string.Format("A star len: {0}", As.Count);
+				}
+			}
+		}
+		if(Input.GetButtonDown("Fire2")){
+			debugMouse.owningTeam = players[0].GetComponent<Player>().team;
+			
+			debugMouse.controllingTeam = players[0].GetComponent<Player>().team;
+			
+			debugMouse.percControlled =100f;
+		}
 	}
-
+	
+	public GameObject getHoveredTile(){
+		Vector3 MousePos =  Camera.main.ScreenToWorldPoint(Input.mousePosition);
+		//Debug.Log("Mouse" + MousePos.x + ", " + MousePos.y);
+		try{
+			return tiles[Mathf.RoundToInt(MousePos.x), Mathf.RoundToInt(MousePos.y)];
+		}
+		catch{
+			return null;
+		}
+	}
+	
 	void OnGUI(){
 		if(sRef.debugMode){
 			if(debugMouse!=null){
@@ -62,6 +128,10 @@ public class GameManager : MonoBehaviour {
 			}
 			if(debugTower !=null){
 				GUI.Box (new Rect (10,200,200,90), string.Format(" team {0} controlling\r\nstate: {1}", debugTower.controllingTeam.teamNumber, debugTower.currentState));
+			}
+			if(debugString != ""){
+				GUI.Box (new Rect (210,100,200,90), debugString);
+				
 			}
 		}
 	}
