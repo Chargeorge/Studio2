@@ -24,7 +24,7 @@ public class TeamInfo
 		switch (teamNumber) {
 				case 1: 
 						returnable.teamColor = new Color32 (0, 138, 206, 255);
-						returnable.startingLocation = new Vector2 (1, 1);
+						returnable.startingLocation = new Vector2 (19, 0);
 						returnable.teamNumber = teamNumber;
 						break;
 				case 2:
