@@ -284,6 +284,7 @@ public class Player : MonoBehaviour {
 				else{
 				///TODO: add reset to tile in case of change
 					//need to reset currenttile to previousState
+					_currentState = PlayerState.standing;
 				}	
 			break;
 		}
