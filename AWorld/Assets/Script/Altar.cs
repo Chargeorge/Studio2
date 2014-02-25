@@ -7,7 +7,7 @@ public class Altar : MonoBehaviour {
 	private TeamInfo _currentControllingTeam;
 	public bool networked;
 	public Settings sRef;
-	public AltarType alterType;
+	public AltarType altarType;
 	private TeamInfo _firstControllingTeam;
 	public TeamInfo touchControl;
 	public int brdX;
@@ -40,9 +40,9 @@ public class Altar : MonoBehaviour {
 	void Start () {
 		sRef = GameObject.Find ("Settings").GetComponent<Settings>();
 		//TODO OHH GOD THIS IS BAD I SHOULDN'T DO THIS
-		alterType = GameManager.GetRandomEnum<AltarType>();
-		Debug.Log("alter: " +alterType.ToString());
-		Material loaded =  (Material)Resources.Load(string.Format("Sprites/Materials/{0}", alterType.ToString()));
+		altarType = GameManager.GetRandomEnum<AltarType>();
+		Debug.Log("altar: " +altarType.ToString());
+		Material loaded =  (Material)Resources.Load(string.Format("Sprites/Materials/{0}", altarType.ToString()));
 		
 		transform.FindChild("Quad").renderer.material = loaded;
 	}

@@ -170,7 +170,7 @@ public class GameManager : MonoBehaviour {
 			Altar ToCheck = ToCheckGO.GetComponent<Altar>();
 			if(ToCheck.currentControllingTeam != null){
 				if(ToCheck.currentControllingTeam.teamNumber == t.teamNumber) {
-					returnable.Add(ToCheck.alterType);
+					returnable.Add(ToCheck.altarType);
 				}
 			}
 			

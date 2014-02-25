@@ -494,7 +494,7 @@ public class Player : MonoBehaviour {
 	
 	private float getAltarSpeedBoost(){
 		List<AltarType> a = gm.getNetworkedAltars(team);
-		if(a.Contains(AltarType.Choytzol)){
+		if(a.Contains(AltarType.Choyutzol)){
 			Debug.Log ("working");
 			return 2f;
 		}else{
