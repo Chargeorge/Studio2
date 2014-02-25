@@ -114,7 +114,7 @@ public class Player : MonoBehaviour {
 						//start building tower				
 				if( buildButtonDown){
 					//NO TOWER HERE, GOTTA DO STUFF.
-					if(currentTile.tower == null){
+					if(currentTile.tower == null || currentTile.tower.GetComponent<Tower>().percActionComplete < 100f){
 		
 					//	Jiggle ();	//Gotta jiggle
 						Pulsate ();
@@ -127,8 +127,14 @@ public class Player : MonoBehaviour {
 								float vpsBuildRate = sRef.vpsBaseBuild;
 								addProgressToAction(vpsBuildRate);
 								
-								GameObject towerBeingBuild = (GameObject)GameObject.Instantiate(_prfbTower, new Vector3(0,0,0), Quaternion.identity);
-								towerInProgress = towerBeingBuild.GetComponent<Tower>();
+								GameObject towerBeingBuilt;
+								if (currentTile.tower == null) { 
+									towerBeingBuilt = (GameObject)GameObject.Instantiate(_prfbTower, new Vector3(0,0,0), Quaternion.identity);
+								}
+								else {
+									towerBeingBuilt = currentTile.tower;
+								}
+								towerInProgress = towerBeingBuilt.GetComponent<Tower>();
 								towerInProgress.startBuilding(currentTile.gameObject, this.gameObject, vpsBuildRate);
 								towerInProgress.setDirection(facing);
 							}
