@@ -37,12 +37,14 @@ public class Tower : MonoBehaviour {
 			//find nearest convertable block
 			if(tileBeingConverted == null){
 				 tileBeingConverted = null;
-				//FIND The first convertable tile, list is ordeed by distance
+				//FIND The first convertable tile, list is ordered by distance
 				_pattern.ForEach(delegate (InfluencePatternHolder p){
 					if(tileBeingConverted == null){
 						int x = (int)brdX + (int)Mathf.RoundToInt(p.relCoordRotated.x);
 						int y = (int)brdY + (int)Mathf.RoundToInt(p.relCoordRotated.y);
-						GameObject Tile = gm.tiles[x, y];
+						GameObject Tile;
+						try { Tile = gm.tiles[x, y]; }
+							catch { return; }
 						if(Tile != null){
 							BaseTile Bt =  Tile.GetComponent<BaseTile>();
 							if(Bt.controllingTeam == null){
@@ -62,7 +64,7 @@ public class Tower : MonoBehaviour {
 			 }
 			 else{
 			 //TODO: Handle situations where other tiles are influencing.  
-				Debug.Log("Tying to influence at rate " + patternConverting.vpsInfluence );
+				Debug.Log("Trying to influence at rate " + patternConverting.vpsInfluence );
 				if(tileBeingConverted.GetComponent<BaseTile>().addProgressToInfluence(patternConverting.vpsInfluence, controllingTeam)){
 					tileBeingConverted = null;
 					patternConverting= null;
