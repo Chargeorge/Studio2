@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour {
 	public GameObject prfbAltar, prfbHome;
 	public List<GameObject> altars;
 	public int numAltars;
+	
 	// Use this for initialization
 	void Start () {
 		sRef = GameObject.Find ("Settings").GetComponent<Settings>();
@@ -97,6 +98,9 @@ public class GameManager : MonoBehaviour {
 	private GameObject setUpTeamHome(Player example){
 		GameObject team1Home = (GameObject)Instantiate(prfbHome, Vector3.zero, Quaternion.identity);
 		team1Home.transform.parent= tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].transform;
+		tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].GetComponent<BaseTile>().controllingTeam = example.team;
+		tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].GetComponent<BaseTile>().owningTeam = example.team;
+		tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].GetComponent<BaseTile>().percControlled = 100f;
 		team1Home.transform.localPosition = new Vector3(0,0,-.5f);
 		team1Home.GetComponent<Home>().team = example.team;
 		

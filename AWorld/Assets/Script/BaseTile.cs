@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 public class BaseTile : MonoBehaviour {
 	
 	
@@ -173,10 +174,7 @@ public class BaseTile : MonoBehaviour {
 		}
 	}
 	// Update is called once per frame
-	void Update () {
-		
-		
-		
+	void Update () {		
 		if(controllingTeam != null){
 			
 			qudInfluenceLayer.SetActive(true);
@@ -328,13 +326,25 @@ public class BaseTile : MonoBehaviour {
 	}
 		
 	public static List<BaseTile> getLocalSameTeamTiles(BaseTile current, TeamInfo T){	
-		return null;
+		List<BaseTile> returnable = current.getLocalTiles();
+		returnable.RemoveAll(x => x.owningTeam == null);
+		returnable.RemoveAll(x => x.owningTeam.teamNumber != T.teamNumber);
+		return returnable;
+		
 	}
 	
 	public static List<BaseTile> getLocalNonTiles(BaseTile current, TeamInfo T){
 		return null;
 	}
 
+	public List<BaseTile> getLocalTiles(){
+		List<BaseTile> returnable = new List<BaseTile>();
+		if(North!= null) returnable.Add(North);
+		if(South!= null) returnable.Add(South);
+		if(East!= null) returnable.Add(East);
+		if(West!= null) returnable.Add(West);
+		return returnable;
+	}
 		
 	public static List<AStarholder> aStarSearch(BaseTile start, BaseTile end, int currentAp, GetLocalTiles LocalMethod, TeamInfo team){
 		Dictionary<int, AStarholder> closedSet  = new Dictionary<int, AStarholder>();		
@@ -527,5 +537,17 @@ public class BaseTile : MonoBehaviour {
 	void OnMouseOver() {
 		GameObject.Find("GameManager").GetComponent<GameManager>().debugMouse = this;
 	}
+	
+	TeamInfo getHomeTeam(TeamInfo t){
+		Home homeBase = GetComponentInChildren<Home>();
+		if (homeBase != null){
+			return homeBase.team;
+		}
+		else{
+			return null;
+		}
+	}
+	
+	
 	
 }
