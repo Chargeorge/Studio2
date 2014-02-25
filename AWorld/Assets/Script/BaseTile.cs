@@ -352,7 +352,7 @@ public class BaseTile : MonoBehaviour {
 		
 		AStarholder current = new AStarholder(start, null);
 		current.hurVal = current.current.calcHueristic(current.current, end);
-		current.apAtThisTurn = currentAp;
+		//current.apAtThisTurn = currentAp;
 		current.pathCostToHere = 0;
 		
 		openSet.Add(current.current.Ident, current);
@@ -368,7 +368,7 @@ public class BaseTile : MonoBehaviour {
 				if(!closedSet.ContainsKey(bt.Ident)){
 					AStarholder newOpen = new AStarholder(bt, current);
 					newOpen.hurVal = newOpen.current.calcHueristic(newOpen.current, end);
-					newOpen.apAtThisTurn = current.apAtThisTurn - newOpen.current.MoveCost;
+					//newOpen.apAtThisTurn = current.apAtThisTurn - newOpen.current.MoveCost;
 					newOpen.pathCostToHere = newOpen.current.MoveCost + current.pathCostToHere;
 					if(openSet.ContainsKey(bt.Ident)){
 						if(openSet[bt.Ident].fVal > newOpen.fVal){
@@ -534,9 +534,9 @@ public class BaseTile : MonoBehaviour {
 		owningTeam = null;
 	}
 	
-	void OnMouseOver() {
+	/*void OnMouseOver() {
 		GameObject.Find("GameManager").GetComponent<GameManager>().debugMouse = this;
-	}
+	}*/
 	
 	TeamInfo getHomeTeam(TeamInfo t){
 		Home homeBase = GetComponentInChildren<Home>();
