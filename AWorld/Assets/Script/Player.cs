@@ -121,7 +121,6 @@ public class Player : MonoBehaviour {
 					addProgressToAction (vpsRate);
 					setDirection(x.Value);
 					_currentState = PlayerState.rotating;
-					Debug.Log ("Starting to rotate...");
 				}
 				
 				//If tower
@@ -338,7 +337,6 @@ public class Player : MonoBehaviour {
 				
 					Pulsate ();
 					
-					Debug.Log ("Rotating...");
 					float vpsRotateRate = sRef.vpsBaseRotate;
 					addProgressToAction (vpsRotateRate);
 					Tower tower = currentTile.tower.GetComponent<Tower>();
