@@ -60,6 +60,7 @@ public class GameManager : MonoBehaviour {
 				team2Home = setUpTeamHome(p2);
 				
 				break;
+				
 			case Mode.TwoVTwo:
 				
 				break;
@@ -82,9 +83,7 @@ public class GameManager : MonoBehaviour {
 				aObj.transform.localPosition = new Vector3(0,0,-1);
 				altars.Add (aObj.gameObject);
 			}
-			
-			
-			
+						
 			setup = false;
 			
 		}

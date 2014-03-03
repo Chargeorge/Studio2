@@ -12,6 +12,8 @@ public class TileCreation : MonoBehaviour {
 	public int boardX, boardY;
 	public int numberOfAltars;
 	public string ranjitRangeTileTypes;
+	public bool fogOn;
+	
 	// Use this for initialization
 	void Start () {
 		//Eventually procedural, for now random. Wee
@@ -26,6 +28,7 @@ public class TileCreation : MonoBehaviour {
 			for(int y=0; y< boardY; y++ ){
 				tilesGameBoard[x,y] = (GameObject)Instantiate(prfbTile, new Vector3(x,y,0), Quaternion.identity);
 				tilesGameBoard[x,y].GetComponent<BaseTile>().IsHover = false;
+				tilesGameBoard[x,y].GetComponent<BaseTile>().IsRevealed = !fogOn;
 				tilesGameBoard[x,y].GetComponent<BaseTile>().MoveCost =1;	
 				tilesGameBoard[x,y].GetComponent<BaseTile>().brdXPos = x;
 				tilesGameBoard[x,y].GetComponent<BaseTile>().brdYPos = y;

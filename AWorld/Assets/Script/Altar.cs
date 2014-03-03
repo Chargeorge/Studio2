@@ -58,6 +58,9 @@ public class Altar : MonoBehaviour {
 			gm.debugString = string.Format("ControllingTeam Number: {0}, Networked: {1}", _currentControllingTeam.teamNumber, networked);
 		}
 		
+		transform.GetComponent<MeshRenderer>().enabled = gm.tiles[brdX, brdY].GetComponent<BaseTile>().IsRevealed;
+		transform.FindChild ("Quad").renderer.enabled = gm.tiles[brdX, brdY].GetComponent<BaseTile>().IsRevealed;
+		
 	}
 	
 	public void setControl(TeamInfo team){

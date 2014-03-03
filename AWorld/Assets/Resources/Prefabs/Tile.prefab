@@ -500,6 +500,7 @@ MonoBehaviour:
   percControlled: 0
   tower: {fileID: 0}
   currentState: 0
+  currentType: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

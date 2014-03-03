@@ -15,8 +15,7 @@ public class BaseTile : MonoBehaviour {
 	public TeamInfo owningTeam;  //OWNING team is the official owning team, use it for defining networks and movement cost.
 	
 	public GameObject tower;
-	
-	
+		
 	public TileState currentState;
 	private int _brdXPos;
 	private int _brdYPos;
@@ -58,6 +57,16 @@ public class BaseTile : MonoBehaviour {
 			_brdYPos = value;
 		}
 	}	
+	
+	private bool _isRevealed;
+	public bool IsRevealed {
+		get {
+			return this._isRevealed;
+		}
+		set {
+			_isRevealed = value;
+		}
+	}
 	
 	private bool _isHover;
 	public bool IsHover {
@@ -201,6 +210,8 @@ public class BaseTile : MonoBehaviour {
 			((MeshRenderer)meshes[i]).enabled = IsSelected;	
 			
 		}
+		
+		transform.GetComponent<MeshRenderer>().enabled = IsRevealed;
 		
 	}
 	

@@ -46,12 +46,12 @@ public class Tower : MonoBehaviour {
 					if(tileBeingConverted == null){
 						int x = (int)brdX + (int)Mathf.RoundToInt(p.relCoordRotated.x);
 						int y = (int)brdY + (int)Mathf.RoundToInt(p.relCoordRotated.y);
-						GameObject Tile;
-						try { Tile = gm.tiles[x, y]; }
+						GameObject tile;
+						try { tile = gm.tiles[x, y]; }
 							catch { return; }
-//						if(Tile != null && Tile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
-						if(Tile != null){
-						BaseTile Bt =  Tile.GetComponent<BaseTile>();
+//						if(tile != null && tile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
+						if(tile != null){
+						BaseTile Bt =  tile.GetComponent<BaseTile>();
 							if(Bt.controllingTeam == null){
 								tileBeingConverted = Bt.gameObject;
 								patternConverting = p;
