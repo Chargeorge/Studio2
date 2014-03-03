@@ -32,7 +32,7 @@ public class Tower : MonoBehaviour {
 	void Update () {
 		int brdX; int brdY;
 		brdX = transform.parent.gameObject.GetComponent<BaseTile>().brdXPos;
-		 brdY = transform.parent.gameObject.GetComponent<BaseTile>().brdYPos;
+	 	brdY = transform.parent.gameObject.GetComponent<BaseTile>().brdYPos;
 		
 		setVisualDirection();
 		
@@ -124,18 +124,10 @@ public class Tower : MonoBehaviour {
 				
 		Color32 towerColor = renderer.material.color;
 		towerColor.a = (byte) (255f * (percActionComplete/100f));
+		if (towerColor.a > 255f) towerColor.a = (byte) 255f;
+		Debug.Log (towerColor.a);
 		renderer.material.color = towerColor;		
 		
-
-		
-		/** Doesn't work, no idea why
-		
-		Color32 towerColor = renderer.material.color;
-		towerColor.a = (byte) (255f * (percActionComplete/100f));		
-		renderer.material.color = towerColor;
-		Debug.Log(renderer.material.color.a);
-		
-		*/
 
 	}
 	

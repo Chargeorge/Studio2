@@ -131,11 +131,8 @@ public class Player : MonoBehaviour {
 								_currentState = PlayerState.building;
 								float vpsBuildRate = sRef.vpsBaseBuild;
 								addProgressToAction(vpsBuildRate);
-								
-								GameObject towerBeingBuild = (GameObject)GameObject.Instantiate(_prfbTower, new Vector3(0,0,0), Quaternion.identity);
-							
+															
 								gm.PlaySFX(towerBuilding, 1.0f);
-								towerInProgress = towerBeingBuild.GetComponent<Tower>();
 								GameObject towerBeingBuilt;
 								if (currentTile.tower == null) { 
 									towerBeingBuilt = (GameObject)GameObject.Instantiate(_prfbTower, new Vector3(0,0,0), Quaternion.identity);
@@ -234,7 +231,7 @@ public class Player : MonoBehaviour {
 					
 					//Debug.Log ("In Build");
 					if(currentTile.controllingTeam != null){
-						Debug.Log ("curent Team");
+//						Debug.Log ("current Team");
 						if(currentTile.controllingTeam.teamNumber == team.teamNumber){
 							//Check for a tower in progress and start building!s
 							if(towerInProgress != null){
