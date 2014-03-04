@@ -399,6 +399,7 @@ MonoBehaviour:
   vpsBaseBuild: 25
   vpsBaseMove: 100
   vpsBaseInfluence: 50
+  vpsBaseRotate: 50
   coefAlliedMove: 1
   coefMoveAllied: 2
   coefMoveEnemy: .330000013
