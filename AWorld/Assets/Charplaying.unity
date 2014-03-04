@@ -407,6 +407,7 @@ MonoBehaviour:
   baseRequired: 100
   scoreOnCapture: 50
   vpsScorePerSecond: 3
+  vpsBeaconBaseInfluence: 100
   debugMode: 1
 --- !u!4 &1843163359
 Transform:

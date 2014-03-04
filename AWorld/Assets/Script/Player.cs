@@ -122,19 +122,21 @@ public class Player : MonoBehaviour {
 						//start building tower				
 				if( buildButtonDown){
 					//NO TOWER HERE, GOTTA DO STUFF.
-					if(currentTile.tower == null || currentTile.tower.GetComponent<Tower>().percActionComplete < 100f){
-		
-					//	Jiggle ();	//Gotta jiggle
-						Pulsate ();
-						gm.PlaySFX(influenceStart, 1.0f);
-						if(currentTile.controllingTeam != null){
-							//Start building tower
-							if(currentTile.controllingTeam.teamNumber == team.teamNumber){
-								
+					//Check influence fist
+					if(currentTile.controllingTeam !=null){
+						
+						if(currentTile.controllingTeam.teamNumber == team.teamNumber){
+							
+							if(currentTile.percControlled < 100f){
+							Pulsate ();
+								_currentState = PlayerState.influencing;
+							}
+							else if(currentTile.tower == null || currentTile.tower.GetComponent<Tower>().percActionComplete < 100f){
+								Pulsate ();
 								_currentState = PlayerState.building;
 								float vpsBuildRate = sRef.vpsBaseBuild;
 								addProgressToAction(vpsBuildRate);
-															
+								
 								gm.PlaySFX(towerBuilding, 1.0f);
 								GameObject towerBeingBuilt;
 								if (currentTile.tower == null) { 
@@ -147,25 +149,18 @@ public class Player : MonoBehaviour {
 								towerInProgress.startBuilding(currentTile.gameObject, this.gameObject, vpsBuildRate);
 								towerInProgress.setDirection(facing);
 							}
-						
-							//Start removing influence
-							else{
-								
-							}
 						}
-						//Start influencing Tower
-						else
-						{
-							float vpsInfluenceRate = sRef.vpsBaseInfluence * getAltarInfluenceBoost();
- 							addProgressToAction(vpsInfluenceRate);
- 							_currentState = PlayerState.influencing;
- 							currentTile.startInfluence(currentActionProgress, team);
+						else{
+							_currentState = PlayerState.influencing;
 						}
 					}
 					else{
-						//TOWER HERE KEEP BUILDING
-						
-						
+					Pulsate ();
+						gm.PlaySFX(influenceStart, 1.0f);
+						float vpsInfluenceRate = sRef.vpsBaseInfluence * getAltarInfluenceBoost();
+						addProgressToAction(vpsInfluenceRate);
+						_currentState = PlayerState.influencing;
+						currentTile.startInfluence(currentActionProgress, team);
 					}
 				}
 				
@@ -282,6 +277,21 @@ public class Player : MonoBehaviour {
 					Pulsate ();
 					gm.PlaySFX(influenceStart, 1.0f);
 					if(currentTile.controllingTeam != null){
+						if(currentTile.controllingTeam.teamNumber  == teamNumber)
+						{
+							Debug.Log("Adding Influence");
+							float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBaseInfluence * getAltarInfluenceBoost() * Time.deltaTime);
+							if(test > 0){
+								_currentState = PlayerState.standing;
+							}
+						}
+						else{
+							float test = currentTile.subTractInfluence(  sRef.vpsBaseInfluence * getAltarInfluenceBoost() * Time.deltaTime, team);
+							if(test > 0f){
+								currentTile.addInfluenceReturnOverflow(test);
+							}
+						}
+						/*
 						float modifier = (currentTile.controllingTeam.teamNumber  == teamNumber) ? 1 : -1;
 						float vpsInfluenceRate = sRef.vpsBaseInfluence * modifier * getAltarInfluenceBoost();
 						addProgressToAction(vpsInfluenceRate);
@@ -296,7 +306,7 @@ public class Player : MonoBehaviour {
 						if(currentTile.percControlled <= 0f){
 							currentTile.clearInfluence();
 							currentActionProgress = 0;
-						}
+						}*/
 						
 						if (x.HasValue) { 
 							setDirection (x.Value);
