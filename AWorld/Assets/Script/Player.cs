@@ -107,6 +107,22 @@ public class Player : MonoBehaviour {
 					
 					
 				}
+				
+				//Rotating - doesn't fit with old comments or build button state diagram, but can hopefully be refactored later to fit better
+				if (buildButtonDown && 
+					currentTile.tower != null && 
+					x.HasValue &&
+					x != currentTile.tower.GetComponent<Tower>().facing && 
+				    (currentTile.tower.GetComponent<Tower>().currentState == TowerState.Basic || 				//Making sure the tower is at least complete at basic level
+				     currentTile.tower.GetComponent<Tower>().currentState == TowerState.BuildingAdvanced || 	//Is there a better way of doing this?
+		 			 currentTile.tower.GetComponent<Tower>().currentState == TowerState.Advanced)) 
+		 		{
+					float vpsRate = sRef.vpsBaseRotate;
+					addProgressToAction (vpsRate);
+					setDirection(x.Value);
+					_currentState = PlayerState.rotating;
+				}
+				
 				//If tower
 					//if stick
 						//begin rotate build
@@ -324,6 +340,41 @@ public class Player : MonoBehaviour {
 					gm.StopSFX();
 				}	
 			break;
+			
+			case PlayerState.rotating: 
+			
+				if (buildButtonDown) {
+				
+					Pulsate ();
+					
+					float vpsRotateRate = sRef.vpsBaseRotate;
+					addProgressToAction (vpsRotateRate);
+					Tower tower = currentTile.tower.GetComponent<Tower>();
+					tower.addRotateProgress (vpsRotateRate);
+					
+					if (tower.percRotateComplete >= 100f) {
+	
+						currentActionProgress = 0;
+						tower.Rotate (facing);
+						tower.percRotateComplete = 0f;
+						_currentState = PlayerState.standing;
+						gm.StopSFX ();
+					
+					}
+					
+				}
+					
+				else {
+				
+					currentActionProgress = 0;
+					currentTile.tower.GetComponent<Tower>().percRotateComplete = 0f;
+					_currentState = PlayerState.standing;
+					gm.StopSFX();
+				
+				}
+			
+			break;
+			
 		}
 		
 		//Set position based on offset

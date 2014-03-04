@@ -5,11 +5,12 @@ using System.Linq;
 public class Tower : MonoBehaviour {
 
 	private List<InfluencePatternHolder> _pattern;
-	public DirectionEnum facing;
+	public DirectionEnum? facing;
 	public TeamInfo controllingTeam;
 	private TowerState _currentState;
 	public float percActionComplete = 0;
 	public float percInfluenceComplete= 0;	//Countdown till another influence is popped
+	public float percRotateComplete = 0;
 	public GameManager gm;	
 	public GameObject tileBeingConverted;
 	private InfluencePatternHolder patternConverting;
@@ -157,6 +158,10 @@ public class Tower : MonoBehaviour {
 	public void addInfluenceProgress(float rate){
 		percInfluenceComplete += rate*Time.deltaTime;
 		//Debug.Log(percControlled);
+	}
+	
+	public void addRotateProgress (float rate) {
+		percRotateComplete += rate*Time.deltaTime;
 	}	
 	
 	/// <summary>
@@ -193,7 +198,7 @@ public class Tower : MonoBehaviour {
 		GameObject.Find("GameManager").GetComponent<GameManager>().debugTower = this;
 	}
 	
-	private float getAngleForDir(DirectionEnum N){
+	private float getAngleForDir(DirectionEnum? N){
 		switch (N){
 		case DirectionEnum.North:
 			return 0f;
@@ -209,9 +214,9 @@ public class Tower : MonoBehaviour {
 			
 		}
 		return 0;
-	} 
+	}
 	
-	public void setDirection(DirectionEnum N){
+	public void setDirection(DirectionEnum? N){
 		
 		float rotAngle = getAngleForDir(N);
 		float currentRotAngle = getAngleForDir(facing);
@@ -223,6 +228,14 @@ public class Tower : MonoBehaviour {
 	
 	public void setVisualDirection(){
 		transform.localEulerAngles = new Vector3(0,0,-1*getAngleForDir(facing));
+	}
+	
+	public void Rotate (DirectionEnum? N) {
+	
+		setDirection (N);
+		setVisualDirection ();
+		_pattern = createBasicInfluenceList (getAngleForDir (facing));
+	
 	}
 	
 	

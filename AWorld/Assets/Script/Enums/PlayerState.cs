@@ -13,7 +13,8 @@ public enum PlayerState
 	standing,
 	building,
 	moving,
-	influencing
+	influencing,
+	rotating
 
 }
 
