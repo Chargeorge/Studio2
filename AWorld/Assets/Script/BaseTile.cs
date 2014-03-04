@@ -525,6 +525,43 @@ public class BaseTile : MonoBehaviour {
 		}
 		return returnable;
 	}
+	
+	/// <summary>
+	/// Subtract any influence, return any influence over the flip
+	/// </summary>
+	/// <returns>The tract influence.</returns>
+	/// <param name="rate">Rate.</param>
+	public float subTractInfluence(float amt, TeamInfo subtractingTeam){
+		if(percControlled > 0){
+			percControlled -= amt;
+		}
+		if(percControlled >0){
+			return 0f;
+		}
+		else{
+			float returnable = Math.Abs (percControlled);
+			flipInfluence(subtractingTeam);
+			return returnable;
+			
+		}
+		
+	}
+	
+	///
+	public float addInfluenceReturnOverflow(float amt){
+		if(percControlled < 100f){
+			percControlled += amt;
+			
+		}
+		if(percControlled >100f){
+			float returnable =  percControlled -100f;
+			finishInfluence();
+			return returnable;
+		}
+		return 0f;
+	}
+	
+	
 	public void flipInfluence(TeamInfo newTeam){
 		controllingTeam = newTeam;
 		percControlled = 0;

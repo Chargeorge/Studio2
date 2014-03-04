@@ -13,6 +13,7 @@ public class Tower : MonoBehaviour {
 	public GameManager gm;	
 	public GameObject tileBeingConverted;
 	private InfluencePatternHolder patternConverting;
+	public Settings sRef;
 	public TowerState currentState{
 		get{
 			return _currentState;
@@ -26,6 +27,7 @@ public class Tower : MonoBehaviour {
 	void Start () {
 		///TODO ADD PATTERN STATICS
 		gm = GameObject.Find ("GameManager").GetComponent<GameManager>();
+		sRef= GameObject.Find ("Settings").GetComponent<Settings>();
 	}
 	
 	// Update is called once per frame
@@ -35,48 +37,69 @@ public class Tower : MonoBehaviour {
 	 	brdY = transform.parent.gameObject.GetComponent<BaseTile>().brdYPos;
 		
 		setVisualDirection();
+
+		//influence work
+		// Find list of all influencible tiles
+		//Get closest tile in terms of distance and  begin influening it
+		//Add Influence till tile is at full
+		// move on to the next tile
+		//repeat till all tiles are full or influence is expended
 		
+		//This solution isn't "Correct" AKA, it doesn't resolve perfectly every frame, but over the aggregrate it should be correct
+		// We can move to fixed update to get closer to correct
 		if(_currentState == TowerState.Basic){
 
 			//find nearest convertable block
-			if(tileBeingConverted == null){
-				 tileBeingConverted = null;
-				//FIND The first convertable tile, list is ordered by distance
-				_pattern.ForEach(delegate (InfluencePatternHolder p){
-					if(tileBeingConverted == null){
-						int x = (int)brdX + (int)Mathf.RoundToInt(p.relCoordRotated.x);
-						int y = (int)brdY + (int)Mathf.RoundToInt(p.relCoordRotated.y);
-						GameObject tile;
-						try { tile = gm.tiles[x, y]; }
-							catch { return; }
-//						if(tile != null && tile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
-						if(tile != null){
-						BaseTile Bt =  tile.GetComponent<BaseTile>();
-							if(Bt.controllingTeam == null){
-								tileBeingConverted = Bt.gameObject;
-								patternConverting = p;
-								Debug.Log("found my dude");
-							}
-							else if(Bt.controllingTeam.teamNumber != controllingTeam.teamNumber || Bt.percControlled < 100f){
-								tileBeingConverted = Bt.gameObject;
-								patternConverting = p;
-								Debug.Log("found my dude");
+			//FIND The first convertable tile, list is ordered by distance
+			//TODO setup for bases so multiple tiles can influence at once
+			float influenceThisFrame = sRef.vpsBeaconBaseInfluence * Time.deltaTime;
+			
+			_pattern.ForEach(delegate (InfluencePatternHolder p){
+				if(influenceThisFrame > 0f){
+					int x = (int)brdX + (int)Mathf.RoundToInt(p.relCoordRotated.x);
+					int y = (int)brdY + (int)Mathf.RoundToInt(p.relCoordRotated.y);
+					GameObject tile;
+					
+					try { tile = gm.tiles[x, y]; }
+						catch { return; }
+	//						if(tile != null && tile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
+					
+					if(tile != null){
+					BaseTile Bt =  tile.GetComponent<BaseTile>();
+						if(Bt.controllingTeam == null){
+							Bt.startInfluence(influenceThisFrame, controllingTeam);
+							influenceThisFrame = 0;  //Assume a null controlled Tile will eat all influence.
+							//Debug.Log("influencing Null tile");
+						}
+						else if(Bt.controllingTeam.teamNumber != controllingTeam.teamNumber){
+							influenceThisFrame = Bt.subTractInfluence(influenceThisFrame * p.coefInfluenceFraction, controllingTeam);
+							//Debug.Log("Removing other influence");
+							if(influenceThisFrame > 0){
+								influenceThisFrame = Bt.addInfluenceReturnOverflow(influenceThisFrame * p.coefInfluenceFraction);
+								//Debug.Log("Adding next frames influence");
 							}
 						}
-						
+						else if(Bt.controllingTeam.teamNumber == controllingTeam.teamNumber && Bt.percControlled < 100f){
+							influenceThisFrame = Bt.addInfluenceReturnOverflow(influenceThisFrame * p.coefInfluenceFraction);
+							//Debug.Log ("Adding my influence");
+						}
+//						|| Bt.percControlled < 100f
 					}
-				 });
-
-			 }
-			 else{
-				gm.PlaySFX(towerInfluencing, 0.8f);
-			 //TODO: Handle situations where other tiles are influencing.  
-				Debug.Log("Trying to influence at rate " + patternConverting.vpsInfluence );
-				if(tileBeingConverted.GetComponent<BaseTile>().addProgressToInfluence(patternConverting.vpsInfluence, controllingTeam)){
-					tileBeingConverted = null;
-					patternConverting= null;
+					
 				}
-			 }
+			
+			 });
+
+//			 
+//			 else{
+//				gm.PlaySFX(towerInfluencing, 0.8f);
+//			 //TODO: Handle situations where other tiles are influencing.  
+//				Debug.Log("Trying to influence at rate " + patternConverting.vpsInfluence );
+//				if(tileBeingConverted.GetComponent<BaseTile>().addProgressToInfluence(patternConverting.vpsInfluence, controllingTeam)){
+//					tileBeingConverted = null;
+//					patternConverting= null;
+//				}
+//			 }
 		}
 		
 	}
@@ -159,10 +182,10 @@ public class Tower : MonoBehaviour {
 	
 	public static List<InfluencePatternHolder> createBasicInfluenceList(float degreeRotated){
 		List<InfluencePatternHolder> returanble = new List<InfluencePatternHolder>();
-		returanble.Add(new InfluencePatternHolder(new Vector2(0,1), 100f, degreeRotated));
-		returanble.Add(new InfluencePatternHolder(new Vector2(0,2), 50f, degreeRotated));
-		returanble.Add(new InfluencePatternHolder(new Vector2(0,3), 33.4f, degreeRotated));
-		returanble.Add(new InfluencePatternHolder(new Vector2(0,4), 25f, degreeRotated));
+		returanble.Add(new InfluencePatternHolder(new Vector2(0,1), 1f, degreeRotated));
+		returanble.Add(new InfluencePatternHolder(new Vector2(0,2), .5f, degreeRotated));
+		returanble.Add(new InfluencePatternHolder(new Vector2(0,3), .33f, degreeRotated));
+		returanble.Add(new InfluencePatternHolder(new Vector2(0,4), .25f, degreeRotated));
 		
 		return returanble.OrderBy(o=>o.relCoordRotated.magnitude).ToList();
 	}

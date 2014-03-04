@@ -14,13 +14,13 @@ public class InfluencePatternHolder
 {
 	private Vector2 relCoord; //Relative coordinate of tower, assuming facing up
 	public Vector2 relCoordRotated;
-	public float vpsInfluence; // Value Per second of influence.
-	public float degRotation; //Degrees Rotated, will return the relative based on this value
+	public float coefInfluenceFraction; // The increased cost to influece this tile
+	public float degRotation; //Degrees Rotated, will return the relativhis tle based on this value
 	public InfluencePatternHolder (Vector2 relCoord,  float vpsInfluenceRate, float degreeRotation)
 	{
 		this.relCoord = relCoord;
 		this.relCoordRotated =  Quaternion.Euler(0,0, -1*degreeRotation)* new Vector3(relCoord.x, relCoord.y,0);
-		this.vpsInfluence = vpsInfluenceRate;
+		this.coefInfluenceFraction = vpsInfluenceRate;
 	}
 	
 	
