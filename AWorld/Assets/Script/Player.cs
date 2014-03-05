@@ -95,7 +95,7 @@ public class Player : MonoBehaviour {
 					if(currentTile.GetDirection(x.Value) != null){
 						BaseTile MovingInto = currentTile.GetDirection(x.Value);
 						//Debug.Log(string.Format("x:{0}, y: {1}", MovingInto.brdXPos, MovingInto.brdYPos));
-						float vpsRate = MovingInto.GetRate(this) * sRef.vpsBaseMove;
+						float vpsRate = MovingInto.GetRate(this, gm) * sRef.vpsBaseMove;
 						addProgressToAction(vpsRate);
 						setDirection(x.Value);
 						_currentState = PlayerState.moving;
@@ -191,7 +191,7 @@ public class Player : MonoBehaviour {
 				if(x.HasValue && x.Value == facing){
 					gm.PlaySFX(playerMove, 0.8f);
 					BaseTile MovingInto = currentTile.GetComponent<BaseTile>().GetDirection(x.Value);
-					float vpsRate = MovingInto.GetRate(this) * sRef.vpsBaseMove *getAltarSpeedBoost();
+					float vpsRate = MovingInto.GetRate(this, gm) * sRef.vpsBaseMove *getAltarSpeedBoost();
 					addProgressToAction(vpsRate);
 					
 					if(currentActionProgress > sRef.baseRequired){
@@ -239,7 +239,7 @@ public class Player : MonoBehaviour {
 			break;	
 			
 			case PlayerState.building:
-				if(buildButtonDown){
+				if(buildButtonDown && currentTile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
 				//	Jiggle ();	//Gotta jiggle
 					Pulsate (); 
 					
@@ -288,7 +288,7 @@ public class Player : MonoBehaviour {
 			break;
 			
 			case PlayerState.influencing:
-				if(buildButtonDown){
+				if(buildButtonDown && currentTile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
 			//		Jiggle ();	//Gotta jiggle
 					Pulsate ();
 					gm.PlaySFX(influenceStart, 1.0f);

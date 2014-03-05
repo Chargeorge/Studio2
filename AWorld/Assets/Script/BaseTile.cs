@@ -471,9 +471,14 @@ public class BaseTile : MonoBehaviour {
 	/// </summary>
 	/// <returns>The rate.</returns>
 	/// <param name="testing">Testing.</param>
-	public float GetRate(Player testing){
+	public float GetRate(Player testing, GameManager gm){
 		if(currentType == TileTypeEnum.water){
-			return 0f;
+			if (gm.getNetworkedAltars(testing.team).Contains (AltarType.Thotzeti)){
+				return 1f;
+			}
+			else{
+				return 0f;
+			}
 		}
 		if(controllingTeam != null){
 			if(controllingTeam.teamNumber == testing.teamNumber){
