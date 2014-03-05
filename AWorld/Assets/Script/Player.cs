@@ -149,16 +149,10 @@ public class Player : MonoBehaviour {
 							}
 							
 							//DO Tile Control 
-							else if(currentTile.getLocalAltar()!=null && currentTile.getLocalAltar().isLocked == false && currentTile.getLocalAltar().networked == true){
-							
-								//TODO: add Animation
-								currentTile.getLocalAltar().isLocked = true;
-										
-									Hashtable ht = new Hashtable();
-									ht.Add("x",.5f);
-									ht.Add("y",.5f);
-									ht.Add("time",.50f);
-								iTween.ShakePosition(currentTile.gameObject, ht);
+							else if(currentTile.getLocalAltar()!=null ){
+									
+								currentTile.getLocalAltar().doCapture(team);
+								
 							}
 							else if(currentTile.beacon == null || currentTile.beacon.GetComponent<Beacon>().percActionComplete < 100f && currentTile.getLocalAltar()== null){
 								Pulsate ();

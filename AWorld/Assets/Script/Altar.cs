@@ -107,5 +107,23 @@ public class Altar : MonoBehaviour {
 		return false;
 	}
 	
+	public bool doCapture(TeamInfo T){
+		if(sRef.optLockTile){
+			if(!isLocked){
+				if(currentControllingTeam.teamNumber == T.teamNumber){
+					if(networked){
+						isLocked = true;
+						Hashtable ht = new Hashtable();
+						ht.Add("x",.5f);
+						ht.Add("y",.5f);
+						ht.Add("time",.50f);
+						iTween.ShakePosition(gameObject, ht);
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
 	
 }
