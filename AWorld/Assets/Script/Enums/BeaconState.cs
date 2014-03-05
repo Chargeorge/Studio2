@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-public enum TowerState
+public enum BeaconState
 {
 	BuildingBasic,
 	Basic, 

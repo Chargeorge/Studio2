@@ -2,12 +2,12 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-public class Tower : MonoBehaviour {
+public class Beacon : MonoBehaviour {
 
 	private List<InfluencePatternHolder> _pattern;
 	public DirectionEnum? facing;
 	public TeamInfo controllingTeam;
-	private TowerState _currentState;
+	private BeaconState _currentState;
 	public float percActionComplete = 0;
 	public float percInfluenceComplete= 0;	//Countdown till another influence is popped
 	public float percRotateComplete = 0;
@@ -15,7 +15,7 @@ public class Tower : MonoBehaviour {
 	public GameObject tileBeingConverted;
 	private InfluencePatternHolder patternConverting;
 	public Settings sRef;
-	public TowerState currentState{
+	public BeaconState currentState{
 		get{
 			return _currentState;
 		}
@@ -48,7 +48,7 @@ public class Tower : MonoBehaviour {
 		
 		//This solution isn't "Correct" AKA, it doesn't resolve perfectly every frame, but over the aggregrate it should be correct
 		// We can move to fixed update to get closer to correct
-		if(_currentState == TowerState.Basic){
+		if(_currentState == BeaconState.Basic){
 
 			//find nearest convertable block
 			//FIND The first convertable tile, list is ordered by distance
@@ -118,12 +118,12 @@ public class Tower : MonoBehaviour {
 	public void startBuilding(GameObject tileLocation, GameObject player, float valInit){
 		this.gameObject.transform.parent = tileLocation.transform;
 		this.facing = player.GetComponent<Player>().facing;
-		this._currentState	= TowerState.BuildingBasic;
+		this._currentState	= BeaconState.BuildingBasic;
 		controllingTeam = player.GetComponent<Player>().team;
 		this.setTeam();
 
 		this.transform.localPosition = new Vector3(0f,0f,-.5f);
-		tileLocation.GetComponent<BaseTile>().tower = this.gameObject;
+		tileLocation.GetComponent<BaseTile>().beacon = this.gameObject;
 
 	}
 	
@@ -172,15 +172,15 @@ public class Tower : MonoBehaviour {
 		if(percActionComplete > 100f){
 			percActionComplete = 100f;
 			
-			if(_currentState == TowerState.BuildingBasic){
+			if(_currentState == BeaconState.BuildingBasic){
 
-				_currentState = TowerState.Basic;
-				_pattern = Tower.createBasicInfluenceList(getAngleForDir(facing));
+				_currentState = BeaconState.Basic;
+				_pattern = Beacon.createBasicInfluenceList(getAngleForDir(facing));
 				
 			}
-			if(_currentState == TowerState.BuildingAdvanced){
-				_currentState = TowerState.Advanced;
-				_pattern = Tower.createBasicInfluenceList(getAngleForDir(facing));
+			if(_currentState == BeaconState.BuildingAdvanced){
+				_currentState = BeaconState.Advanced;
+				_pattern = Beacon.createBasicInfluenceList(getAngleForDir(facing));
 			}			
 		}
 	}
@@ -195,7 +195,7 @@ public class Tower : MonoBehaviour {
 		return returanble.OrderBy(o=>o.relCoordRotated.magnitude).ToList();
 	}
 	void OnMouseOver() {
-		GameObject.Find("GameManager").GetComponent<GameManager>().debugTower = this;
+		GameObject.Find("GameManager").GetComponent<GameManager>().debugBeacon = this;
 	}
 	
 	private float getAngleForDir(DirectionEnum? N){

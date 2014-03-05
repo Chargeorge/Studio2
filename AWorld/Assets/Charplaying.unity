@@ -186,7 +186,7 @@ MonoBehaviour:
   players: []
   prfbPlayer: {fileID: 0}
   debugMouse: {fileID: 0}
-  debugTower: {fileID: 0}
+  debugBeacon: {fileID: 0}
   prfbAltar: {fileID: 0}
   prfbHome: {fileID: 0}
   altars: []

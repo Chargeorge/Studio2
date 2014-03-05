@@ -2,7 +2,13 @@ fileFormatVersion: 2
 guid: 728e5af4b01c4074c81ec79c7f98b261
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - gm: {instanceID: 0}
+  - sRef: {instanceID: 0}
+  - playerMove: {instanceID: 0}
+  - influenceStart: {instanceID: 0}
+  - beaconBuilding: {fileID: 8300000, guid: 7f2413507f8566349b64490b2a2bf528, type: 3}
+  - beaconBuilt: {fileID: 8300000, guid: 20f685198359dcb419464a8a601d94e0, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
