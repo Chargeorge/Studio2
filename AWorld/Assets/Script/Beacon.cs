@@ -55,38 +55,43 @@ public class Beacon : MonoBehaviour {
 			//TODO setup for bases so multiple tiles can influence at once
 			float influenceThisFrame = sRef.vpsBeaconBaseInfluence * Time.deltaTime;
 			
+			bool waterFound = false;
 			_pattern.ForEach(delegate (InfluencePatternHolder p){
-				if(influenceThisFrame > 0f){
-					int x = (int)brdX + (int)Mathf.RoundToInt(p.relCoordRotated.x);
-					int y = (int)brdY + (int)Mathf.RoundToInt(p.relCoordRotated.y);
-					GameObject tile;
-					
-					try { tile = gm.tiles[x, y]; }
-						catch { return; }
-	//						if(tile != null && tile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
-					
-					if(tile != null){
-					BaseTile Bt =  tile.GetComponent<BaseTile>();
-						if(Bt.controllingTeam == null){
-							Bt.startInfluence(influenceThisFrame, controllingTeam);
-							influenceThisFrame = 0;  //Assume a null controlled Tile will eat all influence.
-							//Debug.Log("influencing Null tile");
+				if (!waterFound) {
+					if(influenceThisFrame > 0f){
+						int x = (int)brdX + (int)Mathf.RoundToInt(p.relCoordRotated.x);
+						int y = (int)brdY + (int)Mathf.RoundToInt(p.relCoordRotated.y);
+						GameObject tile;
+						
+						try { tile = gm.tiles[x, y]; }
+							catch { return; }
+						if(tile != null && tile.GetComponent<BaseTile>().currentType == TileTypeEnum.water) { 
+							waterFound = true;
+							return;
 						}
-						else if(Bt.controllingTeam.teamNumber != controllingTeam.teamNumber){
-							influenceThisFrame = Bt.subTractInfluence(influenceThisFrame * p.coefInfluenceFraction, controllingTeam);
-							//Debug.Log("Removing other influence");
-							if(influenceThisFrame > 0){
-								influenceThisFrame = Bt.addInfluenceReturnOverflow(influenceThisFrame * p.coefInfluenceFraction);
-								//Debug.Log("Adding next frames influence");
+						if(tile != null){
+						BaseTile Bt =  tile.GetComponent<BaseTile>();
+							if(Bt.controllingTeam == null){
+								Bt.startInfluence(influenceThisFrame, controllingTeam);
+								influenceThisFrame = 0;  //Assume a null controlled Tile will eat all influence.
+								//Debug.Log("influencing Null tile");
 							}
+							else if(Bt.controllingTeam.teamNumber != controllingTeam.teamNumber){
+								influenceThisFrame = Bt.subTractInfluence(influenceThisFrame * p.coefInfluenceFraction, controllingTeam);
+								//Debug.Log("Removing other influence");
+								if(influenceThisFrame > 0){
+									influenceThisFrame = Bt.addInfluenceReturnOverflow(influenceThisFrame * p.coefInfluenceFraction);
+									//Debug.Log("Adding next frames influence");
+								}
+							}
+							else if(Bt.controllingTeam.teamNumber == controllingTeam.teamNumber && Bt.percControlled < 100f){
+								influenceThisFrame = Bt.addInfluenceReturnOverflow(influenceThisFrame * p.coefInfluenceFraction);
+								//Debug.Log ("Adding my influence");
+							}
+	//						|| Bt.percControlled < 100f
 						}
-						else if(Bt.controllingTeam.teamNumber == controllingTeam.teamNumber && Bt.percControlled < 100f){
-							influenceThisFrame = Bt.addInfluenceReturnOverflow(influenceThisFrame * p.coefInfluenceFraction);
-							//Debug.Log ("Adding my influence");
-						}
-//						|| Bt.percControlled < 100f
+						
 					}
-					
 				}
 			
 			 });
