@@ -13,8 +13,8 @@ public class Player : MonoBehaviour {
 	private float currentActionProgress;
 	public Settings sRef;
 	public DirectionEnum facing;
-	private GameObject _prfbTower;
-	private Tower towerInProgress;
+	private GameObject _prfbBeacon;
+	private Beacon beaconInProgress;
 	private int _vision = 5;
 
 	private float _jiggleRange = 0.1f;			//Max distance from center of grid the player will jiggle
@@ -33,8 +33,8 @@ public class Player : MonoBehaviour {
 
 	public AudioClip playerMove;
 	public AudioClip influenceStart;
-	public AudioClip towerBuilding;
-	public AudioClip towerBuilt;
+	public AudioClip beaconBuilding;
+	public AudioClip beaconBuilt;
 
 	public PlayerState currentState {
 		get {
@@ -68,7 +68,7 @@ public class Player : MonoBehaviour {
 	void Start () {
 		altars = new List<AltarType>();
 		_currentState = PlayerState.standing;
-		_prfbTower = (GameObject)Resources.Load("Prefabs/Tower");
+		_prfbBeacon = (GameObject)Resources.Load("Prefabs/Beacon");
 		sRef = GameObject.Find ("Settings").GetComponent<Settings>();
 		gm = GameObject.Find ("GameManager").GetComponent<GameManager>();
 		RevealTiles ();
@@ -110,12 +110,12 @@ public class Player : MonoBehaviour {
 				
 				//Rotating - doesn't fit with old comments or build button state diagram, but can hopefully be refactored later to fit better
 				if (buildButtonDown && 
-					currentTile.tower != null && 
+					currentTile.beacon != null && 
 					x.HasValue &&
-					x != currentTile.tower.GetComponent<Tower>().facing && 
-				    (currentTile.tower.GetComponent<Tower>().currentState == TowerState.Basic || 				//Making sure the tower is at least complete at basic level
-				     currentTile.tower.GetComponent<Tower>().currentState == TowerState.BuildingAdvanced || 	//Is there a better way of doing this?
-		 			 currentTile.tower.GetComponent<Tower>().currentState == TowerState.Advanced)) 
+					x != currentTile.beacon.GetComponent<Beacon>().facing && 
+				    (currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Basic || 			//Making sure the beacon is at least complete at basic level
+				     currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingAdvanced || 	//Is there a better way of doing this?
+		 			 currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Advanced)) 
 		 		{
 					float vpsRate = sRef.vpsBaseRotate;
 					addProgressToAction (vpsRate);
@@ -123,7 +123,7 @@ public class Player : MonoBehaviour {
 					_currentState = PlayerState.rotating;
 				}
 				
-				//If tower
+				//If beacon
 					//if stick
 						//begin rotate build
 					//else
@@ -135,9 +135,9 @@ public class Player : MonoBehaviour {
 					//if other team
 						//start removing 
 					// if us 
-						//start building tower				
+						//start building beacon				
 				if( buildButtonDown){
-					//NO TOWER HERE, GOTTA DO STUFF.
+					//NO BEACON HERE, GOTTA DO STUFF.
 					//Check influence fist
 					if(currentTile.controllingTeam !=null){
 						
@@ -147,23 +147,23 @@ public class Player : MonoBehaviour {
 							Pulsate ();
 								_currentState = PlayerState.influencing;
 							}
-							else if(currentTile.tower == null || currentTile.tower.GetComponent<Tower>().percActionComplete < 100f){
+							else if(currentTile.beacon == null || currentTile.beacon.GetComponent<Beacon>().percActionComplete < 100f){
 								Pulsate ();
 								_currentState = PlayerState.building;
 								float vpsBuildRate = sRef.vpsBaseBuild;
 								addProgressToAction(vpsBuildRate);
 								
-								gm.PlaySFX(towerBuilding, 1.0f);
-								GameObject towerBeingBuilt;
-								if (currentTile.tower == null) { 
-									towerBeingBuilt = (GameObject)GameObject.Instantiate(_prfbTower, new Vector3(0,0,0), Quaternion.identity);
+								gm.PlaySFX(beaconBuilding, 1.0f);
+								GameObject beaconBeingBuilt;
+								if (currentTile.beacon == null) { 
+									beaconBeingBuilt = (GameObject)GameObject.Instantiate(_prfbBeacon, new Vector3(0,0,0), Quaternion.identity);
 								}
 								else {
-									towerBeingBuilt = currentTile.tower;
+									beaconBeingBuilt = currentTile.beacon;
 								}
-								towerInProgress = towerBeingBuilt.GetComponent<Tower>();
-								towerInProgress.startBuilding(currentTile.gameObject, this.gameObject, vpsBuildRate);
-								towerInProgress.setDirection(facing);
+								beaconInProgress = beaconBeingBuilt.GetComponent<Beacon>();
+								beaconInProgress.startBuilding(currentTile.gameObject, this.gameObject, vpsBuildRate);
+								beaconInProgress.setDirection(facing);
 							}
 						}
 						else{
@@ -247,21 +247,21 @@ public class Player : MonoBehaviour {
 					if(currentTile.controllingTeam != null){
 //						Debug.Log ("current Team");
 						if(currentTile.controllingTeam.teamNumber == team.teamNumber){
-							//Check for a tower in progress and start building!s
-							if(towerInProgress != null){
+							//Check for a beacon in progress and start building!
+							if(beaconInProgress != null){
 								Debug.Log("attempting to build");
 								float vpsBuildRate = sRef.vpsBaseBuild * getAltarBuildBoost ();
-								towerInProgress.addBuildingProgress(vpsBuildRate);
+								beaconInProgress.addBuildingProgress(vpsBuildRate);
 								if(x.HasValue){
 									setDirection(x.Value);
-									towerInProgress.setDirection(x.Value);
+									beaconInProgress.setDirection(x.Value);
 								}
-								if(towerInProgress.percActionComplete > 100f){
+								if(beaconInProgress.percActionComplete > 100f){
 								
 									Debug.Log("Finished?");
 									gm.StopSFX();
-									gm.PlaySFX(towerBuilt, 1.0f);
-									towerInProgress.finishAction();
+									gm.PlaySFX(beaconBuilt, 1.0f);
+									beaconInProgress.finishAction();
 									_currentState = PlayerState.standing;
 									currentActionProgress = 0f;
 								}
@@ -349,14 +349,14 @@ public class Player : MonoBehaviour {
 					
 					float vpsRotateRate = sRef.vpsBaseRotate;
 					addProgressToAction (vpsRotateRate);
-					Tower tower = currentTile.tower.GetComponent<Tower>();
-					tower.addRotateProgress (vpsRotateRate);
+					Beacon beacon = currentTile.beacon.GetComponent<Beacon>();
+					beacon.addRotateProgress (vpsRotateRate);
 					
-					if (tower.percRotateComplete >= 100f) {
+					if (beacon.percRotateComplete >= 100f) {
 	
 						currentActionProgress = 0;
-						tower.Rotate (facing);
-						tower.percRotateComplete = 0f;
+						beacon.Rotate (facing);
+						beacon.percRotateComplete = 0f;
 						_currentState = PlayerState.standing;
 						gm.StopSFX ();
 					
@@ -367,7 +367,7 @@ public class Player : MonoBehaviour {
 				else {
 				
 					currentActionProgress = 0;
-					currentTile.tower.GetComponent<Tower>().percRotateComplete = 0f;
+					currentTile.beacon.GetComponent<Beacon>().percRotateComplete = 0f;
 					_currentState = PlayerState.standing;
 					gm.StopSFX();
 				

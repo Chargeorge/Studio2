@@ -6,7 +6,7 @@ using System.Linq;
 public class BaseTile : MonoBehaviour {
 	
 	
-	public GameObject qudTowerLayer;
+	public GameObject qudBeaconLayer;
 	public GameObject qudSelectedLayer;
 	public GameObject qudInfluenceLayer;
 	
@@ -14,7 +14,7 @@ public class BaseTile : MonoBehaviour {
 	public float percControlled;
 	public TeamInfo owningTeam;  //OWNING team is the official owning team, use it for defining networks and movement cost.
 	
-	public GameObject tower;
+	public GameObject beacon;
 		
 	public TileState currentState;
 	private int _brdXPos;
@@ -196,9 +196,9 @@ public class BaseTile : MonoBehaviour {
 			qudInfluenceLayer.GetComponent<MeshRenderer>().enabled = true;
 		}
 		else{
-			qudTowerLayer.GetComponent<MeshRenderer>().enabled = false;
+			qudBeaconLayer.GetComponent<MeshRenderer>().enabled = false;
 		}
-		qudTowerLayer.GetComponent<MeshRenderer>().enabled = (IsHover) ? true : false ;
+		qudBeaconLayer.GetComponent<MeshRenderer>().enabled = (IsHover) ? true : false ;
 		if(IsHover){
 	
 		}
@@ -572,10 +572,10 @@ public class BaseTile : MonoBehaviour {
 		percControlled = 0;
 		owningTeam = null;
 		
-		Tower localTower = GetComponentInChildren<Tower>();
+		Beacon localBeacon = GetComponentInChildren<Beacon>();
 		Altar localAltar = GetComponentInChildren<Altar>();
 		
-		if(localTower !=null){
+		if(localBeacon !=null){
 			
 		}
 		if(localAltar !=null){
@@ -589,14 +589,14 @@ public class BaseTile : MonoBehaviour {
 			currentState = TileState.normal;
 		}
 		owningTeam = controllingTeam;
-		Tower localTower = GetComponentInChildren<Tower>();
+		Beacon localBeacon = GetComponentInChildren<Beacon>();
 		Altar localAltar = GetComponentInChildren<Altar>();
 		
 		if(localAltar !=null){
 			localAltar.setControl(owningTeam);
 		}
-		if(localTower!= null){
-			localTower.controllingTeam = owningTeam;
+		if(localBeacon!= null){
+			localBeacon.controllingTeam = owningTeam;
 		}
 	}
 	public void clearInfluence(){
@@ -604,7 +604,7 @@ public class BaseTile : MonoBehaviour {
 		controllingTeam = null;
 		owningTeam = null;
 		
-		Tower localTower = GetComponentInChildren<Tower>();
+		Beacon localBeacon = GetComponentInChildren<Beacon>();
 		Altar localAltar = GetComponentInChildren<Altar>();
 	}
 	

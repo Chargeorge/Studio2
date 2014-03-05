@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour {
 	public List<GameObject> players = new List<GameObject>();
 	public GameObject prfbPlayer;
 	public BaseTile debugMouse;
-	public Tower debugTower;
+	public Beacon debugBeacon;
 	public GameObject prfbAltar, prfbHome;
 	public List<GameObject> altars;
 	public int numAltars;
@@ -127,8 +127,8 @@ public class GameManager : MonoBehaviour {
 				GUI.Box (new Rect (10,100,200,90), string.Format("Mouse Over x:{0} y:{1}\r\nState: {2}\r\nPercentControlled: not yet ", debugMouse.brdXPos, debugMouse.brdYPos, debugMouse.currentState));
 				
 			}
-			if(debugTower !=null){
-				GUI.Box (new Rect (10,200,200,90), string.Format(" team {0} controlling\r\nstate: {1}", debugTower.controllingTeam.teamNumber, debugTower.currentState));
+			if(debugBeacon !=null){
+				GUI.Box (new Rect (10,200,200,90), string.Format(" team {0} controlling\r\nstate: {1}", debugBeacon.controllingTeam.teamNumber, debugBeacon.currentState));
 			}
 			if(debugString != ""){
 				GUI.Box (new Rect (210,100,200,90), debugString);
