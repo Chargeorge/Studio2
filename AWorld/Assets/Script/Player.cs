@@ -71,7 +71,7 @@ public class Player : MonoBehaviour {
 		_prfbBeacon = (GameObject)Resources.Load("Prefabs/Beacon");
 		sRef = GameObject.Find ("Settings").GetComponent<Settings>();
 		gm = GameObject.Find ("GameManager").GetComponent<GameManager>();
-		RevealTiles ();
+		gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>().Reveal (_vision, gm);
 	}
 	
 	
@@ -393,7 +393,7 @@ public class Player : MonoBehaviour {
 	
 	public void DoMove(BaseTile MoveTo){
 		grdLocation = new Vector2(MoveTo.brdXPos, MoveTo.brdYPos);
-		RevealTiles ();
+		gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>().Reveal (_vision, gm);
 	}
 	
 	/// <summary>;
@@ -503,23 +503,6 @@ public class Player : MonoBehaviour {
 	private void addProgressToAction(float rate){
 		currentActionProgress+= rate*Time.deltaTime;
 		
-	}
-	
-	/// <summary>
-	/// Reveals nearby tiles.
-	/// </summary>
-	public void RevealTiles () {
-		
-		for (int i = _vision * -1; i <= _vision; i++) {
-			for (int j = (_vision - Mathf.Abs (i)) * -1; j <= _vision - Mathf.Abs (i); j++) {
-				GameObject tile;
-				try { tile = gm.tiles[(int)_grdLocation.x + j, (int)_grdLocation.y + i]; }
-					catch { break; }
-				if (tile != null) {
-					tile.GetComponent<BaseTile>().IsRevealed = true;
-				}		
-			}
-		}
 	}
 	
 	/// <summary>

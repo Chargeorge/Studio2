@@ -21,8 +21,8 @@ public class Beacon : MonoBehaviour {
 		}
 	}
 
-	public AudioClip towerInfluencing;
-	public AudioClip towerBuilt;
+	public AudioClip beaconInfluencing;
+	public AudioClip beaconBuilt;
 
 	// Use this for initialization
 	void Start () {
@@ -93,7 +93,7 @@ public class Beacon : MonoBehaviour {
 
 //			 
 //			 else{
-//				gm.PlaySFX(towerInfluencing, 0.8f);
+//				gm.PlaySFX(beaconInfluencing, 0.8f);
 //			 //TODO: Handle situations where other tiles are influencing.  
 //				Debug.Log("Trying to influence at rate " + patternConverting.vpsInfluence );
 //				if(tileBeingConverted.GetComponent<BaseTile>().addProgressToInfluence(patternConverting.vpsInfluence, controllingTeam)){
@@ -146,11 +146,11 @@ public class Beacon : MonoBehaviour {
 		percActionComplete += rate*Time.deltaTime;
 
 				
-		Color32 towerColor = renderer.material.color;
-		towerColor.a = (byte) (255f * (percActionComplete/100f));
-		if (towerColor.a > 255f) towerColor.a = (byte) 255f;
-		Debug.Log (towerColor.a);
-		renderer.material.color = towerColor;		
+		Color32 beaconColor = renderer.material.color;
+		beaconColor.a = (byte) (255f * (percActionComplete/100f));
+		if (beaconColor.a > 255f) beaconColor.a = (byte) 255f;
+		Debug.Log (beaconColor.a);
+		renderer.material.color = beaconColor;		
 		
 
 	}

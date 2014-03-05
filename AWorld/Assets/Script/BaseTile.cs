@@ -22,6 +22,9 @@ public class BaseTile : MonoBehaviour {
 	public TileTypeEnum currentType;
 	private int _ident;
 	
+	private int _influenceRevealRange = 3;
+	public GameManager gm;		//Added reference to gm in each BaseTile to help reveal fog - may be bad
+		
 	//Delegate used for different A* methods
 	public delegate List<BaseTile> GetLocalTiles(BaseTile Base, TeamInfo T);
 
@@ -598,6 +601,10 @@ public class BaseTile : MonoBehaviour {
 		if(localBeacon!= null){
 			localBeacon.controllingTeam = owningTeam;
 		}
+		
+		//Added reference to GameManager in each BaseTile to do this - if that's bad, need to find a better way because Reveal needs a reference to the GameManager
+		Reveal (_influenceRevealRange, gm);
+		
 	}
 	public void clearInfluence(){
 		percControlled = 0;
@@ -621,6 +628,24 @@ public class BaseTile : MonoBehaviour {
 		}
 		else{
 			return null;
+		}
+	}
+	
+	/// <summary>
+	/// Reveal the specified range.
+	/// </summary>																 x
+	/// <param name="range">The maximum distance at which new tiles should be revealed. Ex 1 = xox</param>
+	///																			 x
+	public void Reveal (int range, GameManager gm) {
+		for (int i = range * -1; i <= range; i++) {
+			for (int j = (range - Mathf.Abs (i)) * -1; j <= range - Mathf.Abs (i); j++) {
+				GameObject tile;
+				try { tile = gm.tiles[_brdXPos + j, _brdYPos + i]; }
+				catch { break; }
+				if (tile != null) {
+					tile.GetComponent<BaseTile>().IsRevealed = true;
+				}		
+			}
 		}
 	}
 	
