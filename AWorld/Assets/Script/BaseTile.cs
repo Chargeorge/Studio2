@@ -23,7 +23,6 @@ public class BaseTile : MonoBehaviour {
 	private int _ident;
 	
 	private int _influenceRevealRange = 3;
-	public GameManager gm;		//Added reference to gm in each BaseTile to help reveal fog - may be bad
 		
 	//Delegate used for different A* methods
 	public delegate List<BaseTile> GetLocalTiles(BaseTile Base, TeamInfo T);
@@ -474,9 +473,9 @@ public class BaseTile : MonoBehaviour {
 	/// </summary>
 	/// <returns>The rate.</returns>
 	/// <param name="testing">Testing.</param>
-	public float GetRate(Player testing, GameManager gm){
+	public float GetRate(Player testing){
 		if(currentType == TileTypeEnum.water){
-			if (gm.getNetworkedAltars(testing.team).Contains (AltarType.Thotzeti)){
+			if (GameObject.Find ("GameManager").GetComponent<GameManager>().getNetworkedAltars(testing.team).Contains (AltarType.Thotzeti)){
 				return 1f;
 			}
 			else{
@@ -603,7 +602,7 @@ public class BaseTile : MonoBehaviour {
 		}
 		
 		//Added reference to GameManager in each BaseTile to do this - if that's bad, need to find a better way because Reveal needs a reference to the GameManager
-		Reveal (_influenceRevealRange, gm);
+		Reveal (_influenceRevealRange, GameObject.Find ("GameManager").GetComponent<GameManager>());
 		
 	}
 	public void clearInfluence(){

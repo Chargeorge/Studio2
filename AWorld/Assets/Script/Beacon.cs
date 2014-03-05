@@ -25,11 +25,17 @@ public class Beacon : MonoBehaviour {
 	public AudioClip beaconInfluencing;
 	public AudioClip beaconBuilt;
 
+	private Material matBasic;
+	private Material matUpgraded;
+
 	// Use this for initialization
 	void Start () {
 		///TODO ADD PATTERN STATICS
 		gm = GameObject.Find ("GameManager").GetComponent<GameManager>();
 		sRef= GameObject.Find ("Settings").GetComponent<Settings>();
+		matBasic = (Material) Resources.Load ("Sprites/Materials/Beacon");
+		matUpgraded = (Material) Resources.Load ("Sprites/Materials/Beacon_Upgraded");
+		
 	}
 	
 	// Update is called once per frame
@@ -49,7 +55,7 @@ public class Beacon : MonoBehaviour {
 		
 		//This solution isn't "Correct" AKA, it doesn't resolve perfectly every frame, but over the aggregrate it should be correct
 		// We can move to fixed update to get closer to correct
-		if(_currentState == BeaconState.Basic){
+		if(_currentState == BeaconState.Basic || _currentState == BeaconState.BuildingAdvanced || _currentState == BeaconState.Advanced){
 
 			//find nearest convertable block
 			//FIND The first convertable tile, list is ordered by distance
@@ -133,6 +139,10 @@ public class Beacon : MonoBehaviour {
 
 	}
 	
+	public void startUpgrading(){
+		this._currentState = BeaconState.BuildingAdvanced;
+	}
+	
 	public void setTeam(){
 		Color32 controllingTeamColor = controllingTeam.teamColor;		
 		//TODO: custom sprites and colors per team
@@ -179,7 +189,7 @@ public class Beacon : MonoBehaviour {
 	/// </summary>
 	public void finishAction(){
 		///TODO: add end semaphore stuff her
-		if(percActionComplete > 100f){
+		if(percActionComplete >= 100f){
 			percActionComplete = 100f;
 			
 			if(_currentState == BeaconState.BuildingBasic){
@@ -190,8 +200,8 @@ public class Beacon : MonoBehaviour {
 			}
 			if(_currentState == BeaconState.BuildingAdvanced){
 				_currentState = BeaconState.Advanced;
-				_pattern = Beacon.createBasicInfluenceList(getAngleForDir(facing));
-			}			
+				_pattern = Beacon.createAdvancedInfluenceList(getAngleForDir(facing));
+			}
 		}
 	}
 	
@@ -201,6 +211,20 @@ public class Beacon : MonoBehaviour {
 		returanble.Add(new InfluencePatternHolder(new Vector2(0,2), .5f, degreeRotated));
 		returanble.Add(new InfluencePatternHolder(new Vector2(0,3), .33f, degreeRotated));
 		returanble.Add(new InfluencePatternHolder(new Vector2(0,4), .25f, degreeRotated));
+		
+		return returanble.OrderBy(o=>o.relCoordRotated.magnitude).ToList();
+	}	
+	
+	public static List<InfluencePatternHolder> createAdvancedInfluenceList(float degreeRotated){
+		List<InfluencePatternHolder> returanble = new List<InfluencePatternHolder>();
+		returanble.Add(new InfluencePatternHolder(new Vector2(0,1), 1f, degreeRotated));
+		returanble.Add(new InfluencePatternHolder(new Vector2(0,2), 1f, degreeRotated));
+		returanble.Add(new InfluencePatternHolder(new Vector2(0,3), .5f, degreeRotated));
+		returanble.Add(new InfluencePatternHolder(new Vector2(0,4), .5f, degreeRotated));
+		returanble.Add(new InfluencePatternHolder(new Vector2(0,5), .33f, degreeRotated));
+		returanble.Add(new InfluencePatternHolder(new Vector2(0,6), .33f, degreeRotated));
+		returanble.Add(new InfluencePatternHolder(new Vector2(0,7), .25f, degreeRotated));
+		returanble.Add(new InfluencePatternHolder(new Vector2(0,8), .25f, degreeRotated));
 		
 		return returanble.OrderBy(o=>o.relCoordRotated.magnitude).ToList();
 	}
@@ -244,14 +268,25 @@ public class Beacon : MonoBehaviour {
 	
 		setDirection (N);
 		setVisualDirection ();
-		_pattern = createBasicInfluenceList (getAngleForDir (facing));
+		if (_currentState == BeaconState.Basic || _currentState == BeaconState.BuildingBasic) {
+			_pattern = createBasicInfluenceList (getAngleForDir (facing));
+		}
+		if (_currentState == BeaconState.Advanced) {
+			_pattern = createAdvancedInfluenceList (getAngleForDir(facing));
+		}
 	
 	}
 	
 	public void Upgrade () {
-	
-		BeaconState = BeaconState.Advanced;
+
+		_currentState = BeaconState.Advanced;
+		renderer.material = matUpgraded;
 		
+		//hax
+		setTeam ();
+		Color32 beaconColor = renderer.material.color;
+		beaconColor.a = 255;
+		renderer.material.color = beaconColor;
 	}
 	
 	

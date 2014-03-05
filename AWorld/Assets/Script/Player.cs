@@ -95,7 +95,7 @@ public class Player : MonoBehaviour {
 					if(currentTile.GetDirection(x.Value) != null){
 						BaseTile MovingInto = currentTile.GetDirection(x.Value);
 						//Debug.Log(string.Format("x:{0}, y: {1}", MovingInto.brdXPos, MovingInto.brdYPos));
-						float vpsRate = MovingInto.GetRate(this, gm) * sRef.vpsBaseMove;
+						float vpsRate = MovingInto.GetRate(this) * sRef.vpsBaseMove;
 						addProgressToAction(vpsRate);
 						setDirection(x.Value);
 						_currentState = PlayerState.moving;
@@ -123,6 +123,7 @@ public class Player : MonoBehaviour {
 					_currentState = PlayerState.rotating;
 				}
 				
+				//Upgrading
 				if (buildButtonDown && 
 					currentTile.beacon != null &&
 					(!x.HasValue || (x.HasValue && x == currentTile.beacon.GetComponent<Beacon>().facing)) &&
@@ -132,6 +133,7 @@ public class Player : MonoBehaviour {
 					float vpsRate = sRef.vpsBaseUpgrade;
 					addProgressToAction (vpsRate);
 					_currentState = PlayerState.upgrading;
+					currentTile.beacon.GetComponent<Beacon>().startUpgrading();
 				}
 				
 				//If beacon
@@ -209,7 +211,7 @@ public class Player : MonoBehaviour {
 				if(x.HasValue && x.Value == facing){
 					gm.PlaySFX(playerMove, 0.8f);
 					BaseTile MovingInto = currentTile.GetComponent<BaseTile>().GetDirection(x.Value);
-					float vpsRate = MovingInto.GetRate(this, gm) * sRef.vpsBaseMove *getAltarSpeedBoost();
+					float vpsRate = MovingInto.GetRate(this) * sRef.vpsBaseMove *getAltarSpeedBoost();
 					addProgressToAction(vpsRate);
 					
 					if(currentActionProgress > sRef.baseRequired){
@@ -403,9 +405,10 @@ public class Player : MonoBehaviour {
 					if (beacon.percUpgradeComplete >= 100f) {
 					
 						currentActionProgress = 0;
+						beacon.finishAction ();
 						beacon.Upgrade ();
 						beacon.percUpgradeComplete = 0f;
-						_currentState = PlayerState.upgrading;
+						_currentState = PlayerState.standing;
 						gm.StopSFX ();
 						
 					}

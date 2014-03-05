@@ -32,7 +32,6 @@ public class TileCreation : MonoBehaviour {
 				tilesGameBoard[x,y].GetComponent<BaseTile>().MoveCost =1;	
 				tilesGameBoard[x,y].GetComponent<BaseTile>().brdXPos = x;
 				tilesGameBoard[x,y].GetComponent<BaseTile>().brdYPos = y;
-				tilesGameBoard[x,y].GetComponent<BaseTile>().gm = gm;		//Added to help reveal fog when tile influenced - may be bad
 				
 				tilesGameBoard[x,y].renderer.material = textureResources[1];
 				//tilesGameBoard[x,y].renderer.material= matTest;
