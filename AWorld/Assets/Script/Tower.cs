@@ -147,11 +147,14 @@ public class Tower : MonoBehaviour {
 
 				
 		Color32 towerColor = renderer.material.color;
-		towerColor.a = (byte) (255f * (percActionComplete/100f));
-		if (towerColor.a > 255f) towerColor.a = (byte) 255f;
+		float newColor =  (255f * (percActionComplete/100f)) ;
+		newColor = (newColor >= 255) ? 254 : newColor;
+		towerColor.a = (byte)newColor;
 		Debug.Log (towerColor.a);
 		renderer.material.color = towerColor;		
-		
+		if(percActionComplete >= 100f){
+			
+		}
 
 	}
 	

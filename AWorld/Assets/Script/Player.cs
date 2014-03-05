@@ -512,9 +512,9 @@ public class Player : MonoBehaviour {
 		
 		for (int i = _vision * -1; i <= _vision; i++) {
 			for (int j = (_vision - Mathf.Abs (i)) * -1; j <= _vision - Mathf.Abs (i); j++) {
-				GameObject tile;
+				GameObject tile = null;
 				try { tile = gm.tiles[(int)_grdLocation.x + j, (int)_grdLocation.y + i]; }
-					catch { break; }
+					catch {  }
 				if (tile != null) {
 					tile.GetComponent<BaseTile>().IsRevealed = true;
 				}		
