@@ -289,6 +289,11 @@ public class Beacon : MonoBehaviour {
 		renderer.material.color = beaconColor;
 	}
 	
+	//Player stopped in the middle of an upgrade
+	public void AbortUpgrade () {
 	
+		_currentState = BeaconState.Basic;
+		
+	}
 	
 }

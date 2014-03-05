@@ -126,7 +126,7 @@ public class Player : MonoBehaviour {
 				//Upgrading
 				if (buildButtonDown && 
 					currentTile.beacon != null &&
-					(!x.HasValue || (x.HasValue && x == currentTile.beacon.GetComponent<Beacon>().facing)) &&
+					facing == currentTile.beacon.GetComponent<Beacon>().facing &&
 					(currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Basic ||
 					 currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingAdvanced)) 
 				{				
@@ -419,6 +419,7 @@ public class Player : MonoBehaviour {
 				
 					currentActionProgress = 0;
 					currentTile.beacon.GetComponent<Beacon>().percUpgradeComplete = 0f;
+					currentTile.beacon.GetComponent<Beacon>().AbortUpgrade();
 					_currentState = PlayerState.standing;
 					gm.StopSFX ();
 				
