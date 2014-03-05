@@ -123,6 +123,17 @@ public class Player : MonoBehaviour {
 					_currentState = PlayerState.rotating;
 				}
 				
+				if (buildButtonDown && 
+					currentTile.beacon != null &&
+					(!x.HasValue || (x.HasValue && x == currentTile.beacon.GetComponent<Beacon>().facing)) &&
+					(currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Basic ||
+					 currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingAdvanced)) 
+				{				
+					float vpsRate = sRef.vpsBaseUpgrade;
+					addProgressToAction (vpsRate);
+					_currentState = PlayerState.upgrading;
+				}
+				
 				//If beacon
 					//if stick
 						//begin rotate build
@@ -358,10 +369,8 @@ public class Player : MonoBehaviour {
 						beacon.Rotate (facing);
 						beacon.percRotateComplete = 0f;
 						_currentState = PlayerState.standing;
-						gm.StopSFX ();
-					
-					}
-					
+						gm.StopSFX ();					
+					}					
 				}
 					
 				else {
@@ -369,13 +378,47 @@ public class Player : MonoBehaviour {
 					currentActionProgress = 0;
 					currentTile.beacon.GetComponent<Beacon>().percRotateComplete = 0f;
 					_currentState = PlayerState.standing;
-					gm.StopSFX();
-				
+					gm.StopSFX ();				
+
 				}
 			
 			break;
 			
+			case PlayerState.upgrading:
+			
+				if (buildButtonDown) {
+				
+					Pulsate ();
+					
+					float vpsUpgradeRate = sRef.vpsBaseUpgrade;
+					addProgressToAction (vpsUpgradeRate);
+					Beacon beacon = currentTile.beacon.GetComponent<Beacon>();
+					beacon.addUpgradeProgress (vpsUpgradeRate);
+					
+					if (beacon.percUpgradeComplete >= 100f) {
+					
+						currentActionProgress = 0;
+						beacon.Upgrade ();
+						beacon.percUpgradeComplete = 0f;
+						_currentState = PlayerState.upgrading;
+						gm.StopSFX ();
+						
+					}
+					
+				}
+				
+				else {
+				
+					currentActionProgress = 0;
+					currentTile.beacon.GetComponent<Beacon>().percUpgradeComplete = 0f;
+					_currentState = PlayerState.standing;
+					gm.StopSFX ();
+				
+				}
+			
+			break;	
 		}
+		
 		
 		//Set position based on offset
 		transform.position = new Vector3 

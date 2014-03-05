@@ -11,6 +11,7 @@ public class Beacon : MonoBehaviour {
 	public float percActionComplete = 0;
 	public float percInfluenceComplete= 0;	//Countdown till another influence is popped
 	public float percRotateComplete = 0;
+	public float percUpgradeComplete = 0;
 	public GameManager gm;	
 	public GameObject tileBeingConverted;
 	private InfluencePatternHolder patternConverting;
@@ -167,7 +168,11 @@ public class Beacon : MonoBehaviour {
 	
 	public void addRotateProgress (float rate) {
 		percRotateComplete += rate*Time.deltaTime;
-	}	
+	}
+	
+	public void addUpgradeProgress (float rate) {
+		percUpgradeComplete += rate*Time.deltaTime;
+	}
 	
 	/// <summary>
 	/// Finishes the current building action.  USE ONLY FOR BUILDING, INFLUENCE HANDLED ELSEWHERE
@@ -241,6 +246,12 @@ public class Beacon : MonoBehaviour {
 		setVisualDirection ();
 		_pattern = createBasicInfluenceList (getAngleForDir (facing));
 	
+	}
+	
+	public void Upgrade () {
+	
+		BeaconState = BeaconState.Advanced;
+		
 	}
 	
 	
