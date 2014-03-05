@@ -152,9 +152,9 @@ public class Beacon : MonoBehaviour {
 
 				
 		Color32 beaconColor = renderer.material.color;
+		float newColor =  (255f * (percActionComplete/100f)) ;
+		newColor = (newColor >= 255) ? 254 : newColor;		
 		beaconColor.a = (byte) (255f * (percActionComplete/100f));
-		if (beaconColor.a > 255f) beaconColor.a = (byte) 255f;
-		Debug.Log (beaconColor.a);
 		renderer.material.color = beaconColor;		
 		
 

@@ -506,6 +506,23 @@ public class Player : MonoBehaviour {
 	}
 	
 	/// <summary>
+	/// Reveals nearby tiles.
+	/// </summary>
+	public void RevealTiles () {
+		
+		for (int i = _vision * -1; i <= _vision; i++) {
+			for (int j = (_vision - Mathf.Abs (i)) * -1; j <= _vision - Mathf.Abs (i); j++) {
+				GameObject tile = null;
+				try { tile = gm.tiles[(int)_grdLocation.x + j, (int)_grdLocation.y + i]; }
+					catch {  }
+				if (tile != null) {
+					tile.GetComponent<BaseTile>().IsRevealed = true;
+				}		
+			}
+		}
+	}
+	
+	/// <summary>
 	/// Jiggle this instance.
 	/// </summary>
 	private void Jiggle () {

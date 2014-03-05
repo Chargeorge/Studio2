@@ -179,7 +179,8 @@ public class GameManager : MonoBehaviour {
 		altars.ForEach(delegate (GameObject ToCheckGO) {
 			Altar ToCheck = ToCheckGO.GetComponent<Altar>();
 			if(ToCheck.currentControllingTeam != null){
-				if(ToCheck.currentControllingTeam.teamNumber == t.teamNumber) {
+				if(ToCheck.currentControllingTeam.teamNumber == t.teamNumber && ToCheck.networked) {
+					
 					returnable.Add(ToCheck.altarType);
 				}
 			}
