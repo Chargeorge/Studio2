@@ -14,8 +14,18 @@ public class Altar : MonoBehaviour {
 	public int brdY;
 	public List<AStarholder> networkToBase;
 	public GameManager gm;
-	
-	
+	private GameObject _lockedLayer;
+	private bool _isLocked;
+
+	public bool isLocked {
+		get {
+			return _isLocked;
+		}
+		set {
+			_lockedLayer.renderer.enabled = value;
+			_isLocked = value;
+		}
+	}	
 
 	#region accessors
 	public TeamInfo currentControllingTeam {
@@ -38,6 +48,8 @@ public class Altar : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+		_lockedLayer = transform.FindChild("LockedLayer").gameObject;
+		isLocked = false;
 		sRef = GameObject.Find ("Settings").GetComponent<Settings>();
 		//TODO OHH GOD THIS IS BAD I SHOULDN'T DO THIS
 		altarType = GameManager.GetRandomEnum<AltarType>();
@@ -64,17 +76,21 @@ public class Altar : MonoBehaviour {
 	}
 	
 	public void setControl(TeamInfo team){
-		if(team!=null) {
-			Color32 copy = new Color32((byte)(team.teamColor.r +30), (byte)(team.teamColor.g-30), (byte)(team.teamColor.b+30), (byte)255);
-			renderer.material.color = copy;
-			//renderer.material.color = team.teamColor;
-			_currentControllingTeam = team;
-			checkNetwork();
-		}else{
-			renderer.material.color = Color.gray;
+		if(!isLocked){
+			if(team!=null) {
+				Color32 copy = new Color32((byte)(team.teamColor.r +30), (byte)(team.teamColor.g-30), (byte)(team.teamColor.b+30), (byte)255);
+				renderer.material.color = copy;
+				//renderer.material.color = team.teamColor;
+				_currentControllingTeam = team;
+				checkNetwork();
+			}else{
+				renderer.material.color = Color.gray;
+			}
 		}
 			
 	}
+	
+
 	
 	public bool checkNetwork(){
 		if(_currentControllingTeam != null){
@@ -91,5 +107,23 @@ public class Altar : MonoBehaviour {
 		return false;
 	}
 	
+	public bool doCapture(TeamInfo T){
+		if(sRef.optLockTile){
+			if(!isLocked){
+				if(currentControllingTeam.teamNumber == T.teamNumber){
+					if(networked){
+						isLocked = true;
+						Hashtable ht = new Hashtable();
+						ht.Add("x",.5f);
+						ht.Add("y",.5f);
+						ht.Add("time",.50f);
+						iTween.ShakePosition(gameObject, ht);
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
 	
 }

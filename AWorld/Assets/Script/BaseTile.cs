@@ -649,6 +649,10 @@ public class BaseTile : MonoBehaviour {
 		}
 	}
 	
+	public Altar getLocalAltar(){
+		Altar localAltar = GetComponentInChildren<Altar>();
+		return localAltar;
+	}
 	
 	
 }

@@ -25,6 +25,8 @@ public class Settings : MonoBehaviour {
 	public float scoreOnCapture = 50f;
 	public float vpsScorePerSecond = 3f;
 	public float vpsBeaconBaseInfluence = 100f;
+	public bool optLockTile = true;
+	
 	
 	public bool debugMode = true;
 	// Use this for initialization

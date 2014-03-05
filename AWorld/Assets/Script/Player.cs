@@ -158,7 +158,14 @@ public class Player : MonoBehaviour {
 							Pulsate ();
 								_currentState = PlayerState.influencing;
 							}
-							else if(currentTile.beacon == null || currentTile.beacon.GetComponent<Beacon>().percActionComplete < 100f){
+							
+							//DO Tile Control 
+							else if(currentTile.getLocalAltar()!=null ){
+									
+								currentTile.getLocalAltar().doCapture(team);
+								
+							}
+							else if(currentTile.beacon == null || currentTile.beacon.GetComponent<Beacon>().percActionComplete < 100f && currentTile.getLocalAltar()== null){
 								Pulsate ();
 								_currentState = PlayerState.building;
 								float vpsBuildRate = sRef.vpsBaseBuild;
@@ -260,7 +267,6 @@ public class Player : MonoBehaviour {
 						if(currentTile.controllingTeam.teamNumber == team.teamNumber){
 							//Check for a beacon in progress and start building!
 							if(beaconInProgress != null){
-								Debug.Log("attempting to build");
 								float vpsBuildRate = sRef.vpsBaseBuild * getAltarBuildBoost ();
 								beaconInProgress.addBuildingProgress(vpsBuildRate);
 								if(x.HasValue){
@@ -269,7 +275,6 @@ public class Player : MonoBehaviour {
 								}
 								if(beaconInProgress.percActionComplete > 100f){
 								
-									Debug.Log("Finished?");
 									gm.StopSFX();
 									gm.PlaySFX(beaconBuilt, 1.0f);
 									beaconInProgress.finishAction();
@@ -306,7 +311,7 @@ public class Player : MonoBehaviour {
 					if(currentTile.controllingTeam != null){
 						if(currentTile.controllingTeam.teamNumber  == teamNumber)
 						{
-							Debug.Log("Adding Influence");
+							//Debug.Log("Adding Influence");
 							float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBaseInfluence * getAltarInfluenceBoost() * Time.deltaTime);
 							if(test > 0){
 								_currentState = PlayerState.standing;
