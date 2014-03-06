@@ -6,5 +6,6 @@ public enum AltarType
 	Khepru = 2,
 	Thotzeti = 3,
 	Munalwa = 4,
-	Yaxchay = 5
+	Yaxchay = 5,
+	Onixtal = 6
 }
