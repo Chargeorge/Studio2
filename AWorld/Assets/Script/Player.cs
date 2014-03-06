@@ -640,10 +640,16 @@ public class Player : MonoBehaviour {
 	/// ONLY used for debug for player
 	/// </summary>
 	private void OnGUI(){
-	
-		if(sRef.debugMode){
-			GUI.Box (new Rect (10+200*(PlayerNumber-1),10,200,90), string.Format("Player {0}\r\nState: {1}\r\npercentcomplete{2}",PlayerNumber, currentState,currentActionProgress));	
+		switch (gm.currentState){
+		case GameState.playing:
+			if(sRef.debugMode){
+				GUI.Box (new Rect (10+200*(PlayerNumber-1),10,200,90), string.Format("Player {0}\r\nState: {1}\r\npercentcomplete{2}",PlayerNumber, currentState,currentActionProgress));	
+			}
+			break;
+		case GameState.gameWon:
+			break;
 		}
+		
 	}
 	
 	private float getAltarSpeedBoost(){

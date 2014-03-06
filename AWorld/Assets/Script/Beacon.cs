@@ -248,12 +248,10 @@ public class Beacon : MonoBehaviour {
 	
 	}
 	
+	
 	public void Upgrade () {
 	
 		_currentState = BeaconState.Advanced;
 		
-	}
-	
-	
-	
+	}	
 }

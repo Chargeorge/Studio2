@@ -28,7 +28,16 @@ public class GameManager : MonoBehaviour {
 	public List<GameObject> altars;
 	public int numAltars;
 	public string debugString;
-	// Use this for initialization
+	public List<VictoryCondition> victoryConditions;
+	private GameState _currentState;
+	public GameState currentState {
+		get {
+			return _currentState;
+		}
+	}
+	private string _victoryString;
+
+	// Use this for initializatio
 	void Start () {
 		sRef = GameObject.Find ("Settings").GetComponent<Settings>();
 		prfbPlayer = (GameObject)Resources.Load("Prefabs/Player");
@@ -36,6 +45,9 @@ public class GameManager : MonoBehaviour {
 		prfbHome = (GameObject)Resources.Load ("Prefabs/Home");
 		
 		altars= new List<GameObject>();
+		victoryConditions = new List<VictoryCondition>();
+		
+		
 	}
 	
 	// Update is called once per frame
@@ -43,6 +55,7 @@ public class GameManager : MonoBehaviour {
 		if (setup){
 			switch (gameMode){
 			case Mode.OneVOne:
+				_currentState = GameState.playing;
 				GameObject Player1 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
 				GameObject Player2 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
 				Player p1 = Player1.GetComponent<Player>();
@@ -58,6 +71,8 @@ public class GameManager : MonoBehaviour {
 				
 				team1Home = setUpTeamHome(p1);
 				team2Home = setUpTeamHome(p2);
+				
+				victoryConditions.Add (new LockMajorityAltars(1) );
 				
 				break;
 				
@@ -83,7 +98,7 @@ public class GameManager : MonoBehaviour {
 				aObj.transform.localPosition = new Vector3(0,0,-1);
 				altars.Add (aObj.gameObject);
 			}
-						
+			
 			setup = false;
 			
 		}
@@ -108,6 +123,16 @@ public class GameManager : MonoBehaviour {
 			
 			debugMouse.percControlled =100f;
 		}
+		_victoryString = "";
+		foreach (VictoryCondition v in victoryConditions){
+			v.CheckState(this);
+			//Debug.Log("checstate done");
+			if(v.isCompleted){
+				_currentState = GameState.gameWon;
+				_victoryString += v.getVictorySting();
+			}
+			
+		}	
 	}
 	
 	public GameObject getHoveredTile(){
@@ -122,18 +147,29 @@ public class GameManager : MonoBehaviour {
 	}
 	
 	void OnGUI(){
-		if(sRef.debugMode){
-			if(debugMouse!=null){
-				GUI.Box (new Rect (10,100,200,90), string.Format("Mouse Over x:{0} y:{1}\r\nState: {2}\r\nPercentControlled: not yet ", debugMouse.brdXPos, debugMouse.brdYPos, debugMouse.currentState));
-				
+		switch(_currentState){
+		
+			case GameState.playing:{
+				if(sRef.debugMode){
+					if(debugMouse!=null){
+						GUI.Box (new Rect (10,100,200,90), string.Format("Mouse Over x:{0} y:{1}\r\nState: {2}\r\nPercentControlled: not yet ", debugMouse.brdXPos, debugMouse.brdYPos, debugMouse.currentState));
+						
+					}
+					if(debugBeacon !=null){
+						GUI.Box (new Rect (10,200,200,90), string.Format(" team {0} controlling\r\nstate: {1}", debugBeacon.controllingTeam.teamNumber, debugBeacon.currentState));
+					}
+					if(debugString != ""){
+						GUI.Box (new Rect (210,100,200,90), debugString);
+						
+					}
+				}
+				break;
 			}
-			if(debugBeacon !=null){
-				GUI.Box (new Rect (10,200,200,90), string.Format(" team {0} controlling\r\nstate: {1}", debugBeacon.controllingTeam.teamNumber, debugBeacon.currentState));
+			case GameState.gameWon:{
+				GUI.Box (new Rect (10,100,400,300), _victoryString);
+				break;
 			}
-			if(debugString != ""){
-				GUI.Box (new Rect (210,100,200,90), debugString);
-				
-			}
+		
 		}
 	}
 
@@ -185,10 +221,11 @@ public class GameManager : MonoBehaviour {
 				}
 			}
 			
-		});
-		
-		
+		});		
 		return returnable;
 	}
 
+	
 }
+
+
