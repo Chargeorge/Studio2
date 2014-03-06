@@ -81,7 +81,7 @@ public class Player : MonoBehaviour {
 		DirectionEnum? x = getStickDirection();
 		BaseTile currentTile = gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>();
 		bool buildButtonDown = getPlayerBuild();
-		
+		//if(x.HasValue) Debug.Log(x.Value);
 		_pulsating = false;	//Pulsate () sets this to true; if false at the end of this method, reset scale and _expanding
 
 		_positionOffset = new Vector2 (0,0);	//This can't possibly be the right way to do this - Josh
