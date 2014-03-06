@@ -259,7 +259,7 @@ public class Beacon : MonoBehaviour {
 	
 	public List<List<InfluencePatternHolder>> createAdvancedInfluenceList(float degreeRotated){
 	
-	//This is mad long so I added a region - minimize at your pleasure - should probably use for loops but whatevs, it's all manual now 
+	//This is gonna be mad long so I added a region - minimize at your pleasure - should probably use for loops, but whatevs, it's all manual now 
 	#region 
 		List<List<InfluencePatternHolder>> list = new List<List<InfluencePatternHolder>>();		
 		List<InfluencePatternHolder> forwardInfluenceList = new List<InfluencePatternHolder>();	//Every influence list will definitely have this, regardless of altars
@@ -386,6 +386,8 @@ public class Beacon : MonoBehaviour {
 				leftInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,6), .5f/4, degreeRotated + 270f));
 				leftInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,7), .33f/4, degreeRotated + 270f));
 				leftInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,8), .33f/4, degreeRotated + 270f));
+				list.Add (leftInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());
+				
 			}
 		}
 		
@@ -448,13 +450,18 @@ public class Beacon : MonoBehaviour {
 	
 		setDirection (N);
 		setVisualDirection ();
-		if (_currentState == BeaconState.Basic || _currentState == BeaconState.BuildingBasic) {
+		UpdateInfluencePatterns();
+	
+	}
+	
+	//Creates new influence patterns, for example when a new altar is captured or when the beacon is rotated.
+	public void UpdateInfluencePatterns () {
+		if (_currentState == BeaconState.Basic || _currentState == BeaconState.BuildingAdvanced) {
 			_patternList = createBasicInfluenceList (getAngleForDir (facing));
 		}
 		if (_currentState == BeaconState.Advanced) {
 			_patternList = createAdvancedInfluenceList (getAngleForDir(facing));
-		}
-	
+		}		
 	}
 	
 	public void Upgrade () {

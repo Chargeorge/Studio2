@@ -83,6 +83,16 @@ public class Altar : MonoBehaviour {
 				//renderer.material.color = team.teamColor;
 				_currentControllingTeam = team;
 				checkNetwork();
+				
+				//TODO - fix - not sure why this doesn't work...
+				if (!sRef.optLockTile) {
+					//Update all existing beacons to match new altar effects
+					GameObject[] beacons = GameObject.FindGameObjectsWithTag("Beacon");
+					foreach (GameObject go in beacons) {
+						go.GetComponent<Beacon>().UpdateInfluencePatterns();
+					}
+				}
+				
 			}else{
 				renderer.material.color = Color.gray;
 			}
@@ -118,6 +128,13 @@ public class Altar : MonoBehaviour {
 						ht.Add("y",.5f);
 						ht.Add("time",.50f);
 						iTween.ShakePosition(gameObject, ht);
+						
+						//Update all existing beacons to match new altar effects
+						GameObject[] beacons = GameObject.FindGameObjectsWithTag("Beacon");
+						foreach (GameObject go in beacons) {
+							go.GetComponent<Beacon>().UpdateInfluencePatterns();
+						}
+						
 						return true;
 					}
 				}
