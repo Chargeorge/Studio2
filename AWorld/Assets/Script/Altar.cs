@@ -143,4 +143,12 @@ public class Altar : MonoBehaviour {
 		return false;
 	}
 	
+	public int? owningTeamNetworkedAndLocked(){
+		if(isLocked && networked){
+			return currentControllingTeam.teamNumber;
+		}
+		else{
+			return null;
+		}
+	}
 }
