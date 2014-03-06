@@ -5,5 +5,6 @@ public enum AltarType
 	Choyutzol = 1,
 	Khepru = 2,
 	Thotzeti = 3,
-	Munalwa = 4
+	Munalwa = 4,
+	Yaxchay = 5
 }

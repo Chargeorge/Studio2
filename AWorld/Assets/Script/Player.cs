@@ -117,10 +117,18 @@ public class Player : MonoBehaviour {
 				     currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingAdvanced || 	//Is there a better way of doing this?
 		 			 currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Advanced)) 
 		 		{
-					float vpsRate = sRef.vpsBaseRotate;
-					addProgressToAction (vpsRate);
-					setDirection(x.Value);
-					_currentState = PlayerState.rotating;
+		 			//Yaxchay: Instant rotation
+		 			if (gm.getNetworkedAltars(team).Contains (AltarType.Yaxchay)) {
+						currentActionProgress = 0;
+						currentTile.beacon.GetComponent<Beacon>().Rotate (facing);
+						currentTile.beacon.GetComponent<Beacon>().percRotateComplete = 0f;
+					}
+					else {
+						float vpsRate = sRef.vpsBaseRotate;
+						addProgressToAction (vpsRate);
+						setDirection(x.Value);
+						_currentState = PlayerState.rotating;
+					}
 				}
 				
 				//Upgrading
