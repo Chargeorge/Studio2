@@ -195,18 +195,19 @@ public class Beacon : MonoBehaviour {
 			if(_currentState == BeaconState.BuildingBasic){
 
 				_currentState = BeaconState.Basic;
-				_pattern = Beacon.createBasicInfluenceList(getAngleForDir(facing));
+				_pattern = createBasicInfluenceList(getAngleForDir(facing));
 				
 			}
 			if(_currentState == BeaconState.BuildingAdvanced){
 				_currentState = BeaconState.Advanced;
-				_pattern = Beacon.createAdvancedInfluenceList(getAngleForDir(facing));
+				_pattern = createAdvancedInfluenceList(getAngleForDir(facing));
 			}
 		}
 	}
 	
-	public static List<InfluencePatternHolder> createBasicInfluenceList(float degreeRotated){
+	public List<InfluencePatternHolder> createBasicInfluenceList(float degreeRotated){
 		List<InfluencePatternHolder> returanble = new List<InfluencePatternHolder>();
+		
 		returanble.Add(new InfluencePatternHolder(new Vector2(0,1), 1f, degreeRotated));
 		returanble.Add(new InfluencePatternHolder(new Vector2(0,2), .5f, degreeRotated));
 		returanble.Add(new InfluencePatternHolder(new Vector2(0,3), .33f, degreeRotated));
@@ -215,16 +216,36 @@ public class Beacon : MonoBehaviour {
 		return returanble.OrderBy(o=>o.relCoordRotated.magnitude).ToList();
 	}	
 	
-	public static List<InfluencePatternHolder> createAdvancedInfluenceList(float degreeRotated){
-		List<InfluencePatternHolder> returanble = new List<InfluencePatternHolder>();
-		returanble.Add(new InfluencePatternHolder(new Vector2(0,1), 1f, degreeRotated));
-		returanble.Add(new InfluencePatternHolder(new Vector2(0,2), 1f, degreeRotated));
-		returanble.Add(new InfluencePatternHolder(new Vector2(0,3), .5f, degreeRotated));
-		returanble.Add(new InfluencePatternHolder(new Vector2(0,4), .5f, degreeRotated));
-		returanble.Add(new InfluencePatternHolder(new Vector2(0,5), .33f, degreeRotated));
-		returanble.Add(new InfluencePatternHolder(new Vector2(0,6), .33f, degreeRotated));
-		returanble.Add(new InfluencePatternHolder(new Vector2(0,7), .25f, degreeRotated));
-		returanble.Add(new InfluencePatternHolder(new Vector2(0,8), .25f, degreeRotated));
+	public List<InfluencePatternHolder> createAdvancedInfluenceList(float degreeRotated){
+
+		List<InfluencePatternHolder> returanble = new List<InfluencePatternHolder>();		
+
+		//Munalwa: Advanced altars give 3x bonus instead of 2x
+		if (gm.getNetworkedAltars(controllingTeam).Contains (AltarType.Munalwa)) {
+			returanble.Add(new InfluencePatternHolder(new Vector2(0,1), 1f, degreeRotated));
+			returanble.Add(new InfluencePatternHolder(new Vector2(0,2), 1f, degreeRotated));
+			returanble.Add(new InfluencePatternHolder(new Vector2(0,3), 1f, degreeRotated));
+			returanble.Add(new InfluencePatternHolder(new Vector2(0,4), .5f, degreeRotated));
+			returanble.Add(new InfluencePatternHolder(new Vector2(0,5), .5f, degreeRotated));
+			returanble.Add(new InfluencePatternHolder(new Vector2(0,6), .5f, degreeRotated));
+			returanble.Add(new InfluencePatternHolder(new Vector2(0,7), .33f, degreeRotated));
+			returanble.Add(new InfluencePatternHolder(new Vector2(0,8), .33f, degreeRotated));
+			returanble.Add(new InfluencePatternHolder(new Vector2(0,9), .33f, degreeRotated));
+			returanble.Add(new InfluencePatternHolder(new Vector2(0,10), .25f, degreeRotated));
+			returanble.Add(new InfluencePatternHolder(new Vector2(0,11), .25f, degreeRotated));
+			returanble.Add(new InfluencePatternHolder(new Vector2(0,12), .25f, degreeRotated));
+		}
+		
+		else {
+			returanble.Add(new InfluencePatternHolder(new Vector2(0,1), 1f, degreeRotated));
+			returanble.Add(new InfluencePatternHolder(new Vector2(0,2), 1f, degreeRotated));
+			returanble.Add(new InfluencePatternHolder(new Vector2(0,3), .5f, degreeRotated));
+			returanble.Add(new InfluencePatternHolder(new Vector2(0,4), .5f, degreeRotated));
+			returanble.Add(new InfluencePatternHolder(new Vector2(0,5), .33f, degreeRotated));
+			returanble.Add(new InfluencePatternHolder(new Vector2(0,6), .33f, degreeRotated));
+			returanble.Add(new InfluencePatternHolder(new Vector2(0,7), .25f, degreeRotated));
+			returanble.Add(new InfluencePatternHolder(new Vector2(0,8), .25f, degreeRotated));
+		}
 		
 		return returanble.OrderBy(o=>o.relCoordRotated.magnitude).ToList();
 	}
