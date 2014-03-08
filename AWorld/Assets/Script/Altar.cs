@@ -85,7 +85,7 @@ public class Altar : MonoBehaviour {
 				checkNetwork();
 				
 				//TODO - fix - not sure why this doesn't work...
-				if (!sRef.optLockTile) {
+				if (sRef.optLockTile) {
 					//Update all existing beacons to match new altar effects
 					GameObject[] beacons = GameObject.FindGameObjectsWithTag("Beacon");
 					foreach (GameObject go in beacons) {

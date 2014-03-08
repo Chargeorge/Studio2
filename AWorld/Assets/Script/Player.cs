@@ -118,7 +118,7 @@ public class Player : MonoBehaviour {
 		 			 currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Advanced)) 
 		 		{
 		 			//Yaxchay: Instant rotation
-		 			if (gm.getNetworkedAltars(team).Contains (AltarType.Yaxchay)) {
+		 			if (gm.getCapturedAltars(team).Contains (AltarType.Yaxchay)) {
 						currentActionProgress = 0;
 						currentTile.beacon.GetComponent<Beacon>().Rotate (facing);
 						currentTile.beacon.GetComponent<Beacon>().percRotateComplete = 0f;
@@ -665,7 +665,7 @@ public class Player : MonoBehaviour {
 	}
 	
 	private float getAltarSpeedBoost(){
-		List<AltarType> a = gm.getNetworkedAltars(team);
+		List<AltarType> a = gm.getCapturedAltars(team);
 		if(a.Contains(AltarType.Choyutzol)){
 			return 2f;
 		}else{
@@ -674,7 +674,7 @@ public class Player : MonoBehaviour {
 	}
 	
 	private float getAltarBuildBoost(){
-		List <AltarType> a = gm.getNetworkedAltars(team);
+		List <AltarType> a = gm.getCapturedAltars(team);
 		if(a.Contains(AltarType.Tikumose)){
 			return 2f;
 		}else{
@@ -683,7 +683,7 @@ public class Player : MonoBehaviour {
 	}
 	
 	private float getAltarInfluenceBoost(){
-		List <AltarType> a = gm.getNetworkedAltars(team);
+		List <AltarType> a = gm.getCapturedAltars(team);
 		if(a.Contains(AltarType.Khepru)){
 			return 2f;
 		}else{

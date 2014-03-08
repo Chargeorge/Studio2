@@ -475,7 +475,7 @@ public class BaseTile : MonoBehaviour {
 	/// <param name="testing">Testing.</param>
 	public float GetRate(Player testing){
 		if(currentType == TileTypeEnum.water){
-			if (GameObject.Find ("GameManager").GetComponent<GameManager>().getNetworkedAltars(testing.team).Contains (AltarType.Thotzeti)){
+			if (GameObject.Find ("GameManager").GetComponent<GameManager>().getCapturedAltars(testing.team).Contains (AltarType.Thotzeti)){
 				return 1f;
 			}
 			else{

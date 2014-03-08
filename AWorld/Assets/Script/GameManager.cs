@@ -219,6 +219,20 @@ public class GameManager : MonoBehaviour {
 		return V;
 	}
 	
+	public List<AltarType> getCapturedAltars(TeamInfo t){
+		List<AltarType> returnable = new List<AltarType>();
+		altars.ForEach(delegate (GameObject ToCheckGO) {
+			Altar ToCheck = ToCheckGO.GetComponent<Altar>();
+			if(ToCheck.currentControllingTeam != null){
+				if(ToCheck.currentControllingTeam.teamNumber == t.teamNumber && ToCheck.isLocked) {
+					returnable.Add(ToCheck.altarType);
+				}
+			}
+			
+		});		
+		return returnable;
+	}
+/**	
 	public List<AltarType> getNetworkedAltars(TeamInfo t){
 		List<AltarType> returnable = new List<AltarType>();
 		altars.ForEach(delegate (GameObject ToCheckGO) {
@@ -233,8 +247,7 @@ public class GameManager : MonoBehaviour {
 		});		
 		return returnable;
 	}
-
-	
+*/
 }
 
 

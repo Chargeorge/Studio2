@@ -7,5 +7,6 @@ public enum AltarType
 	Thotzeti = 3,
 	Munalwa = 4,
 	Yaxchay = 5,
-	Onixtal = 6
+	Onixtal = 6,
+	Tepwante = 7
 }

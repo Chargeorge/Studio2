@@ -357,7 +357,7 @@ MonoBehaviour:
   boardY: 20
   numberOfAltars: 0
   ranjitRangeTileTypes: 
-  fogOn: 1
+  fogOn: 0
 --- !u!4 &1669248506
 Transform:
   m_ObjectHideFlags: 0
@@ -406,6 +406,7 @@ MonoBehaviour:
   coefMoveEnemy: .330000013
   coefConvert: .5
   coefBuildTower: .25
+  coefOnixtal: .25
   baseRequired: 100
   scoreOnCapture: 50
   vpsScorePerSecond: 3
