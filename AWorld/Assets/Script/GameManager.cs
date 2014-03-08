@@ -82,11 +82,18 @@ public class GameManager : MonoBehaviour {
 				
 			}
 			
-			
+			List<AltarType> altarTypes = System.Enum.GetValues(typeof(AltarType)).Cast<AltarType>().ToList();
+			if (numAltars > altarTypes.Count) Debug.LogError ("Too many altars and not enough altar types!"); 
+			    
 			for (int i=0; i<numAltars; i++){
 				Debug.Log ("in Altar");		
 				GameObject a = (GameObject)Instantiate(prfbAltar, Vector3.zero, Quaternion.identity);
 				Altar aObj = a.GetComponent<Altar>();
+				
+				int index = Random.Range (0, altarTypes.Count);
+				aObj.altarType = altarTypes[index];
+				altarTypes.RemoveAt (index);		
+
 		//		aObj.brdX = Random.Range(0, tiles.GetLength(0));
 		//		aObj.brdY = Random.Range(0, tiles.GetLength(1));
 				aObj.brdX = (tiles.GetLength(0) - 1 - i*7)-8;	//Temp
@@ -97,7 +104,7 @@ public class GameManager : MonoBehaviour {
 				aObj.transform.parent = tiles[aObj.brdX, aObj.brdY].transform;
 				aObj.transform.localPosition = new Vector3(0,0,-1);
 				altars.Add (aObj.gameObject);
-			}
+			}			
 			
 			setup = false;
 			
@@ -190,6 +197,8 @@ public class GameManager : MonoBehaviour {
 		tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].GetComponent<BaseTile>().percControlled = 100f;
 		team1Home.transform.localPosition = new Vector3(0,0,-.5f);
 		team1Home.GetComponent<Home>().team = example.team;
+		
+		
 		//ToSet = tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].GetComponent<BaseTile>();
 		
 		return team1Home;

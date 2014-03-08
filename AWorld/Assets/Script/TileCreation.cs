@@ -70,6 +70,7 @@ public class TileCreation : MonoBehaviour {
 		tilesGameBoard[enemyTest.xPos, enemyTest.yPos].GetComponent<BaseTile>().Hero = enemyTest;
 		*/
 		gm.tiles = tilesGameBoard;
+		
 	}
 	
 	// Update is called once per frame

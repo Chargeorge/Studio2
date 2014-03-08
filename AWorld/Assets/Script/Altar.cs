@@ -52,7 +52,7 @@ public class Altar : MonoBehaviour {
 		isLocked = false;
 		sRef = GameObject.Find ("Settings").GetComponent<Settings>();
 		//TODO OHH GOD THIS IS BAD I SHOULDN'T DO THIS
-		altarType = GameManager.GetRandomEnum<AltarType>();
+//		altarType = GameManager.GetRandomEnum<AltarType>();
 		Debug.Log("altar: " +altarType.ToString());
 		Material loaded =  (Material)Resources.Load(string.Format("Sprites/Materials/{0}", altarType.ToString()));
 		
