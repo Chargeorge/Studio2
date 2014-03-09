@@ -31,10 +31,10 @@ public class Control60Perc : VictoryCondition
 		//Debug.Log("Team 1 Altars: " + Team1Altars.Count());
 		//Debug.Log("Team 2 Altars: " + Team2Altars.Count());
 		
-		if(team1Tiles > (float)totalTiles*.6f){
+		if(team1Tiles > (float)totalTiles*.1f){
 			SetVictory(t1);
 		}
-		if(team1Tiles > (float)totalTiles*.6f){
+		if(team2Tiles > (float)totalTiles*.1f){
 			SetVictory(t2);
 		}
 	}

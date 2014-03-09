@@ -72,8 +72,8 @@ public class GameManager : MonoBehaviour {
 				team1Home = setUpTeamHome(p1);
 				team2Home = setUpTeamHome(p2);
 				
-				victoryConditions.Add (new LockMajorityAltars(1) );
-				
+				//victoryConditions.Add (new LockMajorityAltars(1) );
+				victoryConditions.Add (new Control60Perc(1));
 				break;
 				
 			case Mode.TwoVTwo:
