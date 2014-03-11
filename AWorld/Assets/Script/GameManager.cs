@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour {
 	public string debugString;
 	public List<VictoryCondition> victoryConditions;
 	private GameState _currentState;
+	public List<TeamInfo> teams;
 	public GameState currentState {
 		get {
 			return _currentState;
@@ -46,7 +47,7 @@ public class GameManager : MonoBehaviour {
 		
 		altars= new List<GameObject>();
 		victoryConditions = new List<VictoryCondition>();
-		
+		teams = new List<TeamInfo>();
 		
 	}
 	
@@ -62,6 +63,8 @@ public class GameManager : MonoBehaviour {
 				Player p2 = Player2.GetComponent<Player>();
 				p1.SetTeam(TeamInfo.GetTeamInfo(1));
 				p2.SetTeam(TeamInfo.GetTeamInfo(2));
+				teams.Add(p1.team);
+				teams.Add(p2.team);
 				p1.PlayerNumber = 1;
 				p2.PlayerNumber = 2;
 				players.Add(Player1);
@@ -72,8 +75,8 @@ public class GameManager : MonoBehaviour {
 				team1Home = setUpTeamHome(p1);
 				team2Home = setUpTeamHome(p2);
 				
-				victoryConditions.Add (new LockMajorityAltars(1) );
-				
+				//victoryConditions.Add (new LockMajorityAltars(1) );
+				victoryConditions.Add (new ControlViaTime(1));
 				break;
 				
 			case Mode.TwoVTwo:

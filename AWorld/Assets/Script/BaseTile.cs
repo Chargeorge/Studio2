@@ -21,9 +21,11 @@ public class BaseTile : MonoBehaviour {
 	private int _brdYPos;
 	public TileTypeEnum currentType;
 	private int _ident;
+	public List<AStarholder> networkToBase;
+	
 	
 	private int _influenceRevealRange = 3;
-		
+	private GameManager gm;
 	//Delegate used for different A* methods
 	public delegate List<BaseTile> GetLocalTiles(BaseTile Base, TeamInfo T);
 
@@ -173,6 +175,8 @@ public class BaseTile : MonoBehaviour {
 	void Start () {
 		_ident = UnityEngine.Random.Range(1, 10000000);
 		currentState = TileState.normal;
+		networkToBase = new List<AStarholder>();
+		gm = GameObject.Find("GameManager").GetComponent<GameManager>();
 	}
 	
 	public BaseTile GetDirection(DirectionEnum dir){
@@ -636,7 +640,7 @@ public class BaseTile : MonoBehaviour {
 	/// <param name="range">The maximum distance at which new tiles should be revealed. Ex 1 = xox</param>
 	///																			 x
 	public void Reveal (int range, GameManager gm) {
-		for (int i = range * -1; i <= range; i++) {
+		for (int i = range * -1; i <= range; i++){
 			for (int j = (range - Mathf.Abs (i)) * -1; j <= range - Mathf.Abs (i); j++) {
 				GameObject tile;
 				try { tile = gm.tiles[_brdXPos + j, _brdYPos + i]; }
@@ -653,5 +657,18 @@ public class BaseTile : MonoBehaviour {
 		return localAltar;
 	}
 	
-	
+	public bool checkNetworkToHomeBase(){
+		if(owningTeam != null){
+			List<AStarholder> As = 	BaseTile.aStarSearch(this,gm.getTeamBase(owningTeam),int.MaxValue, getLocalSameTeamTiles, owningTeam);
+			if(As.Count> 0){
+				networkToBase = As;
+				return true;
+				
+			}
+			else{
+				return false;
+			}
+		}
+		return false;
+	}
 }

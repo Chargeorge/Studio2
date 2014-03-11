@@ -655,7 +655,7 @@ public class Player : MonoBehaviour {
 		switch (gm.currentState){
 		case GameState.playing:
 			if(sRef.debugMode){
-				GUI.Box (new Rect (10+200*(PlayerNumber-1),10,200,90), string.Format("Player {0}\r\nState: {1}\r\npercentcomplete{2}",PlayerNumber, currentState,currentActionProgress));	
+				GUI.Box (new Rect (10+200*(PlayerNumber-1),10,200,90), string.Format("Player {0}\r\nState: {1}\r\npercentcomplete{2}\r\nScore: {3}",PlayerNumber, currentState,currentActionProgress, team.score));	
 			}
 			break;
 		case GameState.gameWon:

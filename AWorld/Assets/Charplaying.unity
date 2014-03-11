@@ -401,6 +401,7 @@ MonoBehaviour:
   vpsBaseInfluence: 50
   vpsBaseRotate: 50
   vpsBaseUpgrade: 25
+  vpsScorePerAltarPerSecond: 1
   coefAlliedMove: 1
   coefMoveAllied: 2
   coefMoveEnemy: .330000013
