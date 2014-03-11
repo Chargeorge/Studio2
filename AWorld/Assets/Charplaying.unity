@@ -408,6 +408,7 @@ MonoBehaviour:
   coefConvert: .5
   coefBuildTower: .25
   coefOnixtal: .25
+  coefTepwante: 1
   baseRequired: 100
   scoreOnCapture: 50
   vpsScorePerSecond: 3

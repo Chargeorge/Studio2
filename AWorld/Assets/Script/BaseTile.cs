@@ -177,6 +177,7 @@ public class BaseTile : MonoBehaviour {
 		currentState = TileState.normal;
 		networkToBase = new List<AStarholder>();
 		gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+		transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
 	}
 	
 	public BaseTile GetDirection(DirectionEnum dir){
@@ -206,7 +207,7 @@ public class BaseTile : MonoBehaviour {
 		}
 		qudBeaconLayer.GetComponent<MeshRenderer>().enabled = (IsHover) ? true : false ;
 		if(IsHover){
-	
+
 		}
 		
 		Component[] meshes = qudSelectedLayer.GetComponentsInChildren<MeshRenderer>(); 
@@ -217,8 +218,13 @@ public class BaseTile : MonoBehaviour {
 			
 		}
 		
-		transform.GetComponent<MeshRenderer>().enabled = IsRevealed;
-		
+		if(owningTeam== null){
+			transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
+		}
+		else{
+			transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = true;
+			transform.Find("OwnedLayer").GetComponent<MeshRenderer>().material.color = owningTeam.getHighLightColor();
+		}
 	}
 	
 	public static void createTile(TileTypeEnum et, GameObject currentTile){

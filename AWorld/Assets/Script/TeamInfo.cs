@@ -38,7 +38,13 @@ public class TeamInfo
 		return returnable;
 	}
 	
-	
+	public Color32 getHighLightColor(){ 
+		Color32 HighlightColor = teamColor;
+		HighlightColor.r+=100;
+		HighlightColor.b-=100;
+		HighlightColor.g-=100;
+		return HighlightColor;
+	}
 	
 	
 }
