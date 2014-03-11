@@ -197,11 +197,12 @@ public class BaseTile : MonoBehaviour {
 			
 			qudInfluenceLayer.SetActive(true);
 			Color32 controllingTeamColor = controllingTeam.teamColor;
-		
 			controllingTeamColor.a = (byte) (255*(percControlled/100f));
 			
 		
 			qudInfluenceLayer.renderer.material.color = controllingTeamColor;
+			Debug.Log ("Board Position" + _brdXPos+ ", " + _brdYPos + "Color" + qudInfluenceLayer.renderer.material.color);
+			
 			qudInfluenceLayer.GetComponent<MeshRenderer>().enabled = true;
 		}
 		else{

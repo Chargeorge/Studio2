@@ -146,7 +146,7 @@ public class Altar : MonoBehaviour {
 	}
 	
 	public int? owningTeamNetworkedAndLocked(){
-		if(isLocked && networked){
+		if(isLocked && networked || !sRef.optLockTile && networked){
 			return currentControllingTeam.teamNumber;
 		}
 		else{
