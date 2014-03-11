@@ -66,7 +66,9 @@ public class Altar : MonoBehaviour {
 		if(_currentControllingTeam != null){
 			//check to see if I'm networked
 			networked= checkNetwork();
-			
+			if(networked){
+				_currentControllingTeam.score += sRef.vpsScorePerAltarPerSecond * Time.deltaTime;
+			}
 			gm.debugString = string.Format("ControllingTeam Number: {0}, Networked: {1}", _currentControllingTeam.teamNumber, networked);
 		}
 		
@@ -151,4 +153,6 @@ public class Altar : MonoBehaviour {
 			return null;
 		}
 	}
+	
+	
 }

@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour {
 				team2Home = setUpTeamHome(p2);
 				
 				//victoryConditions.Add (new LockMajorityAltars(1) );
-				victoryConditions.Add (new NetworkEnemyBase(1));
+				victoryConditions.Add (new ControlViaTime(1));
 				break;
 				
 			case Mode.TwoVTwo:

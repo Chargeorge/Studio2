@@ -14,9 +14,11 @@ public class TeamInfo
 	public Color32 teamColor;
 	public Vector2 startingLocation;
 	public int teamNumber;
+	public float score;
 	
 	public TeamInfo ()
 	{
+		score = 0;
 	}
 
 	public static TeamInfo GetTeamInfo(int teamNumber){
@@ -35,6 +37,7 @@ public class TeamInfo
 				}
 		return returnable;
 	}
+	
 	
 	
 	
