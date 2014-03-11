@@ -15,7 +15,8 @@ public class BaseTile : MonoBehaviour {
 	public TeamInfo owningTeam;  //OWNING team is the official owning team, use it for defining networks and movement cost.
 	
 	public GameObject beacon;
-		
+	private Animator anim;
+			
 	public TileState currentState;
 	private int _brdXPos;
 	private int _brdYPos;
@@ -178,6 +179,7 @@ public class BaseTile : MonoBehaviour {
 		networkToBase = new List<AStarholder>();
 		gm = GameObject.Find("GameManager").GetComponent<GameManager>();
 		transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
+		
 	}
 	
 	public BaseTile GetDirection(DirectionEnum dir){
