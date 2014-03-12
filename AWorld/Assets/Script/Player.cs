@@ -111,8 +111,7 @@ public class Player : MonoBehaviour {
 				//Rotating - doesn't fit with old comments or build button state diagram, but can hopefully be refactored later to fit better
 				if (buildButtonDown && 
 					currentTile.beacon != null && 
-					x.HasValue &&
-					x != currentTile.beacon.GetComponent<Beacon>().facing && 
+					facing != currentTile.beacon.GetComponent<Beacon>().facing && 
 				    (currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Basic || 			//Making sure the beacon is at least complete at basic level
 				     currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingAdvanced || 	//Is there a better way of doing this?
 		 			 currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Advanced)) 
@@ -126,7 +125,7 @@ public class Player : MonoBehaviour {
 					else {
 						float vpsRate = sRef.vpsBaseRotate;
 						addProgressToAction (vpsRate);
-						setDirection(x.Value);
+//						setDirection(x.Value);
 						_currentState = PlayerState.rotating;
 					}
 				}

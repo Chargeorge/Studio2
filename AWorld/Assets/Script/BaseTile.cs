@@ -199,7 +199,11 @@ public class BaseTile : MonoBehaviour {
 			Color32 controllingTeamColor = controllingTeam.teamColor;
 			controllingTeamColor.a = (byte) (255*(percControlled/100f));
 			
-		
+			//Once color is being set, use lines below to snap from 50% to 100% on full conversion, maybe
+			/**
+			controllingTeamColor.a = (byte) (255*(percControlled/100f)/2);
+			if (percControlled >= 100f) controllingTeamColor.a = (byte) 255;
+			*/
 			qudInfluenceLayer.renderer.material.color = controllingTeamColor;
 			
 			qudInfluenceLayer.GetComponent<MeshRenderer>().enabled = true;
