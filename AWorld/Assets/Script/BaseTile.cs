@@ -85,7 +85,6 @@ public class BaseTile : MonoBehaviour {
 		set {
 			_isRevealed = value;
 			qudFogLayer.renderer.enabled = !value;
-			Debug.Log ("Revealing");
 		}
 	}
 	
@@ -213,13 +212,11 @@ public class BaseTile : MonoBehaviour {
 			
 			qudInfluenceLayer.SetActive(true);
 			Color32 controllingTeamColor = controllingTeam.teamColor;
-			controllingTeamColor.a = (byte) (255*(percControlled/100f));
+			//controllingTeamColor.a = (byte) (255*(percControlled/100f));
 			
-			//Once color is being set, use lines below to snap from 50% to 100% on full conversion, maybe
-			/**
-			controllingTeamColor.a = (byte) (255*(percControlled/100f)/2);
+			controllingTeamColor.a = (byte) (255*(percControlled/100f) * 0.5f);
 			if (percControlled >= 100f) controllingTeamColor.a = (byte) 255;
-			*/
+			
 			qudInfluenceLayer.renderer.material.color = controllingTeamColor;
 			
 			qudInfluenceLayer.GetComponent<MeshRenderer>().enabled = true;
@@ -243,9 +240,9 @@ public class BaseTile : MonoBehaviour {
 		if(owningTeam== null){
 			transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
 		}
-		else{
-			transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = true;
-			transform.Find("OwnedLayer").GetComponent<MeshRenderer>().material.color = owningTeam.getHighLightColor();
+		else{	//Removing this; will use outline to show where player is, not who owns it
+//			transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = true;
+//			transform.Find("OwnedLayer").GetComponent<MeshRenderer>().material.color = owningTeam.getHighLightColor();
 		}
 	}
 	
@@ -634,7 +631,6 @@ public class BaseTile : MonoBehaviour {
 			localBeacon.controllingTeam = owningTeam;
 		}
 		
-		//Added reference to GameManager in each BaseTile to do this - if that's bad, need to find a better way because Reveal needs a reference to the GameManager
 		Reveal (_influenceRevealRange, GameObject.Find ("GameManager").GetComponent<GameManager>());
 		
 	}
