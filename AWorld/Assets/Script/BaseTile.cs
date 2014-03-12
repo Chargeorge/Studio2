@@ -23,6 +23,19 @@ public class BaseTile : MonoBehaviour {
 	public TileTypeEnum currentType;
 	private int _ident;
 	public List<AStarholder> networkToBase;
+	private GameObject _qudFogLayer;
+
+	public GameObject qudFogLayer {
+		get {
+			if(_qudFogLayer == null){
+				_qudFogLayer = transform.FindChild("Fog").gameObject;
+			}
+			return _qudFogLayer;
+		}
+		set {
+			_qudFogLayer = value;
+		}
+	}	
 	
 	
 	private int _influenceRevealRange = 3;
@@ -70,6 +83,8 @@ public class BaseTile : MonoBehaviour {
 		}
 		set {
 			_isRevealed = value;
+			qudFogLayer.renderer.enabled = !value;
+			Debug.Log ("Revealing");
 		}
 	}
 	
