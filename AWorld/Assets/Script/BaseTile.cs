@@ -201,7 +201,6 @@ public class BaseTile : MonoBehaviour {
 			
 		
 			qudInfluenceLayer.renderer.material.color = controllingTeamColor;
-			Debug.Log ("Board Position" + _brdXPos+ ", " + _brdYPos + "Color" + qudInfluenceLayer.renderer.material.color);
 			
 			qudInfluenceLayer.GetComponent<MeshRenderer>().enabled = true;
 		}
@@ -249,7 +248,6 @@ public class BaseTile : MonoBehaviour {
 			break;
 		}
 			
-		//Debug.Log (Resources.Load("Sprites/Materials/River").name);
 	}
 	///Old section needs to be fixed
 	/// 
@@ -511,7 +509,6 @@ public class BaseTile : MonoBehaviour {
 		currentState = TileState.beingInfluenced;
 		controllingTeam = team;
 		percControlled = initialProgress;
-		Debug.Log ("Influence Started " + initialProgress);
 	}
 	
 	public void addProgressToInfluence(float rate){

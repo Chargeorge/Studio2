@@ -85,6 +85,7 @@ public class Altar : MonoBehaviour {
 				//renderer.material.color = team.teamColor;
 				_currentControllingTeam = team;
 				checkNetwork();
+				StartCoroutine(AnimateTiles());
 				
 				//TODO - fix - not sure why this doesn't work...
 				if (sRef.optLockTile) {
@@ -139,10 +140,25 @@ public class Altar : MonoBehaviour {
 						
 						return true;
 					}
+					
+					
 				}
 			}
 		}
 		return false;
+	
+	}
+	
+	
+	public IEnumerator AnimateTiles(){
+		Debug.Log("In Animate Co Routine");		
+		foreach (AStarholder tileHolder in networkToBase) {
+			Debug.Log("Starting Pulse");	
+			tileHolder.current.GetComponent<Animator>().SetTrigger("Pulse");
+			yield return new WaitForSeconds(.01f);
+		}
+		
+		yield  break;
 	}
 	
 	public int? owningTeamNetworkedAndLocked(){

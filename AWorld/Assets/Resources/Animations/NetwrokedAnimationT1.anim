@@ -20,90 +20,23 @@ AnimationClip:
       m_Curve:
       - time: 0
         value: 1
-        inSlope: 0
-        outSlope: 0
+        inSlope: -54.1653786
+        outSlope: -54.1653786
         tangentMode: 10
-      - time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
+      - time: .0166666675
+        value: .0972436368
+        inSlope: -13.5493851
+        outSlope: -13.5493851
         tangentMode: 10
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-    attribute: material._Color.r
-    path: InfluenceLayer
-    classID: 23
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 10
-      - time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 10
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-    attribute: material._Color.g
-    path: InfluenceLayer
-    classID: 23
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 10
-      - time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 10
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-    attribute: material._Color.b
-    path: InfluenceLayer
-    classID: 23
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - time: 0
-        value: 1.04640007
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 10
-      - time: .0333333351
-        value: 1.04640007
-        inSlope: -10.4640007
-        outSlope: -10.4640007
-        tangentMode: 10
-      - time: .0833333358
-        value: 0
-        inSlope: -9.53674316e-07
-        outSlope: -9.53674316e-07
-        tangentMode: 10
-      - time: .13333334
-        value: 1.04640007
-        inSlope: 10.4639997
-        outSlope: 10.4639997
-        tangentMode: 10
-      - time: 1
-        value: 1.04640007
-        inSlope: 0
-        outSlope: 0
+      - time: .0500000007
+        value: .999463856
+        inSlope: 27.0666084
+        outSlope: 27.0666084
         tangentMode: 10
       m_PreInfinity: 2
       m_PostInfinity: 2
     attribute: material._Color.a
-    path: InfluenceLayer
+    path: 
     classID: 23
     script: {fileID: 0}
   m_PPtrCurves: []
@@ -115,7 +48,7 @@ AnimationClip:
   m_AnimationClipSettings:
     serializedVersion: 2
     m_StartTime: 0
-    m_StopTime: 1
+    m_StopTime: .0500000007
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -135,90 +68,23 @@ AnimationClip:
       m_Curve:
       - time: 0
         value: 1
-        inSlope: 0
-        outSlope: 0
+        inSlope: -54.1653786
+        outSlope: -54.1653786
         tangentMode: 10
-      - time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
+      - time: .0166666675
+        value: .0972436368
+        inSlope: -13.5493851
+        outSlope: -13.5493851
         tangentMode: 10
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-    attribute: material._Color.r
-    path: InfluenceLayer
-    classID: 23
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 10
-      - time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 10
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-    attribute: material._Color.g
-    path: InfluenceLayer
-    classID: 23
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 10
-      - time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 10
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-    attribute: material._Color.b
-    path: InfluenceLayer
-    classID: 23
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - time: 0
-        value: 1.04640007
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 10
-      - time: .0333333351
-        value: 1.04640007
-        inSlope: -10.4640007
-        outSlope: -10.4640007
-        tangentMode: 10
-      - time: .0833333358
-        value: 0
-        inSlope: -9.53674316e-07
-        outSlope: -9.53674316e-07
-        tangentMode: 10
-      - time: .13333334
-        value: 1.04640007
-        inSlope: 10.4639997
-        outSlope: 10.4639997
-        tangentMode: 10
-      - time: 1
-        value: 1.04640007
-        inSlope: 0
-        outSlope: 0
+      - time: .0500000007
+        value: .999463856
+        inSlope: 27.0666084
+        outSlope: 27.0666084
         tangentMode: 10
       m_PreInfinity: 2
       m_PostInfinity: 2
     attribute: material._Color.a
-    path: InfluenceLayer
+    path: 
     classID: 23
     script: {fileID: 0}
   m_EulerEditorCurves: []

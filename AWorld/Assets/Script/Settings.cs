@@ -26,7 +26,7 @@ public class Settings : MonoBehaviour {
 	public float coefTepwante = 1.0f;	//Percentage strength at which wider influence beams operate with Tepwante (currently 100% strength but we could change it)
 	public float baseRequired = 100f;
 	public float scoreOnCapture = 50f;
-	public float vpsScorePerSecond = 3f;
+	public float vpsScorePerSecond = 1f;
 	public float vpsBeaconBaseInfluence = 100f;
 	public bool optLockTile = false;
 	
