@@ -29,7 +29,8 @@ public class Settings : MonoBehaviour {
 	public float vpsScorePerSecond = 1f;
 	public float vpsBeaconBaseInfluence = 100f;
 	public bool optLockTile = false;
-	
+	public bool optTilesGiveScore = true;
+	public float valTileConvertScore = 1f;
 	
 	public bool debugMode = true;
 	// Use this for initialization
@@ -40,5 +41,19 @@ public class Settings : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	
+	}
+	private static Settings _instance;
+	
+	//This is the public reference that other classes will use
+	public static Settings SettingsInstance
+	{
+		get
+		{
+			//If _instance hasn't been set yet, we grab it from the scene!
+			//This will only happen the first time this reference is used.
+			if(_instance == null)
+				_instance = GameObject.FindObjectOfType<Settings>();
+			return _instance;
+		}
 	}
 }

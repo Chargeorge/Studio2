@@ -37,6 +37,7 @@ public class BaseTile : MonoBehaviour {
 		}
 	}	
 	
+	private Settings sRef;
 	
 	private int _influenceRevealRange = 3;
 	private GameManager gm;
@@ -194,7 +195,7 @@ public class BaseTile : MonoBehaviour {
 		networkToBase = new List<AStarholder>();
 		gm = GameObject.Find("GameManager").GetComponent<GameManager>();
 		transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
-		
+		sRef = Settings.SettingsInstance;
 	}
 	
 	public BaseTile GetDirection(DirectionEnum dir){
@@ -599,6 +600,8 @@ public class BaseTile : MonoBehaviour {
 	
 	
 	public void flipInfluence(TeamInfo newTeam){
+		owningTeam.score -= getTileScore();
+		
 		controllingTeam = newTeam;
 		percControlled = 0;
 		owningTeam = null;
@@ -622,6 +625,7 @@ public class BaseTile : MonoBehaviour {
 		owningTeam = controllingTeam;
 		Beacon localBeacon = GetComponentInChildren<Beacon>();
 		Altar localAltar = GetComponentInChildren<Altar>();
+		owningTeam.score += getTileScore();
 		
 		if(localAltar !=null){
 			localAltar.setControl(owningTeam);
@@ -695,5 +699,9 @@ public class BaseTile : MonoBehaviour {
 			}
 		}
 		return false;
+	}
+	
+	public float getTileScore(){
+		return sRef.valTileConvertScore;
 	}
 }
