@@ -510,7 +510,6 @@ public class Beacon : MonoBehaviour {
 			float percRotatingToward = 0f;				//How far toward the angle above we're going to get just before 100% rotation
 						
 			if (Mathf.Abs ((getAngleForDir (facing)-getAngleForDir(dirRotatingToward)) % 360f) == 180f) {	//Rotating 180 degrees
-				Debug.Log ("Rotating 180 degrees");
 				if (facing == DirectionEnum.North || facing == DirectionEnum.South)  
 					angleRotatingToward = new Vector3 (-90f, 0f, 0f);
 				else

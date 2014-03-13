@@ -13,11 +13,12 @@ public class Settings : MonoBehaviour {
 	//Char: starting with settings where everything takes 1 second.  
 	public float vpsBaseBuild = 25f;
 	public float vpsBaseMove = 100f;
+	public float vpsBaseFreeMoveSpeed = 2.0f;
 	public float vpsBaseInfluence =  50f;
 	public float vpsBaseRotate = 50f;
 	public float vpsBaseUpgrade = 25f;
 	public float vpsScorePerAltarPerSecond = .1f;
-	public float coefAlliedMove = 1f;
+	public float coefMoveNeutral = 1f;
 	public float coefMoveAllied = 2f;
 	public float coefMoveEnemy = .33f;
 	public float coefConvert = .5f;

@@ -79,7 +79,11 @@ public class Player : MonoBehaviour {
 	void Update (){ 
 		
 		DirectionEnum? x = getStickDirection();
-		BaseTile currentTile = gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>();
+		//BaseTile currentTile = gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>();	//Not used with free movement
+		BaseTile currentTile = gm.tiles[(int) Mathf.Floor (transform.position.x + 0.5f), (int) Mathf.Floor (transform.position.y + 0.5f)].GetComponent<BaseTile>();
+		currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = true;
+		currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().material.color = team.getHighLightColor();
+		
 		bool buildButtonDown = getPlayerBuild();
 		//if(x.HasValue) Debug.Log(x.Value);
 		_pulsating = false;	//Pulsate () sets this to true; if false at the end of this method, reset scale and _expanding
@@ -92,7 +96,10 @@ public class Player : MonoBehaviour {
 			//If we are standing and we get an input, handle it.
 				
 				if(x.HasValue && !buildButtonDown){
-					if(currentTile.GetDirection(x.Value) != null){
+				setDirection(x.Value);	//Still need a 4-directional facing for building/rotating beacons
+				Vector2 analogStickDirection = new Vector2 (getPlayerXAxis(), getPlayerYAxis());
+				_currentState = PlayerState.moving;
+					/**if(currentTile.GetDirection(x.Value) != null){
 						BaseTile MovingInto = currentTile.GetDirection(x.Value);
 						//Debug.Log(string.Format("x:{0}, y: {1}", MovingInto.brdXPos, MovingInto.brdYPos));
 						float vpsRate = MovingInto.GetRate(this) * sRef.vpsBaseMove;
@@ -104,7 +111,7 @@ public class Player : MonoBehaviour {
 					else{
 						setDirection(x.Value);
 					}
-					
+					*/
 					
 				}
 				
@@ -213,8 +220,21 @@ public class Player : MonoBehaviour {
 			//IF it changes, remove all progress (PLACEHOLDER, feel free to nuke)
 			//if it completes, move to next tile, set state to standing
 			case PlayerState.moving:
-				
 			
+				currentTile.Reveal (_vision, gm);
+			
+				if (x.HasValue) {
+					gm.PlaySFX(playerMove, 0.8f);
+					setDirection(x.Value);	//Still need a 4-directional facing for building/rotating beacons
+					
+					transform.position = new Vector3 (
+					transform.position.x + getPlayerXAxis() * sRef.vpsBaseFreeMoveSpeed * getTileSpeedBoost(currentTile) * getAltarSpeedBoost() * Time.deltaTime, 
+					transform.position.y + getPlayerYAxis() * sRef.vpsBaseFreeMoveSpeed * getTileSpeedBoost(currentTile) * getAltarSpeedBoost() * Time.deltaTime, 
+					transform.position.z);
+					
+				}
+				
+				/**
 				if(x.HasValue && x.Value == facing){
 					gm.PlaySFX(playerMove, 0.8f);
 					BaseTile MovingInto = currentTile.GetComponent<BaseTile>().GetDirection(x.Value);
@@ -257,7 +277,8 @@ public class Player : MonoBehaviour {
 						
 					}
 					
-				}
+					
+				}*/
 				else{
 					gm.StopSFX();
 					_currentState= PlayerState.standing; 
@@ -438,10 +459,11 @@ public class Player : MonoBehaviour {
 		
 		
 		//Set position based on offset
+		/* Not with free movement!
 		transform.position = new Vector3 
 			(GameManager.wrldPositionFromGrdPosition(grdLocation).x + _positionOffset.x / 2,
 			 GameManager.wrldPositionFromGrdPosition(grdLocation).y + _positionOffset.y / 2, -1);
-			
+		*/			
 		//If not pulsating, reset scale and _expanding
 		if (!_pulsating) {
 			transform.localScale = new Vector3 (_defaultScale.x, _defaultScale.y, _defaultScale.z);
@@ -451,6 +473,7 @@ public class Player : MonoBehaviour {
 						
 	}
 	
+	//Not used with free movement.
 	public void DoMove(BaseTile MoveTo){
 		grdLocation = new Vector2(MoveTo.brdXPos, MoveTo.brdYPos);
 		gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>().Reveal (_vision, gm);
@@ -663,7 +686,17 @@ public class Player : MonoBehaviour {
 		}
 		
 	}
-	
+		
+	private float getTileSpeedBoost(BaseTile tile) {
+		if (tile.owningTeam == null) {
+			return sRef.coefMoveNeutral;
+		}
+		if (tile.owningTeam == team) {
+			return sRef.coefMoveAllied;
+		}
+		return sRef.coefMoveEnemy;
+	}
+		
 	private float getAltarSpeedBoost(){
 		List<AltarType> a = gm.getCapturedAltars(team);
 		if(a.Contains(AltarType.Choyutzol)){

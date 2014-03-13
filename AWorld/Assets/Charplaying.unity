@@ -773,6 +773,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   vpsBaseBuild: 25
   vpsBaseMove: 100
+  vpsBaseFreeMoveSpeed: 2
   vpsBaseInfluence: 50
   vpsBaseRotate: 50
   vpsBaseUpgrade: 25
