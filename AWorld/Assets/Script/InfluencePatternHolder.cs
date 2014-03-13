@@ -20,7 +20,7 @@ public class InfluencePatternHolder
 	{
 		this.relCoord = relCoord;
 		this.relCoordRotated =  Quaternion.Euler(0,0, -1*degreeRotation)* new Vector3(relCoord.x, relCoord.y,0);
-		this.coefInfluenceFraction = vpsInfluenceRate;
+		this.coefInfluenceFraction = vpsInfluenceRate * GameObject.Find ("Settings").GetComponent<Settings>().coefBaseBeaconInfluence;
 	}
 	
 	

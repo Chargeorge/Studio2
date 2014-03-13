@@ -207,7 +207,7 @@ public class Player : MonoBehaviour {
 					else{
 					Pulsate ();
 						gm.PlaySFX(influenceStart, 1.0f);
-						float vpsInfluenceRate = sRef.vpsBaseInfluence * getAltarInfluenceBoost();
+						float vpsInfluenceRate = sRef.vpsBasePlayerInfluence * getAltarInfluenceBoost();
 						addProgressToAction(vpsInfluenceRate);
 						_currentState = PlayerState.influencing;
 						currentTile.startInfluence(currentActionProgress, team);
@@ -325,7 +325,7 @@ public class Player : MonoBehaviour {
 					else
 					{
 						gm.StopSFX();
-						float vpsInfluenceRate = sRef.vpsBaseInfluence;
+						float vpsInfluenceRate = sRef.vpsBasePlayerInfluence;
 						addProgressToAction(vpsInfluenceRate);
 					}
 					
@@ -347,13 +347,13 @@ public class Player : MonoBehaviour {
 						if(currentTile.controllingTeam.teamNumber  == teamNumber)
 						{
 							//Debug.Log("Adding Influence");
-							float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBaseInfluence * getAltarInfluenceBoost() * Time.deltaTime);
+							float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBasePlayerInfluence * getAltarInfluenceBoost() * Time.deltaTime);
 							if(test > 0){
 								_currentState = PlayerState.standing;
 							}
 						}
 						else{
-							float test = currentTile.subTractInfluence(  sRef.vpsBaseInfluence * getAltarInfluenceBoost() * Time.deltaTime, team);
+							float test = currentTile.subTractInfluence(  sRef.vpsBasePlayerInfluence * getAltarInfluenceBoost() * Time.deltaTime, team);
 							if(test > 0f){
 								currentTile.addInfluenceReturnOverflow(test);
 							}

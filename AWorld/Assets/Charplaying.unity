@@ -774,7 +774,7 @@ MonoBehaviour:
   vpsBaseBuild: 25
   vpsBaseMove: 100
   vpsBaseFreeMoveSpeed: 2
-  vpsBaseInfluence: 50
+  vpsBasePlayerInfluence: 25
   vpsBaseRotate: 50
   vpsBaseUpgrade: 25
   vpsScorePerAltarPerSecond: 1
@@ -782,7 +782,8 @@ MonoBehaviour:
   coefMoveAllied: 2
   coefMoveEnemy: .330000013
   coefConvert: .5
-  coefBuildTower: .25
+  coefBuildBeacon: .25
+  coefBaseBeaconInfluence: .5
   coefOnixtal: .25
   coefTepwante: 1
   baseRequired: 100
