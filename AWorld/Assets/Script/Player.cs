@@ -376,6 +376,7 @@ public class Player : MonoBehaviour {
 					addProgressToAction (vpsRotateRate);
 					Beacon beacon = currentTile.beacon.GetComponent<Beacon>();
 					beacon.addRotateProgress (vpsRotateRate);
+					beacon.dirRotatingToward = facing;
 					
 					if (beacon.percRotateComplete >= 100f) {
 	

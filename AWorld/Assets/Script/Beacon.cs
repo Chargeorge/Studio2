@@ -6,6 +6,7 @@ public class Beacon : MonoBehaviour {
 
 	private List<List<InfluencePatternHolder>> _patternList;
 	public DirectionEnum? facing;
+	public DirectionEnum? dirRotatingToward;	//Used to set visual direction while rotating
 	public TeamInfo controllingTeam;
 	private BeaconState _currentState;
 	public float percActionComplete = 0;
@@ -130,6 +131,7 @@ public class Beacon : MonoBehaviour {
 	public void startBuilding(GameObject tileLocation, GameObject player, float valInit){
 		this.gameObject.transform.parent = tileLocation.transform;
 		this.facing = player.GetComponent<Player>().facing;
+		this.dirRotatingToward = facing;
 		this._currentState	= BeaconState.BuildingBasic;
 		controllingTeam = player.GetComponent<Player>().team;
 		this.setTeam();
@@ -494,12 +496,57 @@ public class Beacon : MonoBehaviour {
 		float currentRotAngle = getAngleForDir(facing);
 		
 		facing = N;
+		dirRotatingToward = N;
 		transform.RotateAround(transform.position, new Vector3(0,0,1), currentRotAngle);
 		transform.RotateAround(transform.position, new Vector3(0,0,-1), rotAngle);
 	}
 	
 	public void setVisualDirection(){
 		transform.localEulerAngles = new Vector3(0,0,-1*getAngleForDir(facing));
+		
+		if (dirRotatingToward != facing && percRotateComplete > 0f && percRotateComplete < 100f) { //Rotating
+			
+			Vector3 angleRotatingToward = Vector3.zero;	//The angle we're roughly rotating toward
+			float percRotatingToward = 0f;				//How far toward the angle above we're going to get just before 100% rotation
+						
+			if (Mathf.Abs ((getAngleForDir (facing)-getAngleForDir(dirRotatingToward)) % 360f) == 180f) {	//Rotating 180 degrees
+				Debug.Log ("Rotating 180 degrees");
+				if (facing == DirectionEnum.North || facing == DirectionEnum.South)  
+					angleRotatingToward = new Vector3 (-90f, 0f, 0f);
+				else
+					angleRotatingToward = new Vector3 (0, -90f, 0f); 
+					
+				percRotatingToward = 80f;
+				transform.localEulerAngles += angleRotatingToward * percRotatingToward/100f * percRotateComplete/100f;
+			}
+			
+			//I know there's a mathy way to do this but holy motherfucking shit fuck I cannot figure it out so fuck it
+			else if ((facing == DirectionEnum.North && dirRotatingToward == DirectionEnum.West) ||
+			     (facing == DirectionEnum.West && dirRotatingToward == DirectionEnum.South) ||
+			     (facing == DirectionEnum.South && dirRotatingToward == DirectionEnum.East) ||
+			     (facing == DirectionEnum.East && dirRotatingToward == DirectionEnum.North)) 
+			{
+				angleRotatingToward = new Vector3 (0,0,90f);
+				percRotatingToward = 50f;
+				transform.localEulerAngles += angleRotatingToward * percRotatingToward/100f * percRotateComplete/100f;
+			}
+			
+			else if ((facing == DirectionEnum.North && dirRotatingToward == DirectionEnum.East) ||
+			     (facing == DirectionEnum.West && dirRotatingToward == DirectionEnum.North) ||
+			     (facing == DirectionEnum.South && dirRotatingToward == DirectionEnum.West) ||
+			     (facing == DirectionEnum.East && dirRotatingToward == DirectionEnum.South)) 
+			{
+				angleRotatingToward = new Vector3 (0,0,-90f);
+				percRotatingToward = 50f;
+				transform.localEulerAngles += angleRotatingToward * percRotatingToward/100f * percRotateComplete/100f;
+			}
+			
+			else{
+				Debug.LogWarning ("Something's wrong in Beacon.setVisualDirection");
+			}
+
+				
+		}
 	}
 	
 	public void Rotate (DirectionEnum? N) {
