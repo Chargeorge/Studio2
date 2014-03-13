@@ -8,20 +8,23 @@ public class Settings : MonoBehaviour {
 	//USage:  Anytime we build every action takes 100 points.  Every frame (Update) we add vpsBase * coef * Time.deltaTime and add it to the current counter
 
 	//Right now this is an object we can instantiate.  Left as is for future iterations that read from the file system.  
-
-
+	
 	//Char: starting with settings where everything takes 1 second.  
+
+	/* NOTE: Changing these numbers does not actually update the Settings object currently in the scene. You must do this manually in the editor. */
 	public float vpsBaseBuild = 25f;
 	public float vpsBaseMove = 100f;
-	public float vpsBaseInfluence =  50f;
+	public float vpsBaseFreeMoveSpeed = 2.0f;
+	public float vpsBasePlayerInfluence =  25f;
 	public float vpsBaseRotate = 50f;
 	public float vpsBaseUpgrade = 25f;
 	public float vpsScorePerAltarPerSecond = .1f;
-	public float coefAlliedMove = 1f;
+	public float coefMoveNeutral = 1f;
 	public float coefMoveAllied = 2f;
 	public float coefMoveEnemy = .33f;
 	public float coefConvert = .5f;
-	public float coefBuildTower = .25f; 
+	public float coefBuildBeacon = .25f; 
+	public float coefBaseBeaconInfluence = 0.5f;	//At 1.0f, takes 1 second to convert a neutral tile 1 space away
 	public float coefOnixtal = 0.25f;	//Percentage strength at which non-facing influence beams operate with Onixtal
 	public float coefTepwante = 1.0f;	//Percentage strength at which wider influence beams operate with Tepwante (currently 100% strength but we could change it)
 	public float baseRequired = 100f;

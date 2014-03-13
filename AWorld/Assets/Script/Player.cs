@@ -79,7 +79,11 @@ public class Player : MonoBehaviour {
 	void Update (){ 
 		
 		DirectionEnum? x = getStickDirection();
-		BaseTile currentTile = gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>();
+		//BaseTile currentTile = gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>();	//Not used with free movement
+		BaseTile currentTile = gm.tiles[(int) Mathf.Floor (transform.position.x + 0.5f), (int) Mathf.Floor (transform.position.y + 0.5f)].GetComponent<BaseTile>();
+		currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = true;
+		currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().material.color = team.getHighLightColor();
+		
 		bool buildButtonDown = getPlayerBuild();
 		//if(x.HasValue) Debug.Log(x.Value);
 		_pulsating = false;	//Pulsate () sets this to true; if false at the end of this method, reset scale and _expanding
@@ -92,7 +96,10 @@ public class Player : MonoBehaviour {
 			//If we are standing and we get an input, handle it.
 				
 				if(x.HasValue && !buildButtonDown){
-					if(currentTile.GetDirection(x.Value) != null){
+				setDirection(x.Value);	//Still need a 4-directional facing for building/rotating beacons
+				Vector2 analogStickDirection = new Vector2 (getPlayerXAxis(), getPlayerYAxis());
+				_currentState = PlayerState.moving;
+					/**if(currentTile.GetDirection(x.Value) != null){
 						BaseTile MovingInto = currentTile.GetDirection(x.Value);
 						//Debug.Log(string.Format("x:{0}, y: {1}", MovingInto.brdXPos, MovingInto.brdYPos));
 						float vpsRate = MovingInto.GetRate(this) * sRef.vpsBaseMove;
@@ -104,7 +111,7 @@ public class Player : MonoBehaviour {
 					else{
 						setDirection(x.Value);
 					}
-					
+					*/
 					
 				}
 				
@@ -200,7 +207,7 @@ public class Player : MonoBehaviour {
 					else{
 					Pulsate ();
 						gm.PlaySFX(influenceStart, 1.0f);
-						float vpsInfluenceRate = sRef.vpsBaseInfluence * getAltarInfluenceBoost();
+						float vpsInfluenceRate = sRef.vpsBasePlayerInfluence * getAltarInfluenceBoost();
 						addProgressToAction(vpsInfluenceRate);
 						_currentState = PlayerState.influencing;
 						currentTile.startInfluence(currentActionProgress, team);
@@ -213,8 +220,26 @@ public class Player : MonoBehaviour {
 			//IF it changes, remove all progress (PLACEHOLDER, feel free to nuke)
 			//if it completes, move to next tile, set state to standing
 			case PlayerState.moving:
-				
 			
+				currentTile.Reveal (_vision, gm);
+			
+				if (x.HasValue) {
+					setDirection(x.Value);	//Still need a 4-directional facing for building/rotating beacons
+					Vector3 posToCheck = new Vector3 (
+					transform.position.x + getPlayerXAxis() * sRef.vpsBaseFreeMoveSpeed * getTileSpeedBoost(currentTile) * getAltarSpeedBoost() * Time.deltaTime, 
+					transform.position.y + getPlayerYAxis() * sRef.vpsBaseFreeMoveSpeed * getTileSpeedBoost(currentTile) * getAltarSpeedBoost() * Time.deltaTime, 
+					transform.position.z);
+					
+					if (!outOfBounds(posToCheck) && 
+						!tooCloseToOpponent(posToCheck) &&
+						(!onWater(posToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti))) 
+					{	//Valid move
+						gm.PlaySFX(playerMove, 0.8f);
+						transform.position = posToCheck;
+					}
+				}
+				
+				/**
 				if(x.HasValue && x.Value == facing){
 					gm.PlaySFX(playerMove, 0.8f);
 					BaseTile MovingInto = currentTile.GetComponent<BaseTile>().GetDirection(x.Value);
@@ -257,7 +282,8 @@ public class Player : MonoBehaviour {
 						
 					}
 					
-				}
+					
+				}*/
 				else{
 					gm.StopSFX();
 					_currentState= PlayerState.standing; 
@@ -299,7 +325,7 @@ public class Player : MonoBehaviour {
 					else
 					{
 						gm.StopSFX();
-						float vpsInfluenceRate = sRef.vpsBaseInfluence;
+						float vpsInfluenceRate = sRef.vpsBasePlayerInfluence;
 						addProgressToAction(vpsInfluenceRate);
 					}
 					
@@ -321,13 +347,13 @@ public class Player : MonoBehaviour {
 						if(currentTile.controllingTeam.teamNumber  == teamNumber)
 						{
 							//Debug.Log("Adding Influence");
-							float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBaseInfluence * getAltarInfluenceBoost() * Time.deltaTime);
+							float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBasePlayerInfluence * getAltarInfluenceBoost() * Time.deltaTime);
 							if(test > 0){
 								_currentState = PlayerState.standing;
 							}
 						}
 						else{
-							float test = currentTile.subTractInfluence(  sRef.vpsBaseInfluence * getAltarInfluenceBoost() * Time.deltaTime, team);
+							float test = currentTile.subTractInfluence(  sRef.vpsBasePlayerInfluence * getAltarInfluenceBoost() * Time.deltaTime, team);
 							if(test > 0f){
 								currentTile.addInfluenceReturnOverflow(test);
 							}
@@ -376,6 +402,7 @@ public class Player : MonoBehaviour {
 					addProgressToAction (vpsRotateRate);
 					Beacon beacon = currentTile.beacon.GetComponent<Beacon>();
 					beacon.addRotateProgress (vpsRotateRate);
+					beacon.dirRotatingToward = facing;
 					
 					if (beacon.percRotateComplete >= 100f) {
 	
@@ -437,10 +464,11 @@ public class Player : MonoBehaviour {
 		
 		
 		//Set position based on offset
+		/* Not with free movement!
 		transform.position = new Vector3 
 			(GameManager.wrldPositionFromGrdPosition(grdLocation).x + _positionOffset.x / 2,
 			 GameManager.wrldPositionFromGrdPosition(grdLocation).y + _positionOffset.y / 2, -1);
-			
+		*/			
 		//If not pulsating, reset scale and _expanding
 		if (!_pulsating) {
 			transform.localScale = new Vector3 (_defaultScale.x, _defaultScale.y, _defaultScale.z);
@@ -450,6 +478,7 @@ public class Player : MonoBehaviour {
 						
 	}
 	
+	//Not used with free movement.
 	public void DoMove(BaseTile MoveTo){
 		grdLocation = new Vector2(MoveTo.brdXPos, MoveTo.brdYPos);
 		gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>().Reveal (_vision, gm);
@@ -662,7 +691,17 @@ public class Player : MonoBehaviour {
 		}
 		
 	}
-	
+		
+	private float getTileSpeedBoost(BaseTile tile) {
+		if (tile.owningTeam == null) {
+			return sRef.coefMoveNeutral;
+		}
+		if (tile.owningTeam == team) {
+			return sRef.coefMoveAllied;
+		}
+		return sRef.coefMoveEnemy;
+	}
+		
 	private float getAltarSpeedBoost(){
 		List<AltarType> a = gm.getCapturedAltars(team);
 		if(a.Contains(AltarType.Choyutzol)){
@@ -690,4 +729,42 @@ public class Player : MonoBehaviour {
 		}
 	}
 	
+	private bool onWater (Vector3 pos) {
+	
+		return (gm.tiles[(int) Mathf.Floor (pos.x + 0.5f), (int) Mathf.Floor (pos.y + 0.5f)].GetComponent<BaseTile>().currentType == TileTypeEnum.water);
+	
+	}
+	
+	private bool outOfBounds (Vector3 pos) {
+	
+		//Assumes tile width and height of exactly 1; will screw up otherwise
+	
+		float minDistanceFromEdge = 0.3f; //Should probably be set in Settings; players cannot be closer to edge than this
+	
+		return (pos.x < -0.5f + minDistanceFromEdge ||
+				pos.y < -0.5f + minDistanceFromEdge ||
+		        pos.x > GameObject.Find ("TileCreator").GetComponent<TileCreation>().boardX - 0.5f - minDistanceFromEdge ||
+		        pos.y > GameObject.Find ("TileCreator").GetComponent<TileCreation>().boardY - 0.5f - minDistanceFromEdge);
+		       
+		/**	return (Mathf.Floor(pos.x + 0.5f) < 0 || 
+				Mathf.Floor(pos.y + 0.5f) < 0 ||
+				Mathf.Floor(pos.x + 0.5f) > GameObject.Find ("TileCreator").GetComponent<TileCreation>().boardX ||
+				Mathf.Floor(pos.y + 0.5f) > GameObject.Find ("TileCreator").GetComponent<TileCreation>().boardY);
+		*/
+	}
+	
+	private bool tooCloseToOpponent (Vector3 pos) {
+	
+		float minDistanceApart = 1.5f;	//Should probably be set in Settings; players cannot be closer than this
+		
+		foreach (GameObject o in GameObject.Find ("GameManager").GetComponent<GameManager>().players) {
+			if (o.GetComponent<Player>().team != team) { //If it's an opponent, check its distance
+				if (minDistanceApart > (o.GetComponent<Player>().gameObject.transform.position - pos).magnitude) {
+					return true;
+				}
+			} 
+		}
+		
+		return false;	
+	}
 }
