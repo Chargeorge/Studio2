@@ -224,14 +224,19 @@ public class Player : MonoBehaviour {
 				currentTile.Reveal (_vision, gm);
 			
 				if (x.HasValue) {
-					gm.PlaySFX(playerMove, 0.8f);
 					setDirection(x.Value);	//Still need a 4-directional facing for building/rotating beacons
-					
-					transform.position = new Vector3 (
+					Vector3 posToCheck = new Vector3 (
 					transform.position.x + getPlayerXAxis() * sRef.vpsBaseFreeMoveSpeed * getTileSpeedBoost(currentTile) * getAltarSpeedBoost() * Time.deltaTime, 
 					transform.position.y + getPlayerYAxis() * sRef.vpsBaseFreeMoveSpeed * getTileSpeedBoost(currentTile) * getAltarSpeedBoost() * Time.deltaTime, 
 					transform.position.z);
 					
+					if (!outOfBounds(posToCheck) && 
+						!tooCloseToOpponent(posToCheck) &&
+						(!onWater(posToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti))) 
+					{	//Valid move
+						gm.PlaySFX(playerMove, 0.8f);
+						transform.position = posToCheck;
+					}
 				}
 				
 				/**
@@ -724,4 +729,42 @@ public class Player : MonoBehaviour {
 		}
 	}
 	
+	private bool onWater (Vector3 pos) {
+	
+		return (gm.tiles[(int) Mathf.Floor (pos.x + 0.5f), (int) Mathf.Floor (pos.y + 0.5f)].GetComponent<BaseTile>().currentType == TileTypeEnum.water);
+	
+	}
+	
+	private bool outOfBounds (Vector3 pos) {
+	
+		//Assumes tile width and height of exactly 1; will screw up otherwise
+	
+		float minDistanceFromEdge = 0.3f; //Should probably be set in Settings; players cannot be closer to edge than this
+	
+		return (pos.x < -0.5f + minDistanceFromEdge ||
+				pos.y < -0.5f + minDistanceFromEdge ||
+		        pos.x > GameObject.Find ("TileCreator").GetComponent<TileCreation>().boardX - 0.5f - minDistanceFromEdge ||
+		        pos.y > GameObject.Find ("TileCreator").GetComponent<TileCreation>().boardY - 0.5f - minDistanceFromEdge);
+		       
+		/**	return (Mathf.Floor(pos.x + 0.5f) < 0 || 
+				Mathf.Floor(pos.y + 0.5f) < 0 ||
+				Mathf.Floor(pos.x + 0.5f) > GameObject.Find ("TileCreator").GetComponent<TileCreation>().boardX ||
+				Mathf.Floor(pos.y + 0.5f) > GameObject.Find ("TileCreator").GetComponent<TileCreation>().boardY);
+		*/
+	}
+	
+	private bool tooCloseToOpponent (Vector3 pos) {
+	
+		float minDistanceApart = 1.5f;	//Should probably be set in Settings; players cannot be closer than this
+		
+		foreach (GameObject o in GameObject.Find ("GameManager").GetComponent<GameManager>().players) {
+			if (o.GetComponent<Player>().team != team) { //If it's an opponent, check its distance
+				if (minDistanceApart > (o.GetComponent<Player>().gameObject.transform.position - pos).magnitude) {
+					return true;
+				}
+			} 
+		}
+		
+		return false;	
+	}
 }
