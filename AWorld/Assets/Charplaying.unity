@@ -789,6 +789,10 @@ MonoBehaviour:
   vpsScorePerSecond: 3
   vpsBeaconBaseInfluence: 100
   optLockTile: 1
+  optTilesGiveScore: 1
+  valTileConvertScore: 1
+  team1Start: {x: 1, y: 1}
+  team2Start: {x: 39, y: 19}
   debugMode: 1
 --- !u!4 &1843163359
 Transform:

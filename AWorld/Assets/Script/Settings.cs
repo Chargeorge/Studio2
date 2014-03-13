@@ -31,6 +31,8 @@ public class Settings : MonoBehaviour {
 	public bool optLockTile = false;
 	public bool optTilesGiveScore = true;
 	public float valTileConvertScore = 1f;
+	public Vector2 team1Start = new Vector2(3,3);
+	public Vector2 team2Start = new Vector2(4,4);
 	
 	public bool debugMode = true;
 	// Use this for initialization

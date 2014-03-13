@@ -26,12 +26,12 @@ public class TeamInfo
 		switch (teamNumber) {
 				case 1: 
 						returnable.teamColor = new Color32 (0, 138, 206, 255);
-						returnable.startingLocation = new Vector2 (19, 0);
+						returnable.startingLocation = Settings.SettingsInstance.team1Start;
 						returnable.teamNumber = teamNumber;
 						break;
 				case 2:
 						returnable.teamColor = new Color32 (255, 209, 38, 255);
-						returnable.startingLocation = new Vector2 (19, 19);
+						returnable.startingLocation = Settings.SettingsInstance.team2Start;
 						returnable.teamNumber = teamNumber;
 						break;
 				}
