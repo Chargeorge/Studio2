@@ -54,6 +54,56 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (setup){
+			List<AltarType> altarTypes = System.Enum.GetValues(typeof(AltarType)).Cast<AltarType>().ToList();
+			if (numAltars > altarTypes.Count) Debug.LogError ("Too many altars and not enough altar types!"); 
+			
+			for (int i=0; i<numAltars; i++){
+				Debug.Log ("in Altar");		
+				GameObject a = (GameObject)Instantiate(prfbAltar, Vector3.zero, Quaternion.identity);
+				Altar aObj = a.GetComponent<Altar>();
+//				
+//				int index = Random.Range (0, altarTypes.Count);
+//				aObj.altarType = altarTypes[index];
+//				altarTypes.RemoveAt (index);		
+//				
+//				//		aObj.brdX = Random.Range(0, tiles.GetLength(0));
+//				//		aObj.brdY = Random.Range(0, tiles.GetLength(1));
+//				aObj.brdX = (tiles.GetLength(0) - 1 - i*7)-8;	//Temp
+//				aObj.brdY = i*3+3;	//Temp
+//				aObj.gm = this;
+//				aObj.sRef = sRef;
+//				aObj.setControl(null);
+//				aObj.transform.parent = tiles[aObj.brdX, aObj.brdY].transform;
+//				aObj.transform.localPosition = new Vector3(0,0,-1);
+//				altars.Add (aObj.gameObject);
+			}
+
+			for (int i=0; i<numAltars; i++){
+				Debug.Log ("in Altar");		
+				GameObject a = (GameObject)Instantiate(prfbAltar, Vector3.zero, Quaternion.identity);
+				Altar aObj = a.GetComponent<Altar>();
+				
+				
+			}
+			int absoluteMagnitude;
+			absoluteMagnitude = Mathf.RoundToInt(Random.Range(10f, (new Vector2(tiles.GetLength(0), tiles.GetLength(1)).magnitude)/2));
+
+			for (int i = 0; i< numAltars; i++){
+				Altar thisAltar = altars[i].GetComponent<Altar>();
+				if(i != numAltars -1){
+					if(i % 2 == 0){
+						absoluteMagnitude = Mathf.RoundToInt(Random.Range(10f, (new Vector2(tiles.GetLength(0), tiles.GetLength(1)).magnitude)/2));
+					}
+					int x, y;
+					//x^2 + y^2 = absoluteMag^2
+					x = Mathf.RoundToInt(Random.Range(0f, Mathf.Sqrt(absoluteMagnitude)));
+					y = Mathf.RoundToInt(Mathf.Sqrt(absoluteMagnitude * absoluteMagnitude - x*x));
+					thisAltar.brdX = x;
+					thisAltar.brdY = y;
+
+				}
+				
+			}
 			switch (gameMode){
 			case Mode.OneVOne:
 				_currentState = GameState.playing;
@@ -72,8 +122,12 @@ public class GameManager : MonoBehaviour {
 				
 				GameObject team1Home, team2Home;
 				
+					//steps to ensure validity
 				team1Home = setUpTeamHome(p1);
 				team2Home = setUpTeamHome(p2);
+				
+				//
+
 				
 				//victoryConditions.Add (new LockMajorityAltars(1) );
 				victoryConditions.Add (new ControlViaTime(1));
@@ -85,30 +139,7 @@ public class GameManager : MonoBehaviour {
 				break;
 				
 			}
-			
-			List<AltarType> altarTypes = System.Enum.GetValues(typeof(AltarType)).Cast<AltarType>().ToList();
-			if (numAltars > altarTypes.Count) Debug.LogError ("Too many altars and not enough altar types!"); 
-			    
-			for (int i=0; i<numAltars; i++){
-				Debug.Log ("in Altar");		
-				GameObject a = (GameObject)Instantiate(prfbAltar, Vector3.zero, Quaternion.identity);
-				Altar aObj = a.GetComponent<Altar>();
-				
-				int index = Random.Range (0, altarTypes.Count);
-				aObj.altarType = altarTypes[index];
-				altarTypes.RemoveAt (index);		
-
-		//		aObj.brdX = Random.Range(0, tiles.GetLength(0));
-		//		aObj.brdY = Random.Range(0, tiles.GetLength(1));
-				aObj.brdX = (tiles.GetLength(0) - 1 - i*7)-8;	//Temp
-				aObj.brdY = i*3+3;	//Temp
-				aObj.gm = this;
-				aObj.sRef = sRef;
-				aObj.setControl(null);
-				aObj.transform.parent = tiles[aObj.brdX, aObj.brdY].transform;
-				aObj.transform.localPosition = new Vector3(0,0,-1);
-				altars.Add (aObj.gameObject);
-			}			
+						
 			
 			setup = false;
 			
@@ -118,13 +149,16 @@ public class GameManager : MonoBehaviour {
 			debugMouse = getHoveredTile().GetComponent<BaseTile>();
 		}
 		if(Input.GetButtonDown("Fire1")){
-			if(debugMouse.owningTeam != null){
-				BaseTile finalDestination = tiles[(int)debugMouse.owningTeam.startingLocation.x,(int)debugMouse.owningTeam.startingLocation.y].GetComponent<BaseTile>();
-				if(debugMouse.owningTeam != null){
-					
-					List<AStarholder> As = 	BaseTile.aStarSearch(debugMouse, finalDestination,int.MaxValue, BaseTile.getLocalSameTeamTiles, debugMouse.owningTeam);
-					debugString = string.Format("A star len: {0}", As.Count);
-				}
+			//A* test
+//			if(debugMouse.owningTeam != null){
+//				BaseTile finalDestination = tiles[(int)debugMouse.owningTeam.startingLocation.x,(int)debugMouse.owningTeam.startingLocation.y].GetComponent<BaseTile>();
+//				if(debugMouse.owningTeam != null){
+//					debug
+//					debugString = string.Format("A star len: {0}", As.Count);
+//				}
+//			}
+			if(debugMouse != null){
+				Debug.Log (debugMouse.findEdges());
 			}
 		}
 		if(Input.GetButtonDown("Fire2")){
@@ -235,6 +269,21 @@ public class GameManager : MonoBehaviour {
 			
 		});		
 		return returnable;
+	}
+
+	private static GameManager _instance;
+	
+	//This is the public reference that other classes will use
+	public static GameManager GameManagerInstance
+	{
+		get
+		{
+			//If _instance hasn't been set yet, we grab it from the scene!
+			//This will only happen the first time this reference is used.
+			if(_instance == null)
+				_instance = GameObject.FindObjectOfType<GameManager>();
+			return _instance;
+		}
 	}
 /**	
 	public List<AltarType> getNetworkedAltars(TeamInfo t){

@@ -266,6 +266,55 @@ public class BaseTile : MonoBehaviour {
 		}
 			
 	}
+
+	/// <summary>
+	/// Recurse through tileset to find if we can reach all 4 edges
+	/// </summary>
+	public bool findEdges(){
+		bool northFound = false, southFound = false, eastFound = false, westFound = false;
+		List<BaseTile> tiles = getLocalTraversableTiles(this, null);
+		Dictionary<int, BaseTile> visited = new Dictionary<int, BaseTile >();
+		foreach(BaseTile B in tiles){
+			findEdgesInner(ref northFound, ref southFound, ref eastFound, ref westFound,visited,getLocalTraversableTiles,   B);
+		}
+		if(northFound && southFound && westFound && eastFound){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
+	public void findEdgesInner(ref bool northFound, 
+	                          ref bool southFound, 
+	                          ref bool eastFound,
+	                          ref bool westFound, 
+	                          Dictionary<int, BaseTile> visited, 
+	                          GetLocalTiles LocalFunction, BaseTile current){
+
+		if(!visited.ContainsKey(current.Ident)){
+			visited.Add(current.Ident, current);
+			if(current.North == null){
+				northFound = true;
+			}
+			if(current.West == null){
+				westFound = true;
+			}
+			if(current.East == null){
+				eastFound = true;
+			}
+			if(current.South == null){
+				southFound = true;
+			}
+
+			List<BaseTile> tilesToVisit  = LocalFunction(current, controllingTeam);
+			foreach (BaseTile B in tilesToVisit){
+				findEdgesInner(ref northFound, ref southFound, ref eastFound, ref westFound, visited, LocalFunction, B);
+			}
+		}
+		
+	}
+	#region oldCode
 	///Old section needs to be fixed
 	/// 
 	/*
@@ -353,7 +402,7 @@ public class BaseTile : MonoBehaviour {
 	
 	}*/
 	
-	
+	#endregion oldCode
 
 
 	/// <summary>
@@ -363,7 +412,9 @@ public class BaseTile : MonoBehaviour {
 	/// <param name="currentAp">Current ap.</param>
 	public static List<BaseTile> getLocalTraversableTiles(BaseTile current, TeamInfo T){
 	//	if(
-		return null;
+		List<BaseTile> returnable = current.getLocalTiles();
+		returnable.RemoveAll(x => x.currentType == TileTypeEnum.water);
+		return returnable;
 	}
 		
 	public static List<BaseTile> getLocalSameTeamTiles(BaseTile current, TeamInfo T){	
