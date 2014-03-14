@@ -236,6 +236,10 @@ public class Player : MonoBehaviour {
 					{	//Valid move
 						gm.PlaySFX(playerMove, 0.8f);
 						transform.position = posToCheck;
+						BaseTile newTile = gm.tiles[(int) Mathf.Floor (transform.position.x + 0.5f), (int) Mathf.Floor (transform.position.y + 0.5f)].GetComponent<BaseTile>();
+						if (newTile != currentTile) {
+							currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
+						}	
 					}
 				}
 				

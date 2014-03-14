@@ -31,7 +31,7 @@ public class Settings : MonoBehaviour {
 	public float scoreOnCapture = 50f;
 	public float vpsScorePerSecond = 1f;
 	public float vpsBeaconBaseInfluence = 100f;
-	public bool optLockTile = false;
+	public bool optLockTile = true;
 	public bool optTilesGiveScore = true;
 	public float valTileConvertScore = 1f;
 	public Vector2 team1Start = new Vector2(3,3);
