@@ -155,6 +155,19 @@ public class Beacon : MonoBehaviour {
 		renderer.material.color = controllingTeamColor;
 		
 	}
+
+	public void setTeam(TeamInfo teamIn){
+		controllingTeam = teamIn;
+		Color32 controllingTeamColor = controllingTeam.teamColor;		
+		//TODO: custom sprites and colors per team
+		controllingTeamColor.a = (byte)(renderer.material.color.a * 255);
+		
+		controllingTeamColor.r += 30;
+		controllingTeamColor.g += 30;
+		controllingTeamColor.b += 30;
+		renderer.material.color = controllingTeamColor;
+		
+	}
 	
 	/// <summary>
 	/// Adds progress to the current building action

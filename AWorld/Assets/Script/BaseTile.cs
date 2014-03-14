@@ -693,7 +693,9 @@ public class BaseTile : MonoBehaviour {
 			localAltar.setControl(owningTeam);
 		}
 		if(localBeacon!= null){
-			localBeacon.controllingTeam = owningTeam;
+
+			localBeacon.setTeam (owningTeam);
+
 		}
 		
 		Reveal (_influenceRevealRange, GameObject.Find ("GameManager").GetComponent<GameManager>());

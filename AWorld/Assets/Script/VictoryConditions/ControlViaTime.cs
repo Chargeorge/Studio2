@@ -19,13 +19,13 @@ public class ControlViaTime : VictoryCondition
 		TeamInfo t1 = gm.teams[0];
 		TeamInfo t2 = gm.teams[1];
 		
-		if(t1.score > 100f && t2.score < 100f && t1.score > t2.score){
+		if(t1.score > Settings.SettingsInstance.valPointsToWin && t2.score < Settings.SettingsInstance.valPointsToWin && t1.score > t2.score){
 			SetVictory(t1);
 		}
-		else if(t2.score > 100f && t1.score < 100f && t2.score > t1.score){
+		else if(t2.score > Settings.SettingsInstance.valPointsToWin && t1.score < Settings.SettingsInstance.valPointsToWin && t2.score > t1.score){
 			SetVictory(t2);
 		}
-		else  if(t2.score > 100f && t1.score > 100f){
+		else  if(t2.score > Settings.SettingsInstance.valPointsToWin && t1.score > Settings.SettingsInstance.valPointsToWin){
 			if(t1.score > t2.score){
 				SetVictory(t2);
 			}
