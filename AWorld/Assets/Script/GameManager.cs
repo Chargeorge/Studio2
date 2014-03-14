@@ -54,6 +54,9 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (setup){
+			GameObject team1Home, team2Home;
+			team1Home  = null;
+			team2Home = null;
 			List<AltarType> altarTypes = System.Enum.GetValues(typeof(AltarType)).Cast<AltarType>().ToList();
 			if (numAltars > altarTypes.Count) Debug.LogError ("Too many altars and not enough altar types!"); 
 			
@@ -92,9 +95,7 @@ public class GameManager : MonoBehaviour {
 			for (int i = 0; i< numAltars; i++){
 				Altar thisAltar = altars[i].GetComponent<Altar>();
 				if(i != numAltars -1){
-					if(i % 2 == 0){
-						absoluteMagnitude = Mathf.RoundToInt(Random.Range(10f, (new Vector2(tiles.GetLength(0), tiles.GetLength(1)).magnitude)*.75f));
-					}
+
 					int x, y;
 					//x^2 + y^2 = absoluteMag^2
 					
@@ -108,13 +109,14 @@ public class GameManager : MonoBehaviour {
 					}
 
 					if(i % 2 == 1){
-						thisAltar.brdX = y;
-						thisAltar.brdY = x;
+						thisAltar.brdX = tiles.GetLength(0)-1-x;
+						thisAltar.brdY = tiles.GetLength(1)-1-y;
+
 						absoluteMagnitude = Mathf.RoundToInt(Random.Range(15f, (new Vector2(tiles.GetLength(0), tiles.GetLength(1)).magnitude)*.75f));
 					}
 					else{
-						thisAltar.brdX = tiles.GetLength(0)-1-x;
-						thisAltar.brdY = tiles.GetLength(1)-1-y;
+						thisAltar.brdX = x;
+						thisAltar.brdY = y;
 					}
 					Debug.Log (string.Format("Altar created at({0}, {1})", thisAltar.brdX, thisAltar.brdY));
 					thisAltar.transform.parent = tiles[thisAltar.brdX, thisAltar.brdY].transform;
@@ -147,7 +149,7 @@ public class GameManager : MonoBehaviour {
 				players.Add(Player1);
 				players.Add(Player2);
 				
-				GameObject team1Home, team2Home;
+			
 				
 					//steps to ensure validity
 				team1Home = setUpTeamHome(p1);
@@ -166,11 +168,23 @@ public class GameManager : MonoBehaviour {
 				break;
 				
 			}
-						
-			//Remove whater where it's bad
+			//Check for any homebase islands, if so regenerate
+			//Check for fairness?  
+			//Remove water where it's on an altar or home base
+			BaseTile team1Tile, team2Tile;
+			team1Tile =tiles[(int)teams[0].startingLocation.x,(int)teams[0].startingLocation.y].GetComponent<BaseTile>();
+			team2Tile = tiles[(int)teams[1].startingLocation.x,(int)teams[1].startingLocation.y].GetComponent<BaseTile>();
+			while(!team1Tile.findEdges() && !team2Tile.findEdges()){
+				GameObject.Find("TileCreator").GetComponent<TileCreation>().perlinPass(TileTypeEnum.water, sRef.optPerlinLevel);
+			}
 
+			checkFlipWater(team1Tile.brdXPos, team1Tile.brdYPos);
+			checkFlipWater(team2Tile.brdXPos, team2Tile.brdYPos);
 
-
+			altars.ForEach(delegate (GameObject altarGO){
+				Altar A = altarGO.GetComponent<Altar>();
+				checkFlipWater(A.brdX, A.brdY);
+			});
 			setup = false;
 			
 		}
@@ -301,6 +315,13 @@ public class GameManager : MonoBehaviour {
 		return returnable;
 	}
 
+	public void checkFlipWater(int x, int y){
+		BaseTile bt = tiles[x,y].GetComponent<BaseTile>();
+		if(bt.currentType == TileTypeEnum.water){
+			bt.setTileType(TileTypeEnum.regular);
+		}
+	}
+
 	private static GameManager _instance;
 	
 	//This is the public reference that other classes will use
@@ -331,6 +352,8 @@ public class GameManager : MonoBehaviour {
 		return returnable;
 	}
 */
+			
+
 }
 
 

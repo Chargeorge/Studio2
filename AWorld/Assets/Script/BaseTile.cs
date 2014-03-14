@@ -70,7 +70,7 @@ public class BaseTile : MonoBehaviour {
 	}
 	public int brdYPos {
 		get {
-			return this._brdYFPos;
+			return this._brdYPos;
 		}
 		set {
 			_brdYPos = value;
