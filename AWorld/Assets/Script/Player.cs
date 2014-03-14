@@ -704,7 +704,6 @@ public class Player : MonoBehaviour {
 		
 	private float getAltarSpeedBoost(){
 		List<AltarType> a = gm.getCapturedAltars(team);
-		Debug.Log(a.ToString());
 		if(a.Contains(AltarType.Choyutzol)){
 			return 2f;
 		}else{
@@ -714,7 +713,6 @@ public class Player : MonoBehaviour {
 	
 	private float getAltarBuildBoost(){
 		List <AltarType> a = gm.getCapturedAltars(team);
-		Debug.Log(a.ToString());
 
 		if(a.Contains(AltarType.Tikumose)){
 			return 2f;
@@ -725,7 +723,6 @@ public class Player : MonoBehaviour {
 	
 	private float getAltarInfluenceBoost(){
 		List <AltarType> a = gm.getCapturedAltars(team);
-		Debug.Log(a.ToString());
 
 		if(a.Contains(AltarType.Khepru)){
 			return 2f;

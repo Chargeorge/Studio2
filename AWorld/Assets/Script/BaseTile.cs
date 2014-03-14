@@ -70,7 +70,7 @@ public class BaseTile : MonoBehaviour {
 	}
 	public int brdYPos {
 		get {
-			return this._brdYPos;
+			return this._brdYFPos;
 		}
 		set {
 			_brdYPos = value;
@@ -267,6 +267,20 @@ public class BaseTile : MonoBehaviour {
 			
 	}
 
+	
+	public void setTileType(TileTypeEnum TT){
+		switch (TT){
+		case TileTypeEnum.regular:
+			gameObject.renderer.material = (Material)Resources.Load("Sprites/Materials/Regular");
+			currentType = TileTypeEnum.regular;
+			break;
+			
+		case TileTypeEnum.water:
+			gameObject.renderer.material = (Material)Resources.Load("Sprites/Materials/Water");
+			currentType = TileTypeEnum.water;
+			break;
+		}
+	}
 	/// <summary>
 	/// Recurse through tileset to find if we can reach all 4 edges
 	/// </summary>

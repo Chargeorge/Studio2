@@ -121,7 +121,15 @@ public class GameManager : MonoBehaviour {
 					thisAltar.transform.localPosition = new Vector3(0,0,-1);
 				
 				}
-				
+				else{
+					thisAltar.brdX = tiles.GetLength(0)/2;
+					thisAltar.brdY = tiles.GetLength(1)/2;
+
+					thisAltar.transform.parent = tiles[thisAltar.brdX, thisAltar.brdY].transform;
+					thisAltar.transform.localPosition = new Vector3(0,0,-1);
+				}
+
+
 			}
 			switch (gameMode){
 			case Mode.OneVOne:
@@ -159,7 +167,10 @@ public class GameManager : MonoBehaviour {
 				
 			}
 						
-			
+			//Remove whater where it's bad
+
+
+
 			setup = false;
 			
 		}
