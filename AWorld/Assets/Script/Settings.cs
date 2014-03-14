@@ -38,6 +38,7 @@ public class Settings : MonoBehaviour {
 	public Vector2 team2Start = new Vector2(4,4);
 	public int optPerlinLevel = 3700;
 	public float valPointsToWin = 300;
+	public int beaconNoBuildRange = 2;
 
 	public bool debugMode = true;
 	// Use this for initialization

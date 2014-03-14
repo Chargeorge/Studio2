@@ -75,6 +75,7 @@ public class Player : MonoBehaviour {
 		_prfbBeacon = (GameObject)Resources.Load("Prefabs/Beacon");
 		sRef = GameObject.Find ("Settings").GetComponent<Settings>();
 		gm = GameObject.Find ("GameManager").GetComponent<GameManager>();
+<<<<<<< HEAD
 		gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>().Reveal (_vision, gm);
 
 		if(PlayerNumber == 1){
@@ -84,6 +85,9 @@ public class Player : MonoBehaviour {
 			scoreTexture = gm.scoreTexture2;
 			winTexture = gm.winTexture2;
 		}
+=======
+		gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>().Reveal (_vision);
+>>>>>>> Added beacon no-build zone
 	}
 	
 	
@@ -193,7 +197,11 @@ public class Player : MonoBehaviour {
 								currentTile.getLocalAltar().doCapture(team);
 								
 							}
-							else if(currentTile.beacon == null || currentTile.beacon.GetComponent<Beacon>().percActionComplete < 100f && currentTile.getLocalAltar()== null){
+							else if((currentTile.beacon == null || 
+									currentTile.beacon.GetComponent<Beacon>().percActionComplete < 100f && 
+									currentTile.getLocalAltar()== null) && 
+									!currentTile.tooCloseToBeacon())
+							{
 								Pulsate ();
 								_currentState = PlayerState.building;
 								float vpsBuildRate = sRef.vpsBaseBuild;
@@ -233,7 +241,7 @@ public class Player : MonoBehaviour {
 			//if it completes, move to next tile, set state to standing
 			case PlayerState.moving:
 			
-				currentTile.Reveal (_vision, gm);
+				currentTile.Reveal (_vision);
 			
 				if (x.HasValue) {
 					setDirection(x.Value);	//Still need a 4-directional facing for building/rotating beacons
@@ -497,7 +505,7 @@ public class Player : MonoBehaviour {
 	//Not used with free movement.
 	public void DoMove(BaseTile MoveTo){
 		grdLocation = new Vector2(MoveTo.brdXPos, MoveTo.brdYPos);
-		gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>().Reveal (_vision, gm);
+		gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>().Reveal (_vision);
 	}
 	
 	/// <summary>;

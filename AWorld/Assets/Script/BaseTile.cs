@@ -699,7 +699,7 @@ public class BaseTile : MonoBehaviour {
 
 		}
 		
-		Reveal (_influenceRevealRange, GameObject.Find ("GameManager").GetComponent<GameManager>());
+		Reveal (_influenceRevealRange);
 		
 	}
 	public void clearInfluence(){
@@ -732,11 +732,11 @@ public class BaseTile : MonoBehaviour {
 	/// </summary>																 x
 	/// <param name="range">The maximum distance at which new tiles should be revealed. Ex 1 = xox</param>
 	///																			 x
-	public void Reveal (int range, GameManager gm) {
+	public void Reveal (int range) {
 		for (int i = range * -1; i <= range; i++){
 			for (int j = (range - Mathf.Abs (i)) * -1; j <= range - Mathf.Abs (i); j++) {
 				GameObject tile;
-				try { tile = gm.tiles[_brdXPos + j, _brdYPos + i]; }
+				try { tile = GameObject.Find ("GameManager").GetComponent<GameManager>().tiles[_brdXPos + j, _brdYPos + i]; }
 				catch { tile = null; }
 				if (tile != null) {
 					tile.GetComponent<BaseTile>().IsRevealed = true;
@@ -767,5 +767,22 @@ public class BaseTile : MonoBehaviour {
 	
 	public float getTileScore(){
 		return sRef.valTileConvertScore;
+	}
+	
+	public bool tooCloseToBeacon() {
+		for (int i = sRef.beaconNoBuildRange * -1; i <= sRef.beaconNoBuildRange; i++){
+			for (int j = (sRef.beaconNoBuildRange - Mathf.Abs (i)) * -1; j <= sRef.beaconNoBuildRange - Mathf.Abs (i); j++) {
+				GameObject tile;
+				try { tile = GameObject.Find ("GameManager").GetComponent<GameManager>().tiles[_brdXPos + j, _brdYPos + i]; }
+				catch { tile = null; }
+				if (tile != null && 
+					tile.GetComponent<BaseTile>().beacon != null && 
+					tile.GetComponent<BaseTile>().beacon.GetComponent<Beacon>().currentState != BeaconState.BuildingBasic) 
+				{
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }
