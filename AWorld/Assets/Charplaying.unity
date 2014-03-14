@@ -619,7 +619,7 @@ MonoBehaviour:
   boardY: 20
   numberOfAltars: 0
   ranjitRangeTileTypes: 
-  fogOn: 1
+  fogOn: 0
 --- !u!4 &1669248506
 Transform:
   m_ObjectHideFlags: 0
@@ -795,6 +795,7 @@ MonoBehaviour:
   valTileConvertScore: 1
   team1Start: {x: 1, y: 1}
   team2Start: {x: 39, y: 19}
+  optPerlinLevel: 1700
   debugMode: 1
 --- !u!4 &1843163359
 Transform:

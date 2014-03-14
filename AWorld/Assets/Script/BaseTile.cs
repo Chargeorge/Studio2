@@ -669,7 +669,7 @@ public class BaseTile : MonoBehaviour {
 			for (int j = (range - Mathf.Abs (i)) * -1; j <= range - Mathf.Abs (i); j++) {
 				GameObject tile;
 				try { tile = gm.tiles[_brdXPos + j, _brdYPos + i]; }
-				catch { break; }
+				catch { tile = null; }
 				if (tile != null) {
 					tile.GetComponent<BaseTile>().IsRevealed = true;
 				}		
