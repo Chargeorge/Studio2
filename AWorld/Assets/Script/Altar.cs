@@ -50,7 +50,7 @@ public class Altar : MonoBehaviour {
 	void Start () {
 		_lockedLayer = transform.FindChild("LockedLayer").gameObject;
 		isLocked = false;
-		sRef = GameObject.Find ("Settings").GetComponent<Settings>();
+		sRef = Settings.SettingsInstance;
 		//TODO OHH GOD THIS IS BAD I SHOULDN'T DO THIS
 //		altarType = GameManager.GetRandomEnum<AltarType>();
 		Debug.Log("altar: " +altarType.ToString());

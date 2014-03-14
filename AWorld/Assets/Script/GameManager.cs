@@ -61,17 +61,18 @@ public class GameManager : MonoBehaviour {
 				Debug.Log ("in Altar");		
 				GameObject a = (GameObject)Instantiate(prfbAltar, Vector3.zero, Quaternion.identity);
 				Altar aObj = a.GetComponent<Altar>();
+				aObj.setControl(null);
 //				
-//				int index = Random.Range (0, altarTypes.Count);
-//				aObj.altarType = altarTypes[index];
-//				altarTypes.RemoveAt (index);		
-//				
+				int index = Random.Range (0, altarTypes.Count);
+				aObj.altarType = altarTypes[index];
+				altarTypes.RemoveAt (index);
+				altars.Add (aObj.gameObject);
+				//				altars.Add (aObj.gameObject);
 //				//		aObj.brdX = Random.Range(0, tiles.GetLength(0));
 //				//		aObj.brdY = Random.Range(0, tiles.GetLength(1));
 //				aObj.brdX = (tiles.GetLength(0) - 1 - i*7)-8;	//Temp
 //				aObj.brdY = i*3+3;	//Temp
-//				aObj.gm = this;
-//				aObj.sRef = sRef;
+
 //				aObj.setControl(null);
 //				aObj.transform.parent = tiles[aObj.brdX, aObj.brdY].transform;
 //				aObj.transform.localPosition = new Vector3(0,0,-1);
@@ -82,25 +83,43 @@ public class GameManager : MonoBehaviour {
 				Debug.Log ("in Altar");		
 				GameObject a = (GameObject)Instantiate(prfbAltar, Vector3.zero, Quaternion.identity);
 				Altar aObj = a.GetComponent<Altar>();
-				
+
 				
 			}
 			int absoluteMagnitude;
-			absoluteMagnitude = Mathf.RoundToInt(Random.Range(10f, (new Vector2(tiles.GetLength(0), tiles.GetLength(1)).magnitude)/2));
+			absoluteMagnitude = Mathf.RoundToInt(Random.Range(10f, (new Vector2(tiles.GetLength(0), tiles.GetLength(1)).magnitude)*.75f));
 
 			for (int i = 0; i< numAltars; i++){
 				Altar thisAltar = altars[i].GetComponent<Altar>();
 				if(i != numAltars -1){
 					if(i % 2 == 0){
-						absoluteMagnitude = Mathf.RoundToInt(Random.Range(10f, (new Vector2(tiles.GetLength(0), tiles.GetLength(1)).magnitude)/2));
+						absoluteMagnitude = Mathf.RoundToInt(Random.Range(10f, (new Vector2(tiles.GetLength(0), tiles.GetLength(1)).magnitude)*.75f));
 					}
 					int x, y;
 					//x^2 + y^2 = absoluteMag^2
-					x = Mathf.RoundToInt(Random.Range(0f, Mathf.Sqrt(absoluteMagnitude)));
+					
+					x = Mathf.RoundToInt(Random.Range(0f, absoluteMagnitude));
 					y = Mathf.RoundToInt(Mathf.Sqrt(absoluteMagnitude * absoluteMagnitude - x*x));
-					thisAltar.brdX = x;
-					thisAltar.brdY = y;
 
+					while(y >= tiles.GetLength(1)){
+						x = Mathf.RoundToInt(Random.Range(0f, absoluteMagnitude));
+						y = Mathf.RoundToInt(Mathf.Sqrt(absoluteMagnitude * absoluteMagnitude - x*x));
+
+					}
+
+					if(i % 2 == 1){
+						thisAltar.brdX = y;
+						thisAltar.brdY = x;
+						absoluteMagnitude = Mathf.RoundToInt(Random.Range(15f, (new Vector2(tiles.GetLength(0), tiles.GetLength(1)).magnitude)*.75f));
+					}
+					else{
+						thisAltar.brdX = tiles.GetLength(0)-1-x;
+						thisAltar.brdY = tiles.GetLength(1)-1-y;
+					}
+					Debug.Log (string.Format("Altar created at({0}, {1})", thisAltar.brdX, thisAltar.brdY));
+					thisAltar.transform.parent = tiles[thisAltar.brdX, thisAltar.brdY].transform;
+					thisAltar.transform.localPosition = new Vector3(0,0,-1);
+				
 				}
 				
 			}

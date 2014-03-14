@@ -379,7 +379,7 @@ MonoBehaviour:
   prfbAltar: {fileID: 0}
   prfbHome: {fileID: 0}
   altars: []
-  numAltars: 4
+  numAltars: 5
   debugString: 
 --- !u!4 &842739088
 Transform:
@@ -793,9 +793,9 @@ MonoBehaviour:
   optLockTile: 0
   optTilesGiveScore: 1
   valTileConvertScore: 1
-  team1Start: {x: 1, y: 1}
+  team1Start: {x: 0, y: 0}
   team2Start: {x: 39, y: 19}
-  optPerlinLevel: 1700
+  optPerlinLevel: 1500
   debugMode: 1
 --- !u!4 &1843163359
 Transform:
