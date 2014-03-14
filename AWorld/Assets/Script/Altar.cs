@@ -69,7 +69,7 @@ public class Altar : MonoBehaviour {
 			if(networked){
 				_currentControllingTeam.score += sRef.vpsScorePerAltarPerSecond * Time.deltaTime;
 			}
-			gm.debugString = string.Format("ControllingTeam Number: {0}, Networked: {1}", _currentControllingTeam.teamNumber, networked);
+			gm.debugString = string.Format(" Number: {0},\r\n Networked: {1}", _currentControllingTeam.teamNumber, networked);
 		}
 		
 		transform.GetComponent<MeshRenderer>().enabled = gm.tiles[brdX, brdY].GetComponent<BaseTile>().IsRevealed;

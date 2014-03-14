@@ -790,7 +790,7 @@ MonoBehaviour:
   scoreOnCapture: 50
   vpsScorePerSecond: 3
   vpsBeaconBaseInfluence: 100
-  optLockTile: 1
+  optLockTile: 0
   optTilesGiveScore: 1
   valTileConvertScore: 1
   team1Start: {x: 1, y: 1}
