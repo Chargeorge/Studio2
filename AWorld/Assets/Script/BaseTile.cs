@@ -218,7 +218,6 @@ public class BaseTile : MonoBehaviour {
 			if (percControlled >= 100f) controllingTeamColor.a = (byte) 255;
 			
 			qudInfluenceLayer.renderer.material.color = controllingTeamColor;
-			
 			qudInfluenceLayer.GetComponent<MeshRenderer>().enabled = true;
 		}
 		else{

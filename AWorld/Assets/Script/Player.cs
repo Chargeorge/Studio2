@@ -232,7 +232,7 @@ public class Player : MonoBehaviour {
 					
 					if (!outOfBounds(posToCheck) && 
 						!tooCloseToOpponent(posToCheck) &&
-						(!onWater(posToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti))) 
+						(!onWater(posToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti)) || currentTile.currentType == TileTypeEnum.water) 
 					{	//Valid move
 						gm.PlaySFX(playerMove, 0.8f);
 						transform.position = posToCheck;
