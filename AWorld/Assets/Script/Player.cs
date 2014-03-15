@@ -36,6 +36,9 @@ public class Player : MonoBehaviour {
 	public AudioClip beaconBuilding;
 	public AudioClip beaconBuilt;
 
+	public float scoreBarH = 30;
+	public Texture scoreTexture;
+
 	public PlayerState currentState {
 		get {
 			return _currentState;
@@ -72,6 +75,12 @@ public class Player : MonoBehaviour {
 		sRef = GameObject.Find ("Settings").GetComponent<Settings>();
 		gm = GameObject.Find ("GameManager").GetComponent<GameManager>();
 		gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>().Reveal (_vision, gm);
+
+		if(PlayerNumber == 1){
+			scoreTexture = gm.scoreTexture1;
+		} else {
+			scoreTexture = gm.scoreTexture2;
+		}
 	}
 	
 	
@@ -683,7 +692,17 @@ public class Player : MonoBehaviour {
 	/// <summary>
 	/// ONLY used for debug for player
 	/// </summary>
+
+
+
 	private void OnGUI(){
+
+		float perScore = team.score / sRef.valPointsToWin;
+
+		GUI.DrawTexture(new Rect(0,(Screen.height - scoreBarH)*(PlayerNumber-1), Screen.width, scoreBarH), gm.scoreBgTexture, ScaleMode.StretchToFill, true, 1.0f);
+		GUI.DrawTexture(new Rect(0,(Screen.height - scoreBarH)*(PlayerNumber-1), Screen.width * perScore, scoreBarH), scoreTexture, ScaleMode.StretchToFill, true, 1.0f);
+
+		if(gm.debugGUI == true){
 		switch (gm.currentState){
 		case GameState.playing:
 			if(sRef.debugMode){
@@ -693,7 +712,7 @@ public class Player : MonoBehaviour {
 		case GameState.gameWon:
 			break;
 		}
-		
+		}
 	}
 		
 	private float getTileSpeedBoost(BaseTile tile) {

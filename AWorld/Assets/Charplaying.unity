@@ -74,6 +74,45 @@ NavMeshSettings:
     widthInaccuracy: 16.666666
     heightInaccuracy: 10
   m_NavMesh: {fileID: 0}
+--- !u!1 &157903927
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 157903929}
+  - 114: {fileID: 157903928}
+  m_Layer: 0
+  m_Name: GUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &157903928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 157903927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbf98c13471d6bb45b5bcb58a7cb2d7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  icon: {fileID: 0}
+--- !u!4 &157903929
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 157903927}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 16.939415, y: 4.65578651, z: 7.57425213}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
 --- !u!1 &473215124
 GameObject:
   m_ObjectHideFlags: 0
@@ -381,6 +420,10 @@ MonoBehaviour:
   altars: []
   numAltars: 5
   debugString: 
+  debugGUI: 0
+  scoreBgTexture: {fileID: 2800000, guid: 701131cd029900d41837b1e5331c8d2a, type: 3}
+  scoreTexture1: {fileID: 2800000, guid: 7975d3be5c2eca1449aa9826e03e8769, type: 3}
+  scoreTexture2: {fileID: 2800000, guid: 8c3ccad306e620c4ab538382e4aea647, type: 3}
 --- !u!4 &842739088
 Transform:
   m_ObjectHideFlags: 0
@@ -796,6 +839,7 @@ MonoBehaviour:
   team1Start: {x: 0, y: 0}
   team2Start: {x: 39, y: 19}
   optPerlinLevel: 1500
+  valPointsToWin: 300
   debugMode: 1
 --- !u!4 &1843163359
 Transform:

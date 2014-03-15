@@ -37,6 +37,11 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 	private string _victoryString;
+	public bool debugGUI;
+	public Texture scoreBgTexture;
+	public Texture scoreTexture1;
+	public Texture scoreTexture2;
+
 
 	// Use this for initializatio
 	void Start () {
@@ -236,6 +241,8 @@ public class GameManager : MonoBehaviour {
 	}
 	
 	void OnGUI(){
+
+		if(debugGUI == true){
 		switch(_currentState){
 		
 			case GameState.playing:{
@@ -259,6 +266,7 @@ public class GameManager : MonoBehaviour {
 				break;
 			}
 		
+		}
 		}
 	}
 
