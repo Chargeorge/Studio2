@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour {
 	public Texture scoreBgTexture;
 	public Texture scoreTexture1;
 	public Texture scoreTexture2;
-
+	private GameObject prfbBeacon;
 
 	// Use this for initializatio
 	void Start () {
@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour {
 		prfbPlayer = (GameObject)Resources.Load("Prefabs/Player");
 		prfbAltar = (GameObject)Resources.Load("Prefabs/Altar");
 		prfbHome = (GameObject)Resources.Load ("Prefabs/Home");
-		
+		prfbBeacon = (GameObject)Resources.Load ("Prefabs/Beacon");
 		altars= new List<GameObject>();
 		victoryConditions = new List<VictoryCondition>();
 		teams = new List<TeamInfo>();
@@ -190,6 +190,16 @@ public class GameManager : MonoBehaviour {
 				Altar A = altarGO.GetComponent<Altar>();
 				checkFlipWater(A.brdX, A.brdY);
 			});
+
+			for(int beaconsBuilt = 0; beaconsBuilt < sRef.neutralBeaconCount; beaconsBuilt ++){
+				int x= Random.Range(0, tiles.GetLength(0));
+				int y = Random.Range(0, tiles.GetLength(1));
+
+				while(!addNeutralBeacon(x,y)) {
+					 x= Random.Range(0, tiles.GetLength(0));
+					 y = Random.Range(0, tiles.GetLength(1));
+				} ///Weird placeholder, just go till you find a decent spot
+			}
 			setup = false;
 			
 		}
@@ -243,30 +253,30 @@ public class GameManager : MonoBehaviour {
 	void OnGUI(){
 
 		if(debugGUI == true){
-		switch(_currentState){
-		
-			case GameState.playing:{
-				if(sRef.debugMode){
-					if(debugMouse!=null){
-						GUI.Box (new Rect (10,100,200,90), string.Format("Mouse Over x:{0} y:{1}\r\nState: {2}\r\nPercentControlled: not yet ", debugMouse.brdXPos, debugMouse.brdYPos, debugMouse.currentState));
-						
+			switch(_currentState){
+			
+				case GameState.playing:{
+					if(sRef.debugMode){
+						if(debugMouse!=null){
+							GUI.Box (new Rect (10,100,200,90), string.Format("Mouse Over x:{0} y:{1}\r\nState: {2}\r\nPercentControlled: not yet ", debugMouse.brdXPos, debugMouse.brdYPos, debugMouse.currentState));
+							
+						}
+						if(debugBeacon !=null){
+							GUI.Box (new Rect (10,200,200,90), string.Format(" team {0} controlling\r\nstate: {1}", debugBeacon.controllingTeam.teamNumber, debugBeacon.currentState));
+						}
+						if(debugString != ""){
+							GUI.Box (new Rect (210,100,200,90), debugString);
+							
+						}
 					}
-					if(debugBeacon !=null){
-						GUI.Box (new Rect (10,200,200,90), string.Format(" team {0} controlling\r\nstate: {1}", debugBeacon.controllingTeam.teamNumber, debugBeacon.currentState));
-					}
-					if(debugString != ""){
-						GUI.Box (new Rect (210,100,200,90), debugString);
-						
-					}
+					break;
 				}
-				break;
+				case GameState.gameWon:{
+					GUI.Box (new Rect (10,100,400,300), _victoryString);
+					break;
+				}
+			
 			}
-			case GameState.gameWon:{
-				GUI.Box (new Rect (10,100,400,300), _victoryString);
-				break;
-			}
-		
-		}
 		}
 	}
 
@@ -344,6 +354,25 @@ public class GameManager : MonoBehaviour {
 			return _instance;
 		}
 	}
+	/// <summary>
+	/// Adds the neutral beacon.
+	/// </summary>
+	/// <returns>If the beacon was succsefully added, if the location is invalid returns false</returns>
+	/// <param name="x">The x coordinate.</param>
+	/// <param name="y">The y coordinate.</param>
+	public bool addNeutralBeacon(int x, int y){
+		GameObject BT = tiles[x,y];
+		if(BT.GetComponent<BaseTile>().buildable()){
+			GameObject beacon = (GameObject)Instantiate(prfbBeacon, Vector3.zero, Quaternion.identity);
+			beacon.GetComponent<Beacon>().buildNeutral(BT);
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
+
 /**	
 	public List<AltarType> getNetworkedAltars(TeamInfo t){
 		List<AltarType> returnable = new List<AltarType>();

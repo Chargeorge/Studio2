@@ -39,7 +39,7 @@ public class Settings : MonoBehaviour {
 	public int optPerlinLevel = 3700;
 	public float valPointsToWin = 300;
 	public int beaconNoBuildRange = 2;
-
+	public int neutralBeaconCount = 12;
 	public bool debugMode = true;
 	// Use this for initialization
 	void Start () {

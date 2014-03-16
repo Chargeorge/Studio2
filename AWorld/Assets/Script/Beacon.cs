@@ -56,7 +56,7 @@ public class Beacon : MonoBehaviour {
 		
 		//This solution isn't "Correct" AKA, it doesn't resolve perfectly every frame, but over the aggregrate it should be correct
 		// We can move to fixed update to get closer to correct
-		if(_currentState == BeaconState.Basic || _currentState == BeaconState.BuildingAdvanced || _currentState == BeaconState.Advanced){
+		if((_currentState == BeaconState.Basic || _currentState == BeaconState.BuildingAdvanced || _currentState == BeaconState.Advanced) && controllingTeam != null){
 
 			//find nearest convertable block
 			//FIND The first convertable tile, list is ordered by distance
@@ -140,7 +140,21 @@ public class Beacon : MonoBehaviour {
 		tileLocation.GetComponent<BaseTile>().beacon = this.gameObject;
 
 	}
-	
+
+	public void buildNeutral(GameObject tileLocation){
+		this.gameObject.transform.parent = tileLocation.transform;
+		this.facing = (DirectionEnum)Random.Range(1,5);
+		this.dirRotatingToward = facing;
+		this._currentState	= BeaconState.Basic;
+		this.setTeam(null);
+		this.transform.localPosition = new Vector3(0f,0f,-.5f);
+		tileLocation.GetComponent<BaseTile>().beacon = this.gameObject;
+
+		_currentState = BeaconState.Basic;
+		_patternList = createBasicInfluenceList(getAngleForDir(facing));
+		
+	}
+
 	public void startUpgrading(){
 		this._currentState = BeaconState.BuildingAdvanced;
 	}
@@ -157,16 +171,21 @@ public class Beacon : MonoBehaviour {
 	}
 
 	public void setTeam(TeamInfo teamIn){
-		controllingTeam = teamIn;
-		Color32 controllingTeamColor = controllingTeam.teamColor;		
-		//TODO: custom sprites and colors per team
-		controllingTeamColor.a = (byte)(renderer.material.color.a * 255);
-		
-		controllingTeamColor.r += 30;
-		controllingTeamColor.g += 30;
-		controllingTeamColor.b += 30;
-		renderer.material.color = controllingTeamColor;
-		
+		if(teamIn != null){
+			controllingTeam = teamIn;
+			Color32 controllingTeamColor = controllingTeam.teamColor;		
+			//TODO: custom sprites and colors per team
+			controllingTeamColor.a = (byte)(renderer.material.color.a * 255);
+			
+			controllingTeamColor.r += 30;
+			controllingTeamColor.g += 30;
+			controllingTeamColor.b += 30;
+			renderer.material.color = controllingTeamColor;
+		}
+		else{
+			controllingTeam = null;
+			renderer.material.color = Color.grey;
+		}
 	}
 	
 	/// <summary>
@@ -241,7 +260,7 @@ public class Beacon : MonoBehaviour {
 		forwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,4), .25f, degreeRotated));
 
 		//Onixtal: Influence in non-facing directions at 25% strength
-		if (gm.getCapturedAltars(controllingTeam).Contains (AltarType.Onixtal)) {
+		if ( (controllingTeam != null) && gm.getCapturedAltars(controllingTeam).Contains (AltarType.Onixtal)) {
 
 			List<InfluencePatternHolder> rightInfluenceList = new List<InfluencePatternHolder>();
 			rightInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,1), 1f*sRef.coefOnixtal, degreeRotated + 90f));
@@ -266,7 +285,7 @@ public class Beacon : MonoBehaviour {
 		}
 		
 		//Tepwante: Influence beam is 3 tiles wide instead of 1 (currently not stacking with Onixtal)
-		if (gm.getCapturedAltars(controllingTeam).Contains (AltarType.Tepwante)) {
+		if (controllingTeam !=null &&  gm.getCapturedAltars(controllingTeam).Contains (AltarType.Tepwante)) {
 			List<InfluencePatternHolder> forwardLeftInfluenceList = new List<InfluencePatternHolder>();
 			forwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,1), 1f*sRef.coefTepwante, degreeRotated));
 			forwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,2), .5f*sRef.coefTepwante, degreeRotated));
