@@ -74,17 +74,15 @@ public class Player : MonoBehaviour {
 		_prfbBeacon = (GameObject)Resources.Load("Prefabs/Beacon");
 		sRef = GameObject.Find ("Settings").GetComponent<Settings>();
 		gm = GameObject.Find ("GameManager").GetComponent<GameManager>();
-<<<<<<< HEAD
-		gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>().Reveal (_vision);
-=======
-		gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>().Reveal (_vision, gm);
 
+		gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>().Reveal (_vision);
+	
 		if(PlayerNumber == 1){
 			scoreTexture = gm.scoreTexture1;
 		} else {
 			scoreTexture = gm.scoreTexture2;
 		}
->>>>>>> UI
+
 	}
 	
 	
