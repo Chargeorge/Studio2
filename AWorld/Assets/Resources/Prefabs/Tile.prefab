@@ -587,6 +587,7 @@ MonoBehaviour:
   beacon: {fileID: 0}
   currentState: 0
   currentType: 0
+  influenceDone: {fileID: 8300000, guid: 9b82f155a31324e43a49607da873b943, type: 3}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

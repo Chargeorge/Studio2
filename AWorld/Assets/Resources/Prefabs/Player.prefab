@@ -87,9 +87,13 @@ MonoBehaviour:
   sRef: {fileID: 0}
   facing: 0
   playerMove: {fileID: 8300000, guid: 8a285014a107dc84c947044aa6975df5, type: 3}
-  influenceStart: {fileID: 8300000, guid: 8a285014a107dc84c947044aa6975df5, type: 3}
+  influenceStart: {fileID: 8300000, guid: ecc33cb34487b2f42aeda4ab96b95613, type: 3}
+  influenceDone: {fileID: 8300000, guid: 9b82f155a31324e43a49607da873b943, type: 3}
   beaconBuilding: {fileID: 8300000, guid: 7f2413507f8566349b64490b2a2bf528, type: 3}
   beaconBuilt: {fileID: 8300000, guid: 20f685198359dcb419464a8a601d94e0, type: 3}
+  beaconRotating: {fileID: 8300000, guid: d7bd506ec09060b44987057319de4fbd, type: 3}
+  beaconUpgrading: {fileID: 8300000, guid: 9491ded75cb806440b66dc3436da4029, type: 3}
+  beaconUpgraded: {fileID: 8300000, guid: 2affab37327687f44843ec7e0d118c41, type: 3}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

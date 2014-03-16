@@ -31,10 +31,16 @@ public class Player : MonoBehaviour {
 	private float pulsateProgress;
 	private List<AltarType> altars;
 
+	bool isPlaying = false;
 	public AudioClip playerMove;
 	public AudioClip influenceStart;
+	public AudioClip influenceDone;
 	public AudioClip beaconBuilding;
 	public AudioClip beaconBuilt;
+	public AudioClip beaconRotating;
+	public AudioClip beaconUpgrading;
+	public AudioClip beaconUpgraded;
+	public AudioClip invalidInput;
 
 	public PlayerState currentState {
 		get {
@@ -90,7 +96,7 @@ public class Player : MonoBehaviour {
 
 		_positionOffset = new Vector2 (0,0);	//This can't possibly be the right way to do this - Josh
 				
-		switch( currentState){
+		switch(currentState){
 			
 			case PlayerState.standing:
 			//If we are standing and we get an input, handle it.
@@ -174,7 +180,7 @@ public class Player : MonoBehaviour {
 							Pulsate ();
 								_currentState = PlayerState.influencing;
 							}
-							
+													
 							//DO Tile Control 
 							else if(currentTile.getLocalAltar()!=null ){
 									
@@ -187,11 +193,12 @@ public class Player : MonoBehaviour {
 									!currentTile.tooCloseToBeacon())
 							{
 								Pulsate ();
+								
 								_currentState = PlayerState.building;
 								float vpsBuildRate = sRef.vpsBaseBuild;
 								addProgressToAction(vpsBuildRate);
 								
-								gm.PlaySFX(beaconBuilding, 1.0f);
+								
 								GameObject beaconBeingBuilt;
 								if (currentTile.beacon == null) { 
 									beaconBeingBuilt = (GameObject)GameObject.Instantiate(_prfbBeacon, new Vector3(0,0,0), Quaternion.identity);
@@ -210,7 +217,7 @@ public class Player : MonoBehaviour {
 					}
 					else{
 					Pulsate ();
-						gm.PlaySFX(influenceStart, 1.0f);
+						//gm.PlaySFX(influenceStart, 1.0f);
 						float vpsInfluenceRate = sRef.vpsBasePlayerInfluence * getAltarInfluenceBoost();
 						addProgressToAction(vpsInfluenceRate);
 						_currentState = PlayerState.influencing;
@@ -302,9 +309,9 @@ public class Player : MonoBehaviour {
 			case PlayerState.building:
 				if(buildButtonDown && currentTile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
 				//	Jiggle ();	//Gotta jiggle
-					Pulsate (); 
-					
-					//Debug.Log ("In Build");
+					Pulsate ();
+					gm.StopSFX();
+									//Debug.Log ("In Build");
 					if(currentTile.controllingTeam != null){
 //						Debug.Log ("current Team");
 						if(currentTile.controllingTeam.teamNumber == team.teamNumber){
@@ -332,7 +339,6 @@ public class Player : MonoBehaviour {
 					}
 					else
 					{
-						gm.StopSFX();
 						float vpsInfluenceRate = sRef.vpsBasePlayerInfluence;
 						addProgressToAction(vpsInfluenceRate);
 					}
@@ -382,6 +388,11 @@ public class Player : MonoBehaviour {
 							currentTile.clearInfluence();
 							currentActionProgress = 0;
 						}*/
+
+						if(currentTile.percControlled >= 100f){
+						Debug.Log ("INLFUENCE DONE");
+							gm.PlaySFX(influenceDone, 1.0f);
+						}
 						
 						if (x.HasValue) { 
 							setDirection (x.Value);
@@ -395,8 +406,8 @@ public class Player : MonoBehaviour {
 				else{
 				///TODO: add reset to tile in case of change
 					//need to reset currenttile to previousState
-					_currentState = PlayerState.standing;
 					gm.StopSFX();
+					_currentState = PlayerState.standing;
 				}	
 			break;
 			
@@ -405,7 +416,7 @@ public class Player : MonoBehaviour {
 				if (buildButtonDown) {
 				
 					Pulsate ();
-					
+					gm.PlaySFX(beaconRotating, 1.0f);
 					float vpsRotateRate = sRef.vpsBaseRotate;
 					addProgressToAction (vpsRotateRate);
 					Beacon beacon = currentTile.beacon.GetComponent<Beacon>();
@@ -438,7 +449,7 @@ public class Player : MonoBehaviour {
 				if (buildButtonDown) {
 				
 					Pulsate ();
-					
+					gm.PlaySFX(beaconUpgrading, 1.0f);
 					float vpsUpgradeRate = sRef.vpsBaseUpgrade;
 					addProgressToAction (vpsUpgradeRate);
 					Beacon beacon = currentTile.beacon.GetComponent<Beacon>();
@@ -452,6 +463,7 @@ public class Player : MonoBehaviour {
 						beacon.percUpgradeComplete = 0f;
 						_currentState = PlayerState.standing;
 						gm.StopSFX ();
+						gm.PlaySFX(beaconUpgraded, 1.0f);
 						
 					}
 					

@@ -25,6 +25,8 @@ public class BaseTile : MonoBehaviour {
 	public List<AStarholder> networkToBase;
 	private GameObject _qudFogLayer;
 
+	public AudioClip influenceDone;
+
 	public GameObject qudFogLayer {
 		get {
 			if(_qudFogLayer == null){
@@ -653,6 +655,7 @@ public class BaseTile : MonoBehaviour {
 		}
 		if(percControlled >100f){
 			float returnable =  percControlled -100f;
+			gm.PlaySFX(influenceDone, 0.7f);
 			finishInfluence();
 			return returnable;
 		}

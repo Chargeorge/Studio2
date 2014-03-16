@@ -23,7 +23,7 @@ public class Beacon : MonoBehaviour {
 		}
 	}
 
-	public AudioClip beaconInfluencing;
+	public AudioClip beaconInfluenceProgress;
 	public AudioClip beaconBuilt;
 
 	private Material matBasic;
@@ -66,6 +66,7 @@ public class Beacon : MonoBehaviour {
 				bool waterFound = false;
 				list.ForEach(delegate (InfluencePatternHolder p){
 					if (!waterFound) {
+						gm.PlaySFX(beaconInfluenceProgress, 1.0f);
 						if(influenceThisFrame > 0f){
 							int x = (int)brdX + (int)Mathf.RoundToInt(p.relCoordRotated.x);
 							int y = (int)brdY + (int)Mathf.RoundToInt(p.relCoordRotated.y);
@@ -175,19 +176,22 @@ public class Beacon : MonoBehaviour {
 	/// <param name="rate">Rate.</param>
 	public void addBuildingProgress(float rate){
 		percActionComplete += rate*Time.deltaTime;
-
-				
+						
 		Color32 beaconColor = renderer.material.color;
 		float newColor =  (255f * (percActionComplete/100f)) ;
 		newColor = (newColor >= 255) ? 254 : newColor;		
 		beaconColor.a = (byte)newColor;
 		renderer.material.color = beaconColor;		
-		
+
+		if(percActionComplete >= 100){
+			gm.PlaySFX(beaconBuilt, 1.0f);
+		}
 
 	}
 	
 	public void addInfluenceProgress(float rate){
 		percInfluenceComplete += rate*Time.deltaTime;
+
 		//Debug.Log(percControlled);
 	}
 	
@@ -211,9 +215,11 @@ public class Beacon : MonoBehaviour {
 		
 		if(percActionComplete >= 100f){
 			percActionComplete = 100f;
+
 			
 			if(_currentState == BeaconState.BuildingBasic){
 
+				gm.PlaySFX(beaconInfluenceProgress, 1.0f);
 				_currentState = BeaconState.Basic;
 				_patternList = createBasicInfluenceList(getAngleForDir(facing));
 				
