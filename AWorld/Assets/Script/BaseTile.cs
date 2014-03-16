@@ -785,4 +785,20 @@ public class BaseTile : MonoBehaviour {
 		}
 		return false;
 	}
+
+	public bool buildable(){
+		if(transform.Find ("Altar") != null){
+			return false;
+		}
+		if(currentType ==TileTypeEnum.water){
+			return false;
+		}
+		if(gm.teams[0].startingLocation.x ==brdXPos && gm.teams[0].startingLocation.y ==brdYPos){
+			return false;
+		}
+		if(gm.teams[1].startingLocation.x ==brdXPos && gm.teams[1].startingLocation.y ==brdYPos){
+			return false;
+		}
+		return true;
+	}
 }
