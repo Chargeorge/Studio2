@@ -75,8 +75,8 @@ public class Player : MonoBehaviour {
 		_prfbBeacon = (GameObject)Resources.Load("Prefabs/Beacon");
 		sRef = GameObject.Find ("Settings").GetComponent<Settings>();
 		gm = GameObject.Find ("GameManager").GetComponent<GameManager>();
-<<<<<<< HEAD
-		gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>().Reveal (_vision, gm);
+
+
 
 		if(PlayerNumber == 1){
 			scoreTexture = gm.scoreTexture1;
@@ -85,9 +85,7 @@ public class Player : MonoBehaviour {
 			scoreTexture = gm.scoreTexture2;
 			winTexture = gm.winTexture2;
 		}
-=======
-		gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>().Reveal (_vision);
->>>>>>> Added beacon no-build zone
+
 	}
 	
 	
