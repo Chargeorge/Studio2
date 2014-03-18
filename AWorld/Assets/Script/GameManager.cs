@@ -324,7 +324,7 @@ public class GameManager : MonoBehaviour {
 		altars.ForEach(delegate (GameObject ToCheckGO) {
 			Altar ToCheck = ToCheckGO.GetComponent<Altar>();
 			if(ToCheck.currentControllingTeam != null){
-				if( (ToCheck.currentControllingTeam.teamNumber == t.teamNumber && ToCheck.isLocked) || (ToCheck.currentControllingTeam.teamNumber == t.teamNumber && !sRef.optLockTile)  ) {
+				if( (ToCheck.currentControllingTeam.teamNumber == t.teamNumber && ToCheck.isLocked) || (ToCheck.currentControllingTeam.teamNumber == t.teamNumber && ToCheck.networked && !sRef.optLockTile)  ) {
 					returnable.Add(ToCheck.altarType);
 				}
 			}
