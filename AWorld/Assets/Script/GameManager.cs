@@ -142,20 +142,35 @@ public class GameManager : MonoBehaviour {
 
 			}
 			switch (gameMode){
-			case Mode.OneVOne:
+			case Mode.OneVOne:{
 				_currentState = GameState.playing;
 				GameObject Player1 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
 				GameObject Player2 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
+				GameObject Player3 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
+				GameObject Player4 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
+
 				Player p1 = Player1.GetComponent<Player>();
 				Player p2 = Player2.GetComponent<Player>();
+				Player p3 = Player3.GetComponent<Player>();
+				Player p4 = Player4.GetComponent<Player>();
+
 				p1.SetTeam(TeamInfo.GetTeamInfo(1));
-				p2.SetTeam(TeamInfo.GetTeamInfo(2));
+				p2.SetTeam(p1.team);
+
+				p3.SetTeam(TeamInfo.GetTeamInfo(2));
+				p4.SetTeam(p3.team);
 				teams.Add(p1.team);
-				teams.Add(p2.team);
+				teams.Add(p3.team);
 				p1.PlayerNumber = 1;
 				p2.PlayerNumber = 2;
+
+				p3.PlayerNumber = 3;
+				p4.PlayerNumber = 4;
 				players.Add(Player1);
 				players.Add(Player2);
+				
+				players.Add(Player3);
+				players.Add(Player4);
 				
 			
 				
@@ -170,11 +185,36 @@ public class GameManager : MonoBehaviour {
 				victoryConditions.Add (new ControlViaTime(1));
 				victoryConditions.Add (new NetworkEnemyBase(1));
 				break;
+			}
+			case Mode.TwoVTwo:{
+				_currentState = GameState.playing;
+				GameObject Player1 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
+				GameObject Player2 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
+				Player p1 = Player1.GetComponent<Player>();
+				Player p2 = Player2.GetComponent<Player>();
+				p1.SetTeam(TeamInfo.GetTeamInfo(1));
+				p2.SetTeam(TeamInfo.GetTeamInfo(2));
+				teams.Add(p1.team);
+				teams.Add(p2.team);
+				p1.PlayerNumber = 1;
+				p2.PlayerNumber = 2;
+				players.Add(Player1);
+				players.Add(Player2);
 				
-			case Mode.TwoVTwo:
 				
+				
+				//steps to ensure validity
+				team1Home = setUpTeamHome(p1);
+				team2Home = setUpTeamHome(p2);
+				
+				//
+				
+				
+				//victoryConditions.Add (new LockMajorityAltars(1) );
+				victoryConditions.Add (new ControlViaTime(1));
+				victoryConditions.Add (new NetworkEnemyBase(1));				
 				break;
-				
+			}
 			}
 			//Check for any homebase islands, if so regenerate
 			//Check for fairness?  

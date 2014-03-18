@@ -41,6 +41,7 @@ public class Settings : MonoBehaviour {
 	public int beaconNoBuildRange = 2;
 	public int neutralBeaconCount = 12;
 	public bool debugMode = true;
+	public Mode gameMode = Mode.OneVOne;
 	// Use this for initialization
 	void Start () {
 	
