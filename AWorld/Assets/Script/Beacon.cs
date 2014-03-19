@@ -171,8 +171,7 @@ public class Beacon : MonoBehaviour {
 	}
 
 	public void setTeam(TeamInfo teamIn){
-<<<<<<< HEAD
-		controllingTeam = teamIn;
+	if(teamIn != null){controllingTeam = teamIn;
 		Color32 controllingTeamColor = controllingTeam.beaconColor;		
 		//TODO: custom sprites and colors per team
 		controllingTeamColor.a = (byte)(renderer.material.color.a * 255);
@@ -180,26 +179,11 @@ public class Beacon : MonoBehaviour {
 //		controllingTeamColor.r += 30;
 //		controllingTeamColor.g += 30;
 //		controllingTeamColor.b += 30;
-		renderer.material.color = controllingTeamColor;
-		
-=======
-		if(teamIn != null){
-			controllingTeam = teamIn;
-			Color32 controllingTeamColor = controllingTeam.teamColor;		
-			//TODO: custom sprites and colors per team
-			controllingTeamColor.a = (byte)(renderer.material.color.a * 255);
-			
-			controllingTeamColor.r += 30;
-			controllingTeamColor.g += 30;
-			controllingTeamColor.b += 30;
-			renderer.material.color = controllingTeamColor;
-		}
+		renderer.material.color = controllingTeamColor;		}
 		else{
 			controllingTeam = null;
 			renderer.material.color = Color.grey;
-		}
->>>>>>> Added neutral beacon
-	}
+		}	}
 	
 	/// <summary>
 	/// Adds progress to the current building action
