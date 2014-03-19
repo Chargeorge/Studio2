@@ -146,25 +146,25 @@ public class Beacon : MonoBehaviour {
 	}
 	
 	public void setTeam(){
-		Color32 controllingTeamColor = controllingTeam.teamColor;		
+		Color32 controllingTeamColor = controllingTeam.beaconColor;		
 		//TODO: custom sprites and colors per team
 		controllingTeamColor.a = 0;
-		controllingTeamColor.r += 30;
-		controllingTeamColor.g += 30;
-		controllingTeamColor.b += 30;
+//		controllingTeamColor.r += 30;
+//		controllingTeamColor.g += 30;
+//		controllingTeamColor.b += 30;
 		renderer.material.color = controllingTeamColor;
 		
 	}
 
 	public void setTeam(TeamInfo teamIn){
 		controllingTeam = teamIn;
-		Color32 controllingTeamColor = controllingTeam.teamColor;		
+		Color32 controllingTeamColor = controllingTeam.beaconColor;		
 		//TODO: custom sprites and colors per team
 		controllingTeamColor.a = (byte)(renderer.material.color.a * 255);
 		
-		controllingTeamColor.r += 30;
-		controllingTeamColor.g += 30;
-		controllingTeamColor.b += 30;
+//		controllingTeamColor.r += 30;
+//		controllingTeamColor.g += 30;
+//		controllingTeamColor.b += 30;
 		renderer.material.color = controllingTeamColor;
 		
 	}

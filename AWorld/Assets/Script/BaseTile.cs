@@ -211,14 +211,15 @@ public class BaseTile : MonoBehaviour {
 		if(controllingTeam != null){
 			
 			qudInfluenceLayer.SetActive(true);
-			Color32 controllingTeamColor = controllingTeam.teamColor;
+			Color32 controllingTeamColor = controllingTeam.tileColor;
 			//controllingTeamColor.a = (byte) (255*(percControlled/100f));
 			
 			controllingTeamColor.a = (byte) (255*(percControlled/100f) * 0.5f);
+
 			if (percControlled >= 100f) controllingTeamColor.a = (byte) 255;
 			
 			qudInfluenceLayer.renderer.material.color = controllingTeamColor;
-			
+//			qudInfluenceLayer.renderer.material.color = controllingTeam.tileColor;			
 			qudInfluenceLayer.GetComponent<MeshRenderer>().enabled = true;
 		}
 		else{

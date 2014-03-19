@@ -97,7 +97,7 @@ public class Altar : MonoBehaviour {
 				}
 				
 			}else{
-				renderer.material.color = Color.gray;
+				renderer.material.color = new Color32(220, 30, 47, 255);
 			}
 		}
 			
