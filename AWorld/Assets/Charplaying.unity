@@ -583,7 +583,7 @@ MonoBehaviour:
   beaconNoBuildRange: 2
   neutralBeaconCount: 12
   debugMode: 1
-  gameMode: 1
+  gameMode: 0
 --- !u!4 &1843163359
 Transform:
   m_ObjectHideFlags: 0

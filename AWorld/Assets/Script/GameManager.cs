@@ -142,7 +142,7 @@ public class GameManager : MonoBehaviour {
 
 			}
 			switch (gameMode){
-			case Mode.OneVOne:{
+			case Mode.TwoVTwo:{
 				_currentState = GameState.playing;
 				GameObject Player1 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
 				GameObject Player2 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
@@ -186,7 +186,7 @@ public class GameManager : MonoBehaviour {
 				victoryConditions.Add (new NetworkEnemyBase(1));
 				break;
 			}
-			case Mode.TwoVTwo:{
+			case Mode.OneVOne:{
 				_currentState = GameState.playing;
 				GameObject Player1 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
 				GameObject Player2 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
