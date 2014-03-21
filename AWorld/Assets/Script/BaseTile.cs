@@ -632,10 +632,10 @@ public class BaseTile : MonoBehaviour {
 	public float subTractInfluence(float amt, TeamInfo subtractingTeam){
 		if(percControlled > 0){
 			percControlled -= amt;
-		}
-		if(percControlled >0){
+			
 			return 0f;
 		}
+
 		else{
 			float returnable = Math.Abs (percControlled);
 			flipInfluence(subtractingTeam);
@@ -661,8 +661,9 @@ public class BaseTile : MonoBehaviour {
 	
 	
 	public void flipInfluence(TeamInfo newTeam){
-		owningTeam.score -= getTileScore();
-		
+		if(owningTeam != null){
+			owningTeam.score -= getTileScore();
+		}
 		controllingTeam = newTeam;
 		percControlled = 0;
 		owningTeam = null;
@@ -679,25 +680,27 @@ public class BaseTile : MonoBehaviour {
 	}
 	public void finishInfluence(){
 		///TODO: add end semaphore stuff her
-		if(percControlled > 100f){
-			percControlled = 100f;
-			currentState = TileState.normal;
-		}
-		owningTeam = controllingTeam;
-		Beacon localBeacon = GetComponentInChildren<Beacon>();
-		Altar localAltar = GetComponentInChildren<Altar>();
-		owningTeam.score += getTileScore();
-		
-		if(localAltar !=null){
-			localAltar.setControl(owningTeam);
-		}
-		if(localBeacon!= null){
+		if(controllingTeam != owningTeam){
+			if(percControlled > 100f){
+				percControlled = 100f;
+				currentState = TileState.normal;
+			}
+			owningTeam = controllingTeam;
+			Beacon localBeacon = GetComponentInChildren<Beacon>();
+			Altar localAltar = GetComponentInChildren<Altar>();
+			owningTeam.score += getTileScore();
+			
+			if(localAltar !=null){
+				localAltar.setControl(owningTeam);
+			}
+			if(localBeacon!= null){
 
-			localBeacon.setTeam (owningTeam);
+				localBeacon.setTeam (owningTeam);
 
+			}
+			
+			Reveal (_influenceRevealRange);
 		}
-		
-		Reveal (_influenceRevealRange);
 		
 	}
 	public void clearInfluence(){

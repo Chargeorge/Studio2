@@ -105,7 +105,7 @@ public class Player : MonoBehaviour {
 			
 			case PlayerState.standing:
 			//If we are standing and we get an input, handle it.
-				
+			Debug.Log (string.Format("Player number {0}, buld button down: {1}", PlayerNumber, buildButtonDown));
 				if(x.HasValue && !buildButtonDown){
 				setDirection(x.Value);	//Still need a 4-directional facing for building/rotating beacons
 				Vector2 analogStickDirection = new Vector2 (getPlayerXAxis(), getPlayerYAxis());
@@ -127,7 +127,7 @@ public class Player : MonoBehaviour {
 				}
 				
 				//Rotating - doesn't fit with old comments or build button state diagram, but can hopefully be refactored later to fit better
-				if (buildButtonDown && 
+    				if (buildButtonDown && 
 					currentTile.beacon != null && 
 					facing != currentTile.beacon.GetComponent<Beacon>().facing && 
 				    (currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Basic || 			//Making sure the beacon is at least complete at basic level
@@ -364,9 +364,10 @@ public class Player : MonoBehaviour {
 					gm.PlaySFX(influenceStart, 1.0f);
 					if(currentTile.controllingTeam != null){
 						if(currentTile.controllingTeam.teamNumber  == teamNumber)
-						{
+						{                                      
 							//Debug.Log("Adding Influence");
 							float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBasePlayerInfluence * getAltarInfluenceBoost() * Time.deltaTime);
+							Debug.Log("test: " + test);
 							if(test > 0){
 								_currentState = PlayerState.standing;
 							}
