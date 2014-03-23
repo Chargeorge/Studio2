@@ -89,9 +89,10 @@ MonoBehaviour:
   gm: {fileID: 0}
   tileBeingConverted: {fileID: 0}
   sRef: {fileID: 0}
-  beaconInfluenceProgress: {fileID: 8300000, guid: 527a3d2a8b2ecab418643c6038da165f,
+  beaconInfluenceProgress: {fileID: 8300000, guid: bcff877a3b52fec49b09b9216a5b38eb,
     type: 3}
-  beaconBuilt: {fileID: 8300000, guid: 20f685198359dcb419464a8a601d94e0, type: 3}
+  beaconBuilding: {fileID: 8300000, guid: 6d5cea721a045f14d81cea941f96ced5, type: 3}
+  beaconBuilt: {fileID: 8300000, guid: 1f51dd9f8824c6546b3cb96f58295ba9, type: 3}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

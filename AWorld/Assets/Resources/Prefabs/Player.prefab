@@ -86,14 +86,15 @@ MonoBehaviour:
   gm: {fileID: 0}
   sRef: {fileID: 0}
   facing: 0
-  playerMove: {fileID: 8300000, guid: 8a285014a107dc84c947044aa6975df5, type: 3}
-  influenceStart: {fileID: 8300000, guid: ecc33cb34487b2f42aeda4ab96b95613, type: 3}
-  influenceDone: {fileID: 8300000, guid: 9b82f155a31324e43a49607da873b943, type: 3}
-  beaconBuilding: {fileID: 8300000, guid: 7f2413507f8566349b64490b2a2bf528, type: 3}
-  beaconBuilt: {fileID: 8300000, guid: 20f685198359dcb419464a8a601d94e0, type: 3}
-  beaconRotating: {fileID: 8300000, guid: d7bd506ec09060b44987057319de4fbd, type: 3}
-  beaconUpgrading: {fileID: 8300000, guid: 9491ded75cb806440b66dc3436da4029, type: 3}
-  beaconUpgraded: {fileID: 8300000, guid: 2affab37327687f44843ec7e0d118c41, type: 3}
+  playerMove: {fileID: 8300000, guid: 95aa64b173607c3408cbe271a4a202a0, type: 3}
+  influenceStart: {fileID: 8300000, guid: 8d530e0d00f99a344a4fa78fb2077595, type: 3}
+  influenceDone: {fileID: 8300000, guid: 4a33269aa3ad0714b991aeaf11ea431a, type: 3}
+  beaconBuilding: {fileID: 8300000, guid: 6d5cea721a045f14d81cea941f96ced5, type: 3}
+  beaconBuilt: {fileID: 8300000, guid: 1f51dd9f8824c6546b3cb96f58295ba9, type: 3}
+  beaconRotating: {fileID: 8300000, guid: c6cb66b0474b31949b668801a48003d7, type: 3}
+  beaconUpgrading: {fileID: 8300000, guid: fb6a91a49e05fe540b927759c3f6933e, type: 3}
+  beaconUpgraded: {fileID: 8300000, guid: 6946113de98ec8941b43b5e0aae58888, type: 3}
+  invalidInput: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

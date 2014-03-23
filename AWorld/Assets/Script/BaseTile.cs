@@ -655,7 +655,8 @@ public class BaseTile : MonoBehaviour {
 		}
 		if(percControlled >100f){
 			float returnable =  percControlled -100f;
-			gm.PlaySFX(influenceDone, 0.7f);
+			audio.Play();
+			audio.PlayOneShot(influenceDone);
 			finishInfluence();
 			return returnable;
 		}
@@ -685,6 +686,7 @@ public class BaseTile : MonoBehaviour {
 		if(percControlled > 100f){
 			percControlled = 100f;
 			currentState = TileState.normal;
+			gm.PlaySFX(influenceDone, 0.7f);
 		}
 		owningTeam = controllingTeam;
 		Beacon localBeacon = GetComponentInChildren<Beacon>();

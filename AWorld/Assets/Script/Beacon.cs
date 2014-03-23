@@ -24,6 +24,7 @@ public class Beacon : MonoBehaviour {
 	}
 
 	public AudioClip beaconInfluenceProgress;
+	public AudioClip beaconBuilding;
 	public AudioClip beaconBuilt;
 
 	private Material matBasic;
@@ -139,7 +140,6 @@ public class Beacon : MonoBehaviour {
 
 		this.transform.localPosition = new Vector3(0f,0f,-.5f);
 		tileLocation.GetComponent<BaseTile>().beacon = this.gameObject;
-
 	}
 	
 	public void startUpgrading(){

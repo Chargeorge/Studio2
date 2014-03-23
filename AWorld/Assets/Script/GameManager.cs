@@ -263,14 +263,26 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void PlaySFX(AudioClip clip, float volume){
-		audio.volume = volume;
 		audio.PlayOneShot(clip);
+
+		if(audio.volume <= volume){
+			audio.volume += 0.3f;
+		}
+		if(audio.volume >= volume){
+		audio.volume = volume;
+		}		
 	}
 
 	public void StopSFX(){
+		audio.volume -= 0.4f;
+		StartCoroutine(StopSFXCoroutine ());
+	}
+
+	public IEnumerator StopSFXCoroutine(){
+		yield return new WaitForSeconds(0.8f);
 		audio.Stop();
 	}
-	
+
 	private GameObject setUpTeamHome(Player example){
 		GameObject team1Home = (GameObject)Instantiate(prfbHome, Vector3.zero, Quaternion.identity);
 		team1Home.transform.parent= tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].transform;

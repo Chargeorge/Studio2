@@ -192,13 +192,13 @@ public class Player : MonoBehaviour {
 									currentTile.getLocalAltar()== null) && 
 									!currentTile.tooCloseToBeacon())
 							{
+									
 								Pulsate ();
 								
 								_currentState = PlayerState.building;
 								float vpsBuildRate = sRef.vpsBaseBuild;
 								addProgressToAction(vpsBuildRate);
-								
-								
+
 								GameObject beaconBeingBuilt;
 								if (currentTile.beacon == null) { 
 									beaconBeingBuilt = (GameObject)GameObject.Instantiate(_prfbBeacon, new Vector3(0,0,0), Quaternion.identity);
@@ -206,6 +206,7 @@ public class Player : MonoBehaviour {
 								else {
 									beaconBeingBuilt = currentTile.beacon;
 								}
+								
 								beaconInProgress = beaconBeingBuilt.GetComponent<Beacon>();
 								beaconInProgress.startBuilding(currentTile.gameObject, this.gameObject, vpsBuildRate);
 								beaconInProgress.setDirection(facing);
@@ -311,6 +312,7 @@ public class Player : MonoBehaviour {
 				//	Jiggle ();	//Gotta jiggle
 					Pulsate ();
 					gm.StopSFX();
+					
 									//Debug.Log ("In Build");
 					if(currentTile.controllingTeam != null){
 //						Debug.Log ("current Team");
@@ -325,7 +327,7 @@ public class Player : MonoBehaviour {
 								}
 								if(beaconInProgress.percActionComplete > 100f){
 								
-									gm.StopSFX();
+									//gm.StopSFX();
 									gm.PlaySFX(beaconBuilt, 1.0f);
 									beaconInProgress.finishAction();
 									_currentState = PlayerState.standing;
