@@ -36,7 +36,8 @@ public class TeamInfo
 				case 2:
 						returnable.teamColor = new Color32 (247, 180, 29, 255);
 						returnable.tileColor = new Color32 (247, 180, 29,255);
-						returnable.beaconColor = new Color32 (0, 165, 80, 255);
+				//		returnable.beaconColor = new Color32 (0, 165, 80, 255);
+						returnable.beaconColor = new Color32 (240, 139, 32, 255);
 						returnable.startingLocation = Settings.SettingsInstance.team2Start;
 						returnable.teamNumber = teamNumber;
 						break;
@@ -51,7 +52,7 @@ public class TeamInfo
 //		HighlightColor.b-=100;
 //		HighlightColor.g-=100;
 
-		Color32 HighlightColor = new Color32(0,0,0,255);
+		Color32 HighlightColor = new Color32(7, 65, 131,255);
 		return HighlightColor;
 	}
 	

@@ -37,10 +37,13 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 	private string _victoryString;
+	//UIstuff
 	public bool debugGUI;
 	public Texture scoreBgTexture;
 	public Texture scoreTexture1;
 	public Texture scoreTexture2;
+	public Texture winTexture1;
+	public Texture winTexture2;
 
 
 	// Use this for initializatio
@@ -264,10 +267,12 @@ public class GameManager : MonoBehaviour {
 			case GameState.gameWon:{
 				GUI.Box (new Rect (10,100,400,300), _victoryString);
 				break;
-			}
+				}
 		
+			}
 		}
-		}
+
+
 	}
 
 	public void PlaySFX(AudioClip clip, float volume){
