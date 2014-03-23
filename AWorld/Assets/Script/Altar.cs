@@ -80,7 +80,7 @@ public class Altar : MonoBehaviour {
 	public void setControl(TeamInfo team){
 		if(!isLocked){
 			if(team!=null) {
-				Color32 copy = new Color32((byte)(team.teamColor.r +30), (byte)(team.teamColor.g-30), (byte)(team.teamColor.b+30), (byte)255);
+				Color32 copy = team.beaconColor;
 				renderer.material.color = copy;
 				//renderer.material.color = team.teamColor;
 				_currentControllingTeam = team;
@@ -97,7 +97,7 @@ public class Altar : MonoBehaviour {
 				}
 				
 			}else{
-				renderer.material.color = Color.gray;
+				renderer.material.color = new Color32(220, 30, 47, 255);
 			}
 		}
 			

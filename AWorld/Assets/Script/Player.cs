@@ -38,6 +38,7 @@ public class Player : MonoBehaviour {
 
 	public float scoreBarH = 30;
 	public Texture scoreTexture;
+	public Texture winTexture;
 
 	public PlayerState currentState {
 		get {
@@ -75,12 +76,14 @@ public class Player : MonoBehaviour {
 		sRef = GameObject.Find ("Settings").GetComponent<Settings>();
 		gm = GameObject.Find ("GameManager").GetComponent<GameManager>();
 
-		gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>().Reveal (_vision);
-	
+
+
 		if(PlayerNumber == 1){
 			scoreTexture = gm.scoreTexture1;
+			winTexture = gm.winTexture1;
 		} else {
 			scoreTexture = gm.scoreTexture2;
+			winTexture = gm.winTexture2;
 		}
 
 	}
@@ -709,6 +712,21 @@ public class Player : MonoBehaviour {
 		GUI.DrawTexture(new Rect(0,(Screen.height - scoreBarH)*(PlayerNumber-1), Screen.width, scoreBarH), gm.scoreBgTexture, ScaleMode.StretchToFill, true, 1.0f);
 		GUI.DrawTexture(new Rect(0,(Screen.height - scoreBarH)*(PlayerNumber-1), Screen.width * perScore, scoreBarH), scoreTexture, ScaleMode.StretchToFill, true, 1.0f);
 
+		int boxWidth = 450;
+		int boxHeight = 200;
+
+		switch (gm.currentState){
+		case GameState.gameWon:
+			if(perScore >= 1){
+			GUI.BeginGroup(new Rect(Screen.width/2 - boxWidth/2, Screen.height/2 - boxHeight/2, boxWidth, boxHeight));
+			GUI.DrawTexture(new Rect(0,0,boxWidth,boxHeight), winTexture, ScaleMode.StretchToFill, true, 1.0f);
+			GUI.EndGroup();
+			}
+			break;
+			
+		case GameState.playing:
+			break;
+		}
 		if(gm.debugGUI == true){
 		switch (gm.currentState){
 		case GameState.playing:
