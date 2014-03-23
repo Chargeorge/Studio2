@@ -17,6 +17,8 @@ public class Altar : MonoBehaviour {
 	private GameObject _lockedLayer;
 	private bool _isLocked;
 
+	public AudioClip Praying;
+
 	public bool isLocked {
 		get {
 			return _isLocked;
@@ -68,6 +70,7 @@ public class Altar : MonoBehaviour {
 			networked= checkNetwork();
 			if(networked){
 				_currentControllingTeam.score += sRef.vpsScorePerAltarPerSecond * Time.deltaTime;
+				gm.PlaySFX(Praying, 1.0f);
 			}
 			gm.debugString = string.Format(" Number: {0},\r\n Networked: {1}", _currentControllingTeam.teamNumber, networked);
 		}

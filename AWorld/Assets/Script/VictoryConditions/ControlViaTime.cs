@@ -8,7 +8,7 @@ public class ControlViaTime : VictoryCondition
 {
 	public ControlViaTime (int valueIn):base(valueIn)
 	{
-		victoryMessage = "team {0} Has gained power immesuable, congratulations."; 
+		victoryMessage = "team {0} Has gained power immesurable, congratulations."; 
 	}
 	
 	public override void CheckState(GameManager gm){
