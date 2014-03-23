@@ -319,22 +319,9 @@ public class GameManager : MonoBehaviour {
 					break;
 				}
 			
-			}
-			case GameState.gameWon:{
-				GUI.Box (new Rect (10,100,400,300), _victoryString);
-				break;
-				}
-		
-			}
-			case GameState.gameWon:{
-				GUI.Box (new Rect (10,100,400,300), _victoryString);
-				break;
-				}
-		
+			
 			}
 		}
-
-
 	}
 
 	public void PlaySFX(AudioClip clip, float volume){
