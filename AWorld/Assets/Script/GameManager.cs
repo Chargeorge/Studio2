@@ -46,13 +46,14 @@ public class GameManager : MonoBehaviour {
 	public Texture winTexture2;
 	private GameObject prfbBeacon;
 
+
 	// Use this for initializatio
 	void Start () {
 		sRef = GameObject.Find ("Settings").GetComponent<Settings>();
 		prfbPlayer = (GameObject)Resources.Load("Prefabs/Player");
 		prfbAltar = (GameObject)Resources.Load("Prefabs/Altar");
 		prfbHome = (GameObject)Resources.Load ("Prefabs/Home");
-		prfbBeacon = (GameObject)Resources.Load ("Prefabs/Beacon");
+		
 		altars= new List<GameObject>();
 		victoryConditions = new List<VictoryCondition>();
 		teams = new List<TeamInfo>();
@@ -142,51 +143,7 @@ public class GameManager : MonoBehaviour {
 
 			}
 			switch (gameMode){
-			case Mode.TwoVTwo:{
-				_currentState = GameState.playing;
-				GameObject Player1 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
-				GameObject Player2 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
-				GameObject Player3 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
-				GameObject Player4 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
-
-				Player p1 = Player1.GetComponent<Player>();
-				Player p2 = Player2.GetComponent<Player>();
-				Player p3 = Player3.GetComponent<Player>();
-				Player p4 = Player4.GetComponent<Player>();
-
-				p1.SetTeam(TeamInfo.GetTeamInfo(1));
-				p2.SetTeam(p1.team);
-
-				p3.SetTeam(TeamInfo.GetTeamInfo(2));
-				p4.SetTeam(p3.team);
-				teams.Add(p1.team);
-				teams.Add(p3.team);
-				p1.PlayerNumber = 1;
-				p2.PlayerNumber = 2;
-
-				p3.PlayerNumber = 3;
-				p4.PlayerNumber = 4;
-				players.Add(Player1);
-				players.Add(Player2);
-				
-				players.Add(Player3);
-				players.Add(Player4);
-				
-			
-				
-					//steps to ensure validity
-				team1Home = setUpTeamHome(p1);
-				team2Home = setUpTeamHome(p2);
-				
-				//
-
-				
-				//victoryConditions.Add (new LockMajorityAltars(1) );
-				victoryConditions.Add (new ControlViaTime(1));
-				victoryConditions.Add (new NetworkEnemyBase(1));
-				break;
-			}
-			case Mode.OneVOne:{
+			case Mode.OneVOne:
 				_currentState = GameState.playing;
 				GameObject Player1 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
 				GameObject Player2 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
@@ -201,20 +158,24 @@ public class GameManager : MonoBehaviour {
 				players.Add(Player1);
 				players.Add(Player2);
 				
+			
 				
-				
-				//steps to ensure validity
+					//steps to ensure validity
 				team1Home = setUpTeamHome(p1);
 				team2Home = setUpTeamHome(p2);
 				
 				//
-				
+
 				
 				//victoryConditions.Add (new LockMajorityAltars(1) );
 				victoryConditions.Add (new ControlViaTime(1));
-				victoryConditions.Add (new NetworkEnemyBase(1));				
+				victoryConditions.Add (new NetworkEnemyBase(1));
 				break;
-			}
+				
+			case Mode.TwoVTwo:
+				
+				break;
+				
 			}
 			//Check for any homebase islands, if so regenerate
 			//Check for fairness?  
@@ -233,16 +194,6 @@ public class GameManager : MonoBehaviour {
 				Altar A = altarGO.GetComponent<Altar>();
 				checkFlipWater(A.brdX, A.brdY);
 			});
-
-			for(int beaconsBuilt = 0; beaconsBuilt < sRef.neutralBeaconCount; beaconsBuilt ++){
-				int x= Random.Range(0, tiles.GetLength(0));
-				int y = Random.Range(0, tiles.GetLength(1));
-
-				while(!addNeutralBeacon(x,y)) {
-					 x= Random.Range(0, tiles.GetLength(0));
-					 y = Random.Range(0, tiles.GetLength(1));
-				} ///Weird placeholder, just go till you find a decent spot
-			}
 			setup = false;
 			
 		}
@@ -296,29 +247,29 @@ public class GameManager : MonoBehaviour {
 	void OnGUI(){
 
 		if(debugGUI == true){
-			switch(_currentState){
-			
-				case GameState.playing:{
-					if(sRef.debugMode){
-						if(debugMouse!=null){
-							GUI.Box (new Rect (10,100,200,90), string.Format("Mouse Over x:{0} y:{1}\r\nState: {2}\r\nPercentControlled: not yet ", debugMouse.brdXPos, debugMouse.brdYPos, debugMouse.currentState));
-							
-						}
-						if(debugBeacon !=null){
-							GUI.Box (new Rect (10,200,200,90), string.Format(" team {0} controlling\r\nstate: {1}", debugBeacon.controllingTeam.teamNumber, debugBeacon.currentState));
-						}
-						if(debugString != ""){
-							GUI.Box (new Rect (210,100,200,90), debugString);
-							
-						}
+		switch(_currentState){
+		
+			case GameState.playing:{
+				if(sRef.debugMode){
+					if(debugMouse!=null){
+						GUI.Box (new Rect (10,100,200,90), string.Format("Mouse Over x:{0} y:{1}\r\nState: {2}\r\nPercentControlled: not yet ", debugMouse.brdXPos, debugMouse.brdYPos, debugMouse.currentState));
+						
 					}
-					break;
+					if(debugBeacon !=null){
+						GUI.Box (new Rect (10,200,200,90), string.Format(" team {0} controlling\r\nstate: {1}", debugBeacon.controllingTeam.teamNumber, debugBeacon.currentState));
+					}
+					if(debugString != ""){
+						GUI.Box (new Rect (210,100,200,90), debugString);
+						
+					}
 				}
-				case GameState.gameWon:{
-					GUI.Box (new Rect (10,100,400,300), _victoryString);
-					break;
+				break;
+			}
+			case GameState.gameWon:{
+				GUI.Box (new Rect (10,100,400,300), _victoryString);
+				break;
 				}
-			
+		
 			}
 			case GameState.gameWon:{
 				GUI.Box (new Rect (10,100,400,300), _victoryString);
@@ -375,7 +326,7 @@ public class GameManager : MonoBehaviour {
 		altars.ForEach(delegate (GameObject ToCheckGO) {
 			Altar ToCheck = ToCheckGO.GetComponent<Altar>();
 			if(ToCheck.currentControllingTeam != null){
-				if( (ToCheck.currentControllingTeam.teamNumber == t.teamNumber && ToCheck.isLocked) || (ToCheck.currentControllingTeam.teamNumber == t.teamNumber && ToCheck.networked && !sRef.optLockTile)  ) {
+				if( (ToCheck.currentControllingTeam.teamNumber == t.teamNumber && ToCheck.isLocked) || (ToCheck.currentControllingTeam.teamNumber == t.teamNumber && !sRef.optLockTile)  ) {
 					returnable.Add(ToCheck.altarType);
 				}
 			}
@@ -405,25 +356,6 @@ public class GameManager : MonoBehaviour {
 			return _instance;
 		}
 	}
-	/// <summary>
-	/// Adds the neutral beacon.
-	/// </summary>
-	/// <returns>If the beacon was succsefully added, if the location is invalid returns false</returns>
-	/// <param name="x">The x coordinate.</param>
-	/// <param name="y">The y coordinate.</param>
-	public bool addNeutralBeacon(int x, int y){
-		GameObject BT = tiles[x,y];
-		if(BT.GetComponent<BaseTile>().buildable()){
-			GameObject beacon = (GameObject)Instantiate(prfbBeacon, Vector3.zero, Quaternion.identity);
-			beacon.GetComponent<Beacon>().buildNeutral(BT);
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
-
-
 /**	
 	public List<AltarType> getNetworkedAltars(TeamInfo t){
 		List<AltarType> returnable = new List<AltarType>();
