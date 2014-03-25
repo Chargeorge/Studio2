@@ -45,6 +45,7 @@ public class GameManager : MonoBehaviour {
 	public Texture winTexture1;
 	public Texture winTexture2;
 	private GameObject prfbBeacon;
+	public VictoryCondition vIsForVendetta;
 
 	// Use this for initializatio
 	void Start () {
@@ -56,6 +57,7 @@ public class GameManager : MonoBehaviour {
 		altars= new List<GameObject>();
 		victoryConditions = new List<VictoryCondition>();
 		teams = new List<TeamInfo>();
+
 		
 	}
 	
@@ -277,6 +279,7 @@ public class GameManager : MonoBehaviour {
 			if(v.isCompleted){
 				_currentState = GameState.gameWon;
 				_victoryString += v.getVictorySting();
+				vIsForVendetta = v;
 			}
 			
 		}	

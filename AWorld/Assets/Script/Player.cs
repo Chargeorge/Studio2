@@ -736,7 +736,7 @@ public class Player : MonoBehaviour {
 
 		switch (gm.currentState){
 		case GameState.gameWon:
-			if(perScore >= 1){
+			if(gm.vIsForVendetta.completingTeam == this.team){
 			GUI.BeginGroup(new Rect(Screen.width/2 - boxWidth/2, Screen.height/2 - boxHeight/2, boxWidth, boxHeight));
 			GUI.DrawTexture(new Rect(0,0,boxWidth,boxHeight), winTexture, ScaleMode.StretchToFill, true, 1.0f);
 			GUI.EndGroup();
