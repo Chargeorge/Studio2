@@ -217,7 +217,7 @@ public class BaseTile : MonoBehaviour {
 			Color32 controllingTeamColor = controllingTeam.tileColor;
 			//controllingTeamColor.a = (byte) (255*(percControlled/100f));
 			
-			controllingTeamColor.a = (byte) (255*(percControlled/100f) * 0.5f);
+			controllingTeamColor.a = (byte) (255*(percControlled/100f) * sRef.percMaxInfluenceColor);
 
 			if (percControlled >= 100f) controllingTeamColor.a = (byte) 255;
 			

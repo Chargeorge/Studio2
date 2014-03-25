@@ -12,39 +12,72 @@ public class Settings : MonoBehaviour {
 	//Char: starting with settings where everything takes 1 second.  
 
 	/* NOTE: Changing these numbers does not actually update the Settings object currently in the scene. You must do this manually in the editor. */
-	public float vpsBaseBuild = 25f;
-	public float vpsBaseMove = 100f;
-	public float vpsBaseFreeMoveSpeed = 2.0f;
-	public float vpsBasePlayerInfluence =  25f;
-	public float vpsBaseRotate = 50f;
-	public float vpsBaseUpgrade = 25f;
-	public float vpsScorePerAltarPerSecond = .1f;
-	public float coefMoveNeutral = 1f;
-	public float coefMoveAllied = 2f;
-	public float coefMoveEnemy = .33f;
-	public float coefConvert = .5f;
-	public float coefBuildBeacon = .25f; 
-	public float coefBaseBeaconInfluence = 0.5f;	//At 1.0f, takes 1 second to convert a neutral tile 1 space away
-	public float coefOnixtal = 0.25f;	//Percentage strength at which non-facing influence beams operate with Onixtal
-	public float coefTepwante = 1.0f;	//Percentage strength at which wider influence beams operate with Tepwante (currently 100% strength but we could change it)
-	public float baseRequired = 100f;
-	public float scoreOnCapture = 50f;
-	public float vpsScorePerSecond = 1f;
-	public float vpsBeaconBaseInfluence = 100f;
-	public bool optLockTile = true;
-	public bool optTilesGiveScore = true;
-	public float valTileConvertScore = 1f;
-	public Vector2 team1Start = new Vector2(3,3);
-	public Vector2 team2Start = new Vector2(4,4);
-	public int optPerlinLevel = 3700;
-	public float valPointsToWin = 300;
-	public int beaconNoBuildRange = 2;
-	public int neutralBeaconCount = 12;
-	public bool debugMode = true;
-	public Mode gameMode = Mode.OneVOne;
+	public float vpsBaseBuild;
+	public float vpsBaseMove;
+	public float vpsBaseFreeMoveSpeed;
+	public float vpsBasePlayerInfluence;
+	public float vpsBaseRotate;
+	public float vpsBaseUpgrade;
+	public float vpsScorePerAltarPerSecond;
+	public float coefMoveNeutral;
+	public float coefMoveAllied;
+	public float coefMoveEnemy;
+	public float coefConvert;
+	public float coefBuildBeacon; 
+	public float coefBaseBeaconInfluence;	//At 1.0f, takes 1 second to convert a neutral tile 1 space away
+	public float coefOnixtal;	//Percentage strength at which non-facing influence beams operate with Onixtal
+	public float coefTepwante;	//Percentage strength at which wider influence beams operate with Tepwante (currently 100% strength but we could change it)
+	public float baseRequired;
+	public float scoreOnCapture;
+	public float vpsScorePerSecond;
+	public float vpsBeaconBaseInfluence;
+	public bool optLockTile;
+	public bool optTilesGiveScore;
+	public float valTileConvertScore;
+	public Vector2 team1Start;
+	public Vector2 team2Start;
+	public int optPerlinLevel;
+	public float valPointsToWin;
+	public int beaconNoBuildRange;
+	public int neutralBeaconCount;
+	public bool debugMode;
+	public Mode gameMode;
+	public float percMaxInfluenceColor;	//Percentage of color that tile fills in when just before 100% influence
+	
 	// Use this for initialization
 	void Start () {
-	
+
+		vpsBaseBuild = 25f;
+		vpsBaseMove = 100f;
+		vpsBaseFreeMoveSpeed = 2.0f;
+		vpsBasePlayerInfluence =  25f;
+		vpsBaseRotate = 50f;
+		vpsBaseUpgrade = 25f;
+		vpsScorePerAltarPerSecond = 1f;
+		coefMoveNeutral = 1f;
+		coefMoveAllied = 2f;
+		coefMoveEnemy = .33f;
+		coefConvert = .5f;
+		coefBuildBeacon = .25f; 
+		coefBaseBeaconInfluence = 0.5f;	//At 1.0f, takes 1 second to convert a neutral tile 1 space away
+		coefOnixtal = 0.25f;	//Percentage strength at which non-facing influence beams operate with Onixtal
+		coefTepwante = 1.0f;	//Percentage strength at which wider influence beams operate with Tepwante (currently 100% strength but we could change it)
+		baseRequired = 100f;
+		scoreOnCapture = 50f;
+		vpsScorePerSecond = 3f;
+		vpsBeaconBaseInfluence = 100f;
+		optLockTile = false;
+		optTilesGiveScore = true;
+		valTileConvertScore = 1f;
+		team1Start = new Vector2(5,10);
+		team2Start = new Vector2(35,10);
+		optPerlinLevel = 1500;
+		valPointsToWin = 300;
+		beaconNoBuildRange = 2;
+		neutralBeaconCount = 12;
+		debugMode = true;
+		gameMode = Mode.OneVOne;
+		percMaxInfluenceColor = 0.7f;	//Percentage of color that tile fills in when just before 100% influence		
 	}
 	
 	// Update is called once per frame
@@ -53,8 +86,8 @@ public class Settings : MonoBehaviour {
 	}
 	private static Settings _instance;
 	
-	//This is the public reference that other classes will use
-	public static Settings SettingsInstance
+	//This is the  reference that other classes will use
+	 public static Settings SettingsInstance
 	{
 		get
 		{
