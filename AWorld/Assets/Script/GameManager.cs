@@ -174,14 +174,9 @@ public class GameManager : MonoBehaviour {
 				players.Add(Player3);
 				players.Add(Player4);
 				
-			
-				
 					//steps to ensure validity
 				team1Home = setUpTeamHome(p1);
 				team2Home = setUpTeamHome(p2);
-				
-				//
-
 				
 				//victoryConditions.Add (new LockMajorityAltars(1) );
 				victoryConditions.Add (new ControlViaTime(1));
@@ -244,6 +239,13 @@ public class GameManager : MonoBehaviour {
 					 x= Random.Range(0, tiles.GetLength(0));
 					 y = Random.Range(0, tiles.GetLength(1));
 				} ///Weird placeholder, just go till you find a decent spot
+			}
+			for(int x = 0; x<  tiles.GetLength(0); x++){
+				for(int y =0 ; y< tiles.GetLength(1); y++){
+					if(tiles[x,y].GetComponent<BaseTile>().currentType != TileTypeEnum.water){
+						tiles[x,y].GetComponent<BaseTile>().tooCloseToBeacon();
+					}
+				}
 			}
 			foreach (GameObject o in players) {
 			 o.GetComponent<Player>().RevealTiles (); 

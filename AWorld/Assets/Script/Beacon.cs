@@ -245,6 +245,14 @@ public class Beacon : MonoBehaviour {
 				_currentState = BeaconState.Basic;
 				_patternList = createBasicInfluenceList(getAngleForDir(facing));
 				
+				for(int x = 0; x<  GameManager.GameManagerInstance.tiles.GetLength(0); x++){
+					for(int y =0 ; y< GameManager.GameManagerInstance.tiles.GetLength(1); y++){
+						if(GameManager.GameManagerInstance.tiles[x,y].GetComponent<BaseTile>().currentType != TileTypeEnum.water){
+							GameManager.GameManagerInstance.tiles[x,y].GetComponent<BaseTile>().tooCloseToBeacon();
+						}
+					}
+				}
+				
 			}
 			if(_currentState == BeaconState.BuildingAdvanced){
 				audio.Stop();

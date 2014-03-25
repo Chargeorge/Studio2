@@ -24,6 +24,21 @@ public class BaseTile : MonoBehaviour {
 	private int _ident;
 	public List<AStarholder> networkToBase;
 	private GameObject _qudFogLayer;
+	
+	private GameObject _qudNoBuildLayer;
+	
+	public GameObject qudNoBuildLayer {
+		get {
+			if(_qudNoBuildLayer == null){
+				_qudNoBuildLayer = transform.FindChild("NoBuildLayer").gameObject;
+			}
+			return _qudNoBuildLayer;
+		}
+		set {
+			_qudNoBuildLayer = value;
+		}
+	}	
+	
 
 	public AudioClip influenceDone;
 
@@ -572,7 +587,7 @@ public class BaseTile : MonoBehaviour {
 	/// <param name="testing">Testing.</param>
 	public float GetRate(Player testing){
 		if(currentType == TileTypeEnum.water){
-			if (GameObject.Find ("GameManager").GetComponent<GameManager>().getCapturedAltars(testing.team).Contains (AltarType.Thotzeti)){
+			if (GameManager.GameManagerInstance.getCapturedAltars(testing.team).Contains (AltarType.Thotzeti)){
 				return 1f;
 			}
 			else{
@@ -746,7 +761,7 @@ public class BaseTile : MonoBehaviour {
 		for (int i = range * -1; i <= range; i++){
 			for (int j = (range - Mathf.Abs (i)) * -1; j <= range - Mathf.Abs (i); j++) {
 				GameObject tile;
-				try { tile = GameObject.Find ("GameManager").GetComponent<GameManager>().tiles[_brdXPos + j, _brdYPos + i]; }
+				try { tile = GameManager.GameManagerInstance.tiles[_brdXPos + j, _brdYPos + i]; }
 				catch { tile = null; }
 				if (tile != null) {
 					tile.GetComponent<BaseTile>().IsRevealed = true;
@@ -783,12 +798,15 @@ public class BaseTile : MonoBehaviour {
 		for (int i = sRef.beaconNoBuildRange * -1; i <= sRef.beaconNoBuildRange; i++){
 			for (int j = (sRef.beaconNoBuildRange - Mathf.Abs (i)) * -1; j <= sRef.beaconNoBuildRange - Mathf.Abs (i); j++) {
 				GameObject tile;
-				try { tile = GameObject.Find ("GameManager").GetComponent<GameManager>().tiles[_brdXPos + j, _brdYPos + i]; }
+				try { tile = GameManager.GameManagerInstance.tiles[_brdXPos + j, _brdYPos + i]; }
 				catch { tile = null; }
 				if (tile != null && 
 					tile.GetComponent<BaseTile>().beacon != null && 
 					tile.GetComponent<BaseTile>().beacon.GetComponent<Beacon>().currentState != BeaconState.BuildingBasic) 
 				{
+					if(this.beacon == null){
+						qudNoBuildLayer.renderer.enabled = true;
+					}
 					return true;
 				}
 			}
