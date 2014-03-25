@@ -26,6 +26,9 @@ public class Beacon : MonoBehaviour {
 	public AudioClip beaconInfluenceProgress;
 	public AudioClip beaconBuilding;
 	public AudioClip beaconBuilt;
+	public AudioClip beaconUpgrading;
+	public AudioClip beaconUpgraded;
+	public AudioClip beaconRotating;
 
 	private Material matBasic;
 	private Material matUpgraded;
@@ -67,7 +70,7 @@ public class Beacon : MonoBehaviour {
 				bool waterFound = false;
 				list.ForEach(delegate (InfluencePatternHolder p){
 					if (!waterFound) {
-						gm.PlaySFX(beaconInfluenceProgress, 1.0f);
+						gm.PlaySFX(beaconInfluenceProgress, 0.1f);
 						if(influenceThisFrame > 0f){
 							int x = (int)brdX + (int)Mathf.RoundToInt(p.relCoordRotated.x);
 							int y = (int)brdY + (int)Mathf.RoundToInt(p.relCoordRotated.y);
@@ -137,9 +140,10 @@ public class Beacon : MonoBehaviour {
 		this._currentState	= BeaconState.BuildingBasic;
 		controllingTeam = player.GetComponent<Player>().team;
 		this.setTeam();
-
+		audio.PlayOneShot(beaconBuilding, 0.9f);
 		this.transform.localPosition = new Vector3(0f,0f,-.5f);
 		tileLocation.GetComponent<BaseTile>().beacon = this.gameObject;
+
 	}
 
 	public void buildNeutral(GameObject tileLocation){
@@ -152,12 +156,15 @@ public class Beacon : MonoBehaviour {
 		tileLocation.GetComponent<BaseTile>().beacon = this.gameObject;
 
 		_currentState = BeaconState.Basic;
+		audio.Stop();
 		_patternList = createBasicInfluenceList(getAngleForDir(facing));
 		
 	}
 
 	public void startUpgrading(){
+		audio.Stop();
 		this._currentState = BeaconState.BuildingAdvanced;
+		audio.PlayOneShot(beaconUpgrading, 1.0f);
 	}
 	
 	public void setTeam(){
@@ -226,7 +233,7 @@ public class Beacon : MonoBehaviour {
 		//TODO - rename to Build () and refactor upgrade stuff into Upgrade ()?
 		
 		///TODO: add end semaphore stuff her
-		
+		audio.Stop();
 		_patternList = new List<List<InfluencePatternHolder>>();
 		
 		if(percActionComplete >= 100f){
@@ -235,12 +242,13 @@ public class Beacon : MonoBehaviour {
 			
 			if(_currentState == BeaconState.BuildingBasic){
 
-				gm.PlaySFX(beaconInfluenceProgress, 1.0f);
 				_currentState = BeaconState.Basic;
 				_patternList = createBasicInfluenceList(getAngleForDir(facing));
 				
 			}
 			if(_currentState == BeaconState.BuildingAdvanced){
+				audio.Stop();
+				audio.PlayOneShot(beaconUpgraded, 1.0f);
 				_currentState = BeaconState.Advanced;
 				_patternList = createAdvancedInfluenceList(getAngleForDir(facing));
 			}
@@ -584,7 +592,7 @@ public class Beacon : MonoBehaviour {
 	}
 	
 	public void Rotate (DirectionEnum? N) {
-	
+		//audio.PlayOneShot(beaconRotating, 1.0f);
 		setDirection (N);
 		setVisualDirection ();
 		UpdateInfluencePatterns();
@@ -615,7 +623,7 @@ public class Beacon : MonoBehaviour {
 	
 	//Player stopped in the middle of an upgrade
 	public void AbortUpgrade () {
-	
+		audio.Stop();
 		_currentState = BeaconState.Basic;
 		
 	}

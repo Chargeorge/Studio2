@@ -70,7 +70,7 @@ public class Altar : MonoBehaviour {
 			networked= checkNetwork();
 			if(networked){
 				_currentControllingTeam.score += sRef.vpsScorePerAltarPerSecond * Time.deltaTime;
-				gm.PlaySFX(Praying, 1.0f);
+				audio.PlayOneShot(Praying, 1.0f);
 			}
 			gm.debugString = string.Format(" Number: {0},\r\n Networked: {1}", _currentControllingTeam.teamNumber, networked);
 		}

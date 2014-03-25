@@ -151,9 +151,12 @@ public class Player : MonoBehaviour {
 					}
 					else {
 						float vpsRate = sRef.vpsBaseRotate;
+						
 						addProgressToAction (vpsRate);
 //						setDirection(x.Value);
+						PlaySFX(beaconRotating, 1.0f);
 						_currentState = PlayerState.rotating;
+						
 					}
 				}
 				
@@ -208,8 +211,8 @@ public class Player : MonoBehaviour {
 							{
 									
 								Pulsate ();
-								
 								_currentState = PlayerState.building;
+								PlaySFX(influenceDone, 1.0f);
 								float vpsBuildRate = sRef.vpsBaseBuild;
 								addProgressToAction(vpsBuildRate);
 
@@ -227,6 +230,7 @@ public class Player : MonoBehaviour {
 							}
 						}
 						else{
+							
 							_currentState = PlayerState.influencing;
 						}
 					}
@@ -260,7 +264,7 @@ public class Player : MonoBehaviour {
 						!tooCloseToOpponent(posToCheck) &&
 						(!onWater(posToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti)) || currentTile.currentType == TileTypeEnum.water) 
 					{	//Valid move
-						gm.PlaySFX(playerMove, 0.8f);
+						PlaySFX(playerMove, 0.2f);
 						transform.position = posToCheck;
 						BaseTile newTile = gm.tiles[(int) Mathf.Floor (transform.position.x + 0.5f), (int) Mathf.Floor (transform.position.y + 0.5f)].GetComponent<BaseTile>();
 						if (newTile != currentTile) {
@@ -315,7 +319,7 @@ public class Player : MonoBehaviour {
 					
 				}*/
 				else{
-					gm.StopSFX();
+					StopSFX();
 					_currentState= PlayerState.standing; 
 					currentActionProgress = 0f;
 				}
@@ -325,7 +329,7 @@ public class Player : MonoBehaviour {
 				if(buildButtonDown && currentTile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
 				//	Jiggle ();	//Gotta jiggle
 					Pulsate ();
-					gm.StopSFX();
+					StopSFX();
 					
 									//Debug.Log ("In Build");
 					if(currentTile.controllingTeam != null){
@@ -342,7 +346,7 @@ public class Player : MonoBehaviour {
 								if(beaconInProgress.percActionComplete > 100f){
 								
 									//gm.StopSFX();
-									gm.PlaySFX(beaconBuilt, 1.0f);
+									PlaySFX(beaconBuilt, 1.0f);
 									beaconInProgress.finishAction();
 									_currentState = PlayerState.standing;
 									currentActionProgress = 0f;
@@ -361,7 +365,7 @@ public class Player : MonoBehaviour {
 					
 				}
 				else{
-					gm.StopSFX();
+					StopSFX();
 					_currentState =  PlayerState.standing;
 					
 					//TODO: figure out what happens when we abandon the tile
@@ -372,7 +376,7 @@ public class Player : MonoBehaviour {
 				if(buildButtonDown && currentTile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
 			//		Jiggle ();	//Gotta jiggle
 					Pulsate ();
-					gm.PlaySFX(influenceStart, 1.0f);
+					PlaySFX(influenceStart, 0.8f);
 					if(currentTile.controllingTeam != null){
 						if(currentTile.controllingTeam.teamNumber  == teamNumber)
 						{                                      
@@ -408,7 +412,7 @@ public class Player : MonoBehaviour {
 
 						if(currentTile.percControlled >= 100f){
 						Debug.Log ("INLFUENCE DONE");
-							gm.PlaySFX(influenceDone, 1.0f);
+							//PlaySFX(influenceDone, 1.0f);
 						}
 						
 						if (x.HasValue) { 
@@ -418,12 +422,13 @@ public class Player : MonoBehaviour {
 						
 					} else{
 					///TODO catch fully influenced Tile!
+					//PlaySFX(influenceDone, 1.0f);
 					}
 				}
 				else{
 				///TODO: add reset to tile in case of change
 					//need to reset currenttile to previousState
-					gm.StopSFX();
+					//StopSFX();
 					_currentState = PlayerState.standing;
 				}	
 			break;
@@ -433,7 +438,7 @@ public class Player : MonoBehaviour {
 				if (buildButtonDown) {
 				
 					Pulsate ();
-					gm.PlaySFX(beaconRotating, 1.0f);
+					//PlaySFX(beaconRotating, 1.0f);
 					float vpsRotateRate = sRef.vpsBaseRotate;
 					addProgressToAction (vpsRotateRate);
 					Beacon beacon = currentTile.beacon.GetComponent<Beacon>();
@@ -446,7 +451,7 @@ public class Player : MonoBehaviour {
 						beacon.Rotate (facing);
 						beacon.percRotateComplete = 0f;
 						_currentState = PlayerState.standing;
-						gm.StopSFX ();					
+						StopSFX ();					
 					}					
 				}
 					
@@ -455,7 +460,7 @@ public class Player : MonoBehaviour {
 					currentActionProgress = 0;
 					currentTile.beacon.GetComponent<Beacon>().percRotateComplete = 0f;
 					_currentState = PlayerState.standing;
-					gm.StopSFX ();				
+					StopSFX ();				
 
 				}
 			
@@ -466,7 +471,7 @@ public class Player : MonoBehaviour {
 				if (buildButtonDown) {
 				
 					Pulsate ();
-					gm.PlaySFX(beaconUpgrading, 1.0f);
+					//PlaySFX(beaconUpgrading, 1.0f);
 					float vpsUpgradeRate = sRef.vpsBaseUpgrade;
 					addProgressToAction (vpsUpgradeRate);
 					Beacon beacon = currentTile.beacon.GetComponent<Beacon>();
@@ -479,8 +484,8 @@ public class Player : MonoBehaviour {
 						beacon.Upgrade ();
 						beacon.percUpgradeComplete = 0f;
 						_currentState = PlayerState.standing;
-						gm.StopSFX ();
-						gm.PlaySFX(beaconUpgraded, 1.0f);
+						StopSFX ();
+						PlaySFX(beaconUpgraded, 1.0f);
 						
 					}
 					
@@ -492,7 +497,7 @@ public class Player : MonoBehaviour {
 					currentTile.beacon.GetComponent<Beacon>().percUpgradeComplete = 0f;
 					currentTile.beacon.GetComponent<Beacon>().AbortUpgrade();
 					_currentState = PlayerState.standing;
-					gm.StopSFX ();
+					StopSFX ();
 				
 				}
 			
@@ -731,7 +736,7 @@ public class Player : MonoBehaviour {
 
 		switch (gm.currentState){
 		case GameState.gameWon:
-			if(perScore >= 1){
+			if(gm.vIsForVendetta.completingTeam == this.team){
 			GUI.BeginGroup(new Rect(Screen.width/2 - boxWidth/2, Screen.height/2 - boxHeight/2, boxWidth, boxHeight));
 			GUI.DrawTexture(new Rect(0,0,boxWidth,boxHeight), winTexture, ScaleMode.StretchToFill, true, 1.0f);
 			GUI.EndGroup();
@@ -830,5 +835,28 @@ public class Player : MonoBehaviour {
 		}
 		
 		return false;	
+	}
+
+	public void PlaySFX(AudioClip clip, float _volume){
+		audio.PlayOneShot(clip);
+		
+		if(audio.volume <= _volume){
+			//audio.volume += 0.2f;
+			audio.volume = _volume;
+		}
+		if(audio.volume >= _volume){
+			audio.volume = _volume;
+		}		
+	}
+	
+	public void StopSFX(){
+		audio.volume -= 0.2f;
+		StartCoroutine(StopSFXCoroutine ());
+	}
+	
+	public IEnumerator StopSFXCoroutine(){
+		audio.volume -= 0.1f;
+		yield return new WaitForSeconds(0.6f);
+		audio.Stop();
 	}
 }
