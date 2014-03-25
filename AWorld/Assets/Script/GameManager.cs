@@ -344,8 +344,10 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void StopSFX(){
+		audio.Stop();
+	/*
 		audio.volume -= 0.4f;
-		StartCoroutine(StopSFXCoroutine ());
+		StartCoroutine(StopSFXCoroutine ());*/
 	}
 
 	public IEnumerator StopSFXCoroutine(){

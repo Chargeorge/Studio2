@@ -377,11 +377,11 @@ AudioSource:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 478547186}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_audioClip: {fileID: 8300000, guid: 062d9731756ef2741a5ae44219dfc06e, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: .349000007
+  m_Volume: .210999995
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -1302,6 +1302,7 @@ MonoBehaviour:
   neutralBeaconCount: 12
   debugMode: 1
   gameMode: 0
+  percMaxInfluenceColor: 0
 --- !u!4 &1843163359
 Transform:
   m_ObjectHideFlags: 0
