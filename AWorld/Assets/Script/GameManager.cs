@@ -245,6 +245,9 @@ public class GameManager : MonoBehaviour {
 					 y = Random.Range(0, tiles.GetLength(1));
 				} ///Weird placeholder, just go till you find a decent spot
 			}
+			foreach (GameObject o in players) {
+			 o.GetComponent<Player>().RevealTiles (); 
+			 }
 			setup = false;
 			
 		}

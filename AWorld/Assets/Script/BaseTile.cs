@@ -209,7 +209,8 @@ public class BaseTile : MonoBehaviour {
 		}
 	}
 	// Update is called once per frame
-	void Update () {		
+	void Update () {
+			
 		if(controllingTeam != null){
 			
 			qudInfluenceLayer.SetActive(true);

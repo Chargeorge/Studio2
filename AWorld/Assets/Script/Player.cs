@@ -9,7 +9,9 @@ public class Player : MonoBehaviour {
 	private Vector2 _positionOffset;	//Offsets position based on how far along move action is
 	private PlayerState _currentState;
 	public int PlayerNumber;
-	public GameManager gm; 
+	public GameManager gm;
+	
+	
 	private float currentActionProgress;
 	public Settings sRef;
 	public DirectionEnum facing;
@@ -114,7 +116,7 @@ public class Player : MonoBehaviour {
 			
 			case PlayerState.standing:
 			//If we are standing and we get an input, handle it.
-			Debug.Log (string.Format("Player number {0}, buld button down: {1}", PlayerNumber, buildButtonDown));
+//			Debug.Log (string.Format("Player number {0}, buld button down: {1}", PlayerNumber, buildButtonDown));
 				if(x.HasValue && !buildButtonDown){
 				setDirection(x.Value);	//Still need a 4-directional facing for building/rotating beacons
 				Vector2 analogStickDirection = new Vector2 (getPlayerXAxis(), getPlayerYAxis());
@@ -640,6 +642,9 @@ public class Player : MonoBehaviour {
 	/// </summary>
 	public void RevealTiles () {
 		
+		BaseTile currentTile = GameManager.GameManagerInstance.tiles[(int) Mathf.Floor (transform.position.x + 0.5f), (int) Mathf.Floor (transform.position.y + 0.5f)].GetComponent<BaseTile>();
+		currentTile.Reveal(_vision);
+		/**
 		for (int i = _vision * -1; i <= _vision; i++) {
 			for (int j = (_vision - Mathf.Abs (i)) * -1; j <= _vision - Mathf.Abs (i); j++) {
 				GameObject tile = null;
@@ -650,6 +655,7 @@ public class Player : MonoBehaviour {
 				}		
 			}
 		}
+		*/
 	}
 	
 	/// <summary>
