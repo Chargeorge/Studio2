@@ -26,7 +26,19 @@ public class BaseTile : MonoBehaviour {
 	private GameObject _qudFogLayer;
 	
 	private GameObject _qudNoBuildLayer;
-
+	
+	public GameObject qudNoBuildLayer {
+		get {
+			if(_qudNoBuildLayer == null){
+				_qudNoBuildLayer = transform.FindChild("NoBuildLayer").gameObject;
+			}
+			return _qudNoBuildLayer;
+		}
+		set {
+			_qudNoBuildLayer = value;
+		}
+	}	
+	
 
 	public AudioClip influenceDone;
 
@@ -791,7 +803,7 @@ public class BaseTile : MonoBehaviour {
 					tile.GetComponent<BaseTile>().beacon != null && 
 					tile.GetComponent<BaseTile>().beacon.GetComponent<Beacon>().currentState != BeaconState.BuildingBasic) 
 				{
-					_qudNoBuildLayer.renderer.enabled = true;
+					qudNoBuildLayer.renderer.enabled = true;
 					return true;
 				}
 			}

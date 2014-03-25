@@ -245,6 +245,11 @@ public class GameManager : MonoBehaviour {
 					 y = Random.Range(0, tiles.GetLength(1));
 				} ///Weird placeholder, just go till you find a decent spot
 			}
+			for(int x = 0; x<  tiles.GetLength(0); x++){
+				for(int y =0 ; y< tiles.GetLength(1); y++){
+					tiles[x,y].GetComponent<BaseTile>().tooCloseToBeacon();
+				}
+			}
 			setup = false;
 			
 		}
