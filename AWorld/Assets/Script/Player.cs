@@ -726,8 +726,8 @@ public class Player : MonoBehaviour {
 		GUI.DrawTexture(new Rect(0,(Screen.height - scoreBarH)*(PlayerNumber-1), Screen.width, scoreBarH), gm.scoreBgTexture, ScaleMode.StretchToFill, true, 1.0f);
 		GUI.DrawTexture(new Rect(0,(Screen.height - scoreBarH)*(PlayerNumber-1), Screen.width * perScore, scoreBarH), scoreTexture, ScaleMode.StretchToFill, true, 1.0f);
 
-		int boxWidth = 450;
-		int boxHeight = 200;
+		int boxWidth = 1600;
+		int boxHeight = 900;
 
 		switch (gm.currentState){
 		case GameState.gameWon:
