@@ -803,7 +803,9 @@ public class BaseTile : MonoBehaviour {
 					tile.GetComponent<BaseTile>().beacon != null && 
 					tile.GetComponent<BaseTile>().beacon.GetComponent<Beacon>().currentState != BeaconState.BuildingBasic) 
 				{
-					qudNoBuildLayer.renderer.enabled = true;
+					if(this.beacon == null){
+						qudNoBuildLayer.renderer.enabled = true;
+					}
 					return true;
 				}
 			}

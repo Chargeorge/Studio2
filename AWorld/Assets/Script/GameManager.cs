@@ -174,14 +174,9 @@ public class GameManager : MonoBehaviour {
 				players.Add(Player3);
 				players.Add(Player4);
 				
-			
-				
 					//steps to ensure validity
 				team1Home = setUpTeamHome(p1);
 				team2Home = setUpTeamHome(p2);
-				
-				//
-
 				
 				//victoryConditions.Add (new LockMajorityAltars(1) );
 				victoryConditions.Add (new ControlViaTime(1));
