@@ -384,7 +384,7 @@ public class Player : MonoBehaviour {
 						{                                      
 							//Debug.Log("Adding Influence");
 							float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBasePlayerInfluence * getAltarInfluenceBoost() * Time.deltaTime);
-//							Debug.Log("test: " + test);
+						//	Debug.Log("test: " + test);
 							if(test > 0){
 								_currentState = PlayerState.standing;
 							}
