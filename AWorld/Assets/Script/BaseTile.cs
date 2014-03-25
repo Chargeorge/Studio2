@@ -621,6 +621,7 @@ public class BaseTile : MonoBehaviour {
 				percControlled += rate*Time.deltaTime;
 				if(percControlled >= 100) {
 					finishInfluence();
+					audio.PlayOneShot(influenceDone, 0.7f); //activate this if we want every tile influenced to trigger a sound, including the ones influenced by beacons
 					returnable = true;
 				}
 			}
@@ -657,8 +658,7 @@ public class BaseTile : MonoBehaviour {
 		}
 		if(percControlled >100f){
 			float returnable =  percControlled -100f;
-			audio.Play();
-			audio.PlayOneShot(influenceDone);
+
 			finishInfluence();
 			return returnable;
 		}
@@ -690,7 +690,8 @@ public class BaseTile : MonoBehaviour {
 			if(percControlled > 100f){
 				percControlled = 100f;
 				currentState = TileState.normal;
-				gm.PlaySFX(influenceDone, 0.7f);
+				audio.PlayOneShot(influenceDone, 0.7f); //activate this if we want every tile influenced to trigger a sound, including the ones influenced by beacons
+
 			}
 			owningTeam = controllingTeam;
 			Beacon localBeacon = GetComponentInChildren<Beacon>();
