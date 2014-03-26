@@ -69,11 +69,11 @@ public class Settings : MonoBehaviour {
 		optLockTile = false;
 		optTilesGiveScore = true;
 		valTileConvertScore = 1f;
-		team1Start = new Vector2(5,10);
-		team2Start = new Vector2(35,10);
-		optPerlinLevel = 1500;
+		team1Start = new Vector2(5,7);
+		team2Start = new Vector2(20,7);
+		optPerlinLevel = 1800;
 		valPointsToWin = 300;
-		beaconNoBuildRange = 2;
+		beaconNoBuildRange = 1;
 		neutralBeaconCount = 12;
 		debugMode = true;
 		gameMode = Mode.OneVOne;
