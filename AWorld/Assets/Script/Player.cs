@@ -17,7 +17,7 @@ public class Player : MonoBehaviour {
 	public DirectionEnum facing;
 	private GameObject _prfbBeacon;
 	private Beacon beaconInProgress;
-	private int _vision = 5;
+	private int _vision = 3;
 
 	private float _jiggleRange = 0.1f;			//Max distance from center of grid the player will jiggle
 	
