@@ -49,7 +49,7 @@ public class Beacon : MonoBehaviour {
 		brdX = transform.parent.gameObject.GetComponent<BaseTile>().brdXPos;
 	 	brdY = transform.parent.gameObject.GetComponent<BaseTile>().brdYPos;
 		
-		setVisualDirection();
+		setVisualDirection();	//Why is this happening every frame?
 
 		//influence work
 		// Find list of all influencible tiles
@@ -120,6 +120,8 @@ public class Beacon : MonoBehaviour {
 //				}
 //			 }
 		}
+		
+		UpdateInfluencePatterns();	//Probably shouldn't call this every frame, but just doing this for now
 		
 	}
 	
