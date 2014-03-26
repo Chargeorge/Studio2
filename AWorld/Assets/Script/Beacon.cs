@@ -474,6 +474,18 @@ public class Beacon : MonoBehaviour {
 			}
 			//No Munalwa
 			else {
+				List<InfluencePatternHolder> mainInfluenceList = new List<InfluencePatternHolder>();
+				mainInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,1), 1f, degreeRotated));
+				mainInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,2), 1f, degreeRotated));
+				mainInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,3), .5f, degreeRotated));
+				mainInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,4), .5f, degreeRotated));
+				mainInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,5), .33f, degreeRotated));
+				mainInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,6), .33f, degreeRotated));
+				mainInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,7), .25f, degreeRotated));
+				mainInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,8), .25f, degreeRotated));
+				list.Add (mainInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());		
+
+
 				List<InfluencePatternHolder> forwardLeftInfluenceList = new List<InfluencePatternHolder>();
 				forwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,1), 1f*sRef.coefTepwante, degreeRotated));
 				forwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,2), 1f*sRef.coefTepwante, degreeRotated));
