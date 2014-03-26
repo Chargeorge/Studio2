@@ -856,8 +856,9 @@ public class Player : MonoBehaviour {
 	}
 	
 	public void StopSFX(){
-		audio.volume -= 0.2f;
-		StartCoroutine(StopSFXCoroutine ());
+		audio.Stop();
+		//audio.volume -= 0.2f;
+		//StartCoroutine(StopSFXCoroutine ());
 	}
 	
 	public IEnumerator StopSFXCoroutine(){
