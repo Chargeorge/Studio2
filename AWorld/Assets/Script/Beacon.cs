@@ -51,6 +51,10 @@ public class Beacon : MonoBehaviour {
 		
 		setVisualDirection();
 
+		if(Input.GetKeyUp(KeyCode.Space)){
+			audio.Stop();
+		}
+
 		//influence work
 		// Find list of all influencible tiles
 		//Get closest tile in terms of distance and  begin influening it
