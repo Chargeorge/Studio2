@@ -228,33 +228,6 @@ public class Beacon : MonoBehaviour {
 		percUpgradeComplete += rate*Time.deltaTime;
 	}
 	
-	/// <summary>
-	/// Finishes the current building action.  USE ONLY FOR BUILDING, INFLUENCE HANDLED ELSEWHERE
-	/// </summary>
-	public void Build(){
-		
-		//Used to be finishAction() - refactored upgrade stuff into Upgrade() - seems cleaner this way
-		
-		///TODO: add end semaphore stuff her
-		audio.Stop();
-		
-		if(percActionComplete >= 100f){
-			percActionComplete = 100f;
-
-	
-			_currentState = BeaconState.Basic;
-			_patternList = createBasicInfluenceList(getAngleForDir(facing));
-			
-			for(int x = 0; x<  GameManager.GameManagerInstance.tiles.GetLength(0); x++){
-				for(int y =0 ; y< GameManager.GameManagerInstance.tiles.GetLength(1); y++){
-					if(GameManager.GameManagerInstance.tiles[x,y].GetComponent<BaseTile>().currentType != TileTypeEnum.water){
-						GameManager.GameManagerInstance.tiles[x,y].GetComponent<BaseTile>().tooCloseToBeacon();
-					}
-				}
-			}
-		}
-	}
-	
 	#region creating_influence_lists
 	//This is gonna be mad long so I added a region - minimize at your pleasure - should probably use for loops, but whatevs, it's all manual now 
 	
@@ -621,6 +594,38 @@ public class Beacon : MonoBehaviour {
 		}		
 	}
 	
+	/// <summary>
+	/// Finishes the current building action.  USE ONLY FOR BUILDING, INFLUENCE HANDLED ELSEWHERE
+	/// </summary>
+	public void Build(){
+		
+		//Used to be finishAction() - refactored upgrade stuff into Upgrade() - seems cleaner this way
+		
+		///TODO: add end semaphore stuff her
+		audio.Stop();
+		
+		if(percActionComplete >= 100f){
+			percActionComplete = 100f;
+			
+			
+			_currentState = BeaconState.Basic;
+			_patternList = createBasicInfluenceList(getAngleForDir(facing));
+			
+			for(int x = 0; x<  GameManager.GameManagerInstance.tiles.GetLength(0); x++){
+				for(int y =0 ; y< GameManager.GameManagerInstance.tiles.GetLength(1); y++){
+					if(GameManager.GameManagerInstance.tiles[x,y].GetComponent<BaseTile>().currentType != TileTypeEnum.water){
+						GameManager.GameManagerInstance.tiles[x,y].GetComponent<BaseTile>().tooCloseToBeacon();
+					}
+				}
+			}
+		}
+	}
+	
+	
+	public void AbortBuild () {
+		GameObject.Destroy (this.gameObject);
+	}
+	
 	public void Upgrade () {
 
 		//This block moved from old finishAction() function, now Build() 
@@ -642,6 +647,7 @@ public class Beacon : MonoBehaviour {
 	//Player stopped in the middle of an upgrade
 	public void AbortUpgrade () {
 		audio.Stop();
+		percUpgradeComplete = 0f;
 		_currentState = BeaconState.Basic;
 		
 	}

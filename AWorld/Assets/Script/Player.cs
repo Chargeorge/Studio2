@@ -367,8 +367,10 @@ public class Player : MonoBehaviour {
 					
 				}
 				else{
-					StopSFX();
-					_currentState =  PlayerState.standing;
+				currentActionProgress = 0;
+				currentTile.beacon.GetComponent<Beacon>().AbortBuild();
+				_currentState = PlayerState.standing;
+				StopSFX ();
 					
 					//TODO: figure out what happens when we abandon the tile
 				}
@@ -495,7 +497,6 @@ public class Player : MonoBehaviour {
 				else {
 				
 					currentActionProgress = 0;
-					currentTile.beacon.GetComponent<Beacon>().percUpgradeComplete = 0f;
 					currentTile.beacon.GetComponent<Beacon>().AbortUpgrade();
 					_currentState = PlayerState.standing;
 					StopSFX ();
@@ -631,7 +632,7 @@ public class Player : MonoBehaviour {
 /// 
 /// </summary>
 /// <param name="rate"></param>
-	private void addProgressToAction(float rate){
+	private void addProgressToAction(float rate){	//Do we actually need this for anything?
 		currentActionProgress+= rate*Time.deltaTime;
 		
 	}
