@@ -264,7 +264,7 @@ public class Player : MonoBehaviour {
 					
 					if (!outOfBounds(posToCheck) && 
 						!tooCloseToOpponent(posToCheck) &&
-						(!onWater(posToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti)) || currentTile.currentType == TileTypeEnum.water) 
+						(!onWater(posToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) 
 					{	//Valid move
 						PlaySFX(playerMove, 0.2f);
 						transform.position = posToCheck;
@@ -349,7 +349,7 @@ public class Player : MonoBehaviour {
 								
 									//gm.StopSFX();
 									PlaySFX(beaconBuilt, 1.0f);
-									beaconInProgress.finishAction();
+									beaconInProgress.Build();
 									_currentState = PlayerState.standing;
 									currentActionProgress = 0f;
 								}
@@ -482,7 +482,6 @@ public class Player : MonoBehaviour {
 					if (beacon.percUpgradeComplete >= 100f) {
 					
 						currentActionProgress = 0;
-						beacon.finishAction ();
 						beacon.Upgrade ();
 						beacon.percUpgradeComplete = 0f;
 						_currentState = PlayerState.standing;
