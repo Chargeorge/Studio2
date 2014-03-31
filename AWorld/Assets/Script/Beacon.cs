@@ -634,17 +634,19 @@ public class Beacon : MonoBehaviour {
 		audio.Stop ();
 		selfDestructing = true;
 		timeStoppedBuilding = Time.time;
-		Invoke ("CheckDestroyBasic", sRef.buildAbortedSelfDestructDelay);
+		Invoke ("CheckSelfDestruct", sRef.selfDestructDelay);
 	//	GameObject.Destroy (this.gameObject);
 	}
 	
-	public void CheckDestroyBasic () {
-		if (selfDestructing && timeStoppedBuilding <= Time.time - sRef.buildAbortedSelfDestructDelay) {
+	public void CheckSelfDestruct () {
+		if (selfDestructing && timeStoppedBuilding <= Time.time - sRef.selfDestructDelay) {
 			GameObject.Destroy (this.gameObject);
 		}
 	}
 	
 	public void Upgrade () {
+
+		losingUpgradeProgress = false;
 
 		//This block moved from old finishAction() function, now Build() 
 		audio.Stop();
@@ -665,8 +667,21 @@ public class Beacon : MonoBehaviour {
 	//Player stopped in the middle of an upgrade
 	public void AbortUpgrade () {
 		audio.Stop();
-		percUpgradeComplete = 0f;
-		_currentState = BeaconState.Basic;
+		losingUpgradeProgress = true;
+		timeStoppedUpgrading = Time.time;
+		Invoke ("CheckLoseUpgradeProgress", sRef.loseUpgradeProgressDelay);
+//		percUpgradeComplete = 0f;
+//		_currentState = BeaconState.Basic;
+		Debug.Log ("Aborting upgrade...");
+		
+	}
+	
+	public void CheckLoseUpgradeProgress () {
+		if (losingUpgradeProgress && timeStoppedUpgrading <= Time.time - sRef.loseUpgradeProgressDelay) {
+			_currentState = BeaconState.Basic;
+			percUpgradeComplete = 0f;
+			Debug.Log ("Lost upgrade progress");
+		}
 		
 	}
 	

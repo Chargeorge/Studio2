@@ -173,6 +173,7 @@ public class Player : MonoBehaviour {
 					addProgressToAction (vpsRate);
 					_currentState = PlayerState.upgrading;
 					currentTile.beacon.GetComponent<Beacon>().startUpgrading();
+					currentTile.beacon.GetComponent<Beacon>().losingUpgradeProgress = false;
 				}
 				
 				//If beacon
@@ -484,6 +485,7 @@ public class Player : MonoBehaviour {
 					addProgressToAction (vpsUpgradeRate);
 					Beacon beacon = currentTile.beacon.GetComponent<Beacon>();
 					beacon.addUpgradeProgress (vpsUpgradeRate);
+					beacon.losingUpgradeProgress = false;
 					
 					if (beacon.percUpgradeComplete >= 100f) {
 					
