@@ -206,6 +206,8 @@ public class Player : MonoBehaviour {
 								currentTile.getLocalAltar().doCapture(team);
 								
 							}
+							
+							//Building
 							else if((currentTile.beacon == null || 
 									currentTile.beacon.GetComponent<Beacon>().percActionComplete < 100f && 
 									currentTile.getLocalAltar()== null) && 
@@ -229,6 +231,7 @@ public class Player : MonoBehaviour {
 								beaconInProgress = beaconBeingBuilt.GetComponent<Beacon>();
 								beaconInProgress.startBuilding(currentTile.gameObject, this.gameObject, vpsBuildRate);
 								beaconInProgress.setDirection(facing);
+								beaconInProgress.selfDestructing = false;
 							}
 						}
 						else{
@@ -341,6 +344,7 @@ public class Player : MonoBehaviour {
 							if(beaconInProgress != null){
 								float vpsBuildRate = sRef.vpsBaseBuild * getAltarBuildBoost ();
 								beaconInProgress.addBuildingProgress(vpsBuildRate);
+								beaconInProgress.selfDestructing = false;
 								if(x.HasValue){
 									setDirection(x.Value);
 									beaconInProgress.setDirection(x.Value);

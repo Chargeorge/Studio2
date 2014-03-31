@@ -13,6 +13,10 @@ public class Beacon : MonoBehaviour {
 	public float percInfluenceComplete= 0;	//Countdown till another influence is popped
 	public float percRotateComplete = 0;
 	public float percUpgradeComplete = 0;
+	public float timeStoppedBuilding;
+	public bool selfDestructing = false;
+	public float timeStoppedUpgrading;
+	public bool losingUpgradeProgress = false;
 	public GameManager gm;	
 	public GameObject tileBeingConverted;
 	private InfluencePatternHolder patternConverting;
@@ -140,8 +144,10 @@ public class Beacon : MonoBehaviour {
 		this.facing = player.GetComponent<Player>().facing;
 		this.dirRotatingToward = facing;
 		this._currentState	= BeaconState.BuildingBasic;
-		controllingTeam = player.GetComponent<Player>().team;
-		this.setTeam();
+		if (controllingTeam == null) {
+			controllingTeam = player.GetComponent<Player>().team;
+			this.setTeam();
+		}	
 		audio.PlayOneShot(beaconBuilding, 0.9f);
 		this.transform.localPosition = new Vector3(0f,0f,-.5f);
 		tileLocation.GetComponent<BaseTile>().beacon = this.gameObject;
@@ -597,11 +603,13 @@ public class Beacon : MonoBehaviour {
 	/// <summary>
 	/// Finishes the current building action.  USE ONLY FOR BUILDING, INFLUENCE HANDLED ELSEWHERE
 	/// </summary>
-	public void Build(){
+	public void Build (){
 		
 		//Used to be finishAction() - refactored upgrade stuff into Upgrade() - seems cleaner this way
 		
 		///TODO: add end semaphore stuff her
+		selfDestructing = false;
+		
 		audio.Stop();
 		
 		if(percActionComplete >= 100f){
@@ -623,7 +631,17 @@ public class Beacon : MonoBehaviour {
 	
 	
 	public void AbortBuild () {
-		GameObject.Destroy (this.gameObject);
+		audio.Stop ();
+		selfDestructing = true;
+		timeStoppedBuilding = Time.time;
+		Invoke ("CheckDestroyBasic", sRef.buildAbortedSelfDestructDelay);
+	//	GameObject.Destroy (this.gameObject);
+	}
+	
+	public void CheckDestroyBasic () {
+		if (selfDestructing && timeStoppedBuilding <= Time.time - sRef.buildAbortedSelfDestructDelay) {
+			GameObject.Destroy (this.gameObject);
+		}
 	}
 	
 	public void Upgrade () {

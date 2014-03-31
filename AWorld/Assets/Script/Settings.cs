@@ -43,6 +43,8 @@ public class Settings : MonoBehaviour {
 	public bool debugMode;
 	public Mode gameMode;
 	public float percMaxInfluenceColor;	//Percentage of color that tile fills in when just before 100% influence
+	public float buildAbortedSelfDestructDelay;	//How long you wait after player stops building before destroying a beacon
+	public float upgradeAbortedSelfDestructDelay;	//How long you wait after player stops upgrading before clearing upgrade progress
 	
 	// Use this for initialization
 	void Start () {
@@ -77,7 +79,9 @@ public class Settings : MonoBehaviour {
 		neutralBeaconCount = 12;
 		debugMode = true;
 		gameMode = Mode.OneVOne;
-		percMaxInfluenceColor = 0.7f;	//Percentage of color that tile fills in when just before 100% influence		
+		percMaxInfluenceColor = 0.7f;	//Percentage of color that tile fills in when just before 100% influence
+		buildAbortedSelfDestructDelay = 0.5f;
+		upgradeAbortedSelfDestructDelay = 0.5f;		
 	}
 	
 	// Update is called once per frame
