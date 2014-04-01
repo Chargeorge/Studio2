@@ -146,7 +146,7 @@ public class Player : MonoBehaviour {
 		 			 currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Advanced)) 
 		 		{
 		 			//Yaxchay: Instant rotation
-		 			if (gm.getCapturedAltars(team).Contains (AltarType.Yaxchay)) {
+		 			if (gm.getCapturedAltars(team).Contains (AltarType.Yaxchay) && currentTile.beacon.GetComponent<Beacon>().controllingTeam == team) {
 						currentActionProgress = 0;
 						currentTile.beacon.GetComponent<Beacon>().Rotate (facing);
 						currentTile.beacon.GetComponent<Beacon>().percRotateComplete = 0f;
@@ -386,13 +386,14 @@ public class Player : MonoBehaviour {
 			//		Jiggle ();	//Gotta jiggle
 					Pulsate ();
 					PlaySFX(influenceStart, 0.8f);
+					
 					if(currentTile.controllingTeam != null){
 						if(currentTile.controllingTeam.teamNumber  == teamNumber)
 						{                                      
 							//Debug.Log("Adding Influence");
 							float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBasePlayerInfluence * getAltarInfluenceBoost() * Time.deltaTime);
 						//	Debug.Log("test: " + test);
-							if(test > 0){
+							if(test > 0f){
 								_currentState = PlayerState.standing;
 							}
 						}
