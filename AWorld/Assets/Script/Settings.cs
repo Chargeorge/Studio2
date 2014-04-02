@@ -43,6 +43,8 @@ public class Settings : MonoBehaviour {
 	public bool debugMode;
 	public Mode gameMode;
 	public float percMaxInfluenceColor;	//Percentage of color that tile fills in when just before 100% influence
+	public float selfDestructDelay;	//How long you wait after player stops building before destroying a beacon
+	public float loseUpgradeProgressDelay;	//How long you wait after player stops upgrading before clearing upgrade progress
 	
 	// Use this for initialization
 	void Start () {
@@ -69,15 +71,17 @@ public class Settings : MonoBehaviour {
 		optLockTile = false;
 		optTilesGiveScore = true;
 		valTileConvertScore = 1f;
-		team1Start = new Vector2(5,10);
-		team2Start = new Vector2(35,10);
-		optPerlinLevel = 1500;
+		team1Start = new Vector2(5,7);
+		team2Start = new Vector2(20,7);
+		optPerlinLevel = 1800;
 		valPointsToWin = 300;
-		beaconNoBuildRange = 2;
+		beaconNoBuildRange = 1;
 		neutralBeaconCount = 12;
 		debugMode = true;
 		gameMode = Mode.OneVOne;
-		percMaxInfluenceColor = 0.7f;	//Percentage of color that tile fills in when just before 100% influence		
+		percMaxInfluenceColor = 0.7f;	//Percentage of color that tile fills in when just before 100% influence
+		selfDestructDelay = 0.5f;
+		loseUpgradeProgressDelay = 0.5f;		
 	}
 	
 	// Update is called once per frame

@@ -17,7 +17,7 @@ public class Player : MonoBehaviour {
 	public DirectionEnum facing;
 	private GameObject _prfbBeacon;
 	private Beacon beaconInProgress;
-	private int _vision = 5;
+	private int _vision = 3;
 
 	private float _jiggleRange = 0.1f;			//Max distance from center of grid the player will jiggle
 	
@@ -146,17 +146,19 @@ public class Player : MonoBehaviour {
 		 			 currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Advanced)) 
 		 		{
 		 			//Yaxchay: Instant rotation
-		 			if (gm.getCapturedAltars(team).Contains (AltarType.Yaxchay)) {
+		 			if (gm.getCapturedAltars(team).Contains (AltarType.Yaxchay) && currentTile.beacon.GetComponent<Beacon>().controllingTeam == team) {
 						currentActionProgress = 0;
 						currentTile.beacon.GetComponent<Beacon>().Rotate (facing);
 						currentTile.beacon.GetComponent<Beacon>().percRotateComplete = 0f;
 					}
 					else {
 						float vpsRate = sRef.vpsBaseRotate;
-						
 						addProgressToAction (vpsRate);
+						
 //						setDirection(x.Value);
+						
 						PlaySFX(beaconRotating, 1.0f);
+						currentTile.beacon.GetComponent<Beacon>().startRotating ();
 						_currentState = PlayerState.rotating;
 						
 					}
@@ -173,6 +175,7 @@ public class Player : MonoBehaviour {
 					addProgressToAction (vpsRate);
 					_currentState = PlayerState.upgrading;
 					currentTile.beacon.GetComponent<Beacon>().startUpgrading();
+					currentTile.beacon.GetComponent<Beacon>().losingUpgradeProgress = false;
 				}
 				
 				//If beacon
@@ -206,6 +209,8 @@ public class Player : MonoBehaviour {
 								currentTile.getLocalAltar().doCapture(team);
 								
 							}
+							
+							//Building
 							else if((currentTile.beacon == null || 
 									currentTile.beacon.GetComponent<Beacon>().percActionComplete < 100f && 
 									currentTile.getLocalAltar()== null) && 
@@ -230,6 +235,7 @@ public class Player : MonoBehaviour {
 								beaconInProgress = beaconBeingBuilt.GetComponent<Beacon>();
 								beaconInProgress.startBuilding(currentTile.gameObject, this.gameObject, vpsBuildRate);
 								beaconInProgress.setDirection(facing);
+								beaconInProgress.selfDestructing = false;
 							}
 						}
 						else{
@@ -264,7 +270,7 @@ public class Player : MonoBehaviour {
 					
 					if (!outOfBounds(posToCheck) && 
 						!tooCloseToOpponent(posToCheck) &&
-						(!onWater(posToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti)) || currentTile.currentType == TileTypeEnum.water) 
+						(!onWater(posToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) 
 					{	//Valid move
 						PlaySFX(playerMove, 0.2f);
 						transform.position = posToCheck;
@@ -341,6 +347,7 @@ public class Player : MonoBehaviour {
 							if(beaconInProgress != null){
 								float vpsBuildRate = sRef.vpsBaseBuild * getAltarBuildBoost ();
 								beaconInProgress.addBuildingProgress(vpsBuildRate);
+								beaconInProgress.selfDestructing = false;
 								if(x.HasValue){
 									setDirection(x.Value);
 									beaconInProgress.setDirection(x.Value);
@@ -349,7 +356,7 @@ public class Player : MonoBehaviour {
 								
 									//gm.StopSFX();
 									PlaySFX(beaconBuilt, 1.0f);
-									beaconInProgress.finishAction();
+									beaconInProgress.Build();
 									_currentState = PlayerState.standing;
 									currentActionProgress = 0f;
 								}
@@ -367,11 +374,11 @@ public class Player : MonoBehaviour {
 					
 				}
 				else{
-					StopSFX();
-					_currentState =  PlayerState.standing;
-					
-					//TODO: figure out what happens when we abandon the tile
-				}
+					currentActionProgress = 0;
+					currentTile.beacon.GetComponent<Beacon>().AbortBuild();
+					_currentState = PlayerState.standing;
+					StopSFX ();
+					}
 			break;
 			
 			case PlayerState.influencing:
@@ -379,13 +386,14 @@ public class Player : MonoBehaviour {
 			//		Jiggle ();	//Gotta jiggle
 					Pulsate ();
 					PlaySFX(influenceStart, 0.8f);
+					
 					if(currentTile.controllingTeam != null){
 						if(currentTile.controllingTeam.teamNumber  == teamNumber)
 						{                                      
 							//Debug.Log("Adding Influence");
 							float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBasePlayerInfluence * getAltarInfluenceBoost() * Time.deltaTime);
 						//	Debug.Log("test: " + test);
-							if(test > 0){
+							if(test > 0f){
 								_currentState = PlayerState.standing;
 							}
 						}
@@ -479,11 +487,11 @@ public class Player : MonoBehaviour {
 					addProgressToAction (vpsUpgradeRate);
 					Beacon beacon = currentTile.beacon.GetComponent<Beacon>();
 					beacon.addUpgradeProgress (vpsUpgradeRate);
+					beacon.losingUpgradeProgress = false;
 					
 					if (beacon.percUpgradeComplete >= 100f) {
 					
 						currentActionProgress = 0;
-						beacon.finishAction ();
 						beacon.Upgrade ();
 						beacon.percUpgradeComplete = 0f;
 						_currentState = PlayerState.standing;
@@ -497,7 +505,6 @@ public class Player : MonoBehaviour {
 				else {
 				
 					currentActionProgress = 0;
-					currentTile.beacon.GetComponent<Beacon>().percUpgradeComplete = 0f;
 					currentTile.beacon.GetComponent<Beacon>().AbortUpgrade();
 					_currentState = PlayerState.standing;
 					StopSFX ();
@@ -633,7 +640,7 @@ public class Player : MonoBehaviour {
 /// 
 /// </summary>
 /// <param name="rate"></param>
-	private void addProgressToAction(float rate){
+	private void addProgressToAction(float rate){	//Do we actually need this for anything?
 		currentActionProgress+= rate*Time.deltaTime;
 		
 	}

@@ -13,6 +13,10 @@ public class Beacon : MonoBehaviour {
 	public float percInfluenceComplete= 0;	//Countdown till another influence is popped
 	public float percRotateComplete = 0;
 	public float percUpgradeComplete = 0;
+	public float timeStoppedBuilding;
+	public bool selfDestructing = false;
+	public float timeStoppedUpgrading;
+	public bool losingUpgradeProgress = false;
 	public GameManager gm;	
 	public GameObject tileBeingConverted;
 	private InfluencePatternHolder patternConverting;
@@ -49,7 +53,7 @@ public class Beacon : MonoBehaviour {
 		brdX = transform.parent.gameObject.GetComponent<BaseTile>().brdXPos;
 	 	brdY = transform.parent.gameObject.GetComponent<BaseTile>().brdYPos;
 		
-		setVisualDirection();
+		setVisualDirection();	//Why is this happening every frame?
 
 		if(Input.GetKeyUp(KeyCode.Space)){
 			audio.Stop();
@@ -125,6 +129,8 @@ public class Beacon : MonoBehaviour {
 //			 }
 		}
 		
+		UpdateInfluencePatterns();	//Probably shouldn't call this every frame, but just doing this for now
+		
 	}
 	
 	//START BUILDING:
@@ -142,8 +148,10 @@ public class Beacon : MonoBehaviour {
 		this.facing = player.GetComponent<Player>().facing;
 		this.dirRotatingToward = facing;
 		this._currentState	= BeaconState.BuildingBasic;
-		controllingTeam = player.GetComponent<Player>().team;
-		this.setTeam();
+		if (controllingTeam == null) {
+			controllingTeam = player.GetComponent<Player>().team;
+			this.setTeam();
+		}	
 		audio.PlayOneShot(beaconBuilding, 0.9f);
 		this.transform.localPosition = new Vector3(0f,0f,-.5f);
 		tileLocation.GetComponent<BaseTile>().beacon = this.gameObject;
@@ -169,6 +177,10 @@ public class Beacon : MonoBehaviour {
 		audio.Stop();
 		this._currentState = BeaconState.BuildingAdvanced;
 		audio.PlayOneShot(beaconUpgrading, 1.0f);
+	}
+	
+	public void startRotating () {
+		//Add SFX here
 	}
 	
 	public void setTeam(){
@@ -228,43 +240,6 @@ public class Beacon : MonoBehaviour {
 	
 	public void addUpgradeProgress (float rate) {
 		percUpgradeComplete += rate*Time.deltaTime;
-	}
-	
-	/// <summary>
-	/// Finishes the current building action.  USE ONLY FOR BUILDING, INFLUENCE HANDLED ELSEWHERE
-	/// </summary>
-	public void finishAction(){
-		//TODO - rename to Build () and refactor upgrade stuff into Upgrade ()?
-		
-		///TODO: add end semaphore stuff her
-		audio.Stop();
-		_patternList = new List<List<InfluencePatternHolder>>();
-		
-		if(percActionComplete >= 100f){
-			percActionComplete = 100f;
-
-			
-			if(_currentState == BeaconState.BuildingBasic){
-
-				_currentState = BeaconState.Basic;
-				_patternList = createBasicInfluenceList(getAngleForDir(facing));
-				
-				for(int x = 0; x<  GameManager.GameManagerInstance.tiles.GetLength(0); x++){
-					for(int y =0 ; y< GameManager.GameManagerInstance.tiles.GetLength(1); y++){
-						if(GameManager.GameManagerInstance.tiles[x,y].GetComponent<BaseTile>().currentType != TileTypeEnum.water){
-							GameManager.GameManagerInstance.tiles[x,y].GetComponent<BaseTile>().tooCloseToBeacon();
-						}
-					}
-				}
-				
-			}
-			if(_currentState == BeaconState.BuildingAdvanced){
-				audio.Stop();
-				audio.PlayOneShot(beaconUpgraded, 1.0f);
-				_currentState = BeaconState.Advanced;
-				_patternList = createAdvancedInfluenceList(getAngleForDir(facing));
-			}
-		}
 	}
 	
 	#region creating_influence_lists
@@ -633,8 +608,60 @@ public class Beacon : MonoBehaviour {
 		}		
 	}
 	
+	/// <summary>
+	/// Finishes the current building action.  USE ONLY FOR BUILDING, INFLUENCE HANDLED ELSEWHERE
+	/// </summary>
+	public void Build (){
+		
+		//Used to be finishAction() - refactored upgrade stuff into Upgrade() - seems cleaner this way
+		
+		///TODO: add end semaphore stuff her
+		selfDestructing = false;
+		
+		audio.Stop();
+		
+		if(percActionComplete >= 100f){
+			percActionComplete = 100f;
+			
+			
+			_currentState = BeaconState.Basic;
+			_patternList = createBasicInfluenceList(getAngleForDir(facing));
+			
+			for(int x = 0; x<  GameManager.GameManagerInstance.tiles.GetLength(0); x++){
+				for(int y =0 ; y< GameManager.GameManagerInstance.tiles.GetLength(1); y++){
+					if(GameManager.GameManagerInstance.tiles[x,y].GetComponent<BaseTile>().currentType != TileTypeEnum.water){
+						GameManager.GameManagerInstance.tiles[x,y].GetComponent<BaseTile>().tooCloseToBeacon();
+					}
+				}
+			}
+		}
+	}
+	
+	
+	public void AbortBuild () {
+		audio.Stop ();
+		selfDestructing = true;
+		timeStoppedBuilding = Time.time;
+		Invoke ("CheckSelfDestruct", sRef.selfDestructDelay);
+	//	GameObject.Destroy (this.gameObject);
+	}
+	
+	public void CheckSelfDestruct () {
+		if (selfDestructing && timeStoppedBuilding <= Time.time - sRef.selfDestructDelay) {
+			GameObject.Destroy (this.gameObject);
+		}
+	}
+	
 	public void Upgrade () {
 
+		losingUpgradeProgress = false;
+
+		//This block moved from old finishAction() function, now Build() 
+		audio.Stop();
+		audio.PlayOneShot(beaconUpgraded, 1.0f);
+		_currentState = BeaconState.Advanced;
+		_patternList = createAdvancedInfluenceList(getAngleForDir(facing));
+		
 		_currentState = BeaconState.Advanced;
 		renderer.material = matUpgraded;
 		
@@ -648,7 +675,21 @@ public class Beacon : MonoBehaviour {
 	//Player stopped in the middle of an upgrade
 	public void AbortUpgrade () {
 		audio.Stop();
-		_currentState = BeaconState.Basic;
+		losingUpgradeProgress = true;
+		timeStoppedUpgrading = Time.time;
+		Invoke ("CheckLoseUpgradeProgress", sRef.loseUpgradeProgressDelay);
+//		percUpgradeComplete = 0f;
+//		_currentState = BeaconState.Basic;
+		Debug.Log ("Aborting upgrade...");
+		
+	}
+	
+	public void CheckLoseUpgradeProgress () {
+		if (losingUpgradeProgress && timeStoppedUpgrading <= Time.time - sRef.loseUpgradeProgressDelay) {
+			_currentState = BeaconState.Basic;
+			percUpgradeComplete = 0f;
+			Debug.Log ("Lost upgrade progress");
+		}
 		
 	}
 	
