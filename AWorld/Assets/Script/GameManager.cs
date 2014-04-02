@@ -47,6 +47,8 @@ public class GameManager : MonoBehaviour {
 	private GameObject prfbBeacon;
 	public VictoryCondition vIsForVendetta;
 
+	public AudioClip Victory_Gong;
+
 	// Use this for initializatio
 	void Start () {
 		sRef = GameObject.Find ("Settings").GetComponent<Settings>();
@@ -323,7 +325,9 @@ public class GameManager : MonoBehaviour {
 					break;
 				}
 				case GameState.gameWon:{
+					audio.PlayOneShot(Victory_Gong, 0.7f);
 					GUI.Box (new Rect (10,100,400,300), _victoryString);
+					
 					break;
 				}
 			

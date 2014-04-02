@@ -181,6 +181,7 @@ public class Beacon : MonoBehaviour {
 	
 	public void startRotating () {
 		//Add SFX here
+		audio.PlayOneShot(beaconRotating, 1.0f);
 	}
 	
 	public void setTeam(){

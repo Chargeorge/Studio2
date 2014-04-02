@@ -42,7 +42,7 @@ public class Player : MonoBehaviour {
 	public AudioClip beaconRotating;
 	public AudioClip beaconUpgrading;
 	public AudioClip beaconUpgraded;
-	public AudioClip invalidInput;
+	public AudioClip invalid_Input;
 
 	public float scoreBarH = 30;
 	public Texture scoreTexture;
@@ -176,6 +176,8 @@ public class Player : MonoBehaviour {
 					_currentState = PlayerState.upgrading;
 					currentTile.beacon.GetComponent<Beacon>().startUpgrading();
 					currentTile.beacon.GetComponent<Beacon>().losingUpgradeProgress = false;
+				} else {
+					//PlaySFX(invalid_Input, 1.0f);
 				}
 				
 				//If beacon
@@ -237,8 +239,9 @@ public class Player : MonoBehaviour {
 								beaconInProgress.setDirection(facing);
 								beaconInProgress.selfDestructing = false;
 							}
-						}
-						else{
+						} else if(currentTile.tooCloseToBeacon()){
+								audio.PlayOneShot(invalid_Input, 1.0f);
+						} else{
 							
 							_currentState = PlayerState.influencing;
 						}
@@ -363,7 +366,7 @@ public class Player : MonoBehaviour {
 							}
 						}
 						else{
-							
+						PlaySFX(invalid_Input, 1.0f);
 						}
 					}
 					else
@@ -378,6 +381,7 @@ public class Player : MonoBehaviour {
 					currentTile.beacon.GetComponent<Beacon>().AbortBuild();
 					_currentState = PlayerState.standing;
 					StopSFX ();
+					PlaySFX(invalid_Input, 1.0f);
 					}
 			break;
 			
@@ -401,6 +405,7 @@ public class Player : MonoBehaviour {
 							float test = currentTile.subTractInfluence(  sRef.vpsBasePlayerInfluence * getAltarInfluenceBoost() * Time.deltaTime, team);
 							if(test > 0f){
 								currentTile.addInfluenceReturnOverflow(test);
+								PlaySFX(invalid_Input, 1.0f);
 							}
 						}
 						/*
