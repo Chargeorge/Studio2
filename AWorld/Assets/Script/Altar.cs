@@ -70,7 +70,7 @@ public class Altar : MonoBehaviour {
 			networked= checkNetwork();
 			if(networked){
 				_currentControllingTeam.score += sRef.vpsScorePerAltarPerSecond * Time.deltaTime;
-				audio.PlayOneShot(Praying, 1.0f);
+				//audio.PlayOneShot(Praying, 1.0f); //this is not the right place to put it, it apparently fucks up the other sounds ?
 			}
 			gm.debugString = string.Format(" Number: {0},\r\n Networked: {1}", _currentControllingTeam.teamNumber, networked);
 		}
@@ -140,7 +140,7 @@ public class Altar : MonoBehaviour {
 						foreach (GameObject go in beacons) {
 							go.GetComponent<Beacon>().UpdateInfluencePatterns();
 						}
-						
+						audio.PlayOneShot(Praying, 1.0f);
 						return true;
 					}
 					
