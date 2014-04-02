@@ -44,7 +44,6 @@ public class Beacon : MonoBehaviour {
 		sRef= GameObject.Find ("Settings").GetComponent<Settings>();
 		matBasic = (Material) Resources.Load ("Sprites/Materials/Beacon");
 		matUpgraded = (Material) Resources.Load ("Sprites/Materials/Beacon_Upgraded");
-		
 	}
 	
 	// Update is called once per frame
@@ -131,6 +130,7 @@ public class Beacon : MonoBehaviour {
 		
 		UpdateInfluencePatterns();	//Probably shouldn't call this every frame, but just doing this for now
 		
+		/**
 		//Check self-destruction and losing upgrade progress - probably shouldn't call this every frame either, but I'm a rebel and I do what I want when I want 
 		if (timeToSelfDestruct ()) { 
 			subtractBuildingProgress (sRef.vpsBaseBuild);
@@ -139,6 +139,7 @@ public class Beacon : MonoBehaviour {
 		if (timeToLoseUpgradeProgress ()) {
 			subtractUpgradeProgress (sRef.vpsBaseUpgrade);
 		}
+		*/
 		
 	}
 	
@@ -152,6 +153,7 @@ public class Beacon : MonoBehaviour {
 	/// <param name="tileLocation">Tile location.</param>
 	/// <param name="player">Player.</param>
 	/// <param name="valInit">Value init.</param>
+		
 	public void startBuilding(GameObject tileLocation, GameObject player, float valInit){
 		this.gameObject.transform.parent = tileLocation.transform;
 		this.facing = player.GetComponent<Player>().facing;
@@ -681,13 +683,20 @@ public class Beacon : MonoBehaviour {
 		audio.Stop ();
 		selfDestructing = true;
 		timeStoppedBuilding = Time.time;
-	//	Invoke ("CheckSelfDestruct", sRef.selfDestructDelay);
+		Invoke ("CheckSelfDestruct", sRef.selfDestructDelay);
 	}
 	
 	public void CheckSelfDestruct () {
 		if (timeToSelfDestruct ()) {
-			GameObject.Destroy (this.gameObject);	//Destroys beacon immediately
-			
+	//		GameObject.Destroy (this.gameObject);	//Destroys beacon immediately
+			StartCoroutine (selfDestruct());
+		}
+	}
+	
+	private IEnumerator selfDestruct () {
+		while (selfDestructing) {
+			subtractBuildingProgress (sRef.vpsBaseBuild);
+			yield return new WaitForEndOfFrame ();
 		}
 	}
 	
@@ -720,23 +729,31 @@ public class Beacon : MonoBehaviour {
 		audio.Stop();
 		losingUpgradeProgress = true;
 		timeStoppedUpgrading = Time.time;
-//		Invoke ("CheckLoseUpgradeProgress", sRef.loseUpgradeProgressDelay);
-//		percUpgradeComplete = 0f;
-//		_currentState = BeaconState.Basic;
+		Invoke ("CheckLoseUpgradeProgress", sRef.loseUpgradeProgressDelay);
 		Debug.Log ("Aborting upgrade...");
 		
 	}
 	
 	public void CheckLoseUpgradeProgress () {
 		if (timeToLoseUpgradeProgress ()) {
-			_currentState = BeaconState.Basic;
-			percUpgradeComplete = 0f;
+//			_currentState = BeaconState.Basic;
+//			percUpgradeComplete = 0f;
 			Debug.Log ("Lost upgrade progress");
+			StartCoroutine(loseUpgradeProgress());
 		}
 	}
 	
 	private bool timeToLoseUpgradeProgress () {
 		return losingUpgradeProgress && timeStoppedUpgrading <= Time.time - sRef.loseUpgradeProgressDelay;
 	}
+	
+	private IEnumerator loseUpgradeProgress () {
+		while (losingUpgradeProgress) {
+			subtractUpgradeProgress (sRef.vpsBaseUpgrade);
+			yield return new WaitForEndOfFrame ();
+		}
+	}
+	
+	
 	
 }
