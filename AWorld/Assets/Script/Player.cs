@@ -212,7 +212,7 @@ public class Player : MonoBehaviour {
 							
 							//Building
 							else if((currentTile.beacon == null || 
-									currentTile.beacon.GetComponent<Beacon>().percActionComplete < 100f && 
+									currentTile.beacon.GetComponent<Beacon>().percBuildComplete < 100f && 
 									currentTile.getLocalAltar()== null) && 
 									!currentTile.tooCloseToBeacon())
 							{
@@ -352,7 +352,7 @@ public class Player : MonoBehaviour {
 									setDirection(x.Value);
 									beaconInProgress.setDirection(x.Value);
 								}
-								if(beaconInProgress.percActionComplete > 100f){
+								if(beaconInProgress.percBuildComplete > 100f){
 								
 									//gm.StopSFX();
 									PlaySFX(beaconBuilt, 1.0f);

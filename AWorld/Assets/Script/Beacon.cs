@@ -9,7 +9,7 @@ public class Beacon : MonoBehaviour {
 	public DirectionEnum? dirRotatingToward;	//Used to set visual direction while rotating
 	public TeamInfo controllingTeam;
 	private BeaconState _currentState;
-	public float percActionComplete = 0;
+	public float percBuildComplete = 0;
 	public float percInfluenceComplete= 0;	//Countdown till another influence is popped
 	public float percRotateComplete = 0;
 	public float percUpgradeComplete = 0;
@@ -127,6 +127,15 @@ public class Beacon : MonoBehaviour {
 		
 		UpdateInfluencePatterns();	//Probably shouldn't call this every frame, but just doing this for now
 		
+		//Check self-destruction and losing upgrade progress - probably shouldn't call this every frame either, but I'm a rebel and I do what I want when I want 
+		if (timeToSelfDestruct ()) { 
+			subtractBuildingProgress (sRef.vpsBaseBuild);
+		}
+		
+		if (timeToLoseUpgradeProgress ()) {
+			subtractUpgradeProgress (sRef.vpsBaseUpgrade);
+		}
+		
 	}
 	
 	//START BUILDING:
@@ -199,7 +208,7 @@ public class Beacon : MonoBehaviour {
 //		controllingTeamColor.r += 30;
 //		controllingTeamColor.g += 30;
 //		controllingTeamColor.b += 30;
-		renderer.material.color = controllingTeamColor;		}
+		renderer.material.color = controllingTeamColor;	}
 		else{
 			controllingTeam = null;
 			renderer.material.color = Color.grey;
@@ -210,18 +219,34 @@ public class Beacon : MonoBehaviour {
 	/// </summary>
 	/// <param name="rate">Rate.</param>
 	public void addBuildingProgress(float rate){
-		percActionComplete += rate*Time.deltaTime;
+		percBuildComplete += rate*Time.deltaTime;
 						
 		Color32 beaconColor = renderer.material.color;
-		float newColor =  (255f * (percActionComplete/100f)) ;
+		float newColor =  (255f * (percBuildComplete/100f)) ;
 		newColor = (newColor >= 255) ? 254 : newColor;		
 		beaconColor.a = (byte)newColor;
 		renderer.material.color = beaconColor;		
 
-		if(percActionComplete >= 100){
+		if(percBuildComplete >= 100){
 			gm.PlaySFX(beaconBuilt, 1.0f);
 		}
-
+	}
+	
+	public void subtractBuildingProgress(float rate) {
+	
+		percBuildComplete -= rate*Time.deltaTime;
+		
+		if (percBuildComplete <= 0f) {
+			GameObject.Destroy (this.gameObject);
+		}
+		
+		else {
+			Color32 beaconColor = renderer.material.color;
+			float newColor =  (255f * (percBuildComplete/100f)) ;
+			newColor = (newColor >= 255) ? 254 : newColor;		
+			beaconColor.a = (byte)newColor;
+			renderer.material.color = beaconColor; 
+		}
 	}
 	
 	public void addInfluenceProgress(float rate){
@@ -236,6 +261,20 @@ public class Beacon : MonoBehaviour {
 	
 	public void addUpgradeProgress (float rate) {
 		percUpgradeComplete += rate*Time.deltaTime;
+
+		//We need some visual representation for this	
+	}
+	
+	
+	public void subtractUpgradeProgress (float rate) {
+		percUpgradeComplete -= rate*Time.deltaTime;
+		
+		if (percUpgradeComplete <= 0f) {
+			percUpgradeComplete = 0f;
+			_currentState = BeaconState.Basic;
+		}
+		
+		//We need some visual representation for this
 	}
 	
 	#region creating_influence_lists
@@ -616,8 +655,8 @@ public class Beacon : MonoBehaviour {
 		
 		audio.Stop();
 		
-		if(percActionComplete >= 100f){
-			percActionComplete = 100f;
+		if(percBuildComplete >= 100f){
+			percBuildComplete = 100f;
 			
 			
 			_currentState = BeaconState.Basic;
@@ -638,14 +677,18 @@ public class Beacon : MonoBehaviour {
 		audio.Stop ();
 		selfDestructing = true;
 		timeStoppedBuilding = Time.time;
-		Invoke ("CheckSelfDestruct", sRef.selfDestructDelay);
-	//	GameObject.Destroy (this.gameObject);
+	//	Invoke ("CheckSelfDestruct", sRef.selfDestructDelay);
 	}
 	
 	public void CheckSelfDestruct () {
-		if (selfDestructing && timeStoppedBuilding <= Time.time - sRef.selfDestructDelay) {
-			GameObject.Destroy (this.gameObject);
+		if (timeToSelfDestruct ()) {
+			GameObject.Destroy (this.gameObject);	//Destroys beacon immediately
+			
 		}
+	}
+	
+	private bool timeToSelfDestruct () {
+		return selfDestructing && timeStoppedBuilding <= Time.time - sRef.selfDestructDelay;
 	}
 	
 	public void Upgrade () {
@@ -673,7 +716,7 @@ public class Beacon : MonoBehaviour {
 		audio.Stop();
 		losingUpgradeProgress = true;
 		timeStoppedUpgrading = Time.time;
-		Invoke ("CheckLoseUpgradeProgress", sRef.loseUpgradeProgressDelay);
+//		Invoke ("CheckLoseUpgradeProgress", sRef.loseUpgradeProgressDelay);
 //		percUpgradeComplete = 0f;
 //		_currentState = BeaconState.Basic;
 		Debug.Log ("Aborting upgrade...");
@@ -681,12 +724,15 @@ public class Beacon : MonoBehaviour {
 	}
 	
 	public void CheckLoseUpgradeProgress () {
-		if (losingUpgradeProgress && timeStoppedUpgrading <= Time.time - sRef.loseUpgradeProgressDelay) {
+		if (timeToLoseUpgradeProgress ()) {
 			_currentState = BeaconState.Basic;
 			percUpgradeComplete = 0f;
 			Debug.Log ("Lost upgrade progress");
 		}
-		
+	}
+	
+	private bool timeToLoseUpgradeProgress () {
+		return losingUpgradeProgress && timeStoppedUpgrading <= Time.time - sRef.loseUpgradeProgressDelay;
 	}
 	
 }
