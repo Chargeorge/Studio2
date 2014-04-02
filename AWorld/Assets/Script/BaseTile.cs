@@ -701,12 +701,13 @@ public class BaseTile : MonoBehaviour {
 		}
 	}
 	public void finishInfluence(){
+		audio.PlayOneShot(influenceDone, 0.7f);
 		///TODO: add end semaphore stuff her
 		if(controllingTeam != owningTeam){
 			if(percControlled > 100f){
 				percControlled = 100f;
 				currentState = TileState.normal;
-				audio.PlayOneShot(influenceDone, 0.7f); //activate this if we want every tile influenced to trigger a sound, including the ones influenced by beacons
+				//audio.PlayOneShot(influenceDone, 0.7f); 
 
 			}
 			owningTeam = controllingTeam;

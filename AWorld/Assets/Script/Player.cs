@@ -218,8 +218,9 @@ public class Player : MonoBehaviour {
 							{
 									
 								Pulsate ();
-								_currentState = PlayerState.building;
 								PlaySFX(influenceDone, 1.0f);
+								_currentState = PlayerState.building;
+								
 								float vpsBuildRate = sRef.vpsBaseBuild;
 								addProgressToAction(vpsBuildRate);
 
@@ -244,7 +245,6 @@ public class Player : MonoBehaviour {
 					}
 					else{
 					Pulsate ();
-						//gm.PlaySFX(influenceStart, 1.0f);
 						float vpsInfluenceRate = sRef.vpsBasePlayerInfluence * getAltarInfluenceBoost();
 						addProgressToAction(vpsInfluenceRate);
 						_currentState = PlayerState.influencing;
@@ -422,7 +422,7 @@ public class Player : MonoBehaviour {
 
 						if(currentTile.percControlled >= 100f){
 						Debug.Log ("INLFUENCE DONE");
-							//PlaySFX(influenceDone, 1.0f);
+							PlaySFX(influenceDone, 1.0f);
 						}
 						
 						if (x.HasValue) { 
@@ -432,13 +432,14 @@ public class Player : MonoBehaviour {
 						
 					} else{
 					///TODO catch fully influenced Tile!
-					//PlaySFX(influenceDone, 1.0f);
+					PlaySFX(influenceDone, 1.0f);
 					}
 				}
 				else{
 				///TODO: add reset to tile in case of change
 					//need to reset currenttile to previousState
 					//StopSFX();
+					
 					_currentState = PlayerState.standing;
 				}	
 			break;
