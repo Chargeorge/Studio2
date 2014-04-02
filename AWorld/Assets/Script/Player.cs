@@ -153,10 +153,12 @@ public class Player : MonoBehaviour {
 					}
 					else {
 						float vpsRate = sRef.vpsBaseRotate;
-						
 						addProgressToAction (vpsRate);
+						
 //						setDirection(x.Value);
+						
 						PlaySFX(beaconRotating, 1.0f);
+						currentTile.beacon.GetComponent<Beacon>().startRotating ();
 						_currentState = PlayerState.rotating;
 						
 					}
@@ -372,13 +374,11 @@ public class Player : MonoBehaviour {
 					
 				}
 				else{
-				currentActionProgress = 0;
-				currentTile.beacon.GetComponent<Beacon>().AbortBuild();
-				_currentState = PlayerState.standing;
-				StopSFX ();
-					
-					//TODO: figure out what happens when we abandon the tile
-				}
+					currentActionProgress = 0;
+					currentTile.beacon.GetComponent<Beacon>().AbortBuild();
+					_currentState = PlayerState.standing;
+					StopSFX ();
+					}
 			break;
 			
 			case PlayerState.influencing:

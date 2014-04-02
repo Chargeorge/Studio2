@@ -175,6 +175,10 @@ public class Beacon : MonoBehaviour {
 		audio.PlayOneShot(beaconUpgrading, 1.0f);
 	}
 	
+	public void startRotating () {
+		//Add SFX here
+	}
+	
 	public void setTeam(){
 		Color32 controllingTeamColor = controllingTeam.beaconColor;		
 		//TODO: custom sprites and colors per team
