@@ -114,6 +114,18 @@ public class Player : MonoBehaviour {
 				
 		switch(currentState){
 			
+			case PlayerState.teleporting:
+				transform.position = Vector2.Lerp(transform.position,team.getHomeTile().transform.position, sRef.teleportRate);
+				BaseTile newTile = gm.tiles[(int) Mathf.Floor (transform.position.x + 0.5f), (int) Mathf.Floor (transform.position.y + 0.5f)].GetComponent<BaseTile>();
+				if (newTile != currentTile) {
+					currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
+				}
+				if(currentTile == team.getHomeTile()){
+					transform.position = currentTile.transform.position;
+				
+				}
+			break;
+			
 			case PlayerState.standing:
 			//If we are standing and we get an input, handle it.
 //			Debug.Log (string.Format("Player number {0}, buld button down: {1}", PlayerNumber, buildButtonDown));
@@ -271,13 +283,13 @@ public class Player : MonoBehaviour {
 					transform.position.z);
 					
 					if (!outOfBounds(posToCheck) && 
-						!tooCloseToOpponent(posToCheck) &&
+						//!tooCloseToOpponent(posToCheck) &&
 						(!onWater(posToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) 
 					{	//Valid move
 						PlaySFX(playerMove, 0.2f);
 						transform.position = posToCheck;
-						BaseTile newTile = gm.tiles[(int) Mathf.Floor (transform.position.x + 0.5f), (int) Mathf.Floor (transform.position.y + 0.5f)].GetComponent<BaseTile>();
-						if (newTile != currentTile) {
+						BaseTile thisTile = gm.tiles[(int) Mathf.Floor (transform.position.x + 0.5f), (int) Mathf.Floor (transform.position.y + 0.5f)].GetComponent<BaseTile>();
+						if (thisTile != currentTile) {
 							currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
 						}	
 					}
@@ -895,4 +907,19 @@ public class Player : MonoBehaviour {
 		yield return new WaitForSeconds(0.6f);
 		audio.Stop();
 	}
+	
+	public void OnCollisionEnter2D(Collision Collided){
+	Debug.Log("In Enter");
+		GameObject go = Collided.gameObject;
+		if(go.tag == "Player"){
+			Player p =  go.GetComponent<Player>();
+			if(p.team != team){
+				p._currentState = PlayerState.teleporting;
+			}
+		}
+	}
+	
+	
+	
+	
 }

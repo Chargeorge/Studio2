@@ -46,6 +46,9 @@ public class Settings : MonoBehaviour {
 	public float selfDestructDelay;	//How long you wait after player stops building before destroying a beacon
 	public float loseUpgradeProgressDelay;	//How long you wait after player stops upgrading before clearing upgrade progress
 	
+	public float teleportRate;
+	
+	
 	// Use this for initialization
 	void Start () {
 
@@ -81,7 +84,9 @@ public class Settings : MonoBehaviour {
 		gameMode = Mode.OneVOne;
 		percMaxInfluenceColor = 0.5f;	//Percentage of color that tile fills in when just before 100% influence
 		selfDestructDelay = 0.5f;
-		loseUpgradeProgressDelay = 0.5f;		
+		loseUpgradeProgressDelay = 0.5f;	
+		
+		 teleportRate = .3f;	
 	}
 	
 	// Update is called once per frame
