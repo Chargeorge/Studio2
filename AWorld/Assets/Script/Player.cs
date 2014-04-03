@@ -218,7 +218,6 @@ public class Player : MonoBehaviour {
 									currentTile.getLocalAltar()== null) && 
 									!currentTile.tooCloseToBeacon())
 							{
-									
 								Pulsate ();
 								PlaySFX(influenceDone, 1.0f);
 								_currentState = PlayerState.building;
@@ -246,8 +245,8 @@ public class Player : MonoBehaviour {
 							_currentState = PlayerState.influencing;
 						}
 					}
-					else{
-					Pulsate ();
+					else {
+						Pulsate ();
 						float vpsInfluenceRate = sRef.vpsBasePlayerInfluence * getAltarInfluenceBoost();
 						addProgressToAction(vpsInfluenceRate);
 						_currentState = PlayerState.influencing;
@@ -381,7 +380,7 @@ public class Player : MonoBehaviour {
 					currentTile.beacon.GetComponent<Beacon>().AbortBuild();
 					_currentState = PlayerState.standing;
 					StopSFX ();
-					PlaySFX(invalid_Input, 1.0f);
+					//PlaySFX(invalid_Input, 1.0f);
 					}
 			break;
 			
@@ -392,13 +391,30 @@ public class Player : MonoBehaviour {
 					PlaySFX(influenceStart, 0.8f);
 					
 					if(currentTile.controllingTeam != null){
-						if(currentTile.controllingTeam.teamNumber  == teamNumber)
+						if(currentTile.controllingTeam.teamNumber == teamNumber)
 						{                                      
 							//Debug.Log("Adding Influence");
 							float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBasePlayerInfluence * getAltarInfluenceBoost() * Time.deltaTime);
 						//	Debug.Log("test: " + test);
 							if(test > 0f){
-								_currentState = PlayerState.standing;
+//								_currentState = PlayerState.standing;
+								_currentState = PlayerState.building;
+								
+								float vpsBuildRate = sRef.vpsBaseBuild;
+								addProgressToAction(vpsBuildRate);
+								
+								GameObject beaconBeingBuilt;
+								if (currentTile.beacon == null) { 
+									beaconBeingBuilt = (GameObject)GameObject.Instantiate(_prfbBeacon, new Vector3(0,0,0), Quaternion.identity);
+								}
+								else {
+									beaconBeingBuilt = currentTile.beacon;
+								}
+								
+								beaconInProgress = beaconBeingBuilt.GetComponent<Beacon>();
+								beaconInProgress.startBuilding(currentTile.gameObject, this.gameObject, vpsBuildRate);
+								beaconInProgress.setDirection(facing);
+								beaconInProgress.selfDestructing = false;
 							}
 						}
 						else{
@@ -426,7 +442,7 @@ public class Player : MonoBehaviour {
 						}*/
 
 						if(currentTile.percControlled >= 100f){
-						Debug.Log ("INLFUENCE DONE");
+//						Debug.Log ("INLFUENCE DONE");
 							PlaySFX(influenceDone, 1.0f);
 						}
 						
