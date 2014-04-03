@@ -56,6 +56,10 @@ public class TeamInfo
 		return HighlightColor;
 	}
 	
+	public GameObject getHomeTile(){
+		return  GameManager.GameManagerInstance.tiles[(int)startingLocation.x, (int)startingLocation.y];
+	}
+	
 	
 }
 
