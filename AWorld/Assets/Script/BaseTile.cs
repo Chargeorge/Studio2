@@ -232,8 +232,13 @@ public class BaseTile : MonoBehaviour {
 			Color32 controllingTeamColor = controllingTeam.tileColor;
 			//controllingTeamColor.a = (byte) (255*(percControlled/100f));
 			
-			controllingTeamColor.a = (byte) (255*(percControlled/100f) * sRef.percMaxInfluenceColor);
-
+			if (owningTeam != null && owningTeam == controllingTeam) {
+				controllingTeamColor.a = (byte) (255-255*((1.0f-percControlled/100f) * (1.0f - sRef.percMaxInfluenceColor)));
+			}
+			else {
+				controllingTeamColor.a = (byte) (255*(percControlled/100f) * sRef.percMaxInfluenceColor);
+			}
+			
 			if (percControlled >= 100f) controllingTeamColor.a = (byte) 255;
 			
 			qudInfluenceLayer.renderer.material.color = controllingTeamColor;
@@ -701,12 +706,13 @@ public class BaseTile : MonoBehaviour {
 		}
 	}
 	public void finishInfluence(){
+		audio.PlayOneShot(influenceDone, 0.7f);
 		///TODO: add end semaphore stuff her
 		if(controllingTeam != owningTeam){
 			if(percControlled > 100f){
 				percControlled = 100f;
 				currentState = TileState.normal;
-				audio.PlayOneShot(influenceDone, 0.7f); //activate this if we want every tile influenced to trigger a sound, including the ones influenced by beacons
+				//audio.PlayOneShot(influenceDone, 0.7f); 
 
 			}
 			owningTeam = controllingTeam;

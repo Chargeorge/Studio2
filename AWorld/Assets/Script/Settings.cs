@@ -82,7 +82,7 @@ public class Settings : MonoBehaviour {
 		neutralBeaconCount = 12;
 		debugMode = true;
 		gameMode = Mode.OneVOne;
-		percMaxInfluenceColor = 0.7f;	//Percentage of color that tile fills in when just before 100% influence
+		percMaxInfluenceColor = 0.5f;	//Percentage of color that tile fills in when just before 100% influence
 		selfDestructDelay = 0.5f;
 		loseUpgradeProgressDelay = 0.5f;	
 		

@@ -238,7 +238,7 @@ AudioSource:
     type: 2}
   m_PrefabInternal: {fileID: 1318136052}
   m_GameObject: {fileID: 473215124}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_audioClip: {fileID: 8300000, guid: 4a33269aa3ad0714b991aeaf11ea431a, type: 3}
   m_PlayOnAwake: 0
@@ -666,6 +666,7 @@ MonoBehaviour:
   scoreTexture2: {fileID: 2800000, guid: 68d5de7dc03aeed4e8b0b0d3f0970bb2, type: 3}
   winTexture1: {fileID: 2800000, guid: ceec3b46a1180ac48abeb66c72f11728, type: 3}
   winTexture2: {fileID: 2800000, guid: bfca8ecba3fbdc64baa49e4be9cdb256, type: 3}
+  Victory_Gong: {fileID: 8300000, guid: 44e623b0750368a44b0288c8ee55df27, type: 3}
 --- !u!4 &842739088
 Transform:
   m_ObjectHideFlags: 0

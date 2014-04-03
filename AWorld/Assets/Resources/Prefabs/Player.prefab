@@ -167,7 +167,7 @@ MonoBehaviour:
   beaconRotating: {fileID: 8300000, guid: c6cb66b0474b31949b668801a48003d7, type: 3}
   beaconUpgrading: {fileID: 8300000, guid: fb6a91a49e05fe540b927759c3f6933e, type: 3}
   beaconUpgraded: {fileID: 8300000, guid: 6946113de98ec8941b43b5e0aae58888, type: 3}
-  invalidInput: {fileID: 0}
+  invalid_Input: {fileID: 8300000, guid: 6a70f885672e80c4e91654430faf640e, type: 3}
   scoreBarH: 30
   scoreTexture: {fileID: 0}
   winTexture: {fileID: 0}
