@@ -115,14 +115,19 @@ public class Player : MonoBehaviour {
 		switch(currentState){
 			
 			case PlayerState.teleporting:
-				transform.position = Vector2.Lerp(transform.position,team.getHomeTile().transform.position, sRef.teleportRate);
+				Vector3 newPos = Vector2.Lerp(transform.position,team.goGetHomeTile().transform.position, sRef.teleportRate);
+				newPos.z = transform.position.z;
+				transform.position = newPos;
 				BaseTile newTile = gm.tiles[(int) Mathf.Floor (transform.position.x + 0.5f), (int) Mathf.Floor (transform.position.y + 0.5f)].GetComponent<BaseTile>();
 				if (newTile != currentTile) {
 					currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
 				}
-				if(currentTile == team.getHomeTile()){
-					transform.position = currentTile.transform.position;
-				
+				if(currentTile == team.goGetHomeTile().GetComponent<BaseTile>()){
+					
+					Vector3 homePos = currentTile.transform.position;
+					homePos.z = transform.position.z;
+				transform.position = homePos;
+					_currentState = PlayerState.standing;
 				}
 			break;
 			
@@ -908,7 +913,7 @@ public class Player : MonoBehaviour {
 		audio.Stop();
 	}
 	
-	public void OnCollisionEnter2D(Collision Collided){
+	public void OnCollisionEnter2D(Collision2D Collided){
 	Debug.Log("In Enter");
 		GameObject go = Collided.gameObject;
 		if(go.tag == "Player"){
