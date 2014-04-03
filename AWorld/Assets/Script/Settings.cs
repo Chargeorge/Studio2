@@ -86,7 +86,7 @@ public class Settings : MonoBehaviour {
 		selfDestructDelay = 0.5f;
 		loseUpgradeProgressDelay = 0.5f;	
 		
-		 teleportRate = .3f;	
+		 teleportRate = .2f;	
 	}
 	
 	// Update is called once per frame
