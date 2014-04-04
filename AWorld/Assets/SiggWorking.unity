@@ -1306,6 +1306,7 @@ MonoBehaviour:
   percMaxInfluenceColor: 0
   selfDestructDelay: 0
   loseUpgradeProgressDelay: 0
+  teleportRate: 0
 --- !u!4 &1843163359
 Transform:
   m_ObjectHideFlags: 0
