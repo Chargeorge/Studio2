@@ -185,6 +185,7 @@ public class Player : MonoBehaviour {
 				if (buildButtonDown && 
 					currentTile.beacon != null &&
 					facing == currentTile.beacon.GetComponent<Beacon>().facing &&
+					currentTile.owningTeam == team &&
 					(currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Basic ||
 					 currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingAdvanced)) 
 				{				
@@ -258,7 +259,6 @@ public class Player : MonoBehaviour {
 						} else if(currentTile.tooCloseToBeacon()){
 								audio.PlayOneShot(invalid_Input, 1.0f);
 						} else{
-							
 							_currentState = PlayerState.influencing;
 						}
 					}
