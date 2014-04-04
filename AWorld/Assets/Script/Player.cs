@@ -156,7 +156,8 @@ public class Player : MonoBehaviour {
 				
 				//Rotating - doesn't fit with old comments or build button state diagram, but can hopefully be refactored later to fit better
     				if (buildButtonDown && 
-					currentTile.beacon != null && 
+			    	currentTile.owningTeam == team &&
+			    	currentTile.beacon != null && 
 					facing != currentTile.beacon.GetComponent<Beacon>().facing && 
 				    (currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Basic || 			//Making sure the beacon is at least complete at basic level
 				     currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingAdvanced || 	//Is there a better way of doing this?
@@ -183,9 +184,9 @@ public class Player : MonoBehaviour {
 				
 				//Upgrading
 				if (buildButtonDown && 
-					currentTile.beacon != null &&
+			    	currentTile.owningTeam == team &&
+			    	currentTile.beacon != null &&
 					facing == currentTile.beacon.GetComponent<Beacon>().facing &&
-					currentTile.owningTeam == team &&
 					(currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Basic ||
 					 currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingAdvanced)) 
 				{				
