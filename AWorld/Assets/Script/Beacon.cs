@@ -162,11 +162,11 @@ public class Beacon : MonoBehaviour {
 		if (controllingTeam == null) {
 			controllingTeam = player.GetComponent<Player>().team;
 			this.setTeam();
-		}	
-		audio.PlayOneShot(beaconBuilding, 0.9f);
+		}
 		this.transform.localPosition = new Vector3(0f,0f,-.5f);
 		tileLocation.GetComponent<BaseTile>().beacon = this.gameObject;
-
+		audio.PlayOneShot(beaconBuilding, 0.9f);
+		
 	}
 
 	public void buildNeutral(GameObject tileLocation){

@@ -238,7 +238,7 @@ public class Player : MonoBehaviour {
 									!currentTile.tooCloseToBeacon())
 							{
 								Pulsate ();
-								PlaySFX(influenceDone, 1.0f);
+//								PlaySFX(influenceDone, 1.0f);
 								_currentState = PlayerState.building;
 								
 								float vpsBuildRate = sRef.vpsBaseBuild;
@@ -383,7 +383,7 @@ public class Player : MonoBehaviour {
 							}
 						}
 						else{
-						PlaySFX(invalid_Input, 1.0f);
+							PlaySFX(invalid_Input, 1.0f);
 						}
 					}
 					else
