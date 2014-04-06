@@ -453,7 +453,13 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-
+	public void tileSendMessage(string message){
+		for(int x = 0; x<  tiles.GetLength(0); x++){
+			for(int y =0 ; y< tiles.GetLength(1); y++){
+				tiles[x,y].SendMessage(message);
+			}
+		}
+	}
 /**	
 	public List<AltarType> getNetworkedAltars(TeamInfo t){
 		List<AltarType> returnable = new List<AltarType>();

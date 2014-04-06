@@ -86,9 +86,9 @@ public class Settings : MonoBehaviour {
 		percMaxInfluenceColor = 0.5f;	//Percentage of color that tile fills in when just before 100% influence
 		selfDestructDelay = 0.5f;
 		loseUpgradeProgressDelay = 0.5f;	
-		secMarqueeUpgradeTime = .5f;
+		secMarqueeUpgradeTime = .4f;
 		teleportRate = .2f;	
-		marqueeCount = 4;
+		marqueeCount = 5;
 		colorOffSet = 6;
 	}
 	

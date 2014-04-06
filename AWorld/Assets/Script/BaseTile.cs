@@ -24,9 +24,7 @@ public class BaseTile : MonoBehaviour {
 	private int _ident;
 	public List<AStarholder> networkToBase;
 	private GameObject _qudFogLayer;
-	
 	private GameObject _qudNoBuildLayer;
-	
 	public GameObject qudNoBuildLayer {
 		get {
 			if(_qudNoBuildLayer == null){
@@ -36,6 +34,19 @@ public class BaseTile : MonoBehaviour {
 		}
 		set {
 			_qudNoBuildLayer = value;
+		}
+	}	
+
+	private GameObject _qudPulsingOwnedLayer;
+	public GameObject qudPulsingOwnedLayer {
+		get {
+			if(_qudPulsingOwnedLayer == null){
+				_qudPulsingOwnedLayer = transform.FindChild("PulsingOwnedLayer").gameObject;
+			}
+			return _qudPulsingOwnedLayer;
+		}
+		set {
+			_qudPulsingOwnedLayer = value;
 		}
 	}	
 
@@ -279,7 +290,7 @@ public class BaseTile : MonoBehaviour {
 
 			if(_distanceToHomeBase.HasValue && _distanceToHomeBase > 0){
 
-				qudInfluenceLayer.renderer.material.color = owningTeam.marqueeColorList[(gm.currentMarquee  + distanceToHomeBase.Value) % sRef.marqueeCount];
+				qudPulsingOwnedLayer.renderer.material.color = owningTeam.marqueeColorList[(gm.currentMarquee  + distanceToHomeBase.Value) % sRef.marqueeCount];
 			}
 			//			
 		}
@@ -725,6 +736,9 @@ public class BaseTile : MonoBehaviour {
 		if(localAltar !=null){
 			localAltar.setControl(null);
 		}
+		//TODO: possible huge performance hit here
+		gm.tileSendMessage("setDistanceToHomeBase");
+		qudPulsingOwnedLayer.renderer.enabled = false;
 	}
 	/// <summary>
 	/// Finish adding influence, set which team controls it
@@ -754,7 +768,10 @@ public class BaseTile : MonoBehaviour {
 			}
 			
 			Reveal (_influenceRevealRange);
-			setDistanceToHomeBase();
+			qudPulsingOwnedLayer.renderer.enabled = true;
+			//TODO: possible huge performance hit here
+			gm.tileSendMessage("setDistanceToHomeBase");
+			//setDistanceToHomeBase();
 
 		}
 		
