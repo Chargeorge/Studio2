@@ -224,6 +224,15 @@ public class BaseTile : MonoBehaviour {
 			_MoveCost = value;
 		}
 	}
+	private ParticleSystem _PS;
+
+	public ParticleSystem PS{
+		get{
+			if(_PS == null) {_PS = GetComponent<ParticleSystem>();}
+			return _PS;
+		}
+	}
+
 	// Use this for initialization
 	void Start () {
 		_ident = UnityEngine.Random.Range(1, 10000000);
@@ -771,6 +780,9 @@ public class BaseTile : MonoBehaviour {
 			//TODO: possible huge performance hit here
 			gm.tileSendMessage("setDistanceToHomeBase");
 			//setDistanceToHomeBase();
+			PS.startColor = controllingTeam.beaconColor;
+			PS.Emit(100);
+
 
 		}
 		
