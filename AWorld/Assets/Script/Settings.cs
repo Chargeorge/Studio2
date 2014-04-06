@@ -48,6 +48,7 @@ public class Settings : MonoBehaviour {
 	public float secMarqueeUpgradeTime;
 	public float teleportRate;
 	public int marqueeCount;
+	public int colorOffSet;
 	
 	// Use this for initialization
 	void Start () {
@@ -88,6 +89,7 @@ public class Settings : MonoBehaviour {
 		secMarqueeUpgradeTime = .5f;
 		teleportRate = .2f;	
 		marqueeCount = 4;
+		colorOffSet = 6;
 	}
 	
 	// Update is called once per frame

@@ -50,12 +50,13 @@ public class TeamInfo
 
 		byte colorOffset = 0;
 		for(int i = 0;  i< Settings.SettingsInstance.marqueeCount; i++){
-			Color32 c = new Color32((byte) (returnable.tileColor.r-colorOffset) ,
-			                        (byte) (returnable.tileColor.g-colorOffset),
-			                        (byte)(returnable.tileColor.b-colorOffset),
-			                        (byte)255);
+			Color32 c = new Color32( 
+			((byte) (returnable.tileColor.r-colorOffset) > 0) ? (byte)(returnable.tileColor.r-colorOffset): (byte)0  ,
+			                        ((byte)(returnable.tileColor.g-colorOffset) > 0) ? (byte)(returnable.tileColor.g-colorOffset) : (byte)0 ,
+			                        ((byte)(returnable.tileColor.b-colorOffset)> 0) ? (byte)(returnable.tileColor.b-colorOffset) : (byte)0,
+			(byte)255);
 			returnable.marqueeColorList.Insert (0,c);
-			colorOffset +=3;
+			colorOffset +=6;
 		}
 		return returnable;
 	}
