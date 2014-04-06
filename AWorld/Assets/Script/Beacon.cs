@@ -74,7 +74,7 @@ public class Beacon : MonoBehaviour {
 			//TODO setup for bases so multiple tiles can influence at once
 			foreach (List<InfluencePatternHolder> list in _patternList) {
 				float influenceThisFrame = sRef.vpsBeaconBaseInfluence * Time.deltaTime;				
-				bool waterFound = false;
+				bool waterFound = false;	
 				list.ForEach(delegate (InfluencePatternHolder p){
 					if (!waterFound) {
 						gm.PlaySFX(beaconInfluenceProgress, 0.1f);
@@ -85,7 +85,11 @@ public class Beacon : MonoBehaviour {
 							
 							try { tile = gm.tiles[x, y]; }
 								catch { return; }
-							if(tile != null && tile.GetComponent<BaseTile>().currentType == TileTypeEnum.water) { 
+							if (tile != null && 
+								tile.GetComponent<BaseTile>().currentType == TileTypeEnum.water && 
+								!gm.getCapturedAltars (controllingTeam).Contains (AltarType.Thotzeti)) 
+							{
+								Debug.Log (Time.time);
 								waterFound = true;
 								return;
 							}

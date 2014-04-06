@@ -265,7 +265,7 @@ public class Player : MonoBehaviour {
 					}
 					else {
 						Pulsate ();
-						float vpsInfluenceRate = sRef.vpsBasePlayerInfluence * getAltarInfluenceBoost();
+						float vpsInfluenceRate = sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost();
 						addProgressToAction(vpsInfluenceRate);
 						_currentState = PlayerState.influencing;
 						currentTile.startInfluence(currentActionProgress, team);
@@ -412,7 +412,7 @@ public class Player : MonoBehaviour {
 						if(currentTile.controllingTeam.teamNumber == teamNumber)
 						{                                      
 							//Debug.Log("Adding Influence");
-							float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBasePlayerInfluence * getAltarInfluenceBoost() * Time.deltaTime);
+							float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime);
 						//	Debug.Log("test: " + test);
 							if(test > 0f){
 //								_currentState = PlayerState.standing;
@@ -427,7 +427,11 @@ public class Player : MonoBehaviour {
 																
 								beaconInProgress = beaconBeingBuilt.GetComponent<Beacon>();
 								
-								if (beaconInProgress.currentState == null || beaconInProgress.currentState == BeaconState.BuildingBasic) {
+								if (currentTile.GetComponent<BaseTile>().getLocalAltar() != null) {
+									_currentState = PlayerState.standing;
+								}
+								
+								else if (beaconInProgress.currentState == null || beaconInProgress.currentState == BeaconState.BuildingBasic) {
 									_currentState = PlayerState.building;
 									float vpsBuildRate = sRef.vpsBaseBuild;	
 									addProgressToAction(vpsBuildRate);
@@ -456,7 +460,7 @@ public class Player : MonoBehaviour {
 							}
 						}
 						else{
-							float test = currentTile.subTractInfluence(  sRef.vpsBasePlayerInfluence * getAltarInfluenceBoost() * Time.deltaTime, team);
+							float test = currentTile.subTractInfluence(  sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime, team);
 							if(test > 0f){
 								currentTile.addInfluenceReturnOverflow(test);
 								PlaySFX(invalid_Input, 1.0f);
@@ -861,10 +865,10 @@ public class Player : MonoBehaviour {
 		}
 	}
 	
-	private float getAltarInfluenceBoost(){
+	private float getPlayerInfluenceBoost(){
 		List <AltarType> a = gm.getCapturedAltars(team);
 
-		if(a.Contains(AltarType.Khepru)){
+		if(a.Contains(AltarType.Choyutzol)){
 			return 2f;
 		}else{
 			return 1f;
