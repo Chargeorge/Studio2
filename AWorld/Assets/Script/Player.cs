@@ -416,45 +416,48 @@ public class Player : MonoBehaviour {
 						//	Debug.Log("test: " + test);
 							if(test > 0f){
 //								_currentState = PlayerState.standing;
-													
-								GameObject beaconBeingBuilt;
-								if (currentTile.beacon == null) { 
-									beaconBeingBuilt = (GameObject)GameObject.Instantiate(_prfbBeacon, new Vector3(0,0,0), Quaternion.identity);
-								}
-								else {
-									beaconBeingBuilt = currentTile.beacon;
-								}
-																
-								beaconInProgress = beaconBeingBuilt.GetComponent<Beacon>();
 								
-								if (currentTile.GetComponent<BaseTile>().getLocalAltar() != null) {
+								if (currentTile.getLocalAltar () != null) {
 									_currentState = PlayerState.standing;
 								}
 								
-								else if (beaconInProgress.currentState == null || beaconInProgress.currentState == BeaconState.BuildingBasic) {
-									_currentState = PlayerState.building;
-									float vpsBuildRate = sRef.vpsBaseBuild;	
-									addProgressToAction(vpsBuildRate);
-									beaconInProgress.startBuilding(currentTile.gameObject, this.gameObject, vpsBuildRate);
-									beaconInProgress.setDirection(facing);
-									beaconInProgress.selfDestructing = false;
-								}
-								
-								else if (beaconInProgress.facing != facing) {
-									_currentState = PlayerState.rotating;
-									beaconInProgress.startRotating ();
-								}
-								
-								//Don't need to rotate, so either upgrade or return to standing
 								else {
-																
-									if (beaconInProgress.currentState == BeaconState.Basic || beaconInProgress.currentState == BeaconState.BuildingAdvanced) {
-										_currentState = PlayerState.upgrading;
-										beaconInProgress.startUpgrading ();
+								
+									GameObject beaconBeingBuilt;
+									if (currentTile.beacon == null) { 
+										beaconBeingBuilt = (GameObject)GameObject.Instantiate(_prfbBeacon, new Vector3(0,0,0), Quaternion.identity);
+									}
+									else {
+										beaconBeingBuilt = currentTile.beacon;
+									}
+									
+									beaconInProgress = beaconBeingBuilt.GetComponent<Beacon>();					
+								
+									if (beaconInProgress.currentState == null || beaconInProgress.currentState == BeaconState.BuildingBasic) {
+										_currentState = PlayerState.building;
+										float vpsBuildRate = sRef.vpsBaseBuild;	
+										addProgressToAction(vpsBuildRate);
+										beaconInProgress.startBuilding(currentTile.gameObject, this.gameObject, vpsBuildRate);
+										beaconInProgress.setDirection(facing);
+										beaconInProgress.selfDestructing = false;
 									}
 								
-									else if (beaconInProgress.currentState == BeaconState.Advanced) {
-										_currentState = PlayerState.standing;
+									else if (beaconInProgress.facing != facing) {
+										_currentState = PlayerState.rotating;
+										beaconInProgress.startRotating ();
+									}
+									
+									//Don't need to rotate, so either upgrade or return to standing
+									else {
+																	
+										if (beaconInProgress.currentState == BeaconState.Basic || beaconInProgress.currentState == BeaconState.BuildingAdvanced) {
+											_currentState = PlayerState.upgrading;
+											beaconInProgress.startUpgrading ();
+										}
+									
+										else if (beaconInProgress.currentState == BeaconState.Advanced) {
+											_currentState = PlayerState.standing;
+										}
 									}
 								}
 							}
