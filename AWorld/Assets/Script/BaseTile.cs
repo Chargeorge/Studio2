@@ -738,7 +738,7 @@ public class BaseTile : MonoBehaviour {
 		}
 		//TODO: possible huge performance hit here
 		gm.tileSendMessage("setDistanceToHomeBase");
-		qudPulsingOwnedLayer.renderer.enabled = false;
+
 	}
 	/// <summary>
 	/// Finish adding influence, set which team controls it
@@ -768,7 +768,6 @@ public class BaseTile : MonoBehaviour {
 			}
 			
 			Reveal (_influenceRevealRange);
-			qudPulsingOwnedLayer.renderer.enabled = true;
 			//TODO: possible huge performance hit here
 			gm.tileSendMessage("setDistanceToHomeBase");
 			//setDistanceToHomeBase();
@@ -849,7 +848,15 @@ public class BaseTile : MonoBehaviour {
 
 	public void setDistanceToHomeBase(){
 		_distanceToHomeBase = getDistanceToHomeBase();
+		if(_distanceToHomeBase ==0){
+			qudPulsingOwnedLayer.renderer.enabled = false;
+		}
+		else{
+			qudPulsingOwnedLayer.renderer.enabled = true;
+		}
+
 	}
+
 	
 	public float getTileScore(){
 		return sRef.valTileConvertScore;
