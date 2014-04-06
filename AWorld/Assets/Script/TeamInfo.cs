@@ -49,7 +49,7 @@ public class TeamInfo
 		}
 
 		byte colorOffset = 0;
-		for(int i = 0;  i< 12; i++){
+		for(int i = 0;  i< Settings.SettingsInstance.marqueeCount; i++){
 			Color32 c = new Color32((byte) (returnable.tileColor.r-colorOffset) ,
 			                        (byte) (returnable.tileColor.g-colorOffset),
 			                        (byte)(returnable.tileColor.b-colorOffset),
