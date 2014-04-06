@@ -38,7 +38,16 @@ public class BaseTile : MonoBehaviour {
 			_qudNoBuildLayer = value;
 		}
 	}	
-	
+
+	private int? _distanceToHomeBase;
+
+	public int? distanceToHomeBase {
+		get {
+			return _distanceToHomeBase;
+		}
+
+	}
+
 
 	public AudioClip influenceDone;
 
@@ -267,8 +276,17 @@ public class BaseTile : MonoBehaviour {
 		else{	//Removing this; will use outline to show where player is, not who owns it
 //			transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = true;
 //			transform.Find("OwnedLayer").GetComponent<MeshRenderer>().material.color = owningTeam.getHighLightColor();
+
+			if(_distanceToHomeBase.HasValue && _distanceToHomeBase > 0){
+
+				qudInfluenceLayer.renderer.material.color = owningTeam.marqueeColorList[(gm.currentMarquee  + distanceToHomeBase.Value) % sRef.marqueeCount];
+			}
+			//			
 		}
 	}
+
+
+
 	
 	public static void createTile(TileTypeEnum et, GameObject currentTile){
 		
@@ -686,7 +704,10 @@ public class BaseTile : MonoBehaviour {
 		return 0f;
 	}
 	
-	
+	/// <summary>
+	/// Sets tile to neutral control
+	/// </summary>
+	/// <param name="newTeam">New team.</param>
 	public void flipInfluence(TeamInfo newTeam){
 		if(owningTeam != null){
 			owningTeam.score -= getTileScore();
@@ -705,6 +726,9 @@ public class BaseTile : MonoBehaviour {
 			localAltar.setControl(null);
 		}
 	}
+	/// <summary>
+	/// Finish adding influence, set which team controls it
+	/// </summary>
 	public void finishInfluence(){
 		audio.PlayOneShot(influenceDone, 0.7f);
 		///TODO: add end semaphore stuff her
@@ -730,6 +754,8 @@ public class BaseTile : MonoBehaviour {
 			}
 			
 			Reveal (_influenceRevealRange);
+			setDistanceToHomeBase();
+
 		}
 		
 	}
@@ -794,6 +820,18 @@ public class BaseTile : MonoBehaviour {
 			}
 		}
 		return false;
+	}
+
+	public int getDistanceToHomeBase(){
+		if(owningTeam != null){
+			List<AStarholder> As = 	BaseTile.aStarSearch(this,gm.getTeamBase(owningTeam),int.MaxValue, getLocalSameTeamTiles, owningTeam);
+			return As.Count;
+		}
+		return 0;
+	}
+
+	public void setDistanceToHomeBase(){
+		_distanceToHomeBase = getDistanceToHomeBase();
 	}
 	
 	public float getTileScore(){

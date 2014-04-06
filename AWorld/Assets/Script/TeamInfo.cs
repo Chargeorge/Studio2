@@ -8,6 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 public class TeamInfo
 {
@@ -17,31 +18,45 @@ public class TeamInfo
 	public Vector2 startingLocation;
 	public int teamNumber;
 	public float score;
+	public List<Color32> marqueeColorList;
 	
 	public TeamInfo ()
 	{
 		score = 0;
+		marqueeColorList = new List<Color32>();
 	}
 
 	public static TeamInfo GetTeamInfo(int teamNumber){
 		TeamInfo returnable = new TeamInfo ();
 		switch (teamNumber) {
-				case 1: 
-						returnable.teamColor = new Color32 (17, 75, 141, 255);
-						returnable.tileColor = new Color32 (88, 151, 209,255);
-						returnable.beaconColor = new Color32 (17, 75, 141, 255);
-						returnable.startingLocation = Settings.SettingsInstance.team1Start;
-						returnable.teamNumber = teamNumber;
-						break;
-				case 2:
-						returnable.teamColor = new Color32 (247, 180, 29, 255);
-						returnable.tileColor = new Color32 (247, 180, 29,255);
-				//		returnable.beaconColor = new Color32 (0, 165, 80, 255);
-						returnable.beaconColor = new Color32 (240, 139, 32, 255);
-						returnable.startingLocation = Settings.SettingsInstance.team2Start;
-						returnable.teamNumber = teamNumber;
-						break;
-				}
+			case 1: 
+				returnable.teamColor = new Color32 (17, 75, 141, 255);
+				returnable.tileColor = new Color32 (88, 151, 209,255);
+				returnable.beaconColor = new Color32 (17, 75, 141, 255);
+				returnable.startingLocation = Settings.SettingsInstance.team1Start;
+				returnable.teamNumber = teamNumber;
+
+
+				break;
+			case 2:
+				returnable.teamColor = new Color32 (247, 180, 40, 255);
+				returnable.tileColor = new Color32 (247, 180, 40,255);
+		//		returnable.beaconColor = new Color32 (0, 165, 80, 255);
+				returnable.beaconColor = new Color32 (240, 139, 32, 255);
+				returnable.startingLocation = Settings.SettingsInstance.team2Start;
+				returnable.teamNumber = teamNumber;
+				break;
+		}
+
+		byte colorOffset = 0;
+		for(int i = 0;  i< 12; i++){
+			Color32 c = new Color32((byte) (returnable.tileColor.r-colorOffset) ,
+			                        (byte) (returnable.tileColor.g-colorOffset),
+			                        (byte)(returnable.tileColor.b-colorOffset),
+			                        (byte)255);
+			returnable.marqueeColorList.Insert (0,c);
+			colorOffset +=3;
+		}
 		return returnable;
 	}
 

@@ -45,8 +45,8 @@ public class GameManager : MonoBehaviour {
 	public Texture winTexture1;
 	public Texture winTexture2;
 	private GameObject prfbBeacon;
-	public VictoryCondition vIsForVendetta;
-
+	public VictoryCondition vIsForVendetta;	
+	public int currentMarquee;
 	public AudioClip Victory_Gong;
 
 	// Use this for initializatio
@@ -59,10 +59,21 @@ public class GameManager : MonoBehaviour {
 		altars= new List<GameObject>();
 		victoryConditions = new List<VictoryCondition>();
 		teams = new List<TeamInfo>();
-
+		StartCoroutine(doMarquee());
 		
 	}
-	
+	/// <summary>
+	/// For the length of the script, every number of frames, u
+	/// </summary>
+	/// <returns>The marquee.</returns>
+	public IEnumerator doMarquee(){
+		while(true){
+			yield return new WaitForSeconds(sRef.secMarqueeUpgradeTime);
+			currentMarquee = (currentMarquee +1) % sRef.marqueeCount;
+		}
+		
+		
+	}
 	// Update is called once per frame
 	void Update () {
 		if (setup){

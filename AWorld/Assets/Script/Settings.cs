@@ -45,9 +45,9 @@ public class Settings : MonoBehaviour {
 	public float percMaxInfluenceColor;	//Percentage of color that tile fills in when just before 100% influence
 	public float selfDestructDelay;	//How long you wait after player stops building before destroying a beacon
 	public float loseUpgradeProgressDelay;	//How long you wait after player stops upgrading before clearing upgrade progress
-	
+	public float secMarqueeUpgradeTime;
 	public float teleportRate;
-	
+	public int marqueeCount;
 	
 	// Use this for initialization
 	void Start () {
@@ -85,8 +85,9 @@ public class Settings : MonoBehaviour {
 		percMaxInfluenceColor = 0.5f;	//Percentage of color that tile fills in when just before 100% influence
 		selfDestructDelay = 0.5f;
 		loseUpgradeProgressDelay = 0.5f;	
-		
-		 teleportRate = .2f;	
+		secMarqueeUpgradeTime = .2f;
+		teleportRate = .2f;	
+		marqueeCount = 12;
 	}
 	
 	// Update is called once per frame

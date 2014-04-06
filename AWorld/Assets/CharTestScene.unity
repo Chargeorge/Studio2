@@ -417,6 +417,8 @@ MonoBehaviour:
   scoreTexture2: {fileID: 2800000, guid: 68d5de7dc03aeed4e8b0b0d3f0970bb2, type: 3}
   winTexture1: {fileID: 2800000, guid: ceec3b46a1180ac48abeb66c72f11728, type: 3}
   winTexture2: {fileID: 2800000, guid: bfca8ecba3fbdc64baa49e4be9cdb256, type: 3}
+  currentMarquee: 0
+  Victory_Gong: {fileID: 0}
 --- !u!4 &842739088
 Transform:
   m_ObjectHideFlags: 0
@@ -724,7 +726,9 @@ MonoBehaviour:
   percMaxInfluenceColor: 0
   selfDestructDelay: 0
   loseUpgradeProgressDelay: 0
+  secMarqueeUpgradeTime: 0
   teleportRate: 0
+  marqueeCount: 0
 --- !u!4 &1843163359
 Transform:
   m_ObjectHideFlags: 0
