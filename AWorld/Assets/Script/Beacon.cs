@@ -89,11 +89,10 @@ public class Beacon : MonoBehaviour {
 								tile.GetComponent<BaseTile>().currentType == TileTypeEnum.water && 
 								!gm.getCapturedAltars (controllingTeam).Contains (AltarType.Thotzeti)) 
 							{
-								Debug.Log (Time.time);
 								waterFound = true;
 								return;
 							}
-							if(tile != null){
+							if(tile != null && tile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
 							BaseTile Bt =  tile.GetComponent<BaseTile>();
 								if(Bt.controllingTeam == null){
 									Bt.startInfluence(influenceThisFrame, controllingTeam);
