@@ -233,9 +233,8 @@ public class Player : MonoBehaviour {
 							//Building
 							else if((currentTile.beacon == null || 
 									//currentTile.beacon.GetComponent<Beacon>().percBuildComplete < 100f &&
-									currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingBasic && 
-									currentTile.getLocalAltar()== null) && 
-									!currentTile.tooCloseToBeacon())
+									currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingBasic) && 
+									currentTile.buildable ())
 							{
 								Pulsate ();
 //								PlaySFX(influenceDone, 1.0f);
@@ -414,10 +413,10 @@ public class Player : MonoBehaviour {
 							//Debug.Log("Adding Influence");
 							float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime);
 						//	Debug.Log("test: " + test);
-							if(test > 0f){
+							if(test > 0f || (currentTile.owningTeam != null && currentTile.owningTeam == team)){
 //								_currentState = PlayerState.standing;
 								
-								if (currentTile.getLocalAltar () != null) {
+								if (currentTile.getLocalAltar () != null || currentTile.tooCloseToBeacon()) {
 									_currentState = PlayerState.standing;
 								}
 								
@@ -434,7 +433,9 @@ public class Player : MonoBehaviour {
 									
 									beaconInProgress = beaconBeingBuilt.GetComponent<Beacon>();					
 								
-									if (beaconInProgress.currentState == null || beaconInProgress.currentState == BeaconState.BuildingBasic) {
+									if (currentTile.buildable () && 
+										(beaconInProgress.currentState == null || beaconInProgress.currentState == BeaconState.BuildingBasic)) 
+									{
 										_currentState = PlayerState.building;
 										float vpsBuildRate = sRef.vpsBaseBuild;	
 										addProgressToAction(vpsBuildRate);

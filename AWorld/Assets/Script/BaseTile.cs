@@ -901,7 +901,7 @@ public class BaseTile : MonoBehaviour {
 	}
 
 	public bool buildable(){
-		if(transform.Find ("Altar") != null){
+		if(gameObject.GetComponent<Altar>() != null){
 			return false;
 		}
 		if(currentType ==TileTypeEnum.water){
@@ -911,6 +911,9 @@ public class BaseTile : MonoBehaviour {
 			return false;
 		}
 		if(gm.teams[1].startingLocation.x ==brdXPos && gm.teams[1].startingLocation.y ==brdYPos){
+			return false;
+		}
+		if(tooCloseToBeacon()){
 			return false;
 		}
 		return true;
