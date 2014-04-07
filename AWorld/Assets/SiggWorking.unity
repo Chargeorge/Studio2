@@ -2470,6 +2470,7 @@ MonoBehaviour:
   coefTepwante: 1
   coefKhepru: 0
   coefYaxchay: 0
+  coefMunalwaScale: 0
   scoreOnCapture: 50
   vpsScorePerSecond: 3
   optLockTile: 0

@@ -30,8 +30,9 @@ public class Settings : MonoBehaviour {
 	public float coefBaseBeaconInfluence;	//At 1.0f, takes 1 second to convert a neutral tile 1 space away
 	public float coefOnixtal;	//Percentage strength at which non-facing influence beams operate with Onixtal
 	public float coefTepwante;	//Percentage strength at which wider influence beams operate with Tepwante (currently 100% strength but we could change it)
-	public float coefKhepru;	//Multiplier applied to all score coming in for current Khepru power
-	public float coefYaxchay;
+	public float coefKhepru;	//Multiplier applied to all score coming in with Khepru
+	public float coefYaxchay;	//Multiplier applied to range on altars with Yaxchay
+	public float coefMunalwaScale;	//Multiplier applied to physical scale of player with Munalwa
 	
 	//Score stuff
 	public float scoreOnCapture;
@@ -89,8 +90,9 @@ public class Settings : MonoBehaviour {
 		coefBaseBeaconInfluence = 0.5f;	//At 1.0f, takes 1 second to convert a neutral tile 1 space away
 		coefOnixtal = 0.25f;	//Percentage strength at which non-facing influence beams operate with Onixtal
 		coefTepwante = 1.0f;	//Percentage strength at which wider influence beams operate with Tepwante (currently 100% strength but we could change it)
-		coefKhepru = 2.0f;		//Multiplier applied to all score coming in for current Khepru power
-		coefYaxchay = 2.0f;		//Multiplier for range of beacons with Yaxchay active
+		coefKhepru = 2.0f;		//Multiplier applied to all score coming in with Khepru
+		coefYaxchay = 2.0f;		//Multiplier for range of beacons with Yaxchay
+		coefMunalwaScale = 2.0f;	//Multiplier applied to physical scale of player with Munalwa
 	
 		//Score stuff
 		scoreOnCapture = 50f;
