@@ -164,7 +164,7 @@ public class Player : MonoBehaviour {
 		 			 currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Advanced)) 
 		 		{
 		 			//Yaxchay: Instant rotation
-		 			if (gm.getCapturedAltars(team).Contains (AltarType.Yaxchay) && currentTile.beacon.GetComponent<Beacon>().controllingTeam == team) {
+		 			if (gm.getCapturedAltars(team).Contains (AltarType.Tikumose) && currentTile.beacon.GetComponent<Beacon>().controllingTeam == team) {
 						currentActionProgress = 0;
 						currentTile.beacon.GetComponent<Beacon>().Rotate (facing);
 						currentTile.beacon.GetComponent<Beacon>().percRotateComplete = 0f;
@@ -308,7 +308,7 @@ public class Player : MonoBehaviour {
 					float vpsRate = MovingInto.GetRate(this) * sRef.vpsBaseMove *getAltarSpeedBoost();
 					addProgressToAction(vpsRate);
 					
-					if(currentActionProgress > sRef.baseRequired){
+					if(currentActionProgress > 100f){
 						DoMove(MovingInto);
 						currentActionProgress = 0f;
 						_currentState = PlayerState.standing;	
@@ -318,7 +318,7 @@ public class Player : MonoBehaviour {
 					
 					//Move avatar according to how far along the action is
 
-					float offset = currentActionProgress / sRef.baseRequired;
+					float offset = currentActionProgress / 100f;
 					offset = Mathf.Pow (10, offset);
 					offset = Mathf.Log10 (offset);
 					
@@ -549,7 +549,7 @@ public class Player : MonoBehaviour {
 				
 					Pulsate ();
 					//PlaySFX(beaconUpgrading, 1.0f);
-					float vpsUpgradeRate = sRef.vpsBaseUpgrade;
+					float vpsUpgradeRate = sRef.vpsBaseUpgrade * getAltarUpgradeBoost ();
 					addProgressToAction (vpsUpgradeRate);
 					Beacon beacon = currentTile.beacon.GetComponent<Beacon>();
 					beacon.addUpgradeProgress (vpsUpgradeRate);
@@ -751,14 +751,15 @@ public class Player : MonoBehaviour {
 	
 		if (_expanding) {
 		
-			float expandRate = sRef.baseRequired / _expandTime;
+		
+			float expandRate = 100f / _expandTime;
 			pulsateProgress += expandRate * Time.deltaTime;
 			
 			
-			float expandAmount = (_maxScale - _minScale) * (expandRate * Time.deltaTime / sRef.baseRequired);
+			float expandAmount = (_maxScale - _minScale) * (expandRate * Time.deltaTime / 100f);
 			transform.localScale = new Vector3 (transform.localScale.x + expandAmount, transform.localScale.y + expandAmount, 1);
 
-			if (pulsateProgress >= sRef.baseRequired) {
+			if (pulsateProgress >= 100f) {
 				transform.localScale = new Vector3 (_maxScale, _maxScale, 1);			
 				_expanding = false;
 				pulsateProgress = 0f;
@@ -776,13 +777,13 @@ public class Player : MonoBehaviour {
 		
 		else {
 	
-			float contractRate = sRef.baseRequired / _contractTime;
+			float contractRate = 100f / _contractTime;
 			pulsateProgress += contractRate * Time.deltaTime;
 	
-			float contractAmount = (_maxScale - _minScale) * (contractRate * Time.deltaTime / sRef.baseRequired);
+			float contractAmount = (_maxScale - _minScale) * (contractRate * Time.deltaTime / 100f);
 			transform.localScale = new Vector3 (transform.localScale.x - contractAmount, transform.localScale.y - contractAmount, 1);			
 			
-			if (pulsateProgress >= sRef.baseRequired) {
+			if (pulsateProgress >= 100f) {
 				transform.localScale = new Vector3 (_minScale, _minScale, 1);			
 				_expanding = true;	
 				pulsateProgress = 0f;
@@ -868,6 +869,16 @@ public class Player : MonoBehaviour {
 		}
 	}
 	
+	private float getAltarUpgradeBoost (){
+		List <AltarType> a = gm.getCapturedAltars(team);
+		
+		if(a.Contains(AltarType.Tikumose)){
+			return 2f;
+		}else{
+			return 1f;
+		}		
+	}
+	
 	private float getPlayerInfluenceBoost(){
 		List <AltarType> a = gm.getCapturedAltars(team);
 
@@ -877,7 +888,7 @@ public class Player : MonoBehaviour {
 			return 1f;
 		}
 	}
-	
+		
 	private bool onWater (Vector3 pos) {
 	
 		return (gm.tiles[(int) Mathf.Floor (pos.x + 0.5f), (int) Mathf.Floor (pos.y + 0.5f)].GetComponent<BaseTile>().currentType == TileTypeEnum.water);
