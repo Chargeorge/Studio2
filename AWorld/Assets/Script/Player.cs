@@ -24,13 +24,12 @@ public class Player : MonoBehaviour {
 	private bool _pulsating;	//Set to false every Update function; Pulsate sets it to true; if false at end of update, resets scale and _expanding
 	private bool _expanding;	//Used during pulsating
 	private Vector3 _defaultScale = new Vector3 (0.5f, 0.5f, 1f);
-	private float _maxScale = 0.9f;
-	private float _minScale = 0.5f;
 //	private float _expandRate = 0.007f;
 //	private float _contractRate = 0.04f;
 	private float _expandTime = 0.8f;
 	private float _contractTime = 0.2f;
 	private float pulsateProgress;
+	
 	private List<AltarType> altars;
 
 	bool isPlaying = false;
@@ -47,6 +46,8 @@ public class Player : MonoBehaviour {
 	public float scoreBarH = 30;
 	public Texture scoreTexture;
 	public Texture winTexture;
+	
+	public Vector3 teleportTarget;
 
 	public PlayerState currentState {
 		get {
@@ -115,20 +116,29 @@ public class Player : MonoBehaviour {
 		switch(currentState){
 			
 			case PlayerState.teleporting:
-				Vector3 newPos = Vector2.Lerp(transform.position,team.goGetHomeTile().transform.position, sRef.teleportRate);
+/**				if (transform.position == teleportTarget) {
+					_currentState = PlayerState.standing;
+				}
+				else {
+					transform.position = Vector2.Lerp(transform.position, teleportTarget, sRef.teleportRate);
+				}
+*/				
+				Vector3 newPos = Vector2.Lerp(transform.position, teleportTarget, sRef.teleportRate);
 				newPos.z = transform.position.z;
 				transform.position = newPos;
 				BaseTile newTile = gm.tiles[(int) Mathf.Floor (transform.position.x + 0.5f), (int) Mathf.Floor (transform.position.y + 0.5f)].GetComponent<BaseTile>();
 				if (newTile != currentTile) {
 					currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
 				}
-				if(currentTile == team.goGetHomeTile().GetComponent<BaseTile>()){
-					
-					Vector3 homePos = currentTile.transform.position;
-					homePos.z = transform.position.z;
-				transform.position = homePos;
+//				if(currentTile == team.goGetHomeTile().GetComponent<BaseTile>()){
+				if(closeEnoughToTeleportTarget(newPos)){
+			
+//					Vector3 homePos = currentTile.transform.position;
+//					homePos.z = transform.position.z;
+//					transform.position = homePos;
 					_currentState = PlayerState.standing;
 				}
+				
 			break;
 			
 			case PlayerState.standing:
@@ -164,7 +174,7 @@ public class Player : MonoBehaviour {
 		 			 currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Advanced)) 
 		 		{
 		 			//Yaxchay: Instant rotation
-		 			if (gm.getCapturedAltars(team).Contains (AltarType.Yaxchay) && currentTile.beacon.GetComponent<Beacon>().controllingTeam == team) {
+		 			if (gm.getCapturedAltars(team).Contains (AltarType.Tikumose) && currentTile.beacon.GetComponent<Beacon>().controllingTeam == team) {
 						currentActionProgress = 0;
 						currentTile.beacon.GetComponent<Beacon>().Rotate (facing);
 						currentTile.beacon.GetComponent<Beacon>().percRotateComplete = 0f;
@@ -233,12 +243,11 @@ public class Player : MonoBehaviour {
 							//Building
 							else if((currentTile.beacon == null || 
 									//currentTile.beacon.GetComponent<Beacon>().percBuildComplete < 100f &&
-									currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingBasic && 
-									currentTile.getLocalAltar()== null) && 
-									!currentTile.tooCloseToBeacon())
+									currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingBasic) && 
+									currentTile.buildable ())
 							{
 								Pulsate ();
-								PlaySFX(influenceDone, 1.0f);
+//								PlaySFX(influenceDone, 1.0f);
 								_currentState = PlayerState.building;
 								
 								float vpsBuildRate = sRef.vpsBaseBuild;
@@ -265,7 +274,7 @@ public class Player : MonoBehaviour {
 					}
 					else {
 						Pulsate ();
-						float vpsInfluenceRate = sRef.vpsBasePlayerInfluence * getAltarInfluenceBoost();
+						float vpsInfluenceRate = sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost();
 						addProgressToAction(vpsInfluenceRate);
 						_currentState = PlayerState.influencing;
 						currentTile.startInfluence(currentActionProgress, team);
@@ -308,7 +317,7 @@ public class Player : MonoBehaviour {
 					float vpsRate = MovingInto.GetRate(this) * sRef.vpsBaseMove *getAltarSpeedBoost();
 					addProgressToAction(vpsRate);
 					
-					if(currentActionProgress > sRef.baseRequired){
+					if(currentActionProgress > 100f){
 						DoMove(MovingInto);
 						currentActionProgress = 0f;
 						_currentState = PlayerState.standing;	
@@ -318,7 +327,7 @@ public class Player : MonoBehaviour {
 					
 					//Move avatar according to how far along the action is
 
-					float offset = currentActionProgress / sRef.baseRequired;
+					float offset = currentActionProgress / 100f;
 					offset = Mathf.Pow (10, offset);
 					offset = Mathf.Log10 (offset);
 					
@@ -383,7 +392,7 @@ public class Player : MonoBehaviour {
 							}
 						}
 						else{
-						PlaySFX(invalid_Input, 1.0f);
+							PlaySFX(invalid_Input, 1.0f);
 						}
 					}
 					else
@@ -412,51 +421,61 @@ public class Player : MonoBehaviour {
 						if(currentTile.controllingTeam.teamNumber == teamNumber)
 						{                                      
 							//Debug.Log("Adding Influence");
-							float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBasePlayerInfluence * getAltarInfluenceBoost() * Time.deltaTime);
+							float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime);
 						//	Debug.Log("test: " + test);
-							if(test > 0f){
+							if(test > 0f || (currentTile.owningTeam != null && currentTile.owningTeam == team)){
 //								_currentState = PlayerState.standing;
-													
-								GameObject beaconBeingBuilt;
-								if (currentTile.beacon == null) { 
-									beaconBeingBuilt = (GameObject)GameObject.Instantiate(_prfbBeacon, new Vector3(0,0,0), Quaternion.identity);
+								
+								if (currentTile.getLocalAltar () != null || currentTile.tooCloseToBeacon()) {
+									_currentState = PlayerState.standing;
 								}
+								
 								else {
-									beaconBeingBuilt = currentTile.beacon;
-								}
-																
-								beaconInProgress = beaconBeingBuilt.GetComponent<Beacon>();
 								
-								if (beaconInProgress.currentState == null || beaconInProgress.currentState == BeaconState.BuildingBasic) {
-									_currentState = PlayerState.building;
-									float vpsBuildRate = sRef.vpsBaseBuild;	
-									addProgressToAction(vpsBuildRate);
-									beaconInProgress.startBuilding(currentTile.gameObject, this.gameObject, vpsBuildRate);
-									beaconInProgress.setDirection(facing);
-									beaconInProgress.selfDestructing = false;
-								}
+									GameObject beaconBeingBuilt;
+									
+									if (currentTile.beacon == null) { 
+										beaconBeingBuilt = (GameObject)GameObject.Instantiate(_prfbBeacon, new Vector3(0,0,0), Quaternion.identity);
+									}
+									else {
+										beaconBeingBuilt = currentTile.beacon;
+									}
+									
+									beaconInProgress = beaconBeingBuilt.GetComponent<Beacon>();					
 								
-								else if (beaconInProgress.facing != facing) {
-									_currentState = PlayerState.rotating;
-									beaconInProgress.startRotating ();
-								}
-								
-								//Don't need to rotate, so either upgrade or return to standing
-								else {
-																
-									if (beaconInProgress.currentState == BeaconState.Basic || beaconInProgress.currentState == BeaconState.BuildingAdvanced) {
-										_currentState = PlayerState.upgrading;
-										beaconInProgress.startUpgrading ();
+									if (currentTile.buildable () && 
+										(beaconInProgress.currentState == null || beaconInProgress.currentState == BeaconState.BuildingBasic)) 
+									{
+										_currentState = PlayerState.building;
+										float vpsBuildRate = sRef.vpsBaseBuild;	
+										addProgressToAction(vpsBuildRate);
+										beaconInProgress.startBuilding(currentTile.gameObject, this.gameObject, vpsBuildRate);
+										beaconInProgress.setDirection(facing);
+										beaconInProgress.selfDestructing = false;
 									}
 								
-									else if (beaconInProgress.currentState == BeaconState.Advanced) {
-										_currentState = PlayerState.standing;
+									else if (beaconInProgress.facing != facing) {
+										_currentState = PlayerState.rotating;
+										beaconInProgress.startRotating ();
+									}
+									
+									//Don't need to rotate, so either upgrade or return to standing
+									else {
+																	
+										if (beaconInProgress.currentState == BeaconState.Basic || beaconInProgress.currentState == BeaconState.BuildingAdvanced) {
+											_currentState = PlayerState.upgrading;
+											beaconInProgress.startUpgrading ();
+										}
+									
+										else if (beaconInProgress.currentState == BeaconState.Advanced) {
+											_currentState = PlayerState.standing;
+										}
 									}
 								}
 							}
 						}
 						else{
-							float test = currentTile.subTractInfluence(  sRef.vpsBasePlayerInfluence * getAltarInfluenceBoost() * Time.deltaTime, team);
+							float test = currentTile.subTractInfluence(  sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime, team);
 							if(test > 0f){
 								currentTile.addInfluenceReturnOverflow(test);
 								PlaySFX(invalid_Input, 1.0f);
@@ -542,7 +561,7 @@ public class Player : MonoBehaviour {
 				
 					Pulsate ();
 					//PlaySFX(beaconUpgrading, 1.0f);
-					float vpsUpgradeRate = sRef.vpsBaseUpgrade;
+					float vpsUpgradeRate = sRef.vpsBaseUpgrade * getAltarUpgradeBoost ();
 					addProgressToAction (vpsUpgradeRate);
 					Beacon beacon = currentTile.beacon.GetComponent<Beacon>();
 					beacon.addUpgradeProgress (vpsUpgradeRate);
@@ -582,7 +601,7 @@ public class Player : MonoBehaviour {
 		*/			
 		//If not pulsating, reset scale and _expanding
 		if (!_pulsating) {
-			transform.localScale = new Vector3 (_defaultScale.x, _defaultScale.y, _defaultScale.z);
+			transform.localScale = new Vector3 (_defaultScale.x, _defaultScale.y, _defaultScale.z) * getScaleBoost ();
 			_expanding = true;
 			pulsateProgress = 0f;
 		}
@@ -741,53 +760,39 @@ public class Player : MonoBehaviour {
 	private void Pulsate () {
 	
 		_pulsating = true;
-	
+		float minScale = getMinScale();
+		float maxScale = getMaxScale();
+		
 		if (_expanding) {
 		
-			float expandRate = sRef.baseRequired / _expandTime;
+		
+			float expandRate = 100f / _expandTime;
 			pulsateProgress += expandRate * Time.deltaTime;
 			
 			
-			float expandAmount = (_maxScale - _minScale) * (expandRate * Time.deltaTime / sRef.baseRequired);
+			float expandAmount = (maxScale - minScale) * (expandRate * Time.deltaTime / 100f);
 			transform.localScale = new Vector3 (transform.localScale.x + expandAmount, transform.localScale.y + expandAmount, 1);
 
-			if (pulsateProgress >= sRef.baseRequired) {
-				transform.localScale = new Vector3 (_maxScale, _maxScale, 1);			
+			if (pulsateProgress >= 100f) {
+				transform.localScale = new Vector3 (maxScale, maxScale, 1);			
 				_expanding = false;
 				pulsateProgress = 0f;
-			}			
-			
-			/**	transform.localScale = new Vector3 (transform.localScale.x + _expandRate, transform.localScale.y + _expandRate, 1);		
-			
-			if (transform.localScale.x >= _maxScale) {
-				transform.localScale = new Vector3 (_maxScale, _maxScale, 1);						
-				_expanding = false;
-			}
-			*/
-			
+			}						
 		}
 		
 		else {
 	
-			float contractRate = sRef.baseRequired / _contractTime;
+			float contractRate = 100f / _contractTime;
 			pulsateProgress += contractRate * Time.deltaTime;
 	
-			float contractAmount = (_maxScale - _minScale) * (contractRate * Time.deltaTime / sRef.baseRequired);
+			float contractAmount = (maxScale - minScale) * (contractRate * Time.deltaTime / 100f);
 			transform.localScale = new Vector3 (transform.localScale.x - contractAmount, transform.localScale.y - contractAmount, 1);			
 			
-			if (pulsateProgress >= sRef.baseRequired) {
-				transform.localScale = new Vector3 (_minScale, _minScale, 1);			
+			if (pulsateProgress >= 100f) {
+				transform.localScale = new Vector3 (minScale, minScale, 1);
 				_expanding = true;	
 				pulsateProgress = 0f;
 			}			
-			
-/**			transform.localScale = new Vector3 (transform.localScale.x - _contractRate, transform.localScale.y - _contractRate, 1);
-
-			if (transform.localScale.x <= _minScale) {
-				transform.localScale = new Vector3 (_minScale, _minScale, 1);		
-				_expanding = true;
-			}
-			*/
 		}		
 	}
 	
@@ -861,16 +866,44 @@ public class Player : MonoBehaviour {
 		}
 	}
 	
-	private float getAltarInfluenceBoost(){
+	private float getAltarUpgradeBoost (){
+		List <AltarType> a = gm.getCapturedAltars(team);
+		
+		if(a.Contains(AltarType.Tikumose)){
+			return 2f;
+		}else{
+			return 1f;
+		}		
+	}
+	
+	private float getPlayerInfluenceBoost(){
 		List <AltarType> a = gm.getCapturedAltars(team);
 
-		if(a.Contains(AltarType.Khepru)){
+		if(a.Contains(AltarType.Choyutzol)){
 			return 2f;
 		}else{
 			return 1f;
 		}
 	}
 	
+	private float getScaleBoost(){
+		List <AltarType> a = gm.getCapturedAltars(team);
+		
+		if(a.Contains(AltarType.Munalwa)){
+			return sRef.coefMunalwaScale;
+		}else{
+			return 1f;
+		}
+	}
+	
+	private float getMinScale () {
+		return 0.5f * getScaleBoost();
+	}
+	
+	private float getMaxScale () {
+		return 0.9f * getScaleBoost();
+	}
+		
 	private bool onWater (Vector3 pos) {
 	
 		return (gm.tiles[(int) Mathf.Floor (pos.x + 0.5f), (int) Mathf.Floor (pos.y + 0.5f)].GetComponent<BaseTile>().currentType == TileTypeEnum.water);
@@ -937,15 +970,25 @@ public class Player : MonoBehaviour {
 	public void OnCollisionEnter2D(Collision2D Collided){
 	Debug.Log("In Enter");
 		GameObject go = Collided.gameObject;
-		if(go.tag == "Player"){
+		if(go.tag == "Player" ){
 			Player p =  go.GetComponent<Player>();
 			if(p.team != team){
+				//Munalwa: Only teleport halfway home when teleporting
+				if (gm.getCapturedAltars (team).Contains (AltarType.Munalwa)) {
+					teleportTarget = (transform.position + team.goGetHomeTile().transform.position) / 2.0f;
+				}
+				else {
+					teleportTarget = team.goGetHomeTile().transform.position;
+				}			
 				p._currentState = PlayerState.teleporting;
 			}
 		}
 	}
 	
-	
+	public bool closeEnoughToTeleportTarget (Vector3 newPos) {
+	//Hoo boy
+		return Mathf.Abs (newPos.x - teleportTarget.x) + Mathf.Abs (newPos.y - teleportTarget.y) <= 0.2f; 
+	}
 	
 	
 }

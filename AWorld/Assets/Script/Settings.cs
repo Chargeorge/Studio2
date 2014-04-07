@@ -11,7 +11,7 @@ public class Settings : MonoBehaviour {
 	
 	//Char: starting with settings where everything takes 1 second.  
 
-	/* NOTE: Changing these numbers does not actually update the Settings object currently in the scene. You must do this manually in the editor. */
+	//Base values per second
 	public float vpsBaseBuild;
 	public float vpsBaseMove;
 	public float vpsBaseFreeMoveSpeed;
@@ -19,6 +19,9 @@ public class Settings : MonoBehaviour {
 	public float vpsBaseRotate;
 	public float vpsBaseUpgrade;
 	public float vpsScorePerAltarPerSecond;
+	public float vpsBeaconBaseInfluence;
+	
+	//Coefficients
 	public float coefMoveNeutral;
 	public float coefMoveAllied;
 	public float coefMoveEnemy;
@@ -27,32 +30,48 @@ public class Settings : MonoBehaviour {
 	public float coefBaseBeaconInfluence;	//At 1.0f, takes 1 second to convert a neutral tile 1 space away
 	public float coefOnixtal;	//Percentage strength at which non-facing influence beams operate with Onixtal
 	public float coefTepwante;	//Percentage strength at which wider influence beams operate with Tepwante (currently 100% strength but we could change it)
-	public float baseRequired;
+	public float coefKhepru;	//Multiplier applied to all score coming in with Khepru
+	public float coefYaxchay;	//Multiplier applied to range on altars with Yaxchay
+	public float coefMunalwaScale;	//Multiplier applied to physical scale of player with Munalwa
+	
+	//Score stuff
 	public float scoreOnCapture;
 	public float vpsScorePerSecond;
-	public float vpsBeaconBaseInfluence;
 	public bool optLockTile;
 	public bool optTilesGiveScore;
 	public float valTileConvertScore;
+	public float valPointsToWin;
+	
+	//Beacon stuff
+	public int beaconBasicRange = 4;
+	public int beaconAdvancedRange = 8;
+	public int beaconNoBuildRange;
+	public float selfDestructDelay;	//How long you wait after player stops building before destroying a beacon
+	public float loseUpgradeProgressDelay;	//How long you wait after player stops upgrading before clearing upgrade progress
+	
+	//Board setup stuff
 	public Vector2 team1Start;
 	public Vector2 team2Start;
 	public int optPerlinLevel;
-	public float valPointsToWin;
-	public int beaconNoBuildRange;
 	public int neutralBeaconCount;
+	
+	//Mode switches
 	public bool debugMode;
 	public Mode gameMode;
-	public float percMaxInfluenceColor;	//Percentage of color that tile fills in when just before 100% influence
-	public float selfDestructDelay;	//How long you wait after player stops building before destroying a beacon
-	public float loseUpgradeProgressDelay;	//How long you wait after player stops upgrading before clearing upgrade progress
+	
+	//Visual stuff
 	public float secMarqueeUpgradeTime;
-	public float teleportRate;
 	public int marqueeCount;
+	public float percMaxInfluenceColor;	//Percentage of color that tile fills in when just before 100% influence
 	public int colorOffSet;
+	
+	//Misc?
+	public float teleportRate;
 	
 	// Use this for initialization
 	void Start () {
 
+		//Base values per second
 		vpsBaseBuild = 25f;
 		vpsBaseMove = 100f;
 		vpsBaseFreeMoveSpeed = 2.0f;
@@ -60,6 +79,9 @@ public class Settings : MonoBehaviour {
 		vpsBaseRotate = 50f;
 		vpsBaseUpgrade = 25f;
 		vpsScorePerAltarPerSecond = 1f;
+		vpsBeaconBaseInfluence = 100f;
+		
+		//Coefficients
 		coefMoveNeutral = 1f;
 		coefMoveAllied = 2f;
 		coefMoveEnemy = .33f;
@@ -68,28 +90,43 @@ public class Settings : MonoBehaviour {
 		coefBaseBeaconInfluence = 0.5f;	//At 1.0f, takes 1 second to convert a neutral tile 1 space away
 		coefOnixtal = 0.25f;	//Percentage strength at which non-facing influence beams operate with Onixtal
 		coefTepwante = 1.0f;	//Percentage strength at which wider influence beams operate with Tepwante (currently 100% strength but we could change it)
-		baseRequired = 100f;
+		coefKhepru = 2.0f;		//Multiplier applied to all score coming in with Khepru
+		coefYaxchay = 2.0f;		//Multiplier for range of beacons with Yaxchay
+		coefMunalwaScale = 2.0f;	//Multiplier applied to physical scale of player with Munalwa
+	
+		//Score stuff
 		scoreOnCapture = 50f;
 		vpsScorePerSecond = 3f;
-		vpsBeaconBaseInfluence = 100f;
 		optLockTile = false;
 		optTilesGiveScore = true;
 		valTileConvertScore = 1f;
+		valPointsToWin = 300;
+
+		//Beacon stuff
+		beaconBasicRange = 4;
+		beaconAdvancedRange = 8;
+		beaconNoBuildRange = 1;
+		selfDestructDelay = 0.5f;
+		loseUpgradeProgressDelay = 0.5f;	
+		
+		//Board setup stuff
 		team1Start = new Vector2(5,7);
 		team2Start = new Vector2(20,7);
 		optPerlinLevel = 1800;
-		valPointsToWin = 300;
-		beaconNoBuildRange = 1;
 		neutralBeaconCount = 12;
+		
+		//Mode switches
 		debugMode = true;
 		gameMode = Mode.OneVOne;
+		
+		//Visual stuff
 		percMaxInfluenceColor = 0.5f;	//Percentage of color that tile fills in when just before 100% influence
-		selfDestructDelay = 0.5f;
-		loseUpgradeProgressDelay = 0.5f;	
 		secMarqueeUpgradeTime = .4f;
-		teleportRate = .2f;	
 		marqueeCount = 5;
 		colorOffSet = 6;
+		
+		//Misc?
+		teleportRate = .2f;
 	}
 	
 	// Update is called once per frame

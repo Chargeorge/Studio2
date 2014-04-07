@@ -871,9 +871,15 @@ public class BaseTile : MonoBehaviour {
 
 	
 	public float getTileScore(){
-		return sRef.valTileConvertScore;
+		List <AltarType> a = gm.getCapturedAltars(controllingTeam);
+		
+		if(a.Contains(AltarType.Khepru)){
+			return sRef.valTileConvertScore * sRef.coefKhepru;
+		}else{
+			return sRef.valTileConvertScore;
+		}
 	}
-	
+		
 	public bool tooCloseToBeacon() {
 		for (int i = sRef.beaconNoBuildRange * -1; i <= sRef.beaconNoBuildRange; i++){
 			for (int j = (sRef.beaconNoBuildRange - Mathf.Abs (i)) * -1; j <= sRef.beaconNoBuildRange - Mathf.Abs (i); j++) {
@@ -895,7 +901,7 @@ public class BaseTile : MonoBehaviour {
 	}
 
 	public bool buildable(){
-		if(transform.Find ("Altar") != null){
+		if(gameObject.GetComponent<Altar>() != null){
 			return false;
 		}
 		if(currentType ==TileTypeEnum.water){
@@ -905,6 +911,9 @@ public class BaseTile : MonoBehaviour {
 			return false;
 		}
 		if(gm.teams[1].startingLocation.x ==brdXPos && gm.teams[1].startingLocation.y ==brdYPos){
+			return false;
+		}
+		if(tooCloseToBeacon()){
 			return false;
 		}
 		return true;

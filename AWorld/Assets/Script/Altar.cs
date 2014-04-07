@@ -69,7 +69,13 @@ public class Altar : MonoBehaviour {
 			//check to see if I'm networked
 			networked= checkNetwork();
 			if(networked){
-				_currentControllingTeam.score += sRef.vpsScorePerAltarPerSecond * Time.deltaTime;
+				List <AltarType> a = gm.getCapturedAltars(_currentControllingTeam);
+				
+				if(a.Contains(AltarType.Khepru)){
+					_currentControllingTeam.score += sRef.vpsScorePerAltarPerSecond * sRef.coefKhepru * Time.deltaTime;
+				}else{
+					_currentControllingTeam.score += sRef.vpsScorePerAltarPerSecond * Time.deltaTime;
+				}
 				//audio.PlayOneShot(Praying, 1.0f); //this is not the right place to put it, it apparently fucks up the other sounds ?
 			}
 			gm.debugString = string.Format(" Number: {0},\r\n Networked: {1}", _currentControllingTeam.teamNumber, networked);
