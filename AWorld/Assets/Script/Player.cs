@@ -424,6 +424,7 @@ public class Player : MonoBehaviour {
 								else {
 								
 									GameObject beaconBeingBuilt;
+									
 									if (currentTile.beacon == null) { 
 										beaconBeingBuilt = (GameObject)GameObject.Instantiate(_prfbBeacon, new Vector3(0,0,0), Quaternion.identity);
 									}

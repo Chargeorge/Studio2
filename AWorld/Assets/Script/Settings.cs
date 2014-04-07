@@ -31,6 +31,7 @@ public class Settings : MonoBehaviour {
 	public float coefOnixtal;	//Percentage strength at which non-facing influence beams operate with Onixtal
 	public float coefTepwante;	//Percentage strength at which wider influence beams operate with Tepwante (currently 100% strength but we could change it)
 	public float coefKhepru;	//Multiplier applied to all score coming in for current Khepru power
+	public float coefYaxchay;
 	
 	//Score stuff
 	public float scoreOnCapture;
@@ -41,6 +42,8 @@ public class Settings : MonoBehaviour {
 	public float valPointsToWin;
 	
 	//Beacon stuff
+	public int beaconBasicRange = 4;
+	public int beaconAdvancedRange = 8;
 	public int beaconNoBuildRange;
 	public float selfDestructDelay;	//How long you wait after player stops building before destroying a beacon
 	public float loseUpgradeProgressDelay;	//How long you wait after player stops upgrading before clearing upgrade progress
@@ -87,6 +90,7 @@ public class Settings : MonoBehaviour {
 		coefOnixtal = 0.25f;	//Percentage strength at which non-facing influence beams operate with Onixtal
 		coefTepwante = 1.0f;	//Percentage strength at which wider influence beams operate with Tepwante (currently 100% strength but we could change it)
 		coefKhepru = 2.0f;		//Multiplier applied to all score coming in for current Khepru power
+		coefYaxchay = 2.0f;		//Multiplier for range of beacons with Yaxchay active
 	
 		//Score stuff
 		scoreOnCapture = 50f;
@@ -97,6 +101,8 @@ public class Settings : MonoBehaviour {
 		valPointsToWin = 300;
 
 		//Beacon stuff
+		beaconBasicRange = 4;
+		beaconAdvancedRange = 8;
 		beaconNoBuildRange = 1;
 		selfDestructDelay = 0.5f;
 		loseUpgradeProgressDelay = 0.5f;	
