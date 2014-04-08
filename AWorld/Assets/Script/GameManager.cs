@@ -19,7 +19,6 @@ public class GameManager : MonoBehaviour {
 	#endregion
 	public GameObject[,] tiles;
 	private bool setup = true;
-	public static Mode gameMode = Mode.OneVOne;
 	public List<GameObject> players = new List<GameObject>();
 	public GameObject prfbPlayer;
 	public BaseTile debugMouse;
@@ -156,7 +155,7 @@ public class GameManager : MonoBehaviour {
 
 
 			}
-			switch (gameMode){
+			switch (sRef.gameMode){
 			case Mode.TwoVTwo:{
 				_currentState = GameState.playing;
 				GameObject Player1 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
@@ -189,7 +188,7 @@ public class GameManager : MonoBehaviour {
 				
 					//steps to ensure validity
 				team1Home = setUpTeamHome(p1);
-				team2Home = setUpTeamHome(p2);
+				team2Home = setUpTeamHome(p3);
 				
 				//victoryConditions.Add (new LockMajorityAltars(1) );
 				victoryConditions.Add (new ControlViaTime(1));
