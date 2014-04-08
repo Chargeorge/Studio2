@@ -290,75 +290,82 @@ public class Player : MonoBehaviour {
 			
 				currentTile.Reveal (_vision);
 			
-				if (x.HasValue) {
-					setDirection(x.Value);	//Still need a 4-directional facing for building/rotating beacons
-					Vector3 posToCheck = new Vector3 (
-					transform.position.x + getPlayerXAxis() * sRef.vpsBaseFreeMoveSpeed * getTileSpeedBoost(currentTile) * getAltarSpeedBoost() * Time.deltaTime, 
-					transform.position.y + getPlayerYAxis() * sRef.vpsBaseFreeMoveSpeed * getTileSpeedBoost(currentTile) * getAltarSpeedBoost() * Time.deltaTime, 
-					transform.position.z);
-					
-					if (!outOfBounds(posToCheck) && 
-						//!tooCloseToOpponent(posToCheck) &&
-						(!onWater(posToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) 
-					{	//Valid move
-						PlaySFX(playerMove, 0.2f);
-						transform.position = posToCheck;
-						BaseTile thisTile = gm.tiles[(int) Mathf.Floor (transform.position.x + 0.5f), (int) Mathf.Floor (transform.position.y + 0.5f)].GetComponent<BaseTile>();
-						if (thisTile != currentTile) {
-							currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
-						}	
-					}
+				//This lets you hit build button while moving to start doing stuff
+				if (buildButtonDown) {
+					_currentState = PlayerState.standing;
 				}
 				
-				/**
-				if(x.HasValue && x.Value == facing){
-					gm.PlaySFX(playerMove, 0.8f);
-					BaseTile MovingInto = currentTile.GetComponent<BaseTile>().GetDirection(x.Value);
-					float vpsRate = MovingInto.GetRate(this) * sRef.vpsBaseMove *getAltarSpeedBoost();
-					addProgressToAction(vpsRate);
-					
-					if(currentActionProgress > 100f){
-						DoMove(MovingInto);
-						currentActionProgress = 0f;
-						_currentState = PlayerState.standing;	
+				else { 
+					if (x.HasValue) {
+						setDirection(x.Value);	//Still need a 4-directional facing for building/rotating beacons
+						Vector3 posToCheck = new Vector3 (
+						transform.position.x + getPlayerXAxis() * sRef.vpsBaseFreeMoveSpeed * getTileSpeedBoost(currentTile) * getAltarSpeedBoost() * Time.deltaTime, 
+						transform.position.y + getPlayerYAxis() * sRef.vpsBaseFreeMoveSpeed * getTileSpeedBoost(currentTile) * getAltarSpeedBoost() * Time.deltaTime, 
+						transform.position.z);
+						
+						if (!outOfBounds(posToCheck) && 
+							//!tooCloseToOpponent(posToCheck) &&
+							(!onWater(posToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) 
+						{	//Valid move
+							PlaySFX(playerMove, 0.2f);
+							transform.position = posToCheck;
+							BaseTile thisTile = gm.tiles[(int) Mathf.Floor (transform.position.x + 0.5f), (int) Mathf.Floor (transform.position.y + 0.5f)].GetComponent<BaseTile>();
+							if (thisTile != currentTile) {
+								currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
+							}	
+						}
 					}
-
-					else{ 
 					
-					//Move avatar according to how far along the action is
-
-					float offset = currentActionProgress / 100f;
-					offset = Mathf.Pow (10, offset);
-					offset = Mathf.Log10 (offset);
-					
-						switch (facing) {
-							
-							case DirectionEnum.East: 
-								_positionOffset = new Vector2 (offset, 0);
-								break;
-							
-							case DirectionEnum.West:
-								_positionOffset = new Vector2 (-1 * offset, 0);
-								break;
-
-							case DirectionEnum.North:
-								_positionOffset = new Vector2 (0, offset);
-								break;
-										
-							case DirectionEnum.South:
-								_positionOffset = new Vector2 (0, -1 * offset);
-								break;
+					/**
+					if(x.HasValue && x.Value == facing){
+						gm.PlaySFX(playerMove, 0.8f);
+						BaseTile MovingInto = currentTile.GetComponent<BaseTile>().GetDirection(x.Value);
+						float vpsRate = MovingInto.GetRate(this) * sRef.vpsBaseMove *getAltarSpeedBoost();
+						addProgressToAction(vpsRate);
+						
+						if(currentActionProgress > 100f){
+							DoMove(MovingInto);
+							currentActionProgress = 0f;
+							_currentState = PlayerState.standing;	
+						}
+	
+						else{ 
+						
+						//Move avatar according to how far along the action is
+	
+						float offset = currentActionProgress / 100f;
+						offset = Mathf.Pow (10, offset);
+						offset = Mathf.Log10 (offset);
+						
+							switch (facing) {
 								
+								case DirectionEnum.East: 
+									_positionOffset = new Vector2 (offset, 0);
+									break;
+								
+								case DirectionEnum.West:
+									_positionOffset = new Vector2 (-1 * offset, 0);
+									break;
+	
+								case DirectionEnum.North:
+									_positionOffset = new Vector2 (0, offset);
+									break;
+											
+								case DirectionEnum.South:
+									_positionOffset = new Vector2 (0, -1 * offset);
+									break;
+									
+							}
+							
 						}
 						
+						
+					}*/
+					else{
+						StopSFX();
+						_currentState= PlayerState.standing; 
+						currentActionProgress = 0f;
 					}
-					
-					
-				}*/
-				else{
-					StopSFX();
-					_currentState= PlayerState.standing; 
-					currentActionProgress = 0f;
 				}
 			break;	
 			
@@ -529,12 +536,15 @@ public class Player : MonoBehaviour {
 					Pulsate ();
 					//PlaySFX(beaconRotating, 1.0f);
 					
+					Beacon beacon = currentTile.beacon.GetComponent<Beacon>();
+				
+					/** This is to let players change facing mid-rotation 
 					if (x.HasValue) { 
 						setDirection (x.Value);
 					}
-					
-					Beacon beacon = currentTile.beacon.GetComponent<Beacon>();
-					
+					*/
+										
+					//This will only be called if players change facing mid-rotation - doesn't hurt anything so leaving it in for now
 					if (beacon.dirRotatingToward != facing) {
 						StopSFX ();
 						currentActionProgress = 0;

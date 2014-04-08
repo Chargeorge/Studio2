@@ -139,11 +139,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: e23b1a1dde9f53e499c53f9c32c4f347, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: e23b1a1dde9f53e499c53f9c32c4f347, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: e23b1a1dde9f53e499c53f9c32c4f347, type: 3}
       propertyPath: m_LocalRotation.w
@@ -153,6 +153,14 @@ Prefab:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: f1acc18f44f36834e941c01bcfa37c39, type: 2}
+    - target: {fileID: 400004, guid: e23b1a1dde9f53e499c53f9c32c4f347, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: e23b1a1dde9f53e499c53f9c32c4f347, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e23b1a1dde9f53e499c53f9c32c4f347, type: 3}
   m_RootGameObject: {fileID: 1707399965}
@@ -2446,7 +2454,7 @@ Transform:
   m_PrefabParentObject: {fileID: 400004, guid: e23b1a1dde9f53e499c53f9c32c4f347, type: 3}
   m_PrefabInternal: {fileID: 342832355}
   m_GameObject: {fileID: 1707399965}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 22.1517601, y: 2.81950665, z: -10.1964684}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2606,6 +2614,7 @@ MonoBehaviour:
   vpsBaseRotate: 50
   vpsBaseUpgrade: 25
   vpsScorePerAltarPerSecond: 1
+  vpsBeaconBaseInfluence: 100
   coefMoveNeutral: 1
   coefMoveAllied: 2
   coefMoveEnemy: .330000013
@@ -2614,28 +2623,31 @@ MonoBehaviour:
   coefBaseBeaconInfluence: .5
   coefOnixtal: .25
   coefTepwante: 1
-  baseRequired: 100
+  coefKhepru: 0
+  coefYaxchay: 0
+  coefMunalwaScale: 0
   scoreOnCapture: 50
   vpsScorePerSecond: 3
-  vpsBeaconBaseInfluence: 100
   optLockTile: 0
   optTilesGiveScore: 1
   valTileConvertScore: 1
+  valPointsToWin: 300
+  beaconBasicRange: 4
+  beaconAdvancedRange: 8
+  beaconNoBuildRange: 2
+  selfDestructDelay: 0
+  loseUpgradeProgressDelay: 0
   team1Start: {x: 5, y: 5}
   team2Start: {x: 15, y: 5}
   optPerlinLevel: 1500
-  valPointsToWin: 300
-  beaconNoBuildRange: 2
   neutralBeaconCount: 12
   debugMode: 1
   gameMode: 0
-  percMaxInfluenceColor: 0
-  selfDestructDelay: 0
-  loseUpgradeProgressDelay: 0
   secMarqueeUpgradeTime: 0
-  teleportRate: 0
   marqueeCount: 0
+  percMaxInfluenceColor: 0
   colorOffSet: 0
+  teleportRate: 0
 --- !u!4 &1843163359
 Transform:
   m_ObjectHideFlags: 0

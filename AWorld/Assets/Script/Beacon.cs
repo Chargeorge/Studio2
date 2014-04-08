@@ -168,6 +168,7 @@ public class Beacon : MonoBehaviour {
 		}
 		this.transform.localPosition = new Vector3(0f,0f,-.5f);
 		tileLocation.GetComponent<BaseTile>().beacon = this.gameObject;
+		audio.Stop ();
 		audio.PlayOneShot(beaconBuilding, 0.9f);
 		
 	}
@@ -194,6 +195,7 @@ public class Beacon : MonoBehaviour {
 	}
 	
 	public void startRotating (DirectionEnum? dir) {
+		audio.Stop ();
 		dirRotatingToward = dir;
 		audio.PlayOneShot(beaconRotating, 1.0f);
 	}
