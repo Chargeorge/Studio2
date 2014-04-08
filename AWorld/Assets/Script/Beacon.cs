@@ -193,8 +193,8 @@ public class Beacon : MonoBehaviour {
 		audio.PlayOneShot(beaconUpgrading, 1.0f);
 	}
 	
-	public void startRotating () {
-		//Add SFX here
+	public void startRotating (DirectionEnum? dir) {
+		dirRotatingToward = dir;
 		audio.PlayOneShot(beaconRotating, 1.0f);
 	}
 	

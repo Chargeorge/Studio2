@@ -185,8 +185,8 @@ public class Player : MonoBehaviour {
 						
 //						setDirection(x.Value);
 						
-						PlaySFX(beaconRotating, 1.0f);
-						currentTile.beacon.GetComponent<Beacon>().startRotating ();
+//						PlaySFX(beaconRotating, 1.0f);
+						currentTile.beacon.GetComponent<Beacon>().startRotating (facing);
 						_currentState = PlayerState.rotating;
 						
 					}
@@ -456,7 +456,7 @@ public class Player : MonoBehaviour {
 								
 									else if (beaconInProgress.facing != facing) {
 										_currentState = PlayerState.rotating;
-										beaconInProgress.startRotating ();
+										beaconInProgress.startRotating (facing);
 									}
 									
 									//Don't need to rotate, so either upgrade or return to standing
@@ -528,20 +528,38 @@ public class Player : MonoBehaviour {
 				
 					Pulsate ();
 					//PlaySFX(beaconRotating, 1.0f);
-					float vpsRotateRate = sRef.vpsBaseRotate;
-					addProgressToAction (vpsRotateRate);
-					Beacon beacon = currentTile.beacon.GetComponent<Beacon>();
-					beacon.addRotateProgress (vpsRotateRate);
-					beacon.dirRotatingToward = facing;
 					
-					if (beacon.percRotateComplete >= 100f) {
-	
+					if (x.HasValue) { 
+						setDirection (x.Value);
+					}
+					
+					Beacon beacon = currentTile.beacon.GetComponent<Beacon>();
+					
+					if (beacon.dirRotatingToward != facing) {
+						StopSFX ();
 						currentActionProgress = 0;
-						beacon.Rotate (facing);
+						beacon.Rotate (beacon.facing);
 						beacon.percRotateComplete = 0f;
-						_currentState = PlayerState.standing;
-						StopSFX ();					
-					}					
+						_currentState = PlayerState.rotating;
+						beacon.startRotating (facing);
+					}
+					
+					else {
+						
+						float vpsRotateRate = sRef.vpsBaseRotate;
+						addProgressToAction (vpsRotateRate);
+						beacon.addRotateProgress (vpsRotateRate);
+						beacon.dirRotatingToward = facing;
+						
+						if (beacon.percRotateComplete >= 100f) {
+		
+							currentActionProgress = 0;
+							beacon.Rotate (facing);
+							beacon.percRotateComplete = 0f;
+							_currentState = PlayerState.standing;
+							StopSFX ();					
+						}
+					}		
 				}
 					
 				else {
