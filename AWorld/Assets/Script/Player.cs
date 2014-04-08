@@ -711,8 +711,18 @@ public class Player : MonoBehaviour {
 		float currentRotAngle = getAngleForDir(facing);
 		
 		facing = N;
-		transform.RotateAround(transform.position, new Vector3(0,0,1), currentRotAngle);
-		transform.RotateAround(transform.position, new Vector3(0,0,-1), rotAngle);
+//		transform.RotateAround(transform.position, new Vector3(0,0,1), currentRotAngle);
+//		transform.RotateAround(transform.position, new Vector3(0,0,-1), rotAngle);
+		Vector2 normVec = new Vector2 (getPlayerXAxis(), getPlayerYAxis()).normalized;
+		float angle;
+		if (getPlayerXAxis() < 0) { 
+			angle = Vector2.Angle (new Vector2 (0, 1), normVec);
+		}
+		else {
+			angle = 360 - Vector2.Angle (new Vector2 (0, 1), normVec);
+		}
+		Debug.Log (angle);
+		transform.eulerAngles = new Vector3(0f, 0f, angle);
 	}
 /// <summary>
 /// 
