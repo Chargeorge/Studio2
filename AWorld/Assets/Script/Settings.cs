@@ -20,6 +20,7 @@ public class Settings : MonoBehaviour {
 	public float vpsBaseUpgrade;
 	public float vpsScorePerAltarPerSecond;
 	public float vpsBeaconBaseInfluence;
+	public float vpsScorePerMinePerSecond;
 	
 	//Coefficients
 	public float coefMoveNeutral;
@@ -36,11 +37,12 @@ public class Settings : MonoBehaviour {
 	
 	//Score stuff
 	public float scoreOnCapture;
-	public float vpsScorePerSecond;
 	public bool optLockTile;
 	public bool optTilesGiveScore;
 	public float valTileConvertScore;
 	public float valPointsToWin;
+	public float valScorePerMine;
+	
 	
 	//Beacon stuff
 	public int beaconBasicRange = 4;
@@ -80,7 +82,7 @@ public class Settings : MonoBehaviour {
 		vpsBaseUpgrade = 25f;
 		vpsScorePerAltarPerSecond = 1f;
 		vpsBeaconBaseInfluence = 100f;
-		
+		vpsScorePerMinePerSecond = 3f;
 		//Coefficients
 		coefMoveNeutral = 1f;
 		coefMoveAllied = 2f;
@@ -96,12 +98,11 @@ public class Settings : MonoBehaviour {
 	
 		//Score stuff
 		scoreOnCapture = 50f;
-		vpsScorePerSecond = 3f;
 		optLockTile = false;
 		optTilesGiveScore = true;
 		valTileConvertScore = 1f;
 		valPointsToWin = 300;
-
+		valScorePerMine = 20f;
 		//Beacon stuff
 		beaconBasicRange = 4;
 		beaconAdvancedRange = 8;

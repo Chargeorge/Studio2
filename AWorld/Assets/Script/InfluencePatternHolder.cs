@@ -23,7 +23,7 @@ public class InfluencePatternHolder
 		this.coefInfluenceFraction = vpsInfluenceRate * GameObject.Find ("Settings").GetComponent<Settings>().coefBaseBeaconInfluence;
 	}
 	
-	
+		
 }
 
 

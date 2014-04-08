@@ -15,7 +15,24 @@ public class Altar : MonoBehaviour {
 	public List<AStarholder> networkToBase;
 	public GameManager gm;
 	private GameObject _lockedLayer;
+	private GameObject _scoreBar;
+	public float baseScoreScale = .74f;
+
+	public GameObject scoreBar {
+		get {
+			if(_scoreBar == null){
+				_scoreBar = gameObject.transform.FindChild("ScoreThingy").gameObject;
+			
+			}
+			return _scoreBar;
+		}
+	}	
+	
+	
 	private bool _isLocked;
+	
+	public float scoreLeft;
+	
 
 	public AudioClip Praying;
 
@@ -59,23 +76,60 @@ public class Altar : MonoBehaviour {
 		Material loaded =  (Material)Resources.Load(string.Format("Sprites/Materials/{0}", altarType.ToString()));
 		gm = GameManager.GameManagerInstance;
 		transform.FindChild("Quad").renderer.material = loaded;
+		scoreLeft = sRef.valScorePerMine;
+	}
+	
+	public void setScoreBarTeam(TeamInfo t ){
+		if(t != null){
+			scoreBar.renderer.material.color = t.teamColor;
+		}
+		else{
+			scoreBar.renderer.material.color =  new Color32(220, 30, 47, 255);
+		}
+		
+	}
+	
+	public void setScoreBarTeam(float scoreLeft){
+		Vector3 newScale = scoreBar.transform.localScale;
+		newScale.x *=  baseScoreScale * scoreLeft  / sRef.valScorePerMine;
+		scoreBar.transform.localScale = newScale;
+		
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		//Am I controlled? 
 		
+		if(altarType != AltarType.MagicalMysteryScore){
+			scoreBar.renderer.enabled = false;
+		
+		}
+		
 		if(_currentControllingTeam != null){
 			//check to see if I'm networked
 			networked= checkNetwork();
 			if(networked){
-				List <AltarType> a = gm.getCapturedAltars(_currentControllingTeam);
-				
-				if(a.Contains(AltarType.Khepru)){
-					_currentControllingTeam.score += sRef.vpsScorePerAltarPerSecond * sRef.coefKhepru * Time.deltaTime;
+				if(altarType != AltarType.MagicalMysteryScore){
+					List <AltarType> a = gm.getCapturedAltars(_currentControllingTeam);
+	 
+					if(a.Contains(AltarType.Khepru)){
+						_currentControllingTeam.score += sRef.vpsScorePerAltarPerSecond * sRef.coefKhepru * Time.deltaTime;
+					}else{
+						_currentControllingTeam.score += sRef.vpsScorePerAltarPerSecond * Time.deltaTime;
+					}
 				}else{
-					_currentControllingTeam.score += sRef.vpsScorePerAltarPerSecond * Time.deltaTime;
+					List <AltarType> a = gm.getCapturedAltars(_currentControllingTeam);
+					if(scoreLeft >=0){
+						float scoreToAdd = sRef.vpsScorePerMinePerSecond * ((a.Contains(AltarType.Khepru)) ? sRef.coefKhepru : 1 )* Time.deltaTime;
+						if(scoreLeft - scoreToAdd < 0){
+							scoreToAdd = scoreLeft;
+						}
+						scoreLeft -= scoreToAdd;
+						
+						
+					}
 				}
+				
 				//audio.PlayOneShot(Praying, 1.0f); //this is not the right place to put it, it apparently fucks up the other sounds ?
 			}
 			gm.debugString = string.Format(" Number: {0},\r\n Networked: {1}", _currentControllingTeam.teamNumber, networked);
@@ -149,13 +203,10 @@ public class Altar : MonoBehaviour {
 						audio.PlayOneShot(Praying, 1.0f);
 						return true;
 					}
-					
-					
 				}
 			}
 		}
 		return false;
-	
 	}
 	
 	
