@@ -144,10 +144,11 @@ public class Player : MonoBehaviour {
 			case PlayerState.standing:
 			//If we are standing and we get an input, handle it.
 //			Debug.Log (string.Format("Player number {0}, buld button down: {1}", PlayerNumber, buildButtonDown));
-				if(x.HasValue && !buildButtonDown){
-				setDirection(x.Value);	//Still need a 4-directional facing for building/rotating beacons
-				Vector2 analogStickDirection = new Vector2 (getPlayerXAxis(), getPlayerYAxis());
-				_currentState = PlayerState.moving;
+				if(x.HasValue && !buildButtonDown) {
+					setDirection(x.Value);	//Still need a 4-directional facing for building/rotating beacons
+					Vector2 analogStickDirection = new Vector2 (getPlayerXAxis(), getPlayerYAxis());
+					_currentState = PlayerState.moving;
+					
 					/**if(currentTile.GetDirection(x.Value) != null){
 						BaseTile MovingInto = currentTile.GetDirection(x.Value);
 						//Debug.Log(string.Format("x:{0}, y: {1}", MovingInto.brdXPos, MovingInto.brdYPos));
@@ -155,17 +156,20 @@ public class Player : MonoBehaviour {
 						addProgressToAction(vpsRate);
 						setDirection(x.Value);
 						_currentState = PlayerState.moving;
-						
+							
 					}
 					else{
 						setDirection(x.Value);
 					}
-					*/
-					
+					*/						
 				}
 				
-				//Rotating - doesn't fit with old comments or build button state diagram, but can hopefully be refactored later to fit better
-    				if (buildButtonDown && 
+				if (x.HasValue) {
+					setDirection (x.Value);
+				}
+				
+				//Rotating
+				if (buildButtonDown && 
 			    	currentTile.owningTeam == team &&
 			    	currentTile.beacon != null && 
 					facing != currentTile.beacon.GetComponent<Beacon>().facing && 
@@ -173,7 +177,7 @@ public class Player : MonoBehaviour {
 				     currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingAdvanced || 	//Is there a better way of doing this?
 		 			 currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Advanced)) 
 		 		{
-		 			//Yaxchay: Instant rotation
+		 			//Tikumose: Instant rotation
 		 			if (gm.getCapturedAltars(team).Contains (AltarType.Tikumose) && currentTile.beacon.GetComponent<Beacon>().controllingTeam == team) {
 						currentActionProgress = 0;
 						currentTile.beacon.GetComponent<Beacon>().Rotate (facing);
@@ -291,7 +295,11 @@ public class Player : MonoBehaviour {
 				currentTile.Reveal (_vision);
 			
 				//This lets you hit build button while moving to start doing stuff
+				//It also freezes you if you can't do anything (ex. are on genesis or upgraded beacon)
 				if (buildButtonDown) {
+					if (x.HasValue) {
+						setDirection (x.Value);
+					}
 					_currentState = PlayerState.standing;
 				}
 				
