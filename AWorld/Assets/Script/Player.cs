@@ -177,6 +177,7 @@ public class Player : MonoBehaviour {
 				     currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingAdvanced || 	//Is there a better way of doing this?
 		 			 currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Advanced)) 
 		 		{
+		 			/**
 		 			//Tikumose: Instant rotation
 		 			if (gm.getCapturedAltars(team).Contains (AltarType.Tikumose) && currentTile.beacon.GetComponent<Beacon>().controllingTeam == team) {
 						currentActionProgress = 0;
@@ -184,6 +185,7 @@ public class Player : MonoBehaviour {
 						currentTile.beacon.GetComponent<Beacon>().percRotateComplete = 0f;
 					}
 					else {
+					*/
 						float vpsRate = sRef.vpsBaseRotate;
 						addProgressToAction (vpsRate);
 						
@@ -193,7 +195,7 @@ public class Player : MonoBehaviour {
 						currentTile.beacon.GetComponent<Beacon>().startRotating (facing);
 						_currentState = PlayerState.rotating;
 						
-					}
+//					}
 				}
 				
 				//Upgrading
@@ -254,7 +256,7 @@ public class Player : MonoBehaviour {
 //								PlaySFX(influenceDone, 1.0f);
 								_currentState = PlayerState.building;
 								
-								float vpsBuildRate = sRef.vpsBaseBuild;
+								float vpsBuildRate = sRef.vpsBaseBuild * getAltarBuildBoost ();
 								addProgressToAction(vpsBuildRate);
 
 								GameObject beaconBeingBuilt;
@@ -462,7 +464,7 @@ public class Player : MonoBehaviour {
 										(beaconInProgress.currentState == null || beaconInProgress.currentState == BeaconState.BuildingBasic)) 
 									{
 										_currentState = PlayerState.building;
-										float vpsBuildRate = sRef.vpsBaseBuild;	
+										float vpsBuildRate = sRef.vpsBaseBuild * getAltarBuildBoost ();	
 										addProgressToAction(vpsBuildRate);
 										beaconInProgress.startBuilding(currentTile.gameObject, this.gameObject, vpsBuildRate);
 										beaconInProgress.setDirection(facing);
@@ -564,7 +566,7 @@ public class Player : MonoBehaviour {
 					
 					else {
 						
-						float vpsRotateRate = sRef.vpsBaseRotate;
+						float vpsRotateRate = sRef.vpsBaseRotate * getAltarRotateBoost ();
 						addProgressToAction (vpsRotateRate);
 						beacon.addRotateProgress (vpsRotateRate);
 						beacon.dirRotatingToward = facing;
@@ -892,7 +894,7 @@ public class Player : MonoBehaviour {
 		}
 		return sRef.coefMoveEnemy;
 	}
-		
+	
 	private float getAltarSpeedBoost(){
 		List<AltarType> a = gm.getCapturedAltars(team);
 		if(a.Contains(AltarType.Choyutzol)){
@@ -913,6 +915,16 @@ public class Player : MonoBehaviour {
 	}
 	
 	private float getAltarUpgradeBoost (){
+		List <AltarType> a = gm.getCapturedAltars(team);
+		
+		if(a.Contains(AltarType.Tikumose)){
+			return 2f;
+		}else{
+			return 1f;
+		}		
+	}
+	
+	private float getAltarRotateBoost (){
 		List <AltarType> a = gm.getCapturedAltars(team);
 		
 		if(a.Contains(AltarType.Tikumose)){
