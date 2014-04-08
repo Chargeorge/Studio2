@@ -228,9 +228,9 @@ public class Player : MonoBehaviour {
 						//start removing 
 					// if us 
 						//start building beacon				
-				if( buildButtonDown){
+				if (buildButtonDown){
 					//NO BEACON HERE, GOTTA DO STUFF.
-					//Check influence fist
+					//Check influence first
 					if(currentTile.controllingTeam !=null){
 						
 						if(currentTile.controllingTeam.teamNumber == team.teamNumber){
@@ -272,7 +272,7 @@ public class Player : MonoBehaviour {
 								beaconInProgress.setDirection(facing);
 								beaconInProgress.selfDestructing = false;
 							}
-						} else if(currentTile.tooCloseToBeacon()){
+						} else if(currentTile.tooCloseToBeacon() && currentTile.beacon == null){
 								audio.PlayOneShot(invalid_Input, 1.0f);
 						} else{
 							_currentState = PlayerState.influencing;
