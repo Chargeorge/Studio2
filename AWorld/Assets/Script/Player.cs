@@ -105,7 +105,7 @@ public class Player : MonoBehaviour {
 		//BaseTile currentTile = gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>();	//Not used with free movement
 		BaseTile currentTile = gm.tiles[(int) Mathf.Floor (transform.position.x + 0.5f), (int) Mathf.Floor (transform.position.y + 0.5f)].GetComponent<BaseTile>();
 		currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = true;
-		currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().material.color = team.getHighLightColor();
+		currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().material.color = team.highlightColor;
 		
 		bool buildButtonDown = getPlayerBuild();
 		//if(x.HasValue) Debug.Log(x.Value);
@@ -254,8 +254,11 @@ public class Player : MonoBehaviour {
 								addProgressToAction(vpsBuildRate);
 
 								GameObject beaconBeingBuilt;
+								
 								if (currentTile.beacon == null) { 
 									beaconBeingBuilt = (GameObject)GameObject.Instantiate(_prfbBeacon, new Vector3(0,0,0), Quaternion.identity);
+
+									
 								}
 								else {
 									beaconBeingBuilt = currentTile.beacon;
@@ -433,9 +436,10 @@ public class Player : MonoBehaviour {
 								else {
 								
 									GameObject beaconBeingBuilt;
-									
+
 									if (currentTile.beacon == null) { 
 										beaconBeingBuilt = (GameObject)GameObject.Instantiate(_prfbBeacon, new Vector3(0,0,0), Quaternion.identity);
+										
 									}
 									else {
 										beaconBeingBuilt = currentTile.beacon;
