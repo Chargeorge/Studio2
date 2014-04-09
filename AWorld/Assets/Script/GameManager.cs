@@ -316,7 +316,6 @@ public class GameManager : MonoBehaviour {
 	}
 	
 	void OnGUI(){
-
 		if(debugGUI == true){
 			switch(_currentState){
 			

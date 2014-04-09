@@ -91,7 +91,7 @@ public class Altar : MonoBehaviour {
 	
 	public void setScoreBarLen(){
 		Vector3 newScale = scoreBar.transform.localScale;
-		newScale.x *=  baseScoreScale * scoreLeft  / sRef.valScorePerMine;
+		newScale.x =  baseScoreScale * scoreLeft  / sRef.valScorePerMine;
 		scoreBar.transform.localScale = newScale;
 		
 	}
@@ -119,14 +119,16 @@ public class Altar : MonoBehaviour {
 					}
 				}else{
 					List <AltarType> a = gm.getCapturedAltars(_currentControllingTeam);
-					if(scoreLeft >=0){
+					if(scoreLeft >0){
+
+						Debug.Log("did a thing" + scoreLeft);
 						float scoreToAdd = sRef.vpsScorePerMinePerSecond * ((a.Contains(AltarType.Khepru)) ? sRef.coefKhepru : 1 )* Time.deltaTime;
 						if(scoreLeft - scoreToAdd < 0){
 							scoreToAdd = scoreLeft;
 						}
 						scoreLeft -= scoreToAdd;
 						setScoreBarLen();
-						
+						_currentControllingTeam.score += scoreToAdd;
 					}
 				}
 				

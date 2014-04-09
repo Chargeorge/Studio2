@@ -85,7 +85,7 @@ public class Settings : MonoBehaviour {
 		vpsBaseUpgrade = 25f;
 		vpsScorePerAltarPerSecond = 1f;
 		vpsBeaconBaseInfluence = 100f;
-		vpsScorePerMinePerSecond = 3f;
+		vpsScorePerMinePerSecond = 1f;
 		//Coefficients
 		coefMoveNeutral = 1f;
 		coefMoveAllied = 2f;
@@ -105,7 +105,7 @@ public class Settings : MonoBehaviour {
 		optTilesGiveScore = true;
 		valTileConvertScore = 1f;
 		valPointsToWin = 300;
-		valScorePerMine = 20f;
+		valScorePerMine = 100f;
 		//Beacon stuff
 		beaconBasicRange = 4;
 		beaconAdvancedRange = 8;
@@ -126,9 +126,9 @@ public class Settings : MonoBehaviour {
 		
 		//Visual stuff
 		percMaxInfluenceColor = 0.5f;	//Percentage of color that tile fills in when just before 100% influence
-		secMarqueeUpgradeTime = .4f;
-		marqueeCount = 5;
-		colorOffSet = 6;
+		secMarqueeUpgradeTime = .08f;
+		marqueeCount = 16;
+		colorOffSet = 2;
 		
 		//Misc?
 		teleportRate = .2f;
