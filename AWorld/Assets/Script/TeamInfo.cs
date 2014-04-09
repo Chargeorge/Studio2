@@ -15,6 +15,7 @@ public class TeamInfo
 	public Color32 teamColor;
 	public Color32 tileColor;
 	public Color32 beaconColor;
+	public Color32 highlightColor;
 	public Vector2 startingLocation;
 	public int teamNumber;
 	public float score;
@@ -32,9 +33,10 @@ public class TeamInfo
 			case 1: 
 				returnable.teamColor = new Color32 (17, 75, 141, 255);
 				returnable.tileColor = new Color32 (88, 151, 209,255);
-				returnable.beaconColor = new Color32 (17, 75, 141, 255);
+				returnable.beaconColor = new Color32 (21, 86, 163, 255);
 				returnable.startingLocation = Settings.SettingsInstance.team1Start;
 				returnable.teamNumber = teamNumber;
+				returnable.highlightColor = new Color32 (17, 75, 141, 150);
 
 
 				break;
@@ -45,6 +47,7 @@ public class TeamInfo
 				returnable.beaconColor = new Color32 (240, 139, 32, 255);
 				returnable.startingLocation = Settings.SettingsInstance.team2Start;
 				returnable.teamNumber = teamNumber;
+				returnable.highlightColor = new Color32 (247, 180, 40, 150);
 				break;
 		}
 
@@ -70,6 +73,7 @@ public class TeamInfo
 
 		Color32 HighlightColor = new Color32(7, 65, 131,255);
 		return HighlightColor;
+	
 	}
 	
 	public GameObject goGetHomeTile(){
