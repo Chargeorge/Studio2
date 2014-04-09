@@ -24,9 +24,7 @@ public class BaseTile : MonoBehaviour {
 	private int _ident;
 	public List<AStarholder> networkToBase;
 	private GameObject _qudFogLayer;
-	
 	private GameObject _qudNoBuildLayer;
-	
 	public GameObject qudNoBuildLayer {
 		get {
 			if(_qudNoBuildLayer == null){
@@ -38,7 +36,29 @@ public class BaseTile : MonoBehaviour {
 			_qudNoBuildLayer = value;
 		}
 	}	
-	
+
+	private GameObject _qudPulsingOwnedLayer;
+	public GameObject qudPulsingOwnedLayer {
+		get {
+			if(_qudPulsingOwnedLayer == null){
+				_qudPulsingOwnedLayer = transform.FindChild("PulsingOwnedLayer").gameObject;
+			}
+			return _qudPulsingOwnedLayer;
+		}
+		set {
+			_qudPulsingOwnedLayer = value;
+		}
+	}	
+
+	private int? _distanceToHomeBase;
+
+	public int? distanceToHomeBase {
+		get {
+			return _distanceToHomeBase;
+		}
+
+	}
+
 
 	public AudioClip influenceDone;
 
@@ -204,6 +224,15 @@ public class BaseTile : MonoBehaviour {
 			_MoveCost = value;
 		}
 	}
+	private ParticleSystem _PS;
+
+	public ParticleSystem PS{
+		get{
+			if(_PS == null) {_PS = GetComponent<ParticleSystem>();}
+			return _PS;
+		}
+	}
+
 	// Use this for initialization
 	void Start () {
 		_ident = UnityEngine.Random.Range(1, 10000000);
@@ -232,8 +261,13 @@ public class BaseTile : MonoBehaviour {
 			Color32 controllingTeamColor = controllingTeam.tileColor;
 			//controllingTeamColor.a = (byte) (255*(percControlled/100f));
 			
-			controllingTeamColor.a = (byte) (255*(percControlled/100f) * sRef.percMaxInfluenceColor);
-
+			if (owningTeam != null && owningTeam == controllingTeam) {
+				controllingTeamColor.a = (byte) (255-255*((1.0f-percControlled/100f) * (1.0f - sRef.percMaxInfluenceColor)));
+			}
+			else {
+				controllingTeamColor.a = (byte) (255*(percControlled/100f) * sRef.percMaxInfluenceColor);
+			}
+			
 			if (percControlled >= 100f) controllingTeamColor.a = (byte) 255;
 			
 			qudInfluenceLayer.renderer.material.color = controllingTeamColor;
@@ -262,8 +296,17 @@ public class BaseTile : MonoBehaviour {
 		else{	//Removing this; will use outline to show where player is, not who owns it
 //			transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = true;
 //			transform.Find("OwnedLayer").GetComponent<MeshRenderer>().material.color = owningTeam.getHighLightColor();
+
+			if(_distanceToHomeBase.HasValue && _distanceToHomeBase > 0){
+
+				qudPulsingOwnedLayer.renderer.material.color = owningTeam.marqueeColorList[(gm.currentMarquee  + distanceToHomeBase.Value) % sRef.marqueeCount];
+			}
+			//			
 		}
 	}
+
+
+
 	
 	public static void createTile(TileTypeEnum et, GameObject currentTile){
 		
@@ -681,7 +724,10 @@ public class BaseTile : MonoBehaviour {
 		return 0f;
 	}
 	
-	
+	/// <summary>
+	/// Sets tile to neutral control
+	/// </summary>
+	/// <param name="newTeam">New team.</param>
 	public void flipInfluence(TeamInfo newTeam){
 		if(owningTeam != null){
 			owningTeam.score -= getTileScore();
@@ -699,7 +745,13 @@ public class BaseTile : MonoBehaviour {
 		if(localAltar !=null){
 			localAltar.setControl(null);
 		}
+		//TODO: possible huge performance hit here
+		gm.tileSendMessage("setDistanceToHomeBase");
+
 	}
+	/// <summary>
+	/// Finish adding influence, set which team controls it
+	/// </summary>
 	public void finishInfluence(){
 		audio.PlayOneShot(influenceDone, 0.7f);
 		///TODO: add end semaphore stuff her
@@ -725,6 +777,13 @@ public class BaseTile : MonoBehaviour {
 			}
 			
 			Reveal (_influenceRevealRange);
+			//TODO: possible huge performance hit here
+			gm.tileSendMessage("setDistanceToHomeBase");
+			//setDistanceToHomeBase();
+			PS.startColor = controllingTeam.beaconColor;
+			PS.Emit(100);
+
+
 		}
 		
 	}
@@ -790,11 +849,37 @@ public class BaseTile : MonoBehaviour {
 		}
 		return false;
 	}
+
+	public int getDistanceToHomeBase(){
+		if(owningTeam != null){
+			List<AStarholder> As = 	BaseTile.aStarSearch(this,gm.getTeamBase(owningTeam),int.MaxValue, getLocalSameTeamTiles, owningTeam);
+			return As.Count;
+		}
+		return 0;
+	}
+
+	public void setDistanceToHomeBase(){
+		_distanceToHomeBase = getDistanceToHomeBase();
+		if(_distanceToHomeBase ==0){
+			qudPulsingOwnedLayer.renderer.enabled = false;
+		}
+		else{
+			qudPulsingOwnedLayer.renderer.enabled = true;
+		}
+
+	}
+
 	
 	public float getTileScore(){
-		return sRef.valTileConvertScore;
+		List <AltarType> a = gm.getCapturedAltars(controllingTeam);
+		
+		if(a.Contains(AltarType.Khepru)){
+			return sRef.valTileConvertScore * sRef.coefKhepru;
+		}else{
+			return sRef.valTileConvertScore;
+		}
 	}
-	
+		
 	public bool tooCloseToBeacon() {
 		for (int i = sRef.beaconNoBuildRange * -1; i <= sRef.beaconNoBuildRange; i++){
 			for (int j = (sRef.beaconNoBuildRange - Mathf.Abs (i)) * -1; j <= sRef.beaconNoBuildRange - Mathf.Abs (i); j++) {
@@ -816,7 +901,7 @@ public class BaseTile : MonoBehaviour {
 	}
 
 	public bool buildable(){
-		if(transform.Find ("Altar") != null){
+		if(gameObject.GetComponent<Altar>() != null){
 			return false;
 		}
 		if(currentType ==TileTypeEnum.water){
@@ -826,6 +911,9 @@ public class BaseTile : MonoBehaviour {
 			return false;
 		}
 		if(gm.teams[1].startingLocation.x ==brdXPos && gm.teams[1].startingLocation.y ==brdYPos){
+			return false;
+		}
+		if(tooCloseToBeacon()){
 			return false;
 		}
 		return true;

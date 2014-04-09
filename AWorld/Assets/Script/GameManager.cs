@@ -19,14 +19,12 @@ public class GameManager : MonoBehaviour {
 	#endregion
 	public GameObject[,] tiles;
 	private bool setup = true;
-	public static Mode gameMode = Mode.OneVOne;
 	public List<GameObject> players = new List<GameObject>();
 	public GameObject prfbPlayer;
 	public BaseTile debugMouse;
 	public Beacon debugBeacon;
 	public GameObject prfbAltar, prfbHome;
 	public List<GameObject> altars;
-	public int numAltars;
 	public string debugString;
 	public List<VictoryCondition> victoryConditions;
 	private GameState _currentState;
@@ -45,13 +43,16 @@ public class GameManager : MonoBehaviour {
 	public Texture winTexture1;
 	public Texture winTexture2;
 	private GameObject prfbBeacon;
-	public VictoryCondition vIsForVendetta;
-
+	public VictoryCondition vIsForVendetta;	
+	public int currentMarquee;
 	public AudioClip Victory_Gong;
+	public List<GameObject> beacons;
 
 	// Use this for initializatio
 	void Start () {
 		sRef = GameObject.Find ("Settings").GetComponent<Settings>();
+
+		beacons = new List<GameObject>();
 		prfbPlayer = (GameObject)Resources.Load("Prefabs/Player");
 		prfbAltar = (GameObject)Resources.Load("Prefabs/Altar");
 		prfbHome = (GameObject)Resources.Load ("Prefabs/Home");
@@ -59,10 +60,21 @@ public class GameManager : MonoBehaviour {
 		altars= new List<GameObject>();
 		victoryConditions = new List<VictoryCondition>();
 		teams = new List<TeamInfo>();
-
+		StartCoroutine(doMarquee());
 		
 	}
-	
+	/// <summary>
+	/// For the length of the script, every number of frames, u
+	/// </summary>
+	/// <returns>The marquee.</returns>
+	public IEnumerator doMarquee(){
+		while(true){
+			yield return new WaitForSeconds(sRef.secMarqueeUpgradeTime);
+			currentMarquee = (currentMarquee +1) % sRef.marqueeCount;
+		}
+		
+		
+	}
 	// Update is called once per frame
 	void Update () {
 		if (setup){
@@ -70,82 +82,10 @@ public class GameManager : MonoBehaviour {
 			team1Home  = null;
 			team2Home = null;
 			List<AltarType> altarTypes = System.Enum.GetValues(typeof(AltarType)).Cast<AltarType>().ToList();
-			if (numAltars > altarTypes.Count) Debug.LogError ("Too many altars and not enough altar types!"); 
+			if (sRef.numAltars > altarTypes.Count) Debug.LogError ("Too many altars and not enough altar types!"); 
 			
-			for (int i=0; i<numAltars; i++){
-				Debug.Log ("in Altar");		
-				GameObject a = (GameObject)Instantiate(prfbAltar, Vector3.zero, Quaternion.identity);
-				Altar aObj = a.GetComponent<Altar>();
-				aObj.setControl(null);
-//				
-				int index = Random.Range (0, altarTypes.Count);
-				aObj.altarType = altarTypes[index];
-				altarTypes.RemoveAt (index);
-				altars.Add (aObj.gameObject);
-				//				altars.Add (aObj.gameObject);
-//				//		aObj.brdX = Random.Range(0, tiles.GetLength(0));
-//				//		aObj.brdY = Random.Range(0, tiles.GetLength(1));
-//				aObj.brdX = (tiles.GetLength(0) - 1 - i*7)-8;	//Temp
-//				aObj.brdY = i*3+3;	//Temp
 
-//				aObj.setControl(null);
-//				aObj.transform.parent = tiles[aObj.brdX, aObj.brdY].transform;
-//				aObj.transform.localPosition = new Vector3(0,0,-1);
-//				altars.Add (aObj.gameObject);
-			}
-
-			for (int i=0; i<numAltars; i++){
-				Debug.Log ("in Altar");		
-				GameObject a = (GameObject)Instantiate(prfbAltar, Vector3.zero, Quaternion.identity);
-				Altar aObj = a.GetComponent<Altar>();
-
-				
-			}
-			int absoluteMagnitude;
-			absoluteMagnitude = Mathf.RoundToInt(Random.Range(10f, (new Vector2(tiles.GetLength(0), tiles.GetLength(1)).magnitude)*.75f));
-
-			for (int i = 0; i< numAltars; i++){
-				Altar thisAltar = altars[i].GetComponent<Altar>();
-				if(i != numAltars -1){
-
-					int x, y;
-					//x^2 + y^2 = absoluteMag^2
-					
-					x = Mathf.RoundToInt(Random.Range(0f, absoluteMagnitude));
-					y = Mathf.RoundToInt(Mathf.Sqrt(absoluteMagnitude * absoluteMagnitude - x*x));
-
-					while(y >= tiles.GetLength(1)){
-						x = Mathf.RoundToInt(Random.Range(0f, absoluteMagnitude));
-						y = Mathf.RoundToInt(Mathf.Sqrt(absoluteMagnitude * absoluteMagnitude - x*x));
-
-					}
-
-					if(i % 2 == 1){
-						thisAltar.brdX = tiles.GetLength(0)-1-x;
-						thisAltar.brdY = tiles.GetLength(1)-1-y;
-
-						absoluteMagnitude = Mathf.RoundToInt(Random.Range(15f, (new Vector2(tiles.GetLength(0), tiles.GetLength(1)).magnitude)*.75f));
-					}
-					else{
-						thisAltar.brdX = x;
-						thisAltar.brdY = y;
-					}
-					Debug.Log (string.Format("Altar created at({0}, {1})", thisAltar.brdX, thisAltar.brdY));
-					thisAltar.transform.parent = tiles[thisAltar.brdX, thisAltar.brdY].transform;
-					thisAltar.transform.localPosition = new Vector3(0,0,-1);
-				
-				}
-				else{
-					thisAltar.brdX = tiles.GetLength(0)/2;
-					thisAltar.brdY = tiles.GetLength(1)/2;
-
-					thisAltar.transform.parent = tiles[thisAltar.brdX, thisAltar.brdY].transform;
-					thisAltar.transform.localPosition = new Vector3(0,0,-1);
-				}
-
-
-			}
-			switch (gameMode){
+			switch (sRef.gameMode){
 			case Mode.TwoVTwo:{
 				_currentState = GameState.playing;
 				GameObject Player1 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
@@ -178,7 +118,7 @@ public class GameManager : MonoBehaviour {
 				
 					//steps to ensure validity
 				team1Home = setUpTeamHome(p1);
-				team2Home = setUpTeamHome(p2);
+				team2Home = setUpTeamHome(p3);
 				
 				//victoryConditions.Add (new LockMajorityAltars(1) );
 				victoryConditions.Add (new ControlViaTime(1));
@@ -228,8 +168,94 @@ public class GameManager : MonoBehaviour {
 			checkFlipWater(team1Tile.brdXPos, team1Tile.brdYPos);
 			checkFlipWater(team2Tile.brdXPos, team2Tile.brdYPos);
 
+			for (int i=0; i<sRef.numAltars; i++){
+				Debug.Log ("in Altar");		
+				GameObject a = (GameObject)Instantiate(prfbAltar, Vector3.zero, Quaternion.identity);
+				Altar aObj = a.GetComponent<Altar>();
+				aObj.setControl(null);
+				//				
+				int index = Random.Range (0, altarTypes.Count);
+				aObj.altarType = altarTypes[index];
+				altarTypes.Remove(AltarType.MagicalMysteryScore);
+				altarTypes.RemoveAt (index);
+				altars.Add (aObj.gameObject);
+				//				altars.Add (aObj.gameObject);
+				//				//		aObj.brdX = Random.Range(0, tiles.GetLength(0));
+				//				//		aObj.brdY = Random.Range(0, tiles.GetLength(1));
+				//				aObj.brdX = (tiles.GetLength(0) - 1 - i*7)-8;	//Temp
+				//				aObj.brdY = i*3+3;	//Temp
+				
+				//				aObj.setControl(null);
+				//				aObj.transform.parent = tiles[aObj.brdX, aObj.brdY].transform;
+				//				aObj.transform.localPosition = new Vector3(0,0,-1);
+				//				altars.Add (aObj.gameObject);
+			}
+			
+			for (int i=0; i<sRef.numScoringAltars; i++){
+				Debug.Log ("in Altar");		
+				GameObject a = (GameObject)Instantiate(prfbAltar, Vector3.zero, Quaternion.identity);
+				Altar aObj = a.GetComponent<Altar>();
+				aObj.setControl(null);
+				aObj.altarType = AltarType.MagicalMysteryScore;
+				altars.Add(a);
+			}
+			int absoluteMagnitude;
+			absoluteMagnitude = getRandomMagnitude(.2f,.35f);
+			Vector2[] alterPositions  = new Vector2[4]{new Vector2(10,2), new Vector2(10,10), new Vector2(15,2),new Vector2( 15,10)};
+			
+			for (int i = 0; i< altars.Count; i++){
+				Altar thisAltar = altars[i].GetComponent<Altar>();
+				if(i != altars.Count -1){
+
+					thisAltar.brdX = (int)alterPositions[i].x;
+					thisAltar.brdY = (int)alterPositions[i].y;
+					
+//
+//					if(i % teams.Count == 1){
+//
+//					}
+//
+//					Vector2 validPos = generateValidAltarPosition(thisAltar, teams[ i % teams.Count].startingLocation , ( i % teams.Count == 1) ? true : false, absoluteMagnitude);
+//					thisAltar.brdX = (int)validPos.x;
+//					thisAltar.brdY = (int)validPos.y;
+				}
+				else{
+					thisAltar.brdX = tiles.GetLength(0)/2;
+					thisAltar.brdY = tiles.GetLength(1)/2;
+				
+				}
+				
+				
+			}
+
+
+			int randomXOffset = Random.Range(0,3);
+			int randomYOffset = Random.Range(0,2);
+			
+			for(int i = 0; i < altars.Count; i++){
+				if( (i % 2) == 1){
+					altars[Random.Range(0,altars.Count)].GetComponent<Altar>().brdX+=randomXOffset;
+					
+					altars[Random.Range(0,altars.Count)].GetComponent<Altar>().brdY+=randomYOffset;
+				}else{
+					
+					altars[Random.Range(0,altars.Count)].GetComponent<Altar>().brdX-=randomXOffset;
+					
+					altars[Random.Range(0,altars.Count)].GetComponent<Altar>().brdY-=randomYOffset;
+				
+				}
+				
+			}
+			
+
 			altars.ForEach(delegate (GameObject altarGO){
 				Altar A = altarGO.GetComponent<Altar>();
+				
+				
+				A.transform.parent = tiles[A.brdX, A.brdY].transform;
+				A.transform.localPosition = new Vector3(0,0,-1);
+				Debug.Log (string.Format("Altar created at({0}, {1})", A.brdX, A.brdY));
+				
 				checkFlipWater(A.brdX, A.brdY);
 			});
 
@@ -292,6 +318,98 @@ public class GameManager : MonoBehaviour {
 			
 		}	
 	}
+
+public Vector2 generateValidAltarPosition(Altar thisAltar, Vector2 startPos, bool flip, int absoluteMagnitude){
+
+		int x, y;
+		//x^2 + y^2 = absoluteMag^2
+		
+		x = Mathf.RoundToInt(Random.Range(0f, absoluteMagnitude));
+		y = Mathf.RoundToInt(Mathf.Sqrt(absoluteMagnitude * absoluteMagnitude - x*x));
+
+		if(!flip){
+			x += (int)teams[0].startingLocation.x;
+			y += (int)teams[0].startingLocation.y;
+		}
+		else{
+			x = (int)teams[0].startingLocation.x - x;
+			y = (int)teams[0].startingLocation.y -y;
+		}
+		Debug.Log ("Distance" + getDistanceToNearestAltar(new Vector2(x,y)));
+		
+		int origX = x;
+		int baseX = x;
+		while(y >= tiles.GetLength(1) || getDistanceToNearestAltar(new Vector2(x,y)) < 4f || getDistanceToNearestStart(new Vector2(x,y)) < 5f || y < 0 || x <= 0){
+		
+			baseX++;
+			x = baseX;
+			y = Mathf.RoundToInt(Mathf.Sqrt(absoluteMagnitude * absoluteMagnitude - x*x));
+			
+			if(!flip){
+				x += (int)teams[0].startingLocation.x;
+				y += (int)teams[0].startingLocation.y;
+			}
+			else{
+				x = (int)teams[0].startingLocation.x - x;
+				y = (int)teams[0].startingLocation.y -y;
+			}
+		}
+
+
+
+//		if(i % 2 == 1){
+//			thisAltar.brdX = tiles.GetLength(0)-1-x;
+//			thisAltar.brdY = tiles.GetLength(1)-1-y;
+//			
+//			absoluteMagnitude  = getRandomMagnitude(.3f,.4f);
+//		}
+//		else{
+			//thisAltar.brdX = x;
+			//thisAltar.brdY = y;
+//		}
+		return new Vector2(x,y);
+	}
+
+	public float getDistanceToNearestStart(Vector2 position){
+		float minDistance = float.MaxValue;
+
+		teams.ForEach(delegate(TeamInfo t){
+			float distance = Vector2.Distance(position, t.startingLocation);
+			if(distance < minDistance) {minDistance = distance;}
+		});
+		return minDistance;
+	}
+
+	
+	public float getDistanceToNearestAltar(Vector2 position){
+		float minDistance = float.MaxValue;
+
+		
+		altars.ForEach(delegate(GameObject t){
+
+			Vector2 test = new Vector2(t.GetComponent<Altar>().brdX,t.GetComponent<Altar>().brdY);
+			float distance = Vector2.Distance(position,test);
+			if(distance < minDistance) {minDistance = distance;}
+		});
+		return minDistance;
+	}
+
+
+	public float getDistanceToNearestBeacon(Vector2 position){
+		float minDistance = float.MaxValue;
+
+		
+		beacons.ForEach(delegate(GameObject t){
+			float distance = Vector2.Distance(position, new Vector2(t.transform.parent.gameObject.GetComponent<BaseTile>().brdXPos,t.transform.parent.gameObject.GetComponent<BaseTile>().brdYPos));
+			if(distance < minDistance) {minDistance = distance;}
+		});
+		return minDistance;
+	}
+
+	public int getRandomMagnitude(float lower, float higher){
+		return Mathf.RoundToInt(Random.Range( (new Vector2(tiles.GetLength(0), tiles.GetLength(1)).magnitude)*lower, (new Vector2(tiles.GetLength(0), tiles.GetLength(1)).magnitude)*higher));
+
+	}
 	
 	public GameObject getHoveredTile(){
 		Vector3 MousePos =  Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -305,7 +423,6 @@ public class GameManager : MonoBehaviour {
 	}
 	
 	void OnGUI(){
-
 		if(debugGUI == true){
 			switch(_currentState){
 			
@@ -436,6 +553,7 @@ public class GameManager : MonoBehaviour {
 		if(BT.GetComponent<BaseTile>().buildable()){
 			GameObject beacon = (GameObject)Instantiate(prfbBeacon, Vector3.zero, Quaternion.identity);
 			beacon.GetComponent<Beacon>().buildNeutral(BT);
+			beacons.Add(beacon);
 			return true;
 		}
 		else{
@@ -443,7 +561,13 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-
+	public void tileSendMessage(string message){
+		for(int x = 0; x<  tiles.GetLength(0); x++){
+			for(int y =0 ; y< tiles.GetLength(1); y++){
+				tiles[x,y].SendMessage(message);
+			}
+		}
+	}
 /**	
 	public List<AltarType> getNetworkedAltars(TeamInfo t){
 		List<AltarType> returnable = new List<AltarType>();

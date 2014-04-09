@@ -8,5 +8,6 @@ public enum AltarType
 	Munalwa = 4,
 	Yaxchay = 5,
 	Onixtal = 6,
-	Tepwante = 7
+	Tepwante = 7,
+	MagicalMysteryScore = 8
 }

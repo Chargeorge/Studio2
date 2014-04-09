@@ -15,8 +15,8 @@ public enum PlayerState
 	moving,
 	influencing,
 	rotating,
-	upgrading
-
+	upgrading,
+	teleporting
 }
 
 

@@ -24,13 +24,12 @@ public class Player : MonoBehaviour {
 	private bool _pulsating;	//Set to false every Update function; Pulsate sets it to true; if false at end of update, resets scale and _expanding
 	private bool _expanding;	//Used during pulsating
 	private Vector3 _defaultScale = new Vector3 (0.5f, 0.5f, 1f);
-	private float _maxScale = 0.9f;
-	private float _minScale = 0.5f;
 //	private float _expandRate = 0.007f;
 //	private float _contractRate = 0.04f;
 	private float _expandTime = 0.8f;
 	private float _contractTime = 0.2f;
 	private float pulsateProgress;
+	
 	private List<AltarType> altars;
 
 	bool isPlaying = false;
@@ -47,6 +46,8 @@ public class Player : MonoBehaviour {
 	public float scoreBarH = 30;
 	public Texture scoreTexture;
 	public Texture winTexture;
+	
+	public Vector3 teleportTarget;
 
 	public PlayerState currentState {
 		get {
@@ -104,7 +105,7 @@ public class Player : MonoBehaviour {
 		//BaseTile currentTile = gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>();	//Not used with free movement
 		BaseTile currentTile = gm.tiles[(int) Mathf.Floor (transform.position.x + 0.5f), (int) Mathf.Floor (transform.position.y + 0.5f)].GetComponent<BaseTile>();
 		currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = true;
-		currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().material.color = team.getHighLightColor();
+		currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().material.color = team.highlightColor;
 		
 		bool buildButtonDown = getPlayerBuild();
 		//if(x.HasValue) Debug.Log(x.Value);
@@ -114,13 +115,40 @@ public class Player : MonoBehaviour {
 				
 		switch(currentState){
 			
+			case PlayerState.teleporting:
+/**				if (transform.position == teleportTarget) {
+					_currentState = PlayerState.standing;
+				}
+				else {
+					transform.position = Vector2.Lerp(transform.position, teleportTarget, sRef.teleportRate);
+				}
+*/				
+				Vector3 newPos = Vector2.Lerp(transform.position, teleportTarget, sRef.teleportRate);
+				newPos.z = transform.position.z;
+				transform.position = newPos;
+				BaseTile newTile = gm.tiles[(int) Mathf.Floor (transform.position.x + 0.5f), (int) Mathf.Floor (transform.position.y + 0.5f)].GetComponent<BaseTile>();
+				if (newTile != currentTile) {
+					currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
+				}
+//				if(currentTile == team.goGetHomeTile().GetComponent<BaseTile>()){
+				if(closeEnoughToTeleportTarget(newPos)){
+			
+//					Vector3 homePos = currentTile.transform.position;
+//					homePos.z = transform.position.z;
+//					transform.position = homePos;
+					_currentState = PlayerState.standing;
+				}
+				
+			break;
+			
 			case PlayerState.standing:
 			//If we are standing and we get an input, handle it.
 //			Debug.Log (string.Format("Player number {0}, buld button down: {1}", PlayerNumber, buildButtonDown));
-				if(x.HasValue && !buildButtonDown){
-				setDirection(x.Value);	//Still need a 4-directional facing for building/rotating beacons
-				Vector2 analogStickDirection = new Vector2 (getPlayerXAxis(), getPlayerYAxis());
-				_currentState = PlayerState.moving;
+				if(x.HasValue && !buildButtonDown) {
+					setDirection(x.Value);	//Still need a 4-directional facing for building/rotating beacons
+					Vector2 analogStickDirection = new Vector2 (getPlayerXAxis(), getPlayerYAxis());
+					_currentState = PlayerState.moving;
+					
 					/**if(currentTile.GetDirection(x.Value) != null){
 						BaseTile MovingInto = currentTile.GetDirection(x.Value);
 						//Debug.Log(string.Format("x:{0}, y: {1}", MovingInto.brdXPos, MovingInto.brdYPos));
@@ -128,45 +156,52 @@ public class Player : MonoBehaviour {
 						addProgressToAction(vpsRate);
 						setDirection(x.Value);
 						_currentState = PlayerState.moving;
-						
+							
 					}
 					else{
 						setDirection(x.Value);
 					}
-					*/
-					
+					*/						
 				}
 				
-				//Rotating - doesn't fit with old comments or build button state diagram, but can hopefully be refactored later to fit better
-    				if (buildButtonDown && 
-					currentTile.beacon != null && 
+				if (x.HasValue) {
+					setDirection (x.Value);
+				}
+				
+				//Rotating
+				if (buildButtonDown && 
+			    	currentTile.owningTeam == team &&
+			    	currentTile.beacon != null && 
 					facing != currentTile.beacon.GetComponent<Beacon>().facing && 
 				    (currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Basic || 			//Making sure the beacon is at least complete at basic level
 				     currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingAdvanced || 	//Is there a better way of doing this?
 		 			 currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Advanced)) 
 		 		{
-		 			//Yaxchay: Instant rotation
-		 			if (gm.getCapturedAltars(team).Contains (AltarType.Yaxchay) && currentTile.beacon.GetComponent<Beacon>().controllingTeam == team) {
+		 			/**
+		 			//Tikumose: Instant rotation
+		 			if (gm.getCapturedAltars(team).Contains (AltarType.Tikumose) && currentTile.beacon.GetComponent<Beacon>().controllingTeam == team) {
 						currentActionProgress = 0;
 						currentTile.beacon.GetComponent<Beacon>().Rotate (facing);
 						currentTile.beacon.GetComponent<Beacon>().percRotateComplete = 0f;
 					}
 					else {
+					*/
 						float vpsRate = sRef.vpsBaseRotate;
 						addProgressToAction (vpsRate);
 						
 //						setDirection(x.Value);
 						
-						PlaySFX(beaconRotating, 1.0f);
-						currentTile.beacon.GetComponent<Beacon>().startRotating ();
+//						PlaySFX(beaconRotating, 1.0f);
+						currentTile.beacon.GetComponent<Beacon>().startRotating (facing);
 						_currentState = PlayerState.rotating;
 						
-					}
+//					}
 				}
 				
 				//Upgrading
 				if (buildButtonDown && 
-					currentTile.beacon != null &&
+			    	currentTile.owningTeam == team &&
+			    	currentTile.beacon != null &&
 					facing == currentTile.beacon.GetComponent<Beacon>().facing &&
 					(currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Basic ||
 					 currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingAdvanced)) 
@@ -193,13 +228,12 @@ public class Player : MonoBehaviour {
 						//start removing 
 					// if us 
 						//start building beacon				
-				if( buildButtonDown){
+				if (buildButtonDown){
 					//NO BEACON HERE, GOTTA DO STUFF.
-					//Check influence fist
+					//Check influence first
 					if(currentTile.controllingTeam !=null){
 						
 						if(currentTile.controllingTeam.teamNumber == team.teamNumber){
-							
 							if(currentTile.percControlled < 100f){
 							Pulsate ();
 								_currentState = PlayerState.influencing;
@@ -211,24 +245,26 @@ public class Player : MonoBehaviour {
 								currentTile.getLocalAltar().doCapture(team);
 								
 							}
-							
+
 							//Building
 							else if((currentTile.beacon == null || 
-									currentTile.beacon.GetComponent<Beacon>().percBuildComplete < 100f && 
-									currentTile.getLocalAltar()== null) && 
-									!currentTile.tooCloseToBeacon())
+									//currentTile.beacon.GetComponent<Beacon>().percBuildComplete < 100f &&
+									currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingBasic) && 
+									currentTile.buildable ())
 							{
-									
 								Pulsate ();
-								PlaySFX(influenceDone, 1.0f);
+//								PlaySFX(influenceDone, 1.0f);
 								_currentState = PlayerState.building;
 								
-								float vpsBuildRate = sRef.vpsBaseBuild;
+								float vpsBuildRate = sRef.vpsBaseBuild * getAltarBuildBoost ();
 								addProgressToAction(vpsBuildRate);
 
 								GameObject beaconBeingBuilt;
+								
 								if (currentTile.beacon == null) { 
 									beaconBeingBuilt = (GameObject)GameObject.Instantiate(_prfbBeacon, new Vector3(0,0,0), Quaternion.identity);
+
+									
 								}
 								else {
 									beaconBeingBuilt = currentTile.beacon;
@@ -239,16 +275,15 @@ public class Player : MonoBehaviour {
 								beaconInProgress.setDirection(facing);
 								beaconInProgress.selfDestructing = false;
 							}
-						} else if(currentTile.tooCloseToBeacon()){
+						} else if(currentTile.tooCloseToBeacon() && currentTile.beacon == null){
 								audio.PlayOneShot(invalid_Input, 1.0f);
 						} else{
-							
 							_currentState = PlayerState.influencing;
 						}
 					}
-					else{
-					Pulsate ();
-						float vpsInfluenceRate = sRef.vpsBasePlayerInfluence * getAltarInfluenceBoost();
+					else {
+						Pulsate ();
+						float vpsInfluenceRate = sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost();
 						addProgressToAction(vpsInfluenceRate);
 						_currentState = PlayerState.influencing;
 						currentTile.startInfluence(currentActionProgress, team);
@@ -264,75 +299,86 @@ public class Player : MonoBehaviour {
 			
 				currentTile.Reveal (_vision);
 			
-				if (x.HasValue) {
-					setDirection(x.Value);	//Still need a 4-directional facing for building/rotating beacons
-					Vector3 posToCheck = new Vector3 (
-					transform.position.x + getPlayerXAxis() * sRef.vpsBaseFreeMoveSpeed * getTileSpeedBoost(currentTile) * getAltarSpeedBoost() * Time.deltaTime, 
-					transform.position.y + getPlayerYAxis() * sRef.vpsBaseFreeMoveSpeed * getTileSpeedBoost(currentTile) * getAltarSpeedBoost() * Time.deltaTime, 
-					transform.position.z);
-					
-					if (!outOfBounds(posToCheck) && 
-						!tooCloseToOpponent(posToCheck) &&
-						(!onWater(posToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) 
-					{	//Valid move
-						PlaySFX(playerMove, 0.2f);
-						transform.position = posToCheck;
-						BaseTile newTile = gm.tiles[(int) Mathf.Floor (transform.position.x + 0.5f), (int) Mathf.Floor (transform.position.y + 0.5f)].GetComponent<BaseTile>();
-						if (newTile != currentTile) {
-							currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
-						}	
+				//This lets you hit build button while moving to start doing stuff
+				//It also freezes you if you can't do anything (ex. are on genesis or upgraded beacon)
+				if (buildButtonDown) {
+					if (x.HasValue) {
+						setDirection (x.Value);
 					}
+					_currentState = PlayerState.standing;
 				}
 				
-				/**
-				if(x.HasValue && x.Value == facing){
-					gm.PlaySFX(playerMove, 0.8f);
-					BaseTile MovingInto = currentTile.GetComponent<BaseTile>().GetDirection(x.Value);
-					float vpsRate = MovingInto.GetRate(this) * sRef.vpsBaseMove *getAltarSpeedBoost();
-					addProgressToAction(vpsRate);
-					
-					if(currentActionProgress > sRef.baseRequired){
-						DoMove(MovingInto);
-						currentActionProgress = 0f;
-						_currentState = PlayerState.standing;	
+				else { 
+					if (x.HasValue) {
+						setDirection(x.Value);	//Still need a 4-directional facing for building/rotating beacons
+						Vector3 posToCheck = new Vector3 (
+						transform.position.x + getPlayerXAxis() * sRef.vpsBaseFreeMoveSpeed * getTileSpeedBoost(currentTile) * getAltarSpeedBoost() * Time.deltaTime, 
+						transform.position.y + getPlayerYAxis() * sRef.vpsBaseFreeMoveSpeed * getTileSpeedBoost(currentTile) * getAltarSpeedBoost() * Time.deltaTime, 
+						transform.position.z);
+						
+						if (!outOfBounds(posToCheck) && 
+							//!tooCloseToOpponent(posToCheck) &&
+							(!onWater(posToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) 
+						{	//Valid move
+							PlaySFX(playerMove, 0.2f);
+							transform.position = posToCheck;
+							BaseTile thisTile = gm.tiles[(int) Mathf.Floor (transform.position.x + 0.5f), (int) Mathf.Floor (transform.position.y + 0.5f)].GetComponent<BaseTile>();
+							if (thisTile != currentTile) {
+								currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
+							}	
+						}
 					}
-
-					else{ 
 					
-					//Move avatar according to how far along the action is
-
-					float offset = currentActionProgress / sRef.baseRequired;
-					offset = Mathf.Pow (10, offset);
-					offset = Mathf.Log10 (offset);
-					
-						switch (facing) {
-							
-							case DirectionEnum.East: 
-								_positionOffset = new Vector2 (offset, 0);
-								break;
-							
-							case DirectionEnum.West:
-								_positionOffset = new Vector2 (-1 * offset, 0);
-								break;
-
-							case DirectionEnum.North:
-								_positionOffset = new Vector2 (0, offset);
-								break;
-										
-							case DirectionEnum.South:
-								_positionOffset = new Vector2 (0, -1 * offset);
-								break;
+					/**
+					if(x.HasValue && x.Value == facing){
+						gm.PlaySFX(playerMove, 0.8f);
+						BaseTile MovingInto = currentTile.GetComponent<BaseTile>().GetDirection(x.Value);
+						float vpsRate = MovingInto.GetRate(this) * sRef.vpsBaseMove *getAltarSpeedBoost();
+						addProgressToAction(vpsRate);
+						
+						if(currentActionProgress > 100f){
+							DoMove(MovingInto);
+							currentActionProgress = 0f;
+							_currentState = PlayerState.standing;	
+						}
+	
+						else{ 
+						
+						//Move avatar according to how far along the action is
+	
+						float offset = currentActionProgress / 100f;
+						offset = Mathf.Pow (10, offset);
+						offset = Mathf.Log10 (offset);
+						
+							switch (facing) {
 								
+								case DirectionEnum.East: 
+									_positionOffset = new Vector2 (offset, 0);
+									break;
+								
+								case DirectionEnum.West:
+									_positionOffset = new Vector2 (-1 * offset, 0);
+									break;
+	
+								case DirectionEnum.North:
+									_positionOffset = new Vector2 (0, offset);
+									break;
+											
+								case DirectionEnum.South:
+									_positionOffset = new Vector2 (0, -1 * offset);
+									break;
+									
+							}
+							
 						}
 						
+						
+					}*/
+					else{
+						StopSFX();
+						_currentState= PlayerState.standing; 
+						currentActionProgress = 0f;
 					}
-					
-					
-				}*/
-				else{
-					StopSFX();
-					_currentState= PlayerState.standing; 
-					currentActionProgress = 0f;
 				}
 			break;	
 			
@@ -366,7 +412,7 @@ public class Player : MonoBehaviour {
 							}
 						}
 						else{
-						PlaySFX(invalid_Input, 1.0f);
+							PlaySFX(invalid_Input, 1.0f);
 						}
 					}
 					else
@@ -381,7 +427,7 @@ public class Player : MonoBehaviour {
 					currentTile.beacon.GetComponent<Beacon>().AbortBuild();
 					_currentState = PlayerState.standing;
 					StopSFX ();
-					PlaySFX(invalid_Input, 1.0f);
+					//PlaySFX(invalid_Input, 1.0f);
 					}
 			break;
 			
@@ -392,17 +438,65 @@ public class Player : MonoBehaviour {
 					PlaySFX(influenceStart, 0.8f);
 					
 					if(currentTile.controllingTeam != null){
-						if(currentTile.controllingTeam.teamNumber  == teamNumber)
+						if(currentTile.controllingTeam.teamNumber == teamNumber)
 						{                                      
 							//Debug.Log("Adding Influence");
-							float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBasePlayerInfluence * getAltarInfluenceBoost() * Time.deltaTime);
+							float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime);
 						//	Debug.Log("test: " + test);
-							if(test > 0f){
-								_currentState = PlayerState.standing;
+							if(test > 0f || (currentTile.owningTeam != null && currentTile.owningTeam == team)){
+//								_currentState = PlayerState.standing;
+								
+								if (currentTile.getLocalAltar () != null || currentTile.tooCloseToBeacon()) {
+									_currentState = PlayerState.standing;
+								}
+								
+								else {
+								
+									GameObject beaconBeingBuilt;
+
+									if (currentTile.beacon == null) { 
+										beaconBeingBuilt = (GameObject)GameObject.Instantiate(_prfbBeacon, new Vector3(0,0,0), Quaternion.identity);
+										
+									}
+									else {
+										beaconBeingBuilt = currentTile.beacon;
+									}
+									
+									beaconInProgress = beaconBeingBuilt.GetComponent<Beacon>();					
+								
+									if (currentTile.buildable () && 
+										(beaconInProgress.currentState == null || beaconInProgress.currentState == BeaconState.BuildingBasic)) 
+									{
+										_currentState = PlayerState.building;
+										float vpsBuildRate = sRef.vpsBaseBuild * getAltarBuildBoost ();	
+										addProgressToAction(vpsBuildRate);
+										beaconInProgress.startBuilding(currentTile.gameObject, this.gameObject, vpsBuildRate);
+										beaconInProgress.setDirection(facing);
+										beaconInProgress.selfDestructing = false;
+									}
+								
+									else if (beaconInProgress.facing != facing) {
+										_currentState = PlayerState.rotating;
+										beaconInProgress.startRotating (facing);
+									}
+									
+									//Don't need to rotate, so either upgrade or return to standing
+									else {
+																	
+										if (beaconInProgress.currentState == BeaconState.Basic || beaconInProgress.currentState == BeaconState.BuildingAdvanced) {
+											_currentState = PlayerState.upgrading;
+											beaconInProgress.startUpgrading ();
+										}
+									
+										else if (beaconInProgress.currentState == BeaconState.Advanced) {
+											_currentState = PlayerState.standing;
+										}
+									}
+								}
 							}
 						}
 						else{
-							float test = currentTile.subTractInfluence(  sRef.vpsBasePlayerInfluence * getAltarInfluenceBoost() * Time.deltaTime, team);
+							float test = currentTile.subTractInfluence(  sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime, team);
 							if(test > 0f){
 								currentTile.addInfluenceReturnOverflow(test);
 								PlaySFX(invalid_Input, 1.0f);
@@ -426,7 +520,7 @@ public class Player : MonoBehaviour {
 						}*/
 
 						if(currentTile.percControlled >= 100f){
-						Debug.Log ("INLFUENCE DONE");
+//						Debug.Log ("INLFUENCE DONE");
 							PlaySFX(influenceDone, 1.0f);
 						}
 						
@@ -455,20 +549,41 @@ public class Player : MonoBehaviour {
 				
 					Pulsate ();
 					//PlaySFX(beaconRotating, 1.0f);
-					float vpsRotateRate = sRef.vpsBaseRotate;
-					addProgressToAction (vpsRotateRate);
-					Beacon beacon = currentTile.beacon.GetComponent<Beacon>();
-					beacon.addRotateProgress (vpsRotateRate);
-					beacon.dirRotatingToward = facing;
 					
-					if (beacon.percRotateComplete >= 100f) {
-	
+					Beacon beacon = currentTile.beacon.GetComponent<Beacon>();
+				
+					/** This is to let players change facing mid-rotation 
+					if (x.HasValue) { 
+						setDirection (x.Value);
+					}
+					*/
+										
+					//This will only be called if players change facing mid-rotation - doesn't hurt anything so leaving it in for now
+					if (beacon.dirRotatingToward != facing) {
+						StopSFX ();
 						currentActionProgress = 0;
-						beacon.Rotate (facing);
+						beacon.Rotate (beacon.facing);
 						beacon.percRotateComplete = 0f;
-						_currentState = PlayerState.standing;
-						StopSFX ();					
-					}					
+						_currentState = PlayerState.rotating;
+						beacon.startRotating (facing);
+					}
+					
+					else {
+						
+						float vpsRotateRate = sRef.vpsBaseRotate * getAltarRotateBoost ();
+						addProgressToAction (vpsRotateRate);
+						beacon.addRotateProgress (vpsRotateRate);
+						beacon.dirRotatingToward = facing;
+						
+						if (beacon.percRotateComplete >= 100f) {
+		
+							currentActionProgress = 0;
+							beacon.Rotate (facing);
+							beacon.percRotateComplete = 0f;
+							_currentState = PlayerState.standing;
+							StopSFX ();					
+						}
+					}		
 				}
 					
 				else {
@@ -488,7 +603,7 @@ public class Player : MonoBehaviour {
 				
 					Pulsate ();
 					//PlaySFX(beaconUpgrading, 1.0f);
-					float vpsUpgradeRate = sRef.vpsBaseUpgrade;
+					float vpsUpgradeRate = sRef.vpsBaseUpgrade * getAltarUpgradeBoost ();
 					addProgressToAction (vpsUpgradeRate);
 					Beacon beacon = currentTile.beacon.GetComponent<Beacon>();
 					beacon.addUpgradeProgress (vpsUpgradeRate);
@@ -528,7 +643,7 @@ public class Player : MonoBehaviour {
 		*/			
 		//If not pulsating, reset scale and _expanding
 		if (!_pulsating) {
-			transform.localScale = new Vector3 (_defaultScale.x, _defaultScale.y, _defaultScale.z);
+			transform.localScale = new Vector3 (_defaultScale.x, _defaultScale.y, _defaultScale.z) * getScaleBoost ();
 			_expanding = true;
 			pulsateProgress = 0f;
 		}
@@ -638,8 +753,18 @@ public class Player : MonoBehaviour {
 		float currentRotAngle = getAngleForDir(facing);
 		
 		facing = N;
-		transform.RotateAround(transform.position, new Vector3(0,0,1), currentRotAngle);
-		transform.RotateAround(transform.position, new Vector3(0,0,-1), rotAngle);
+//		transform.RotateAround(transform.position, new Vector3(0,0,1), currentRotAngle);
+//		transform.RotateAround(transform.position, new Vector3(0,0,-1), rotAngle);
+		Vector2 normVec = new Vector2 (getPlayerXAxis(), getPlayerYAxis()).normalized;
+		float angle;
+		if (getPlayerXAxis() < 0) { 
+			angle = Vector2.Angle (new Vector2 (0, 1), normVec);
+		}
+		else {
+			angle = 360 - Vector2.Angle (new Vector2 (0, 1), normVec);
+		}
+		Debug.Log (angle);
+		transform.eulerAngles = new Vector3(0f, 0f, angle);
 	}
 /// <summary>
 /// 
@@ -687,53 +812,39 @@ public class Player : MonoBehaviour {
 	private void Pulsate () {
 	
 		_pulsating = true;
-	
+		float minScale = getMinScale();
+		float maxScale = getMaxScale();
+		
 		if (_expanding) {
 		
-			float expandRate = sRef.baseRequired / _expandTime;
+		
+			float expandRate = 100f / _expandTime;
 			pulsateProgress += expandRate * Time.deltaTime;
 			
 			
-			float expandAmount = (_maxScale - _minScale) * (expandRate * Time.deltaTime / sRef.baseRequired);
+			float expandAmount = (maxScale - minScale) * (expandRate * Time.deltaTime / 100f);
 			transform.localScale = new Vector3 (transform.localScale.x + expandAmount, transform.localScale.y + expandAmount, 1);
 
-			if (pulsateProgress >= sRef.baseRequired) {
-				transform.localScale = new Vector3 (_maxScale, _maxScale, 1);			
+			if (pulsateProgress >= 100f) {
+				transform.localScale = new Vector3 (maxScale, maxScale, 1);			
 				_expanding = false;
 				pulsateProgress = 0f;
-			}			
-			
-			/**	transform.localScale = new Vector3 (transform.localScale.x + _expandRate, transform.localScale.y + _expandRate, 1);		
-			
-			if (transform.localScale.x >= _maxScale) {
-				transform.localScale = new Vector3 (_maxScale, _maxScale, 1);						
-				_expanding = false;
-			}
-			*/
-			
+			}						
 		}
 		
 		else {
 	
-			float contractRate = sRef.baseRequired / _contractTime;
+			float contractRate = 100f / _contractTime;
 			pulsateProgress += contractRate * Time.deltaTime;
 	
-			float contractAmount = (_maxScale - _minScale) * (contractRate * Time.deltaTime / sRef.baseRequired);
+			float contractAmount = (maxScale - minScale) * (contractRate * Time.deltaTime / 100f);
 			transform.localScale = new Vector3 (transform.localScale.x - contractAmount, transform.localScale.y - contractAmount, 1);			
 			
-			if (pulsateProgress >= sRef.baseRequired) {
-				transform.localScale = new Vector3 (_minScale, _minScale, 1);			
+			if (pulsateProgress >= 100f) {
+				transform.localScale = new Vector3 (minScale, minScale, 1);
 				_expanding = true;	
 				pulsateProgress = 0f;
 			}			
-			
-/**			transform.localScale = new Vector3 (transform.localScale.x - _contractRate, transform.localScale.y - _contractRate, 1);
-
-			if (transform.localScale.x <= _minScale) {
-				transform.localScale = new Vector3 (_minScale, _minScale, 1);		
-				_expanding = true;
-			}
-			*/
 		}		
 	}
 	
@@ -787,7 +898,7 @@ public class Player : MonoBehaviour {
 		}
 		return sRef.coefMoveEnemy;
 	}
-		
+	
 	private float getAltarSpeedBoost(){
 		List<AltarType> a = gm.getCapturedAltars(team);
 		if(a.Contains(AltarType.Choyutzol)){
@@ -807,16 +918,54 @@ public class Player : MonoBehaviour {
 		}
 	}
 	
-	private float getAltarInfluenceBoost(){
+	private float getAltarUpgradeBoost (){
+		List <AltarType> a = gm.getCapturedAltars(team);
+		
+		if(a.Contains(AltarType.Tikumose)){
+			return 2f;
+		}else{
+			return 1f;
+		}		
+	}
+	
+	private float getAltarRotateBoost (){
+		List <AltarType> a = gm.getCapturedAltars(team);
+		
+		if(a.Contains(AltarType.Tikumose)){
+			return 2f;
+		}else{
+			return 1f;
+		}		
+	}
+	
+	private float getPlayerInfluenceBoost(){
 		List <AltarType> a = gm.getCapturedAltars(team);
 
-		if(a.Contains(AltarType.Khepru)){
+		if(a.Contains(AltarType.Choyutzol)){
 			return 2f;
 		}else{
 			return 1f;
 		}
 	}
 	
+	private float getScaleBoost(){
+		List <AltarType> a = gm.getCapturedAltars(team);
+		
+		if(a.Contains(AltarType.Munalwa)){
+			return sRef.coefMunalwaScale;
+		}else{
+			return 1f;
+		}
+	}
+	
+	private float getMinScale () {
+		return 0.5f * getScaleBoost();
+	}
+	
+	private float getMaxScale () {
+		return 0.9f * getScaleBoost();
+	}
+		
 	private bool onWater (Vector3 pos) {
 	
 		return (gm.tiles[(int) Mathf.Floor (pos.x + 0.5f), (int) Mathf.Floor (pos.y + 0.5f)].GetComponent<BaseTile>().currentType == TileTypeEnum.water);
@@ -879,4 +1028,29 @@ public class Player : MonoBehaviour {
 		yield return new WaitForSeconds(0.6f);
 		audio.Stop();
 	}
+	
+	public void OnCollisionEnter2D(Collision2D Collided){
+	Debug.Log("In Enter");
+		GameObject go = Collided.gameObject;
+		if(go.tag == "Player" ){
+			Player p =  go.GetComponent<Player>();
+			if(p.team != team){
+				//Munalwa: Only teleport halfway home when teleporting
+				if (gm.getCapturedAltars (team).Contains (AltarType.Munalwa)) {
+					teleportTarget = (transform.position + team.goGetHomeTile().transform.position) / 2.0f;
+				}
+				else {
+					teleportTarget = team.goGetHomeTile().transform.position;
+				}			
+				p._currentState = PlayerState.teleporting;
+			}
+		}
+	}
+	
+	public bool closeEnoughToTeleportTarget (Vector3 newPos) {
+	//Hoo boy
+		return Mathf.Abs (newPos.x - teleportTarget.x) + Mathf.Abs (newPos.y - teleportTarget.y) <= 0.2f; 
+	}
+	
+	
 }

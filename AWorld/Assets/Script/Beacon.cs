@@ -36,97 +36,103 @@ public class Beacon : MonoBehaviour {
 
 	private Material matBasic;
 	private Material matUpgraded;
+	public Color32 neutralColor;
 
 	// Use this for initialization
 	void Start () {
 		///TODO ADD PATTERN STATICS
 		gm = GameObject.Find ("GameManager").GetComponent<GameManager>();
 		sRef= GameObject.Find ("Settings").GetComponent<Settings>();
-		matBasic = (Material) Resources.Load ("Sprites/Materials/Beacon");
-		matUpgraded = (Material) Resources.Load ("Sprites/Materials/Beacon_Upgraded");
+		matBasic = (Material) Resources.Load ("Sprites/Materials/Base");
+		matUpgraded = (Material) Resources.Load ("Sprites/Materials/BaseUpg");
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		int brdX; int brdY;
-		brdX = transform.parent.gameObject.GetComponent<BaseTile>().brdXPos;
-	 	brdY = transform.parent.gameObject.GetComponent<BaseTile>().brdYPos;
-		
-		setVisualDirection();	//Why is this happening every frame?
+		if (transform.parent != null) { //Hax
+			brdX = transform.parent.gameObject.GetComponent<BaseTile>().brdXPos;
+		 	brdY = transform.parent.gameObject.GetComponent<BaseTile>().brdYPos;
+			
+			setVisualDirection();	//Why is this happening every frame?
 
-		if(Input.GetKeyUp(KeyCode.Space)){
-			audio.Stop();
-		}
+			if(Input.GetKeyUp(KeyCode.Space)){
+				audio.Stop();
+			}
 
-		//influence work
-		// Find list of all influencible tiles
-		//Get closest tile in terms of distance and  begin influening it
-		//Add Influence till tile is at full
-		// move on to the next tile
-		//repeat till all tiles are full or influence is expended
-		
-		//This solution isn't "Correct" AKA, it doesn't resolve perfectly every frame, but over the aggregrate it should be correct
-		// We can move to fixed update to get closer to correct
-		if((_currentState == BeaconState.Basic || _currentState == BeaconState.BuildingAdvanced || _currentState == BeaconState.Advanced) && controllingTeam != null){
+			//influence work
+			// Find list of all influencible tiles
+			//Get closest tile in terms of distance and  begin influening it
+			//Add Influence till tile is at full
+			// move on to the next tile
+			//repeat till all tiles are full or influence is expended
+			
+			//This solution isn't "Correct" AKA, it doesn't resolve perfectly every frame, but over the aggregrate it should be correct
+			// We can move to fixed update to get closer to correct
+			if((_currentState == BeaconState.Basic || _currentState == BeaconState.BuildingAdvanced || _currentState == BeaconState.Advanced) && controllingTeam != null){
 
-			//find nearest convertable block
-			//FIND The first convertable tile, list is ordered by distance
-			//TODO setup for bases so multiple tiles can influence at once
-			foreach (List<InfluencePatternHolder> list in _patternList) {
-				float influenceThisFrame = sRef.vpsBeaconBaseInfluence * Time.deltaTime;				
-				bool waterFound = false;
-				list.ForEach(delegate (InfluencePatternHolder p){
-					if (!waterFound) {
-						gm.PlaySFX(beaconInfluenceProgress, 0.1f);
-						if(influenceThisFrame > 0f){
-							int x = (int)brdX + (int)Mathf.RoundToInt(p.relCoordRotated.x);
-							int y = (int)brdY + (int)Mathf.RoundToInt(p.relCoordRotated.y);
-							GameObject tile;
-							
-							try { tile = gm.tiles[x, y]; }
-								catch { return; }
-							if(tile != null && tile.GetComponent<BaseTile>().currentType == TileTypeEnum.water) { 
-								waterFound = true;
-								return;
-							}
-							if(tile != null){
-							BaseTile Bt =  tile.GetComponent<BaseTile>();
-								if(Bt.controllingTeam == null){
-									Bt.startInfluence(influenceThisFrame, controllingTeam);
-									influenceThisFrame = 0;  //Assume a null controlled Tile will eat all influence.
-									//Debug.Log("influencing Null tile");
+				//find nearest convertable block
+				//FIND The first convertable tile, list is ordered by distance
+				//TODO setup for bases so multiple tiles can influence at once
+				foreach (List<InfluencePatternHolder> list in _patternList) {
+					float influenceThisFrame = sRef.vpsBeaconBaseInfluence * Time.deltaTime;				
+					bool waterFound = false;	
+					list.ForEach(delegate (InfluencePatternHolder p){
+						if (!waterFound) {
+							gm.PlaySFX(beaconInfluenceProgress, 0.1f);
+							if(influenceThisFrame > 0f){
+								int x = (int)brdX + (int)Mathf.RoundToInt(p.relCoordRotated.x);
+								int y = (int)brdY + (int)Mathf.RoundToInt(p.relCoordRotated.y);
+								GameObject tile;
+								
+								try { tile = gm.tiles[x, y]; }
+									catch { return; }
+								if (tile != null && 
+									tile.GetComponent<BaseTile>().currentType == TileTypeEnum.water && 
+									!gm.getCapturedAltars (controllingTeam).Contains (AltarType.Thotzeti)) 
+								{
+									waterFound = true;
+									return;
 								}
-								else if(Bt.controllingTeam.teamNumber != controllingTeam.teamNumber){
-									influenceThisFrame = Bt.subTractInfluence(influenceThisFrame * p.coefInfluenceFraction, controllingTeam);
-									//Debug.Log("Removing other influence");
-									if(influenceThisFrame > 0){
-										influenceThisFrame = Bt.addInfluenceReturnOverflow(influenceThisFrame * p.coefInfluenceFraction);
-										//Debug.Log("Adding next frames influence");
+								if(tile != null && tile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
+								BaseTile Bt =  tile.GetComponent<BaseTile>();
+									if(Bt.controllingTeam == null){
+										Bt.startInfluence(influenceThisFrame, controllingTeam);
+										influenceThisFrame = 0;  //Assume a null controlled Tile will eat all influence.
+										//Debug.Log("influencing Null tile");
 									}
+									else if(Bt.controllingTeam.teamNumber != controllingTeam.teamNumber){
+										influenceThisFrame = Bt.subTractInfluence(influenceThisFrame * p.coefInfluenceFraction, controllingTeam);
+										//Debug.Log("Removing other influence");
+										if(influenceThisFrame > 0){
+											influenceThisFrame = Bt.addInfluenceReturnOverflow(influenceThisFrame * p.coefInfluenceFraction);
+											//Debug.Log("Adding next frames influence");
+										}
+									}
+									else if(Bt.controllingTeam.teamNumber == controllingTeam.teamNumber && Bt.percControlled < 100f){
+										influenceThisFrame = Bt.addInfluenceReturnOverflow(influenceThisFrame * p.coefInfluenceFraction);
+										//Debug.Log ("Adding my influence");
+									}
+			//						|| Bt.percControlled < 100f
 								}
-								else if(Bt.controllingTeam.teamNumber == controllingTeam.teamNumber && Bt.percControlled < 100f){
-									influenceThisFrame = Bt.addInfluenceReturnOverflow(influenceThisFrame * p.coefInfluenceFraction);
-									//Debug.Log ("Adding my influence");
-								}
-		//						|| Bt.percControlled < 100f
+								
 							}
-							
 						}
-					}
-				});
-			 }
+					});
+				 }
 
-//			 
-//			 else{
-//				gm.PlaySFX(beaconInfluencing, 0.8f);
-//			 //TODO: Handle situations where other tiles are influencing.  
-//				Debug.Log("Trying to influence at rate " + patternConverting.vpsInfluence );
-//				if(tileBeingConverted.GetComponent<BaseTile>().addProgressToInfluence(patternConverting.vpsInfluence, controllingTeam)){
-//					tileBeingConverted = null;
-//					patternConverting= null;
-//				}
-//			 }
-		}
+	//			 
+	//			 else{
+	//				gm.PlaySFX(beaconInfluencing, 0.8f);
+	//			 //TODO: Handle situations where other tiles are influencing.  
+	//				Debug.Log("Trying to influence at rate " + patternConverting.vpsInfluence );
+	//				if(tileBeingConverted.GetComponent<BaseTile>().addProgressToInfluence(patternConverting.vpsInfluence, controllingTeam)){
+	//					tileBeingConverted = null;
+	//					patternConverting= null;
+	//				}
+	//			 }
+			}
 		
 		UpdateInfluencePatterns();	//Probably shouldn't call this every frame, but just doing this for now
 		
@@ -140,6 +146,7 @@ public class Beacon : MonoBehaviour {
 			subtractUpgradeProgress (sRef.vpsBaseUpgrade);
 		}
 		*/
+		}
 		
 	}
 	
@@ -162,11 +169,12 @@ public class Beacon : MonoBehaviour {
 		if (controllingTeam == null) {
 			controllingTeam = player.GetComponent<Player>().team;
 			this.setTeam();
-		}	
-		audio.PlayOneShot(beaconBuilding, 0.9f);
+		}
 		this.transform.localPosition = new Vector3(0f,0f,-.5f);
 		tileLocation.GetComponent<BaseTile>().beacon = this.gameObject;
-
+		audio.Stop ();
+		audio.PlayOneShot(beaconBuilding, 0.9f);
+		
 	}
 
 	public void buildNeutral(GameObject tileLocation){
@@ -190,35 +198,45 @@ public class Beacon : MonoBehaviour {
 		audio.PlayOneShot(beaconUpgrading, 1.0f);
 	}
 	
-	public void startRotating () {
-		//Add SFX here
+	public void startRotating (DirectionEnum? dir) {
+		audio.Stop ();
+		dirRotatingToward = dir;
 		audio.PlayOneShot(beaconRotating, 1.0f);
 	}
 	
 	public void setTeam(){
-		Color32 controllingTeamColor = controllingTeam.beaconColor;		
+		Color32 controllingTeamColor = controllingTeam.beaconColor;	
+		Color32 platformColor = controllingTeam.tileColor;
 		//TODO: custom sprites and colors per team
 		controllingTeamColor.a = 0;
-//		controllingTeamColor.r += 30;
-//		controllingTeamColor.g += 30;
-//		controllingTeamColor.b += 30;
-		renderer.material.color = controllingTeamColor;
-		
+
+		transform.FindChild("Arrow").renderer.material.color = controllingTeamColor;
+		transform.FindChild("Base").renderer.material.color = controllingTeamColor;
+		transform.FindChild("Platform").renderer.material.color = platformColor;
 	}
 
 	public void setTeam(TeamInfo teamIn){
 	if(teamIn != null){controllingTeam = teamIn;
-		Color32 controllingTeamColor = controllingTeam.beaconColor;		
+		Color32 controllingTeamColor = controllingTeam.beaconColor;	
+			Color32 platformColor = controllingTeam.tileColor;
 		//TODO: custom sprites and colors per team
-		controllingTeamColor.a = (byte)(renderer.material.color.a * 255);
-		
-//		controllingTeamColor.r += 30;
-//		controllingTeamColor.g += 30;
-//		controllingTeamColor.b += 30;
-		renderer.material.color = controllingTeamColor;	}
+		controllingTeamColor.a = (byte)(transform.FindChild("Arrow").renderer.material.color.a * 255);
+		controllingTeamColor.a = (byte)(transform.FindChild("Base").renderer.material.color.a * 255);
+			platformColor.a = (byte)(transform.FindChild("Platform").renderer.material.color.a * 255);
+
+
+			transform.FindChild("Arrow").renderer.material.color = controllingTeamColor;	
+			transform.FindChild("Base").renderer.material.color = controllingTeamColor;
+			transform.FindChild("Platform").renderer.material.color = platformColor;
+		}
 		else{
+
+			neutralColor = new Color32 (150, 150, 150, 255);
+
 			controllingTeam = null;
-			renderer.material.color = Color.grey;
+			transform.FindChild("Arrow").renderer.material.color = neutralColor;
+			transform.FindChild("Base").renderer.material.color = neutralColor;
+			transform.FindChild("Platform").renderer.material.color = neutralColor;
 		}	}
 	
 	/// <summary>
@@ -228,11 +246,27 @@ public class Beacon : MonoBehaviour {
 	public void addBuildingProgress(float rate){
 		percBuildComplete += rate*Time.deltaTime;
 						
-		Color32 beaconColor = renderer.material.color;
+		Color32 beaconColor = transform.FindChild("Arrow").renderer.material.color;
+		Color32 platformColor = controllingTeam.tileColor;
 		float newColor =  (255f * (percBuildComplete/100f)) ;
 		newColor = (newColor >= 255) ? 254 : newColor;		
 		beaconColor.a = (byte)newColor;
-		renderer.material.color = beaconColor;		
+
+		//failed attempt at rising platform
+//		Transform platform = transform.FindChild ("Platform");
+//		Vector3 platformPos = platform.position;
+//		float newPos = (0.09f * (percBuildComplete/100f));
+//		newPos = (newPos >= 0.09f) ? 0.089f : newPos;
+//		platformPos.y = (byte)newPos;
+//		platform.position = platformPos;
+
+
+
+//		platform.Translate(Vector3.up * platformPos);
+
+		transform.FindChild("Arrow").renderer.material.color = beaconColor;		
+		transform.FindChild("Base").renderer.material.color = beaconColor;	
+		transform.FindChild("Platform").renderer.material.color = platformColor;
 
 		if(percBuildComplete >= 100){
 			gm.PlaySFX(beaconBuilt, 1.0f);
@@ -248,11 +282,14 @@ public class Beacon : MonoBehaviour {
 		}
 		
 		else {
-			Color32 beaconColor = renderer.material.color;
+			Color32 beaconColor = transform.FindChild("Arrow").renderer.material.color;
+			Color32 platformColor = controllingTeam.tileColor;
 			float newColor =  (255f * (percBuildComplete/100f)) ;
 			newColor = (newColor >= 255) ? 254 : newColor;		
 			beaconColor.a = (byte)newColor;
-			renderer.material.color = beaconColor; 
+			transform.FindChild("Arrow").renderer.material.color = beaconColor; 
+			transform.FindChild("Base").renderer.material.color = beaconColor; 
+			transform.FindChild("Platform").renderer.material.color = platformColor;
 		}
 	}
 	
@@ -283,7 +320,6 @@ public class Beacon : MonoBehaviour {
 		
 		//We need some visual representation for this
 	}
-	
 	#region creating_influence_lists
 	//This is gonna be mad long so I added a region - minimize at your pleasure - should probably use for loops, but whatevs, it's all manual now 
 	
@@ -293,56 +329,178 @@ public class Beacon : MonoBehaviour {
 		List<InfluencePatternHolder> forwardInfluenceList = new List<InfluencePatternHolder>();	//Every influence list will definitely have this, regardless of altars
 		
 		//Not sure if sorting the lists is necessary?
-
-		forwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,1), 1f, degreeRotated));
-		forwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,2), .5f, degreeRotated));
-		forwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,3), .33f, degreeRotated));
-		forwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,4), .25f, degreeRotated));
-
-		//Onixtal: Influence in non-facing directions at 25% strength
-		if ( (controllingTeam != null) && gm.getCapturedAltars(controllingTeam).Contains (AltarType.Onixtal)) {
-
-			List<InfluencePatternHolder> rightInfluenceList = new List<InfluencePatternHolder>();
-			rightInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,1), 1f*sRef.coefOnixtal, degreeRotated + 90f));
-			rightInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,2), .5f*sRef.coefOnixtal, degreeRotated + 90f));
-			rightInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,3), .33f*sRef.coefOnixtal, degreeRotated + 90f));
-			rightInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,4), .25f*sRef.coefOnixtal, degreeRotated + 90f));
-			list.Add (rightInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());
-			
-			List<InfluencePatternHolder> backwardInfluenceList = new List<InfluencePatternHolder>();
-			backwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,1), 1f*sRef.coefOnixtal, degreeRotated + 180f));
-			backwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,2), .5f*sRef.coefOnixtal, degreeRotated + 180f));
-			backwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,3), .33f*sRef.coefOnixtal, degreeRotated + 180f));
-			backwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,4), .25f*sRef.coefOnixtal, degreeRotated + 180f));
-			list.Add (backwardInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());
-			
-			List<InfluencePatternHolder> leftInfluenceList = new List<InfluencePatternHolder>();
-			leftInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,1), 1f*sRef.coefOnixtal, degreeRotated + 270f));
-			leftInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,2), .5f*sRef.coefOnixtal, degreeRotated + 270f));
-			leftInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,3), .33f*sRef.coefOnixtal, degreeRotated + 270f));
-			leftInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,4), .25f*sRef.coefOnixtal, degreeRotated + 270f));
-			list.Add (leftInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());
-		}
 		
-		//Tepwante: Influence beam is 3 tiles wide instead of 1 (currently not stacking with Onixtal)
-		if (controllingTeam !=null &&  gm.getCapturedAltars(controllingTeam).Contains (AltarType.Tepwante)) {
-			List<InfluencePatternHolder> forwardLeftInfluenceList = new List<InfluencePatternHolder>();
-			forwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,1), 1f*sRef.coefTepwante, degreeRotated));
-			forwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,2), .5f*sRef.coefTepwante, degreeRotated));
-			forwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,3), .33f*sRef.coefTepwante, degreeRotated));
-			forwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,4), .25f*sRef.coefTepwante, degreeRotated));
-			list.Add (forwardLeftInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());		
-
-			List<InfluencePatternHolder> forwardRightInfluenceList = new List<InfluencePatternHolder>();
-			forwardRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,1), 1f*sRef.coefTepwante, degreeRotated));
-			forwardRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,2), .5f*sRef.coefTepwante, degreeRotated));
-			forwardRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,3), .33f*sRef.coefTepwante, degreeRotated));
-			forwardRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,4), .25f*sRef.coefTepwante, degreeRotated));
-			list.Add (forwardRightInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());		
-		}
+		if (controllingTeam != null) {
+		
+			bool onixtal = gm.getCapturedAltars(controllingTeam).Contains (AltarType.Onixtal);
+			bool yaxchay = gm.getCapturedAltars(controllingTeam).Contains (AltarType.Yaxchay);
+			bool tepwante = gm.getCapturedAltars(controllingTeam).Contains (AltarType.Tepwante);
+			int baseRange = sRef.beaconBasicRange;
+			
+			if (!yaxchay && !onixtal && !tepwante) {
+				for (int i = 1; i <= sRef.beaconBasicRange; i++) { 
+					forwardInfluenceList.Add(new InfluencePatternHolder(new Vector2 (0,i), getBaseBeaconStrength (i), degreeRotated));
+				}			
+			}
+			
+			//Yaxchay: x2 range, x2 power
+			else if (yaxchay) {
 				
+				//Deal with straight-forward pattern first since others don't affect this
+				for (int i = 1; i <= baseRange*sRef.coefYaxchay; i++) { 
+					forwardInfluenceList.Add(new InfluencePatternHolder(new Vector2 (0,i), getBaseBeaconStrength (i), degreeRotated));
+				}
+				list.Add (forwardInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());				
+				
+				//Yaxchay + Onixtal - build right, backward, and left patterns
+				if (onixtal) {
+					
+					List<InfluencePatternHolder> rightInfluenceList = new List<InfluencePatternHolder>();
+					List<InfluencePatternHolder> backwardInfluenceList = new List<InfluencePatternHolder>();
+					List<InfluencePatternHolder> leftInfluenceList = new List<InfluencePatternHolder>();
+					
+					for (int i = 1; i <= baseRange*sRef.coefYaxchay; i++) {
+						rightInfluenceList.Add (new InfluencePatternHolder (new Vector2 (0,i), getBaseBeaconStrength (i)*sRef.coefOnixtal, degreeRotated + 90f));
+						backwardInfluenceList.Add (new InfluencePatternHolder (new Vector2 (0,i), getBaseBeaconStrength (i)*sRef.coefOnixtal, degreeRotated + 180f));
+						leftInfluenceList.Add (new InfluencePatternHolder (new Vector2 (0,i), getBaseBeaconStrength (i)*sRef.coefOnixtal, degreeRotated + 270f));
+					}
+					
+					list.Add (rightInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());				
+					list.Add (backwardInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());				
+					list.Add (leftInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());				
+					
+				}
+				
+				//Yaxchay + Tepwante - build forward triple-beam patterns
+				if (tepwante) {
+					
+					List<InfluencePatternHolder> forwardRightInfluenceList = new List<InfluencePatternHolder>();
+					List<InfluencePatternHolder> forwardLeftInfluenceList = new List<InfluencePatternHolder>();
+					
+					for (int i = 1; i <= baseRange*sRef.coefYaxchay; i++) { 
+						forwardRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,i), getBaseBeaconStrength (i)*sRef.coefTepwante, degreeRotated));
+						forwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,i), getBaseBeaconStrength (i)*sRef.coefTepwante, degreeRotated));
+					}
+					
+					list.Add (forwardRightInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());				
+					list.Add (forwardLeftInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());				
+				}
+				
+				//Yaxchay + Tepwante + Onixtal - build triple-beam patterns for left, backward, and right
+				if (onixtal && tepwante) {
+					
+					//Backward triple-beam patterns
+					List<InfluencePatternHolder> backwardLeftInfluenceList = new List<InfluencePatternHolder>();
+					List<InfluencePatternHolder> backwardRightInfluenceList = new List<InfluencePatternHolder>();
+					
+					for (int i = 1; i <= baseRange*sRef.coefYaxchay; i++) {
+						backwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,i), getBaseBeaconStrength (i)*sRef.coefTepwante*sRef.coefOnixtal, degreeRotated + 180f));
+						backwardRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,i), getBaseBeaconStrength (i)*sRef.coefTepwante*sRef.coefOnixtal, degreeRotated + 180f));	
+					}
+					
+					list.Add (backwardRightInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());				
+					list.Add (backwardLeftInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());	
+					
+					//Left and right patterns 
+					//lololololololol					
+					List<InfluencePatternHolder> rightLeftInfluenceList = new List<InfluencePatternHolder>();
+					List<InfluencePatternHolder> rightRightInfluenceList = new List<InfluencePatternHolder>();
+					List<InfluencePatternHolder> leftLeftInfluenceList = new List<InfluencePatternHolder>();
+					List<InfluencePatternHolder> leftRightInfluenceList = new List<InfluencePatternHolder>();
+					
+					for (int i = 2; i <= baseRange*sRef.coefYaxchay; i++) { //Start at 2 for left + right so you don't overlap at corners with forward + backward triple-beam patterns
+						rightLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,i), getBaseBeaconStrength (i)*sRef.coefTepwante*sRef.coefOnixtal, degreeRotated + 90f));
+						rightRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,i), getBaseBeaconStrength (i)*sRef.coefTepwante*sRef.coefOnixtal, degreeRotated + 90f));	
+						leftLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,i), getBaseBeaconStrength (i)*sRef.coefTepwante*sRef.coefOnixtal, degreeRotated + 270f));
+						leftRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,i), getBaseBeaconStrength (i)*sRef.coefTepwante*sRef.coefOnixtal, degreeRotated + 270f));	
+					}
+					
+					list.Add (rightRightInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());				
+					list.Add (rightLeftInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());	
+					list.Add (leftRightInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());				
+					list.Add (leftLeftInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());		
+				}
+			}
+			
+			//No Yaxchay
+			else {
+				
+				for (int i = 1; i <= baseRange; i++) { 
+					forwardInfluenceList.Add(new InfluencePatternHolder(new Vector2 (0,i), getBaseBeaconStrength (i), degreeRotated));
+				}
+				
+				//Onixtal: Influence in non-facing directions at 25% strength
+				if (onixtal) {
+					
+					if (gm.getCapturedAltars(controllingTeam).Contains (AltarType.Onixtal) && !gm.getCapturedAltars(controllingTeam).Contains (AltarType.Tepwante)) {
+						
+						List<InfluencePatternHolder> rightInfluenceList = new List<InfluencePatternHolder>();
+						List<InfluencePatternHolder> backwardInfluenceList = new List<InfluencePatternHolder>();
+						List<InfluencePatternHolder> leftInfluenceList = new List<InfluencePatternHolder>();
+						
+						for (int i = 1; i <= baseRange; i++) {
+							rightInfluenceList.Add (new InfluencePatternHolder (new Vector2 (0,i), getBaseBeaconStrength (i)*sRef.coefOnixtal, degreeRotated + 90f));
+							backwardInfluenceList.Add (new InfluencePatternHolder (new Vector2 (0,i), getBaseBeaconStrength (i)*sRef.coefOnixtal, degreeRotated + 180f));
+							leftInfluenceList.Add (new InfluencePatternHolder (new Vector2 (0,i), getBaseBeaconStrength (i)*sRef.coefOnixtal, degreeRotated + 270f));
+						}
+						
+						list.Add (rightInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());				
+						list.Add (backwardInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());				
+						list.Add (leftInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());				
+						
+					}
+					
+					//Onixtal + Tepwante - build triple-beam patterns for left, backward, and right 
+					if (tepwante) {
+						//Backward triple-beam patterns
+						List<InfluencePatternHolder> backwardLeftInfluenceList = new List<InfluencePatternHolder>();
+						List<InfluencePatternHolder> backwardRightInfluenceList = new List<InfluencePatternHolder>();
+						
+						for (int i = 1; i <= baseRange; i++) {
+							backwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,i), getBaseBeaconStrength (i)*sRef.coefTepwante*sRef.coefOnixtal, degreeRotated + 180f));
+							backwardRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,i), getBaseBeaconStrength (i)*sRef.coefTepwante*sRef.coefOnixtal, degreeRotated + 180f));	
+						}
+						
+						list.Add (backwardRightInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());				
+						list.Add (backwardLeftInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());	
+						
+						//Left and right patterns 
+						List<InfluencePatternHolder> rightLeftInfluenceList = new List<InfluencePatternHolder>();
+						List<InfluencePatternHolder> rightRightInfluenceList = new List<InfluencePatternHolder>();
+						List<InfluencePatternHolder> leftLeftInfluenceList = new List<InfluencePatternHolder>();
+						List<InfluencePatternHolder> leftRightInfluenceList = new List<InfluencePatternHolder>();
+						
+						for (int i = 2; i <= sRef.beaconBasicRange; i++) { //Start at 2 for left + right so you don't overlap at corners with forward + backward triple-beam patterns
+							rightLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,i), getBaseBeaconStrength (i)*sRef.coefTepwante*sRef.coefOnixtal, degreeRotated + 90f));
+							rightRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,i), getBaseBeaconStrength (i)*sRef.coefTepwante*sRef.coefOnixtal, degreeRotated + 90f));	
+							leftLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,i), getBaseBeaconStrength (i)*sRef.coefTepwante*sRef.coefOnixtal, degreeRotated + 270f));
+							leftRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,i), getBaseBeaconStrength (i)*sRef.coefTepwante*sRef.coefOnixtal, degreeRotated + 270f));	
+						}
+						
+						list.Add (rightRightInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());				
+						list.Add (rightLeftInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());	
+						list.Add (leftRightInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());				
+						list.Add (leftLeftInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());					
+					}
+				}
+				
+				//Tepwante: Triple beam - assuming no Yaxchay and no Onixtal by now
+				else if (tepwante) {
+					List<InfluencePatternHolder> forwardRightInfluenceList = new List<InfluencePatternHolder>();
+					List<InfluencePatternHolder> forwardLeftInfluenceList = new List<InfluencePatternHolder>();
+					
+					for (int i = 1; i <= baseRange; i++) { 
+						forwardRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,i), getBaseBeaconStrength (i)*sRef.coefTepwante, degreeRotated));
+						forwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,i), getBaseBeaconStrength (i)*sRef.coefTepwante, degreeRotated));
+					}
+					
+					list.Add (forwardRightInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());				
+					list.Add (forwardLeftInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());			
+				}
+			}
+		}
+
 		list.Insert (0, forwardInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());
-//		return forwardInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList();
 		return list;
 	}	
 	
@@ -351,203 +509,179 @@ public class Beacon : MonoBehaviour {
 		List<List<InfluencePatternHolder>> list = new List<List<InfluencePatternHolder>>();		
 		List<InfluencePatternHolder> forwardInfluenceList = new List<InfluencePatternHolder>();	//Every influence list will definitely have this, regardless of altars
 		
-		//Munalwa: Upgraded altars give 3x bonus instead of 2x
-		if (gm.getCapturedAltars(controllingTeam).Contains (AltarType.Munalwa)) {
-//			for (float i = 1f; i <= 12f; i++) {	//This might work as a better way to write this - haven't tested it though, staying with manual code for now
-//				forwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,i), 1/(Mathf.Ceil(i/3)), degreeRotated));
-//			}
-			forwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,1), 1f, degreeRotated));
-			forwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,2), 1f, degreeRotated));
-			forwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,3), 1f, degreeRotated));
-			forwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,4), .5f, degreeRotated));
-			forwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,5), .5f, degreeRotated));
-			forwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,6), .5f, degreeRotated));
-			forwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,7), .33f, degreeRotated));
-			forwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,8), .33f, degreeRotated));
-			forwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,9), .33f, degreeRotated));
-			forwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,10), .25f, degreeRotated));
-			forwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,11), .25f, degreeRotated));
-			forwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,12), .25f, degreeRotated));
-		}
+		//Not sure if sorting the lists is necessary?
 		
-		//Onixtal: Influence in non-facing directions at 25% strength
-		if (gm.getCapturedAltars(controllingTeam).Contains (AltarType.Onixtal)) {
-			//Has Munalwa, so 3x bonus for upgraded beacons
-			if (gm.getCapturedAltars(controllingTeam).Contains (AltarType.Munalwa)) {
-				
-				List<InfluencePatternHolder> rightInfluenceList = new List<InfluencePatternHolder>();
-				rightInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,1), 1f*sRef.coefOnixtal, degreeRotated + 90f));
-				rightInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,2), 1f*sRef.coefOnixtal, degreeRotated + 90f));
-				rightInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,3), 1f*sRef.coefOnixtal, degreeRotated + 90f));
-				rightInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,4), .5f*sRef.coefOnixtal, degreeRotated + 90f));
-				rightInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,5), .5f*sRef.coefOnixtal, degreeRotated + 90f));
-				rightInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,6), .5f*sRef.coefOnixtal, degreeRotated + 90f));
-				rightInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,7), .33f*sRef.coefOnixtal, degreeRotated + 90f));
-				rightInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,8), .33f*sRef.coefOnixtal, degreeRotated + 90f));
-				rightInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,9), .33f*sRef.coefOnixtal, degreeRotated + 90f));
-				rightInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,10), .25f*sRef.coefOnixtal, degreeRotated + 90f));
-				rightInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,11), .25f*sRef.coefOnixtal, degreeRotated + 90f));
-				rightInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,12), .25f*sRef.coefOnixtal, degreeRotated + 90f));
-				list.Add (rightInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());
-				
-				List<InfluencePatternHolder> backwardInfluenceList = new List<InfluencePatternHolder>();
-				backwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,1), 1f*sRef.coefOnixtal, degreeRotated + 180f));
-				backwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,2), 1f*sRef.coefOnixtal, degreeRotated + 180f));
-				backwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,3), 1f*sRef.coefOnixtal, degreeRotated + 180f));
-				backwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,4), .5f*sRef.coefOnixtal, degreeRotated + 180f));
-				backwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,5), .5f*sRef.coefOnixtal, degreeRotated + 180f));
-				backwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,6), .5f*sRef.coefOnixtal, degreeRotated + 180f));
-				backwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,7), .33f*sRef.coefOnixtal, degreeRotated + 180f));
-				backwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,8), .33f*sRef.coefOnixtal, degreeRotated + 180f));
-				backwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,9), .33f*sRef.coefOnixtal, degreeRotated + 180f));
-				backwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,10), .25f*sRef.coefOnixtal, degreeRotated + 180f));
-				backwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,11), .25f*sRef.coefOnixtal, degreeRotated + 180f));
-				backwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,12), .25f*sRef.coefOnixtal, degreeRotated + 180f));
-				list.Add (backwardInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());
-				
-				List<InfluencePatternHolder> leftInfluenceList = new List<InfluencePatternHolder>();
-				leftInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,1), 1f*sRef.coefOnixtal, degreeRotated + 270f));
-				leftInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,2), 1f*sRef.coefOnixtal, degreeRotated + 270f));
-				leftInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,3), 1f*sRef.coefOnixtal, degreeRotated + 270f));
-				leftInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,4), .5f*sRef.coefOnixtal, degreeRotated + 270f));
-				leftInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,5), .5f*sRef.coefOnixtal, degreeRotated + 270f));
-				leftInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,6), .5f*sRef.coefOnixtal, degreeRotated + 270f));
-				leftInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,7), .33f*sRef.coefOnixtal, degreeRotated + 270f));
-				leftInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,8), .33f*sRef.coefOnixtal, degreeRotated + 270f));
-				leftInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,9), .33f*sRef.coefOnixtal, degreeRotated + 270f));
-				leftInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,10), .25f*sRef.coefOnixtal, degreeRotated + 270f));
-				leftInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,11), .25f*sRef.coefOnixtal, degreeRotated + 270f));
-				leftInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,12), .25f*sRef.coefOnixtal, degreeRotated + 270f));
-				list.Add (leftInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());
-			}
-			else {	//No Munalwa
+		if (controllingTeam != null) {
+		
+			bool onixtal = gm.getCapturedAltars(controllingTeam).Contains (AltarType.Onixtal);
+			bool yaxchay = gm.getCapturedAltars(controllingTeam).Contains (AltarType.Yaxchay);
+			bool tepwante = gm.getCapturedAltars(controllingTeam).Contains (AltarType.Tepwante);
+			int baseRange = sRef.beaconAdvancedRange;
 			
-				List<InfluencePatternHolder> rightInfluenceList = new List<InfluencePatternHolder>();
-				rightInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,1), 1f*sRef.coefOnixtal, degreeRotated + 90f));
-				rightInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,2), 1f*sRef.coefOnixtal, degreeRotated + 90f));
-				rightInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,3), .5f*sRef.coefOnixtal, degreeRotated + 90f));
-				rightInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,4), .5f*sRef.coefOnixtal, degreeRotated + 90f));
-				rightInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,5), .33f*sRef.coefOnixtal, degreeRotated + 90f));
-				rightInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,6), .33f*sRef.coefOnixtal, degreeRotated + 90f));
-				rightInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,7), .25f*sRef.coefOnixtal, degreeRotated + 90f));
-				rightInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,8), .25f*sRef.coefOnixtal, degreeRotated + 90f));
-				list.Add (rightInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());
-				
-				List<InfluencePatternHolder> backwardInfluenceList = new List<InfluencePatternHolder>();
-				backwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,1), 1f*sRef.coefOnixtal, degreeRotated + 180f));
-				backwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,2), 1f*sRef.coefOnixtal, degreeRotated + 180f));
-				backwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,3), .5f*sRef.coefOnixtal, degreeRotated + 180f));
-				backwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,4), .5f*sRef.coefOnixtal, degreeRotated + 180f));
-				backwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,5), .33f*sRef.coefOnixtal, degreeRotated + 180f));
-				backwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,6), .33f*sRef.coefOnixtal, degreeRotated + 180f));
-				backwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,7), .25f*sRef.coefOnixtal, degreeRotated + 180f));
-				backwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,8), .25f*sRef.coefOnixtal, degreeRotated + 180f));
-				list.Add (backwardInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());
-				
-				List<InfluencePatternHolder> leftInfluenceList = new List<InfluencePatternHolder>();
-				leftInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,1), 1f*sRef.coefOnixtal, degreeRotated + 270f));
-				leftInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,2), 1f*sRef.coefOnixtal, degreeRotated + 270f));
-				leftInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,3), .5f*sRef.coefOnixtal, degreeRotated + 270f));
-				leftInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,4), .5f*sRef.coefOnixtal, degreeRotated + 270f));
-				leftInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,5), .33f*sRef.coefOnixtal, degreeRotated + 270f));
-				leftInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,6), .33f*sRef.coefOnixtal, degreeRotated + 270f));
-				leftInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,7), .25f*sRef.coefOnixtal, degreeRotated + 270f));
-				leftInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,8), .25f*sRef.coefOnixtal, degreeRotated + 270f));
-				list.Add (leftInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());
-				
+			if (!yaxchay && !onixtal && !tepwante) {
+				for (int i = 1; i <= baseRange; i++) { 
+					forwardInfluenceList.Add(new InfluencePatternHolder(new Vector2 (0,i), getBaseBeaconStrength (i), degreeRotated));
+				}			
 			}
-		}
-		
-		//Tepwante: Influence beam is 3 tiles wide instead of 1 (currently not stacking with Onixtal, but stacking with Munalwa)
-		if (gm.getCapturedAltars(controllingTeam).Contains (AltarType.Tepwante)) {
-			//Munalwa: Upgraded altars give 3x bonus instead of 2x
-			if (gm.getCapturedAltars(controllingTeam).Contains (AltarType.Munalwa)) {
-				List<InfluencePatternHolder> forwardLeftInfluenceList = new List<InfluencePatternHolder>();
-				forwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,1), 1f*sRef.coefTepwante, degreeRotated));
-				forwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,2), 1f*sRef.coefTepwante, degreeRotated));
-				forwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,3), 1f*sRef.coefTepwante, degreeRotated));
-				forwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,4), .5f*sRef.coefTepwante, degreeRotated));
-				forwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,5), .5f*sRef.coefTepwante, degreeRotated));
-				forwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,6), .5f*sRef.coefTepwante, degreeRotated));
-				forwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,7), .33f*sRef.coefTepwante, degreeRotated));
-				forwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,8), .33f*sRef.coefTepwante, degreeRotated));
-				forwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,9), .33f*sRef.coefTepwante, degreeRotated));
-				forwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,10), .25f*sRef.coefTepwante, degreeRotated));
-				forwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,11), .25f*sRef.coefTepwante, degreeRotated));
-				forwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,12), .25f*sRef.coefTepwante, degreeRotated));
-				list.Add (forwardLeftInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());		
+			
+			//Yaxchay: x2 range, x2 power
+			else if (yaxchay) {
 				
-				List<InfluencePatternHolder> forwardRightInfluenceList = new List<InfluencePatternHolder>();
-				forwardRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,1), 1f*sRef.coefTepwante, degreeRotated));
-				forwardRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,2), 1f*sRef.coefTepwante, degreeRotated));
-				forwardRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,3), 1f*sRef.coefTepwante, degreeRotated));
-				forwardRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,4), .5f*sRef.coefTepwante, degreeRotated));
-				forwardRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,5), .5f*sRef.coefTepwante, degreeRotated));
-				forwardRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,6), .5f*sRef.coefTepwante, degreeRotated));
-				forwardRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,7), .33f*sRef.coefTepwante, degreeRotated));
-				forwardRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,8), .33f*sRef.coefTepwante, degreeRotated));
-				forwardRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,9), .33f*sRef.coefTepwante, degreeRotated));
-				forwardRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,10), .25f*sRef.coefTepwante, degreeRotated));
-				forwardRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,11), .25f*sRef.coefTepwante, degreeRotated));
-				forwardRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,12), .25f*sRef.coefTepwante, degreeRotated));
-				list.Add (forwardRightInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());		
+				//Deal with straight-forward pattern first since others don't affect this
+				for (int i = 1; i <= baseRange*sRef.coefYaxchay; i++) { 
+					forwardInfluenceList.Add(new InfluencePatternHolder(new Vector2 (0,i), getBaseBeaconStrength (i), degreeRotated));
+				}
+				list.Add (forwardInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());				
 				
+				//Yaxchay + Onixtal - build right, backward, and left patterns
+				if (onixtal) {
+					
+					List<InfluencePatternHolder> rightInfluenceList = new List<InfluencePatternHolder>();
+					List<InfluencePatternHolder> backwardInfluenceList = new List<InfluencePatternHolder>();
+					List<InfluencePatternHolder> leftInfluenceList = new List<InfluencePatternHolder>();
+					
+					for (int i = 1; i <= baseRange*sRef.coefYaxchay; i++) {
+						rightInfluenceList.Add (new InfluencePatternHolder (new Vector2 (0,i), getBaseBeaconStrength (i)*sRef.coefOnixtal, degreeRotated + 90f));
+						backwardInfluenceList.Add (new InfluencePatternHolder (new Vector2 (0,i), getBaseBeaconStrength (i)*sRef.coefOnixtal, degreeRotated + 180f));
+						leftInfluenceList.Add (new InfluencePatternHolder (new Vector2 (0,i), getBaseBeaconStrength (i)*sRef.coefOnixtal, degreeRotated + 270f));
+					}
+					
+					list.Add (rightInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());				
+					list.Add (backwardInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());				
+					list.Add (leftInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());				
+					
+				}
+				
+				//Yaxchay + Tepwante - build forward triple-beam patterns
+				if (tepwante) {
+					
+					List<InfluencePatternHolder> forwardRightInfluenceList = new List<InfluencePatternHolder>();
+					List<InfluencePatternHolder> forwardLeftInfluenceList = new List<InfluencePatternHolder>();
+					
+					for (int i = 1; i <= baseRange*sRef.coefYaxchay; i++) { 
+						forwardRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,i), getBaseBeaconStrength (i)*sRef.coefTepwante, degreeRotated));
+						forwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,i), getBaseBeaconStrength (i)*sRef.coefTepwante, degreeRotated));
+					}
+					
+					list.Add (forwardRightInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());				
+					list.Add (forwardLeftInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());				
+				}
+				
+				//Yaxchay + Tepwante + Onixtal - build triple-beam patterns for left, backward, and right
+				if (onixtal && tepwante) {
+					
+					//Backward triple-beam patterns
+					List<InfluencePatternHolder> backwardLeftInfluenceList = new List<InfluencePatternHolder>();
+					List<InfluencePatternHolder> backwardRightInfluenceList = new List<InfluencePatternHolder>();
+					
+					for (int i = 1; i <= baseRange*sRef.coefYaxchay; i++) {
+						backwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,i), getBaseBeaconStrength (i)*sRef.coefTepwante*sRef.coefOnixtal, degreeRotated + 180f));
+						backwardRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,i), getBaseBeaconStrength (i)*sRef.coefTepwante*sRef.coefOnixtal, degreeRotated + 180f));	
+					}
+					
+					list.Add (backwardRightInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());				
+					list.Add (backwardLeftInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());	
+					
+					//Left and right patterns 
+					//lololololololol					
+					List<InfluencePatternHolder> rightLeftInfluenceList = new List<InfluencePatternHolder>();
+					List<InfluencePatternHolder> rightRightInfluenceList = new List<InfluencePatternHolder>();
+					List<InfluencePatternHolder> leftLeftInfluenceList = new List<InfluencePatternHolder>();
+					List<InfluencePatternHolder> leftRightInfluenceList = new List<InfluencePatternHolder>();
+					
+					for (int i = 2; i <= baseRange*sRef.coefYaxchay; i++) { //Start at 2 for left + right so you don't overlap at corners with forward + backward triple-beam patterns
+						rightLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,i), getBaseBeaconStrength (i)*sRef.coefTepwante*sRef.coefOnixtal, degreeRotated + 90f));
+						rightRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,i), getBaseBeaconStrength (i)*sRef.coefTepwante*sRef.coefOnixtal, degreeRotated + 90f));	
+						leftLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,i), getBaseBeaconStrength (i)*sRef.coefTepwante*sRef.coefOnixtal, degreeRotated + 270f));
+						leftRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,i), getBaseBeaconStrength (i)*sRef.coefTepwante*sRef.coefOnixtal, degreeRotated + 270f));	
+					}
+					
+					list.Add (rightRightInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());				
+					list.Add (rightLeftInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());	
+					list.Add (leftRightInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());				
+					list.Add (leftLeftInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());		
+				}
 			}
-			//No Munalwa
+			
+			//No Yaxchay
 			else {
-				List<InfluencePatternHolder> mainInfluenceList = new List<InfluencePatternHolder>();
-				mainInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,1), 1f, degreeRotated));
-				mainInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,2), 1f, degreeRotated));
-				mainInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,3), .5f, degreeRotated));
-				mainInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,4), .5f, degreeRotated));
-				mainInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,5), .33f, degreeRotated));
-				mainInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,6), .33f, degreeRotated));
-				mainInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,7), .25f, degreeRotated));
-				mainInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,8), .25f, degreeRotated));
-				list.Add (mainInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());		
-
-
-				List<InfluencePatternHolder> forwardLeftInfluenceList = new List<InfluencePatternHolder>();
-				forwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,1), 1f*sRef.coefTepwante, degreeRotated));
-				forwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,2), 1f*sRef.coefTepwante, degreeRotated));
-				forwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,3), .5f*sRef.coefTepwante, degreeRotated));
-				forwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,4), .5f*sRef.coefTepwante, degreeRotated));
-				forwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,5), .33f*sRef.coefTepwante, degreeRotated));
-				forwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,6), .33f*sRef.coefTepwante, degreeRotated));
-				forwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,7), .25f*sRef.coefTepwante, degreeRotated));
-				forwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,8), .25f*sRef.coefTepwante, degreeRotated));
-				list.Add (forwardLeftInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());		
-				
-				List<InfluencePatternHolder> forwardRightInfluenceList = new List<InfluencePatternHolder>();
-				forwardRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,1), 1f*sRef.coefTepwante, degreeRotated));
-				forwardRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,2), 1f*sRef.coefTepwante, degreeRotated));
-				forwardRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,3), .5f*sRef.coefTepwante, degreeRotated));
-				forwardRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,4), .5f*sRef.coefTepwante, degreeRotated));
-				forwardRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,5), .33f*sRef.coefTepwante, degreeRotated));
-				forwardRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,6), .33f*sRef.coefTepwante, degreeRotated));
-				forwardRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,7), .25f*sRef.coefTepwante, degreeRotated));
-				forwardRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,8), .25f*sRef.coefTepwante, degreeRotated));
-				list.Add (forwardRightInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());				
-			}
-		}
+			
+				for (int i = 1; i <= baseRange; i++) { 
+					forwardInfluenceList.Add(new InfluencePatternHolder(new Vector2 (0,i), getBaseBeaconStrength (i), degreeRotated));
+				}
 		
-		//No altars that affect beacons are owned
-		if (!gm.getCapturedAltars(controllingTeam).Contains (AltarType.Munalwa) && 
-			!gm.getCapturedAltars(controllingTeam).Contains (AltarType.Onixtal) && 
-			!gm.getCapturedAltars(controllingTeam).Contains (AltarType.Tepwante))
-		{
-			forwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,1), 1f, degreeRotated));
-			forwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,2), 1f, degreeRotated));
-			forwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,3), .5f, degreeRotated));
-			forwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,4), .5f, degreeRotated));
-			forwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,5), .33f, degreeRotated));
-			forwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,6), .33f, degreeRotated));
-			forwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,7), .25f, degreeRotated));
-			forwardInfluenceList.Add(new InfluencePatternHolder(new Vector2(0,8), .25f, degreeRotated));
+				//Onixtal: Influence in non-facing directions at 25% strength
+				if (onixtal) {
+				
+					if (gm.getCapturedAltars(controllingTeam).Contains (AltarType.Onixtal) && !gm.getCapturedAltars(controllingTeam).Contains (AltarType.Tepwante)) {
+						
+						List<InfluencePatternHolder> rightInfluenceList = new List<InfluencePatternHolder>();
+						List<InfluencePatternHolder> backwardInfluenceList = new List<InfluencePatternHolder>();
+						List<InfluencePatternHolder> leftInfluenceList = new List<InfluencePatternHolder>();
+						
+						for (int i = 1; i <= baseRange; i++) {
+							rightInfluenceList.Add (new InfluencePatternHolder (new Vector2 (0,i), getBaseBeaconStrength (i)*sRef.coefOnixtal, degreeRotated + 90f));
+							backwardInfluenceList.Add (new InfluencePatternHolder (new Vector2 (0,i), getBaseBeaconStrength (i)*sRef.coefOnixtal, degreeRotated + 180f));
+							leftInfluenceList.Add (new InfluencePatternHolder (new Vector2 (0,i), getBaseBeaconStrength (i)*sRef.coefOnixtal, degreeRotated + 270f));
+						}
+						
+						list.Add (rightInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());				
+						list.Add (backwardInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());				
+						list.Add (leftInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());				
+						
+					}
+					
+					//Onixtal + Tepwante - build triple-beam patterns for left, backward, and right 
+					if (tepwante) {
+						//Backward triple-beam patterns
+						List<InfluencePatternHolder> backwardLeftInfluenceList = new List<InfluencePatternHolder>();
+						List<InfluencePatternHolder> backwardRightInfluenceList = new List<InfluencePatternHolder>();
+						
+						for (int i = 1; i <= baseRange; i++) {
+							backwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,i), getBaseBeaconStrength (i)*sRef.coefTepwante*sRef.coefOnixtal, degreeRotated + 180f));
+							backwardRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,i), getBaseBeaconStrength (i)*sRef.coefTepwante*sRef.coefOnixtal, degreeRotated + 180f));	
+						}
+						
+						list.Add (backwardRightInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());				
+						list.Add (backwardLeftInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());	
+						
+						//Left and right patterns 
+						List<InfluencePatternHolder> rightLeftInfluenceList = new List<InfluencePatternHolder>();
+						List<InfluencePatternHolder> rightRightInfluenceList = new List<InfluencePatternHolder>();
+						List<InfluencePatternHolder> leftLeftInfluenceList = new List<InfluencePatternHolder>();
+						List<InfluencePatternHolder> leftRightInfluenceList = new List<InfluencePatternHolder>();
+						
+						for (int i = 2; i <= baseRange; i++) { //Start at 2 for left + right so you don't overlap at corners with forward + backward triple-beam patterns
+							rightLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,i), getBaseBeaconStrength (i)*sRef.coefTepwante*sRef.coefOnixtal, degreeRotated + 90f));
+							rightRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,i), getBaseBeaconStrength (i)*sRef.coefTepwante*sRef.coefOnixtal, degreeRotated + 90f));	
+							leftLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,i), getBaseBeaconStrength (i)*sRef.coefTepwante*sRef.coefOnixtal, degreeRotated + 270f));
+							leftRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,i), getBaseBeaconStrength (i)*sRef.coefTepwante*sRef.coefOnixtal, degreeRotated + 270f));	
+						}
+						
+						list.Add (rightRightInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());				
+						list.Add (rightLeftInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());	
+						list.Add (leftRightInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());				
+						list.Add (leftLeftInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());					
+					}
+				}
+			
+			//Tepwante: Triple beam - assuming no Yaxchay and no Onixtal by now
+				else if (tepwante) {
+					List<InfluencePatternHolder> forwardRightInfluenceList = new List<InfluencePatternHolder>();
+					List<InfluencePatternHolder> forwardLeftInfluenceList = new List<InfluencePatternHolder>();
+					
+					for (int i = 1; i <= baseRange; i++) { 
+						forwardRightInfluenceList.Add(new InfluencePatternHolder(new Vector2(1,i), getBaseBeaconStrength (i)*sRef.coefTepwante, degreeRotated));
+						forwardLeftInfluenceList.Add(new InfluencePatternHolder(new Vector2(-1,i), getBaseBeaconStrength (i)*sRef.coefTepwante, degreeRotated));
+					}
+					
+					list.Add (forwardRightInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());				
+					list.Add (forwardLeftInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());			
+				}
+			}
 		}
 		
 		list.Insert (0, forwardInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList());
-		//		return forwardInfluenceList.OrderBy(o=>o.relCoordRotated.magnitude).ToList();
 		return list;
 	}
 	#endregion
@@ -581,12 +715,13 @@ public class Beacon : MonoBehaviour {
 		
 		facing = N;
 		dirRotatingToward = N;
-		transform.RotateAround(transform.position, new Vector3(0,0,1), currentRotAngle);
-		transform.RotateAround(transform.position, new Vector3(0,0,-1), rotAngle);
+		transform.FindChild ("Arrow").RotateAround(transform.position, new Vector3(0,0,1), currentRotAngle);
+		transform.FindChild ("Arrow").RotateAround(transform.position, new Vector3(0,0,-1), rotAngle);
 	}
 	
 	public void setVisualDirection(){
-		transform.localEulerAngles = new Vector3(0,0,-1*getAngleForDir(facing));
+		Transform arrow = transform.FindChild ("Arrow");
+		arrow.localEulerAngles = new Vector3(0,0,-1*getAngleForDir(facing));
 		
 		if (dirRotatingToward != facing && percRotateComplete > 0f && percRotateComplete < 100f) { //Rotating
 			
@@ -600,7 +735,7 @@ public class Beacon : MonoBehaviour {
 					angleRotatingToward = new Vector3 (0, -90f, 0f); 
 					
 				percRotatingToward = 80f;
-				transform.localEulerAngles += angleRotatingToward * percRotatingToward/100f * percRotateComplete/100f;
+				arrow.localEulerAngles += angleRotatingToward * percRotatingToward/100f * percRotateComplete/100f;
 			}
 			
 			//I know there's a mathy way to do this but holy motherfucking shit fuck I cannot figure it out so fuck it
@@ -611,7 +746,7 @@ public class Beacon : MonoBehaviour {
 			{
 				angleRotatingToward = new Vector3 (0,0,90f);
 				percRotatingToward = 50f;
-				transform.localEulerAngles += angleRotatingToward * percRotatingToward/100f * percRotateComplete/100f;
+				arrow.localEulerAngles += angleRotatingToward * percRotatingToward/100f * percRotateComplete/100f;
 			}
 			
 			else if ((facing == DirectionEnum.North && dirRotatingToward == DirectionEnum.East) ||
@@ -621,7 +756,7 @@ public class Beacon : MonoBehaviour {
 			{
 				angleRotatingToward = new Vector3 (0,0,-90f);
 				percRotatingToward = 50f;
-				transform.localEulerAngles += angleRotatingToward * percRotatingToward/100f * percRotateComplete/100f;
+				arrow.localEulerAngles += angleRotatingToward * percRotatingToward/100f * percRotateComplete/100f;
 			}
 			
 			else{
@@ -716,13 +851,16 @@ public class Beacon : MonoBehaviour {
 		_patternList = createAdvancedInfluenceList(getAngleForDir(facing));
 		
 		_currentState = BeaconState.Advanced;
-		renderer.material = matUpgraded;
+		transform.FindChild("Base").renderer.material = matUpgraded;
 		
 		//hax
 		setTeam ();
-		Color32 beaconColor = renderer.material.color;
+		Color32 platformColor = transform.FindChild("Base").renderer.material.color;
+		Color32 beaconColor = transform.FindChild("Arrow").renderer.material.color;
+		platformColor.a = 255;
 		beaconColor.a = 255;
-		renderer.material.color = beaconColor;
+		transform.FindChild("Arrow").renderer.material.color = beaconColor;
+		transform.FindChild("Base").renderer.material.color = platformColor;
 	}
 	
 	//Player stopped in the middle of an upgrade
@@ -755,6 +893,46 @@ public class Beacon : MonoBehaviour {
 		}
 	}
 	
-	
-	
+	private float getBaseBeaconStrength (int distance) {
+
+		float strength = -1;
+		
+		//Basic, no Yaxchay
+		if (!gm.getCapturedAltars(controllingTeam).Contains (AltarType.Yaxchay) && (currentState == BeaconState.Basic || currentState == BeaconState.BuildingAdvanced)) { 
+			if (distance == 1) strength = 1f;
+			else if (distance == 2) strength = 0.5f;
+			else if (distance == 3) strength = 0.33f;
+			else if (distance == 4) strength = 0.25f;				
+		}
+		
+		//Basic, Yaxchay
+		else if (gm.getCapturedAltars(controllingTeam).Contains (AltarType.Yaxchay) && (currentState == BeaconState.Basic || currentState == BeaconState.BuildingAdvanced)) { 
+			if (distance >= 1 && distance <= 2) strength = 1f;
+			if (distance >= 3 && distance <= 4) strength = 0.5f;
+			if (distance >= 5 && distance <= 6) strength = 0.33f;
+			if (distance >= 7 && distance <= 8) strength = 0.25f;
+		}
+		
+		//Advanced, no Yaxchay - same as basic + Yaxchay given current bonuses, but that may change
+		else if (!gm.getCapturedAltars(controllingTeam).Contains (AltarType.Yaxchay) && currentState == BeaconState.Advanced) { 
+			if (distance >= 1 && distance <= 2) strength = 1f;
+			if (distance >= 3 && distance <= 4) strength = 0.5f;
+			if (distance >= 5 && distance <= 6) strength = 0.33f;
+			if (distance >= 7 && distance <= 8) strength = 0.25f;
+		}
+		
+		//Advanced, Yaxchay
+		else if (gm.getCapturedAltars(controllingTeam).Contains (AltarType.Yaxchay) && currentState == BeaconState.Advanced) { 
+			if (distance >= 1 && distance <= 4) strength = 1f;
+			if (distance >= 5 && distance <= 8) strength = 0.5f;
+			if (distance >= 9 && distance <= 12) strength = 0.33f;
+			if (distance >= 13 && distance <= 16) strength = 0.25f;
+		}		
+		
+		if (strength == -1) {
+			Debug.LogWarning ("Error when determining base beacon strength");
+		}
+		
+		return strength;
+	}
 }
