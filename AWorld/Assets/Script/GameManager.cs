@@ -26,7 +26,6 @@ public class GameManager : MonoBehaviour {
 	public Beacon debugBeacon;
 	public GameObject prfbAltar, prfbHome;
 	public List<GameObject> altars;
-	public int numAltars;
 	public string debugString;
 	public List<VictoryCondition> victoryConditions;
 	private GameState _currentState;
@@ -81,9 +80,9 @@ public class GameManager : MonoBehaviour {
 			team1Home  = null;
 			team2Home = null;
 			List<AltarType> altarTypes = System.Enum.GetValues(typeof(AltarType)).Cast<AltarType>().ToList();
-			if (numAltars > altarTypes.Count) Debug.LogError ("Too many altars and not enough altar types!"); 
+			if (sRef.numAltars > altarTypes.Count) Debug.LogError ("Too many altars and not enough altar types!"); 
 			
-			for (int i=0; i<numAltars; i++){
+			for (int i=0; i<sRef.numAltars; i++){
 				Debug.Log ("in Altar");		
 				GameObject a = (GameObject)Instantiate(prfbAltar, Vector3.zero, Quaternion.identity);
 				Altar aObj = a.GetComponent<Altar>();
@@ -91,6 +90,7 @@ public class GameManager : MonoBehaviour {
 //				
 				int index = Random.Range (0, altarTypes.Count);
 				aObj.altarType = altarTypes[index];
+				altarTypes.Remove(AltarType.MagicalMysteryScore);
 				altarTypes.RemoveAt (index);
 				altars.Add (aObj.gameObject);
 				//				altars.Add (aObj.gameObject);
@@ -105,19 +105,20 @@ public class GameManager : MonoBehaviour {
 //				altars.Add (aObj.gameObject);
 			}
 
-			for (int i=0; i<numAltars; i++){
+			for (int i=0; i<sRef.numScoringAltars; i++){
 				Debug.Log ("in Altar");		
 				GameObject a = (GameObject)Instantiate(prfbAltar, Vector3.zero, Quaternion.identity);
 				Altar aObj = a.GetComponent<Altar>();
-
-				
+				aObj.setControl(null);
+				aObj.altarType = AltarType.MagicalMysteryScore;
+				altars.Add(a);
 			}
 			int absoluteMagnitude;
 			absoluteMagnitude = Mathf.RoundToInt(Random.Range(10f, (new Vector2(tiles.GetLength(0), tiles.GetLength(1)).magnitude)*.75f));
 
-			for (int i = 0; i< numAltars; i++){
+			for (int i = 0; i< altars.Count; i++){
 				Altar thisAltar = altars[i].GetComponent<Altar>();
-				if(i != numAltars -1){
+				if(i != altars.Count -1){
 
 					int x, y;
 					//x^2 + y^2 = absoluteMag^2

@@ -430,7 +430,7 @@ ParticleSystem:
         m_PostInfinity: 2
       minMaxState: 0
     startSpeed:
-      scalar: -2
+      scalar: -40.2799988
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -684,7 +684,7 @@ ParticleSystem:
     time3: 0
     m_BurstCount: 1
   SizeModule:
-    enabled: 0
+    enabled: 1
     curve:
       scalar: 1
       maxCurve:
@@ -696,7 +696,7 @@ ParticleSystem:
           outSlope: 0
           tangentMode: 0
         - time: 1
-          value: 1
+          value: .0567685366
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -719,7 +719,7 @@ ParticleSystem:
         m_PostInfinity: 2
       minMaxState: 1
   RotationModule:
-    enabled: 0
+    enabled: 1
     curve:
       scalar: .785398126
       maxCurve:
@@ -1111,10 +1111,10 @@ ParticleSystem:
     inWorldSpace: 0
     randomizePerFrame: 0
   ExternalForcesModule:
-    enabled: 1
+    enabled: 0
     multiplier: 1
   ClampVelocityModule:
-    enabled: 0
+    enabled: 1
     x:
       scalar: 1
       maxCurve:
@@ -1215,7 +1215,7 @@ ParticleSystem:
         m_PostInfinity: 2
       minMaxState: 0
     magnitude:
-      scalar: 1
+      scalar: .5
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1249,7 +1249,7 @@ ParticleSystem:
       minMaxState: 0
     separateAxis: 0
     inWorldSpace: 0
-    dampen: 1
+    dampen: .200000003
   SizeBySpeedModule:
     enabled: 0
     curve:
@@ -1841,7 +1841,6 @@ MonoBehaviour:
   prfbAltar: {fileID: 0}
   prfbHome: {fileID: 0}
   altars: []
-  numAltars: 5
   debugString: 
   debugGUI: 0
   scoreBgTexture: {fileID: 2800000, guid: 701131cd029900d41837b1e5331c8d2a, type: 3}
@@ -2348,7 +2347,7 @@ MonoBehaviour:
   boardY: 13
   numberOfAltars: 0
   ranjitRangeTileTypes: 
-  fogOn: 1
+  fogOn: 0
 --- !u!4 &1669248506
 Transform:
   m_ObjectHideFlags: 0
@@ -2615,6 +2614,7 @@ MonoBehaviour:
   vpsBaseUpgrade: 25
   vpsScorePerAltarPerSecond: 1
   vpsBeaconBaseInfluence: 100
+  vpsScorePerMinePerSecond: 0
   coefMoveNeutral: 1
   coefMoveAllied: 2
   coefMoveEnemy: .330000013
@@ -2627,11 +2627,11 @@ MonoBehaviour:
   coefYaxchay: 0
   coefMunalwaScale: 0
   scoreOnCapture: 50
-  vpsScorePerSecond: 3
   optLockTile: 0
   optTilesGiveScore: 1
   valTileConvertScore: 1
   valPointsToWin: 300
+  valScorePerMine: 0
   beaconBasicRange: 4
   beaconAdvancedRange: 8
   beaconNoBuildRange: 2
@@ -2641,6 +2641,9 @@ MonoBehaviour:
   team2Start: {x: 15, y: 5}
   optPerlinLevel: 1500
   neutralBeaconCount: 12
+  numAltars: 0
+  numScoringAltars: 0
+  ranjitRangeAltars: 
   debugMode: 1
   gameMode: 0
   secMarqueeUpgradeTime: 0

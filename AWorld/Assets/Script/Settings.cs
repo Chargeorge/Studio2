@@ -56,7 +56,10 @@ public class Settings : MonoBehaviour {
 	public Vector2 team2Start;
 	public int optPerlinLevel;
 	public int neutralBeaconCount;
-	
+	public int numAltars;
+	public int numScoringAltars;
+	public string ranjitRangeAltars;
+
 	//Mode switches
 	public bool debugMode;
 	public Mode gameMode;
@@ -115,7 +118,8 @@ public class Settings : MonoBehaviour {
 		team2Start = new Vector2(20,7);
 		optPerlinLevel = 1800;
 		neutralBeaconCount = 12;
-		
+		numAltars = 0;
+		numScoringAltars = 5;
 		//Mode switches
 		debugMode = true;
 		gameMode = Mode.OneVOne;
