@@ -89,7 +89,7 @@ public class Altar : MonoBehaviour {
 		
 	}
 	
-	public void setScoreBarTeam(float scoreLeft){
+	public void setScoreBarLen(){
 		Vector3 newScale = scoreBar.transform.localScale;
 		newScale.x *=  baseScoreScale * scoreLeft  / sRef.valScorePerMine;
 		scoreBar.transform.localScale = newScale;
@@ -102,14 +102,14 @@ public class Altar : MonoBehaviour {
 		
 		if(altarType != AltarType.MagicalMysteryScore){
 			scoreBar.renderer.enabled = false;
-		
+			transform.FindChild("ScoreThingyBG").renderer.enabled = false;
 		}
 		
 		if(_currentControllingTeam != null){
 			//check to see if I'm networked
 			networked= checkNetwork();
 			if(networked){
-				if(altarType != AltarType.MagicalMysteryScore){
+				if(altarType !=  AltarType.MagicalMysteryScore){
 					List <AltarType> a = gm.getCapturedAltars(_currentControllingTeam);
 	 
 					if(a.Contains(AltarType.Khepru)){
@@ -125,7 +125,7 @@ public class Altar : MonoBehaviour {
 							scoreToAdd = scoreLeft;
 						}
 						scoreLeft -= scoreToAdd;
-						
+						setScoreBarLen();
 						
 					}
 				}
