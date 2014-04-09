@@ -202,36 +202,61 @@ public class GameManager : MonoBehaviour {
 			}
 			int absoluteMagnitude;
 			absoluteMagnitude = getRandomMagnitude(.2f,.35f);
+			Vector2[] alterPositions  = new Vector2[4]{new Vector2(10,2), new Vector2(10,10), new Vector2(15,2),new Vector2( 15,10)};
+			
 			for (int i = 0; i< altars.Count; i++){
 				Altar thisAltar = altars[i].GetComponent<Altar>();
 				if(i != altars.Count -1){
+
+					thisAltar.brdX = (int)alterPositions[i].x;
+					thisAltar.brdY = (int)alterPositions[i].y;
 					
-
-					if(i % teams.Count == 1){
-
-					}
-
-					Vector2 validPos = generateValidAltarPosition(thisAltar, teams[ i % teams.Count].startingLocation , ( i % teams.Count == 1) ? true : false, absoluteMagnitude);
-					thisAltar.brdX = (int)validPos.x;
-					thisAltar.brdY = (int)validPos.y;
+//
+//					if(i % teams.Count == 1){
+//
+//					}
+//
+//					Vector2 validPos = generateValidAltarPosition(thisAltar, teams[ i % teams.Count].startingLocation , ( i % teams.Count == 1) ? true : false, absoluteMagnitude);
+//					thisAltar.brdX = (int)validPos.x;
+//					thisAltar.brdY = (int)validPos.y;
 				}
 				else{
 					thisAltar.brdX = tiles.GetLength(0)/2;
 					thisAltar.brdY = tiles.GetLength(1)/2;
-					
-					thisAltar.transform.parent = tiles[thisAltar.brdX, thisAltar.brdY].transform;
-					thisAltar.transform.localPosition = new Vector3(0,0,-1);
+				
 				}
 				
-				Debug.Log (string.Format("Altar created at({0}, {1})", thisAltar.brdX, thisAltar.brdY));
-				thisAltar.transform.parent = tiles[thisAltar.brdX, thisAltar.brdY].transform;
-				thisAltar.transform.localPosition = new Vector3(0,0,-1);
-
+				
 			}
 
 
+			int randomXOffset = Random.Range(0,3);
+			int randomYOffset = Random.Range(0,2);
+			
+			for(int i = 0; i < altars.Count; i++){
+				if( (i % 2) == 1){
+					altars[Random.Range(0,altars.Count)].GetComponent<Altar>().brdX+=randomXOffset;
+					
+					altars[Random.Range(0,altars.Count)].GetComponent<Altar>().brdY+=randomYOffset;
+				}else{
+					
+					altars[Random.Range(0,altars.Count)].GetComponent<Altar>().brdX-=randomXOffset;
+					
+					altars[Random.Range(0,altars.Count)].GetComponent<Altar>().brdY-=randomYOffset;
+				
+				}
+				
+			}
+			
+
 			altars.ForEach(delegate (GameObject altarGO){
 				Altar A = altarGO.GetComponent<Altar>();
+				
+				
+				A.transform.parent = tiles[A.brdX, A.brdY].transform;
+				A.transform.localPosition = new Vector3(0,0,-1);
+				Debug.Log (string.Format("Altar created at({0}, {1})", A.brdX, A.brdY));
+				
 				checkFlipWater(A.brdX, A.brdY);
 			});
 
@@ -294,7 +319,7 @@ public class GameManager : MonoBehaviour {
 		}	
 	}
 
-	public Vector2 generateValidAltarPosition(Altar thisAltar, Vector2 startPos, bool flip, int absoluteMagnitude){
+public Vector2 generateValidAltarPosition(Altar thisAltar, Vector2 startPos, bool flip, int absoluteMagnitude){
 
 		int x, y;
 		//x^2 + y^2 = absoluteMag^2
@@ -311,8 +336,13 @@ public class GameManager : MonoBehaviour {
 			y = (int)teams[0].startingLocation.y -y;
 		}
 		Debug.Log ("Distance" + getDistanceToNearestAltar(new Vector2(x,y)));
-		while(y >= tiles.GetLength(1) || getDistanceToNearestAltar(new Vector2(x,y)) < 4f || getDistanceToNearestStart(new Vector2(x,y)) < 5f || y < 0 || x < 0){
-			x = Mathf.RoundToInt(Random.Range(0f, absoluteMagnitude)) ;
+		
+		int origX = x;
+		int baseX = x;
+		while(y >= tiles.GetLength(1) || getDistanceToNearestAltar(new Vector2(x,y)) < 4f || getDistanceToNearestStart(new Vector2(x,y)) < 5f || y < 0 || x <= 0){
+		
+			baseX++;
+			x = baseX;
 			y = Mathf.RoundToInt(Mathf.Sqrt(absoluteMagnitude * absoluteMagnitude - x*x));
 			
 			if(!flip){
