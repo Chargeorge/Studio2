@@ -200,11 +200,18 @@ public class GameManager : MonoBehaviour {
 				aObj.altarType = AltarType.MagicalMysteryScore;
 				altars.Add(a);
 			}
+			int absoluteMagnitude;
+			absoluteMagnitude = getRandomMagnitude(.2f,.35f);
 			for (int i = 0; i< altars.Count; i++){
 				Altar thisAltar = altars[i].GetComponent<Altar>();
 				if(i != altars.Count -1){
+					
 
-					Vector2 validPos = generateValidAltarPosition(thisAltar, teams[ i % teams.Count].startingLocation, ( i % teams.Count == 1) ? true : false);
+					if(i % teams.Count == 1){
+
+					}
+
+					Vector2 validPos = generateValidAltarPosition(thisAltar, teams[ i % teams.Count].startingLocation , ( i % teams.Count == 1) ? true : false, absoluteMagnitude);
 					thisAltar.brdX = (int)validPos.x;
 					thisAltar.brdY = (int)validPos.y;
 				}
@@ -287,9 +294,7 @@ public class GameManager : MonoBehaviour {
 		}	
 	}
 
-	public Vector2 generateValidAltarPosition(Altar thisAltar, Vector2 startPos, bool flip){
-		int absoluteMagnitude;
-		absoluteMagnitude = getRandomMagnitude(.2f,.35f);
+	public Vector2 generateValidAltarPosition(Altar thisAltar, Vector2 startPos, bool flip, int absoluteMagnitude){
 
 		int x, y;
 		//x^2 + y^2 = absoluteMag^2
@@ -305,7 +310,8 @@ public class GameManager : MonoBehaviour {
 			x = (int)teams[0].startingLocation.x - x;
 			y = (int)teams[0].startingLocation.y -y;
 		}
-		while(y >= tiles.GetLength(1) || getDistanceToNearestAltar(new Vector2(x,y)) < 4f || getDistanceToNearestStart(new Vector2(x,y)) < 5f){
+		Debug.Log ("Distance" + getDistanceToNearestAltar(new Vector2(x,y)));
+		while(y >= tiles.GetLength(1) || getDistanceToNearestAltar(new Vector2(x,y)) < 4f || getDistanceToNearestStart(new Vector2(x,y)) < 5f || y < 0 || x < 0){
 			x = Mathf.RoundToInt(Random.Range(0f, absoluteMagnitude)) ;
 			y = Mathf.RoundToInt(Mathf.Sqrt(absoluteMagnitude * absoluteMagnitude - x*x));
 			
@@ -335,33 +341,37 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public float getDistanceToNearestStart(Vector2 position){
-		float minDistance = 0;
+		float minDistance = float.MaxValue;
 
 		teams.ForEach(delegate(TeamInfo t){
 			float distance = Vector2.Distance(position, t.startingLocation);
-			if(distance > minDistance) {minDistance = distance;}
+			if(distance < minDistance) {minDistance = distance;}
 		});
 		return minDistance;
 	}
 
 	
 	public float getDistanceToNearestAltar(Vector2 position){
-		float minDistance = 0;
+		float minDistance = float.MaxValue;
+
 		
 		altars.ForEach(delegate(GameObject t){
-			float distance = Vector2.Distance(position, new Vector2(t.GetComponent<Altar>().brdX,t.GetComponent<Altar>().brdY));
-			if(distance > minDistance) {minDistance = distance;}
+
+			Vector2 test = new Vector2(t.GetComponent<Altar>().brdX,t.GetComponent<Altar>().brdY);
+			float distance = Vector2.Distance(position,test);
+			if(distance < minDistance) {minDistance = distance;}
 		});
 		return minDistance;
 	}
 
 
 	public float getDistanceToNearestBeacon(Vector2 position){
-		float minDistance = 0;
+		float minDistance = float.MaxValue;
+
 		
 		beacons.ForEach(delegate(GameObject t){
 			float distance = Vector2.Distance(position, new Vector2(t.transform.parent.gameObject.GetComponent<BaseTile>().brdXPos,t.transform.parent.gameObject.GetComponent<BaseTile>().brdYPos));
-			if(distance > minDistance) {minDistance = distance;}
+			if(distance < minDistance) {minDistance = distance;}
 		});
 		return minDistance;
 	}
