@@ -310,6 +310,7 @@ public class GameManager : MonoBehaviour {
 			v.CheckState(this);
 			//Debug.Log("checstate done");
 			if(v.isCompleted){
+				audio.PlayOneShot(Victory_Gong, 0.7f);
 				_currentState = GameState.gameWon;
 				_victoryString += v.getVictorySting();
 				vIsForVendetta = v;

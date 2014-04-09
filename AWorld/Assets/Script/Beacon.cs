@@ -36,100 +36,103 @@ public class Beacon : MonoBehaviour {
 
 	private Material matBasic;
 	private Material matUpgraded;
+	public Color32 neutralColor;
 
 	// Use this for initialization
 	void Start () {
 		///TODO ADD PATTERN STATICS
 		gm = GameObject.Find ("GameManager").GetComponent<GameManager>();
 		sRef= GameObject.Find ("Settings").GetComponent<Settings>();
-		matBasic = (Material) Resources.Load ("Sprites/Materials/Beacon");
-		matUpgraded = (Material) Resources.Load ("Sprites/Materials/Beacon_Upgraded");
+		matBasic = (Material) Resources.Load ("Sprites/Materials/Base");
+		matUpgraded = (Material) Resources.Load ("Sprites/Materials/BaseUpg");
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		int brdX; int brdY;
-		brdX = transform.parent.gameObject.GetComponent<BaseTile>().brdXPos;
-	 	brdY = transform.parent.gameObject.GetComponent<BaseTile>().brdYPos;
-		
-		setVisualDirection();	//Why is this happening every frame?
+		if (transform.parent != null) { //Hax
+			brdX = transform.parent.gameObject.GetComponent<BaseTile>().brdXPos;
+		 	brdY = transform.parent.gameObject.GetComponent<BaseTile>().brdYPos;
+			
+			setVisualDirection();	//Why is this happening every frame?
 
-		if(Input.GetKeyUp(KeyCode.Space)){
-			audio.Stop();
-		}
+			if(Input.GetKeyUp(KeyCode.Space)){
+				audio.Stop();
+			}
 
-		//influence work
-		// Find list of all influencible tiles
-		//Get closest tile in terms of distance and  begin influening it
-		//Add Influence till tile is at full
-		// move on to the next tile
-		//repeat till all tiles are full or influence is expended
-		
-		//This solution isn't "Correct" AKA, it doesn't resolve perfectly every frame, but over the aggregrate it should be correct
-		// We can move to fixed update to get closer to correct
-		if((_currentState == BeaconState.Basic || _currentState == BeaconState.BuildingAdvanced || _currentState == BeaconState.Advanced) && controllingTeam != null){
+			//influence work
+			// Find list of all influencible tiles
+			//Get closest tile in terms of distance and  begin influening it
+			//Add Influence till tile is at full
+			// move on to the next tile
+			//repeat till all tiles are full or influence is expended
+			
+			//This solution isn't "Correct" AKA, it doesn't resolve perfectly every frame, but over the aggregrate it should be correct
+			// We can move to fixed update to get closer to correct
+			if((_currentState == BeaconState.Basic || _currentState == BeaconState.BuildingAdvanced || _currentState == BeaconState.Advanced) && controllingTeam != null){
 
-			//find nearest convertable block
-			//FIND The first convertable tile, list is ordered by distance
-			//TODO setup for bases so multiple tiles can influence at once
-			foreach (List<InfluencePatternHolder> list in _patternList) {
-				float influenceThisFrame = sRef.vpsBeaconBaseInfluence * Time.deltaTime;				
-				bool waterFound = false;	
-				list.ForEach(delegate (InfluencePatternHolder p){
-					if (!waterFound) {
-						gm.PlaySFX(beaconInfluenceProgress, 0.1f);
-						if(influenceThisFrame > 0f){
-							int x = (int)brdX + (int)Mathf.RoundToInt(p.relCoordRotated.x);
-							int y = (int)brdY + (int)Mathf.RoundToInt(p.relCoordRotated.y);
-							GameObject tile;
-							
-							try { tile = gm.tiles[x, y]; }
-								catch { return; }
-							if (tile != null && 
-								tile.GetComponent<BaseTile>().currentType == TileTypeEnum.water && 
-								!gm.getCapturedAltars (controllingTeam).Contains (AltarType.Thotzeti)) 
-							{
-								waterFound = true;
-								return;
-							}
-							if(tile != null && tile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
-							BaseTile Bt =  tile.GetComponent<BaseTile>();
-								if(Bt.controllingTeam == null){
-									Bt.startInfluence(influenceThisFrame, controllingTeam);
-									influenceThisFrame = 0;  //Assume a null controlled Tile will eat all influence.
-									//Debug.Log("influencing Null tile");
+				//find nearest convertable block
+				//FIND The first convertable tile, list is ordered by distance
+				//TODO setup for bases so multiple tiles can influence at once
+				foreach (List<InfluencePatternHolder> list in _patternList) {
+					float influenceThisFrame = sRef.vpsBeaconBaseInfluence * Time.deltaTime;				
+					bool waterFound = false;	
+					list.ForEach(delegate (InfluencePatternHolder p){
+						if (!waterFound) {
+							gm.PlaySFX(beaconInfluenceProgress, 0.1f);
+							if(influenceThisFrame > 0f){
+								int x = (int)brdX + (int)Mathf.RoundToInt(p.relCoordRotated.x);
+								int y = (int)brdY + (int)Mathf.RoundToInt(p.relCoordRotated.y);
+								GameObject tile;
+								
+								try { tile = gm.tiles[x, y]; }
+									catch { return; }
+								if (tile != null && 
+									tile.GetComponent<BaseTile>().currentType == TileTypeEnum.water && 
+									!gm.getCapturedAltars (controllingTeam).Contains (AltarType.Thotzeti)) 
+								{
+									waterFound = true;
+									return;
 								}
-								else if(Bt.controllingTeam.teamNumber != controllingTeam.teamNumber){
-									influenceThisFrame = Bt.subTractInfluence(influenceThisFrame * p.coefInfluenceFraction, controllingTeam);
-									//Debug.Log("Removing other influence");
-									if(influenceThisFrame > 0){
-										influenceThisFrame = Bt.addInfluenceReturnOverflow(influenceThisFrame * p.coefInfluenceFraction);
-										//Debug.Log("Adding next frames influence");
+								if(tile != null && tile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
+								BaseTile Bt =  tile.GetComponent<BaseTile>();
+									if(Bt.controllingTeam == null){
+										Bt.startInfluence(influenceThisFrame, controllingTeam);
+										influenceThisFrame = 0;  //Assume a null controlled Tile will eat all influence.
+										//Debug.Log("influencing Null tile");
 									}
+									else if(Bt.controllingTeam.teamNumber != controllingTeam.teamNumber){
+										influenceThisFrame = Bt.subTractInfluence(influenceThisFrame * p.coefInfluenceFraction, controllingTeam);
+										//Debug.Log("Removing other influence");
+										if(influenceThisFrame > 0){
+											influenceThisFrame = Bt.addInfluenceReturnOverflow(influenceThisFrame * p.coefInfluenceFraction);
+											//Debug.Log("Adding next frames influence");
+										}
+									}
+									else if(Bt.controllingTeam.teamNumber == controllingTeam.teamNumber && Bt.percControlled < 100f){
+										influenceThisFrame = Bt.addInfluenceReturnOverflow(influenceThisFrame * p.coefInfluenceFraction);
+										//Debug.Log ("Adding my influence");
+									}
+			//						|| Bt.percControlled < 100f
 								}
-								else if(Bt.controllingTeam.teamNumber == controllingTeam.teamNumber && Bt.percControlled < 100f){
-									influenceThisFrame = Bt.addInfluenceReturnOverflow(influenceThisFrame * p.coefInfluenceFraction);
-									//Debug.Log ("Adding my influence");
-								}
-		//						|| Bt.percControlled < 100f
+								
 							}
-							
 						}
-					}
-				});
-			 }
+					});
+				 }
 
-//			 
-//			 else{
-//				gm.PlaySFX(beaconInfluencing, 0.8f);
-//			 //TODO: Handle situations where other tiles are influencing.  
-//				Debug.Log("Trying to influence at rate " + patternConverting.vpsInfluence );
-//				if(tileBeingConverted.GetComponent<BaseTile>().addProgressToInfluence(patternConverting.vpsInfluence, controllingTeam)){
-//					tileBeingConverted = null;
-//					patternConverting= null;
-//				}
-//			 }
-		}
+	//			 
+	//			 else{
+	//				gm.PlaySFX(beaconInfluencing, 0.8f);
+	//			 //TODO: Handle situations where other tiles are influencing.  
+	//				Debug.Log("Trying to influence at rate " + patternConverting.vpsInfluence );
+	//				if(tileBeingConverted.GetComponent<BaseTile>().addProgressToInfluence(patternConverting.vpsInfluence, controllingTeam)){
+	//					tileBeingConverted = null;
+	//					patternConverting= null;
+	//				}
+	//			 }
+			}
 		
 		UpdateInfluencePatterns();	//Probably shouldn't call this every frame, but just doing this for now
 		
@@ -143,6 +146,7 @@ public class Beacon : MonoBehaviour {
 			subtractUpgradeProgress (sRef.vpsBaseUpgrade);
 		}
 		*/
+		}
 		
 	}
 	
@@ -201,29 +205,38 @@ public class Beacon : MonoBehaviour {
 	}
 	
 	public void setTeam(){
-		Color32 controllingTeamColor = controllingTeam.beaconColor;		
+		Color32 controllingTeamColor = controllingTeam.beaconColor;	
+		Color32 platformColor = controllingTeam.tileColor;
 		//TODO: custom sprites and colors per team
 		controllingTeamColor.a = 0;
-//		controllingTeamColor.r += 30;
-//		controllingTeamColor.g += 30;
-//		controllingTeamColor.b += 30;
-		renderer.material.color = controllingTeamColor;
-		
+
+		transform.FindChild("Arrow").renderer.material.color = controllingTeamColor;
+		transform.FindChild("Base").renderer.material.color = controllingTeamColor;
+		transform.FindChild("Platform").renderer.material.color = platformColor;
 	}
 
 	public void setTeam(TeamInfo teamIn){
 	if(teamIn != null){controllingTeam = teamIn;
-		Color32 controllingTeamColor = controllingTeam.beaconColor;		
+		Color32 controllingTeamColor = controllingTeam.beaconColor;	
+			Color32 platformColor = controllingTeam.tileColor;
 		//TODO: custom sprites and colors per team
-		controllingTeamColor.a = (byte)(renderer.material.color.a * 255);
-		
-//		controllingTeamColor.r += 30;
-//		controllingTeamColor.g += 30;
-//		controllingTeamColor.b += 30;
-		renderer.material.color = controllingTeamColor;	}
+		controllingTeamColor.a = (byte)(transform.FindChild("Arrow").renderer.material.color.a * 255);
+		controllingTeamColor.a = (byte)(transform.FindChild("Base").renderer.material.color.a * 255);
+			platformColor.a = (byte)(transform.FindChild("Platform").renderer.material.color.a * 255);
+
+
+			transform.FindChild("Arrow").renderer.material.color = controllingTeamColor;	
+			transform.FindChild("Base").renderer.material.color = controllingTeamColor;
+			transform.FindChild("Platform").renderer.material.color = platformColor;
+		}
 		else{
+
+			neutralColor = new Color32 (150, 150, 150, 255);
+
 			controllingTeam = null;
-			renderer.material.color = Color.grey;
+			transform.FindChild("Arrow").renderer.material.color = neutralColor;
+			transform.FindChild("Base").renderer.material.color = neutralColor;
+			transform.FindChild("Platform").renderer.material.color = neutralColor;
 		}	}
 	
 	/// <summary>
@@ -233,11 +246,27 @@ public class Beacon : MonoBehaviour {
 	public void addBuildingProgress(float rate){
 		percBuildComplete += rate*Time.deltaTime;
 						
-		Color32 beaconColor = renderer.material.color;
+		Color32 beaconColor = transform.FindChild("Arrow").renderer.material.color;
+		Color32 platformColor = controllingTeam.tileColor;
 		float newColor =  (255f * (percBuildComplete/100f)) ;
 		newColor = (newColor >= 255) ? 254 : newColor;		
 		beaconColor.a = (byte)newColor;
-		renderer.material.color = beaconColor;		
+
+		//failed attempt at rising platform
+//		Transform platform = transform.FindChild ("Platform");
+//		Vector3 platformPos = platform.position;
+//		float newPos = (0.09f * (percBuildComplete/100f));
+//		newPos = (newPos >= 0.09f) ? 0.089f : newPos;
+//		platformPos.y = (byte)newPos;
+//		platform.position = platformPos;
+
+
+
+//		platform.Translate(Vector3.up * platformPos);
+
+		transform.FindChild("Arrow").renderer.material.color = beaconColor;		
+		transform.FindChild("Base").renderer.material.color = beaconColor;	
+		transform.FindChild("Platform").renderer.material.color = platformColor;
 
 		if(percBuildComplete >= 100){
 			gm.PlaySFX(beaconBuilt, 1.0f);
@@ -253,11 +282,14 @@ public class Beacon : MonoBehaviour {
 		}
 		
 		else {
-			Color32 beaconColor = renderer.material.color;
+			Color32 beaconColor = transform.FindChild("Arrow").renderer.material.color;
+			Color32 platformColor = controllingTeam.tileColor;
 			float newColor =  (255f * (percBuildComplete/100f)) ;
 			newColor = (newColor >= 255) ? 254 : newColor;		
 			beaconColor.a = (byte)newColor;
-			renderer.material.color = beaconColor; 
+			transform.FindChild("Arrow").renderer.material.color = beaconColor; 
+			transform.FindChild("Base").renderer.material.color = beaconColor; 
+			transform.FindChild("Platform").renderer.material.color = platformColor;
 		}
 	}
 	
@@ -683,12 +715,13 @@ public class Beacon : MonoBehaviour {
 		
 		facing = N;
 		dirRotatingToward = N;
-		transform.RotateAround(transform.position, new Vector3(0,0,1), currentRotAngle);
-		transform.RotateAround(transform.position, new Vector3(0,0,-1), rotAngle);
+		transform.FindChild ("Arrow").RotateAround(transform.position, new Vector3(0,0,1), currentRotAngle);
+		transform.FindChild ("Arrow").RotateAround(transform.position, new Vector3(0,0,-1), rotAngle);
 	}
 	
 	public void setVisualDirection(){
-		transform.localEulerAngles = new Vector3(0,0,-1*getAngleForDir(facing));
+		Transform arrow = transform.FindChild ("Arrow");
+		arrow.localEulerAngles = new Vector3(0,0,-1*getAngleForDir(facing));
 		
 		if (dirRotatingToward != facing && percRotateComplete > 0f && percRotateComplete < 100f) { //Rotating
 			
@@ -702,7 +735,7 @@ public class Beacon : MonoBehaviour {
 					angleRotatingToward = new Vector3 (0, -90f, 0f); 
 					
 				percRotatingToward = 80f;
-				transform.localEulerAngles += angleRotatingToward * percRotatingToward/100f * percRotateComplete/100f;
+				arrow.localEulerAngles += angleRotatingToward * percRotatingToward/100f * percRotateComplete/100f;
 			}
 			
 			//I know there's a mathy way to do this but holy motherfucking shit fuck I cannot figure it out so fuck it
@@ -713,7 +746,7 @@ public class Beacon : MonoBehaviour {
 			{
 				angleRotatingToward = new Vector3 (0,0,90f);
 				percRotatingToward = 50f;
-				transform.localEulerAngles += angleRotatingToward * percRotatingToward/100f * percRotateComplete/100f;
+				arrow.localEulerAngles += angleRotatingToward * percRotatingToward/100f * percRotateComplete/100f;
 			}
 			
 			else if ((facing == DirectionEnum.North && dirRotatingToward == DirectionEnum.East) ||
@@ -723,7 +756,7 @@ public class Beacon : MonoBehaviour {
 			{
 				angleRotatingToward = new Vector3 (0,0,-90f);
 				percRotatingToward = 50f;
-				transform.localEulerAngles += angleRotatingToward * percRotatingToward/100f * percRotateComplete/100f;
+				arrow.localEulerAngles += angleRotatingToward * percRotatingToward/100f * percRotateComplete/100f;
 			}
 			
 			else{
@@ -818,13 +851,16 @@ public class Beacon : MonoBehaviour {
 		_patternList = createAdvancedInfluenceList(getAngleForDir(facing));
 		
 		_currentState = BeaconState.Advanced;
-		renderer.material = matUpgraded;
+		transform.FindChild("Base").renderer.material = matUpgraded;
 		
 		//hax
 		setTeam ();
-		Color32 beaconColor = renderer.material.color;
+		Color32 platformColor = transform.FindChild("Base").renderer.material.color;
+		Color32 beaconColor = transform.FindChild("Arrow").renderer.material.color;
+		platformColor.a = 255;
 		beaconColor.a = 255;
-		renderer.material.color = beaconColor;
+		transform.FindChild("Arrow").renderer.material.color = beaconColor;
+		transform.FindChild("Base").renderer.material.color = platformColor;
 	}
 	
 	//Player stopped in the middle of an upgrade

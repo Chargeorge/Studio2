@@ -6,11 +6,17 @@ ModelImporter:
     100000: ID12
     100002: ID18
     100004: //RootNode
+    100006: nurbsCube1
+    100008: SketchUp
     400000: ID12
     400002: ID18
     400004: //RootNode
+    400006: nurbsCube1
+    400008: SketchUp
     2300000: //RootNode
+    2300002: SketchUp
     3300000: //RootNode
+    3300002: SketchUp
     4300000: SketchUp
     9500000: //RootNode
   materials:

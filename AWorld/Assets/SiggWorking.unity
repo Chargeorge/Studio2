@@ -1850,6 +1850,7 @@ MonoBehaviour:
   winTexture2: {fileID: 2800000, guid: c14379d92aa39dd4a9ddbdcc57d52fac, type: 3}
   currentMarquee: 0
   Victory_Gong: {fileID: 8300000, guid: 44e623b0750368a44b0288c8ee55df27, type: 3}
+  beacons: []
 --- !u!4 &842739088
 Transform:
   m_ObjectHideFlags: 0
@@ -2651,6 +2652,9 @@ MonoBehaviour:
   percMaxInfluenceColor: 0
   colorOffSet: 0
   teleportRate: 0
+  closeEnoughDistanceTeleport: 0
+  moveToCenterRate: 0
+  closeEnoughDistanceMoveToCenter: 0
 --- !u!4 &1843163359
 Transform:
   m_ObjectHideFlags: 0
