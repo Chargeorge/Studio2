@@ -111,7 +111,7 @@ public class Player : MonoBehaviour {
 		//if(x.HasValue) Debug.Log(x.Value);
 		_pulsating = false;	//Pulsate () sets this to true; if false at the end of this method, reset scale and _expanding
 
-		_positionOffset = new Vector2 (0,0);	//This can't possibly be the right way to do this - Josh
+		//_positionOffset = new Vector2 (0,0);	//This can't possibly be the right way to do this - Josh
 				
 		switch(currentState){
 			
@@ -131,7 +131,7 @@ public class Player : MonoBehaviour {
 					currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
 				}
 //				if(currentTile == team.goGetHomeTile().GetComponent<BaseTile>()){
-				if(closeEnoughToTeleportTarget(newPos)){
+				if(closeEnoughToTarget(newPos, teleportTarget, sRef.closeEnoughDistanceTeleport)){
 			
 //					Vector3 homePos = currentTile.transform.position;
 //					homePos.z = transform.position.z;
@@ -229,6 +229,7 @@ public class Player : MonoBehaviour {
 					// if us 
 						//start building beacon				
 				if (buildButtonDown){
+					moveTowardCenterOfTile (currentTile);
 					//NO BEACON HERE, GOTTA DO STUFF.
 					//Check influence first
 					if(currentTile.controllingTeam !=null){
@@ -288,6 +289,11 @@ public class Player : MonoBehaviour {
 						_currentState = PlayerState.influencing;
 						currentTile.startInfluence(currentActionProgress, team);
 					}
+				}
+				
+				//We chillin
+				else {
+					moveTowardCenterOfTile (currentTile);
 				}
 				
 			break;
@@ -392,7 +398,8 @@ public class Player : MonoBehaviour {
 					if(currentTile.controllingTeam != null){
 //						Debug.Log ("current Team");
 						if(currentTile.controllingTeam.teamNumber == team.teamNumber){
-							//Check for a beacon in progress and start building!
+							moveTowardCenterOfTile (currentTile);
+						//Check for a beacon in progress and start building!
 							if(beaconInProgress != null){
 								float vpsBuildRate = sRef.vpsBaseBuild * getAltarBuildBoost ();
 								beaconInProgress.addBuildingProgress(vpsBuildRate);
@@ -419,6 +426,7 @@ public class Player : MonoBehaviour {
 					{
 						float vpsInfluenceRate = sRef.vpsBasePlayerInfluence;
 						addProgressToAction(vpsInfluenceRate);
+						_currentState = PlayerState.influencing;
 					}
 					
 				}
@@ -442,6 +450,7 @@ public class Player : MonoBehaviour {
 						{                                      
 							//Debug.Log("Adding Influence");
 							float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime);
+							moveTowardCenterOfTile (currentTile);
 						//	Debug.Log("test: " + test);
 							if(test > 0f || (currentTile.owningTeam != null && currentTile.owningTeam == team)){
 //								_currentState = PlayerState.standing;
@@ -583,7 +592,8 @@ public class Player : MonoBehaviour {
 							_currentState = PlayerState.standing;
 							StopSFX ();					
 						}
-					}		
+					}
+					moveTowardCenterOfTile (currentTile);
 				}
 					
 				else {
@@ -617,9 +627,8 @@ public class Player : MonoBehaviour {
 						_currentState = PlayerState.standing;
 						StopSFX ();
 						PlaySFX(beaconUpgraded, 1.0f);
-						
 					}
-					
+					moveTowardCenterOfTile (currentTile);
 				}
 				
 				else {
@@ -631,7 +640,7 @@ public class Player : MonoBehaviour {
 				
 				}
 			
-			break;	
+			break;
 		}
 		
 		
@@ -763,7 +772,6 @@ public class Player : MonoBehaviour {
 		else {
 			angle = 360 - Vector2.Angle (new Vector2 (0, 1), normVec);
 		}
-		Debug.Log (angle);
 		transform.eulerAngles = new Vector3(0f, 0f, angle);
 	}
 /// <summary>
@@ -1047,10 +1055,23 @@ public class Player : MonoBehaviour {
 		}
 	}
 	
-	public bool closeEnoughToTeleportTarget (Vector3 newPos) {
+	public bool closeEnoughToTarget (Vector3 newPos, Vector3 target, float closeEnoughDistance) {
 	//Hoo boy
-		return Mathf.Abs (newPos.x - teleportTarget.x) + Mathf.Abs (newPos.y - teleportTarget.y) <= 0.2f; 
+		return Mathf.Abs (newPos.x - target.x) + Mathf.Abs (newPos.y - target.y) <= closeEnoughDistance; 
 	}
 	
+	public void moveTowardCenterOfTile (BaseTile tile) {
+		
+		Vector3 newPos;
+		if (closeEnoughToTarget (transform.position, tile.transform.position, sRef.closeEnoughDistanceMoveToCenter)) {
+			newPos = new Vector3 (tile.transform.position.x, tile.transform.position.y, transform.position.z);
+		}
+		else {
+			newPos = Vector2.Lerp(transform.position, tile.transform.position, sRef.moveToCenterRate);
+			newPos.z = transform.position.z;
+		}
+		transform.position = newPos;
+		
+	}
 	
 }
