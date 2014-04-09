@@ -47,10 +47,13 @@ public class GameManager : MonoBehaviour {
 	public VictoryCondition vIsForVendetta;	
 	public int currentMarquee;
 	public AudioClip Victory_Gong;
+	public List<GameObject> beacons;
 
 	// Use this for initializatio
 	void Start () {
 		sRef = GameObject.Find ("Settings").GetComponent<Settings>();
+
+		beacons = new List<GameObject>();
 		prfbPlayer = (GameObject)Resources.Load("Prefabs/Player");
 		prfbAltar = (GameObject)Resources.Load("Prefabs/Altar");
 		prfbHome = (GameObject)Resources.Load ("Prefabs/Home");
@@ -82,81 +85,7 @@ public class GameManager : MonoBehaviour {
 			List<AltarType> altarTypes = System.Enum.GetValues(typeof(AltarType)).Cast<AltarType>().ToList();
 			if (sRef.numAltars > altarTypes.Count) Debug.LogError ("Too many altars and not enough altar types!"); 
 			
-			for (int i=0; i<sRef.numAltars; i++){
-				Debug.Log ("in Altar");		
-				GameObject a = (GameObject)Instantiate(prfbAltar, Vector3.zero, Quaternion.identity);
-				Altar aObj = a.GetComponent<Altar>();
-				aObj.setControl(null);
-//				
-				int index = Random.Range (0, altarTypes.Count);
-				aObj.altarType = altarTypes[index];
-				altarTypes.Remove(AltarType.MagicalMysteryScore);
-				altarTypes.RemoveAt (index);
-				altars.Add (aObj.gameObject);
-				//				altars.Add (aObj.gameObject);
-//				//		aObj.brdX = Random.Range(0, tiles.GetLength(0));
-//				//		aObj.brdY = Random.Range(0, tiles.GetLength(1));
-//				aObj.brdX = (tiles.GetLength(0) - 1 - i*7)-8;	//Temp
-//				aObj.brdY = i*3+3;	//Temp
 
-//				aObj.setControl(null);
-//				aObj.transform.parent = tiles[aObj.brdX, aObj.brdY].transform;
-//				aObj.transform.localPosition = new Vector3(0,0,-1);
-//				altars.Add (aObj.gameObject);
-			}
-
-			for (int i=0; i<sRef.numScoringAltars; i++){
-				Debug.Log ("in Altar");		
-				GameObject a = (GameObject)Instantiate(prfbAltar, Vector3.zero, Quaternion.identity);
-				Altar aObj = a.GetComponent<Altar>();
-				aObj.setControl(null);
-				aObj.altarType = AltarType.MagicalMysteryScore;
-				altars.Add(a);
-			}
-			int absoluteMagnitude;
-			absoluteMagnitude = Mathf.RoundToInt(Random.Range(10f, (new Vector2(tiles.GetLength(0), tiles.GetLength(1)).magnitude)*.75f));
-
-			for (int i = 0; i< altars.Count; i++){
-				Altar thisAltar = altars[i].GetComponent<Altar>();
-				if(i != altars.Count -1){
-
-					int x, y;
-					//x^2 + y^2 = absoluteMag^2
-					
-					x = Mathf.RoundToInt(Random.Range(0f, absoluteMagnitude));
-					y = Mathf.RoundToInt(Mathf.Sqrt(absoluteMagnitude * absoluteMagnitude - x*x));
-
-					while(y >= tiles.GetLength(1)){
-						x = Mathf.RoundToInt(Random.Range(0f, absoluteMagnitude));
-						y = Mathf.RoundToInt(Mathf.Sqrt(absoluteMagnitude * absoluteMagnitude - x*x));
-
-					}
-
-					if(i % 2 == 1){
-						thisAltar.brdX = tiles.GetLength(0)-1-x;
-						thisAltar.brdY = tiles.GetLength(1)-1-y;
-
-						absoluteMagnitude = Mathf.RoundToInt(Random.Range(15f, (new Vector2(tiles.GetLength(0), tiles.GetLength(1)).magnitude)*.75f));
-					}
-					else{
-						thisAltar.brdX = x;
-						thisAltar.brdY = y;
-					}
-					Debug.Log (string.Format("Altar created at({0}, {1})", thisAltar.brdX, thisAltar.brdY));
-					thisAltar.transform.parent = tiles[thisAltar.brdX, thisAltar.brdY].transform;
-					thisAltar.transform.localPosition = new Vector3(0,0,-1);
-				
-				}
-				else{
-					thisAltar.brdX = tiles.GetLength(0)/2;
-					thisAltar.brdY = tiles.GetLength(1)/2;
-
-					thisAltar.transform.parent = tiles[thisAltar.brdX, thisAltar.brdY].transform;
-					thisAltar.transform.localPosition = new Vector3(0,0,-1);
-				}
-
-
-			}
 			switch (gameMode){
 			case Mode.TwoVTwo:{
 				_currentState = GameState.playing;
@@ -240,6 +169,60 @@ public class GameManager : MonoBehaviour {
 			checkFlipWater(team1Tile.brdXPos, team1Tile.brdYPos);
 			checkFlipWater(team2Tile.brdXPos, team2Tile.brdYPos);
 
+			for (int i=0; i<sRef.numAltars; i++){
+				Debug.Log ("in Altar");		
+				GameObject a = (GameObject)Instantiate(prfbAltar, Vector3.zero, Quaternion.identity);
+				Altar aObj = a.GetComponent<Altar>();
+				aObj.setControl(null);
+				//				
+				int index = Random.Range (0, altarTypes.Count);
+				aObj.altarType = altarTypes[index];
+				altarTypes.Remove(AltarType.MagicalMysteryScore);
+				altarTypes.RemoveAt (index);
+				altars.Add (aObj.gameObject);
+				//				altars.Add (aObj.gameObject);
+				//				//		aObj.brdX = Random.Range(0, tiles.GetLength(0));
+				//				//		aObj.brdY = Random.Range(0, tiles.GetLength(1));
+				//				aObj.brdX = (tiles.GetLength(0) - 1 - i*7)-8;	//Temp
+				//				aObj.brdY = i*3+3;	//Temp
+				
+				//				aObj.setControl(null);
+				//				aObj.transform.parent = tiles[aObj.brdX, aObj.brdY].transform;
+				//				aObj.transform.localPosition = new Vector3(0,0,-1);
+				//				altars.Add (aObj.gameObject);
+			}
+			
+			for (int i=0; i<sRef.numScoringAltars; i++){
+				Debug.Log ("in Altar");		
+				GameObject a = (GameObject)Instantiate(prfbAltar, Vector3.zero, Quaternion.identity);
+				Altar aObj = a.GetComponent<Altar>();
+				aObj.setControl(null);
+				aObj.altarType = AltarType.MagicalMysteryScore;
+				altars.Add(a);
+			}
+			for (int i = 0; i< altars.Count; i++){
+				Altar thisAltar = altars[i].GetComponent<Altar>();
+				if(i != altars.Count -1){
+
+					Vector2 validPos = generateValidAltarPosition(thisAltar, teams[ i % teams.Count].startingLocation, ( i % teams.Count == 1) ? true : false);
+					thisAltar.brdX = (int)validPos.x;
+					thisAltar.brdY = (int)validPos.y;
+				}
+				else{
+					thisAltar.brdX = tiles.GetLength(0)/2;
+					thisAltar.brdY = tiles.GetLength(1)/2;
+					
+					thisAltar.transform.parent = tiles[thisAltar.brdX, thisAltar.brdY].transform;
+					thisAltar.transform.localPosition = new Vector3(0,0,-1);
+				}
+				
+				Debug.Log (string.Format("Altar created at({0}, {1})", thisAltar.brdX, thisAltar.brdY));
+				thisAltar.transform.parent = tiles[thisAltar.brdX, thisAltar.brdY].transform;
+				thisAltar.transform.localPosition = new Vector3(0,0,-1);
+
+			}
+
+
 			altars.ForEach(delegate (GameObject altarGO){
 				Altar A = altarGO.GetComponent<Altar>();
 				checkFlipWater(A.brdX, A.brdY);
@@ -302,6 +285,90 @@ public class GameManager : MonoBehaviour {
 			}
 			
 		}	
+	}
+
+	public Vector2 generateValidAltarPosition(Altar thisAltar, Vector2 startPos, bool flip){
+		int absoluteMagnitude;
+		absoluteMagnitude = getRandomMagnitude(.2f,.35f);
+
+		int x, y;
+		//x^2 + y^2 = absoluteMag^2
+		
+		x = Mathf.RoundToInt(Random.Range(0f, absoluteMagnitude));
+		y = Mathf.RoundToInt(Mathf.Sqrt(absoluteMagnitude * absoluteMagnitude - x*x));
+
+		if(!flip){
+			x += (int)teams[0].startingLocation.x;
+			y += (int)teams[0].startingLocation.y;
+		}
+		else{
+			x = (int)teams[0].startingLocation.x - x;
+			y = (int)teams[0].startingLocation.y -y;
+		}
+		while(y >= tiles.GetLength(1) || getDistanceToNearestAltar(new Vector2(x,y)) < 4f || getDistanceToNearestStart(new Vector2(x,y)) < 5f){
+			x = Mathf.RoundToInt(Random.Range(0f, absoluteMagnitude)) ;
+			y = Mathf.RoundToInt(Mathf.Sqrt(absoluteMagnitude * absoluteMagnitude - x*x));
+			
+			if(!flip){
+				x += (int)teams[0].startingLocation.x;
+				y += (int)teams[0].startingLocation.y;
+			}
+			else{
+				x = (int)teams[0].startingLocation.x - x;
+				y = (int)teams[0].startingLocation.y -y;
+			}
+		}
+
+
+
+//		if(i % 2 == 1){
+//			thisAltar.brdX = tiles.GetLength(0)-1-x;
+//			thisAltar.brdY = tiles.GetLength(1)-1-y;
+//			
+//			absoluteMagnitude  = getRandomMagnitude(.3f,.4f);
+//		}
+//		else{
+			//thisAltar.brdX = x;
+			//thisAltar.brdY = y;
+//		}
+		return new Vector2(x,y);
+	}
+
+	public float getDistanceToNearestStart(Vector2 position){
+		float minDistance = 0;
+
+		teams.ForEach(delegate(TeamInfo t){
+			float distance = Vector2.Distance(position, t.startingLocation);
+			if(distance > minDistance) {minDistance = distance;}
+		});
+		return minDistance;
+	}
+
+	
+	public float getDistanceToNearestAltar(Vector2 position){
+		float minDistance = 0;
+		
+		altars.ForEach(delegate(GameObject t){
+			float distance = Vector2.Distance(position, new Vector2(t.GetComponent<Altar>().brdX,t.GetComponent<Altar>().brdY));
+			if(distance > minDistance) {minDistance = distance;}
+		});
+		return minDistance;
+	}
+
+
+	public float getDistanceToNearestBeacon(Vector2 position){
+		float minDistance = 0;
+		
+		beacons.ForEach(delegate(GameObject t){
+			float distance = Vector2.Distance(position, new Vector2(t.transform.parent.gameObject.GetComponent<BaseTile>().brdXPos,t.transform.parent.gameObject.GetComponent<BaseTile>().brdYPos));
+			if(distance > minDistance) {minDistance = distance;}
+		});
+		return minDistance;
+	}
+
+	public int getRandomMagnitude(float lower, float higher){
+		return Mathf.RoundToInt(Random.Range( (new Vector2(tiles.GetLength(0), tiles.GetLength(1)).magnitude)*lower, (new Vector2(tiles.GetLength(0), tiles.GetLength(1)).magnitude)*higher));
+
 	}
 	
 	public GameObject getHoveredTile(){
@@ -446,6 +513,7 @@ public class GameManager : MonoBehaviour {
 		if(BT.GetComponent<BaseTile>().buildable()){
 			GameObject beacon = (GameObject)Instantiate(prfbBeacon, Vector3.zero, Quaternion.identity);
 			beacon.GetComponent<Beacon>().buildNeutral(BT);
+			beacons.Add(beacon);
 			return true;
 		}
 		else{
