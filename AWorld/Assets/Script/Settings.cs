@@ -70,8 +70,11 @@ public class Settings : MonoBehaviour {
 	public float percMaxInfluenceColor;	//Percentage of color that tile fills in when just before 100% influence
 	public int colorOffSet;
 	
-	//Misc?
+	//Movement rate stuff
 	public float teleportRate;
+	public float closeEnoughDistanceTeleport;
+	public float moveToCenterRate;
+	public float closeEnoughDistanceMoveToCenter;
 	
 	// Use this for initialization
 	void Start () {
@@ -132,6 +135,9 @@ public class Settings : MonoBehaviour {
 		
 		//Misc?
 		teleportRate = .2f;
+		closeEnoughDistanceTeleport = 0.2f;
+		moveToCenterRate = 0.014f;
+		closeEnoughDistanceMoveToCenter = 0.012f;
 	}
 	
 	// Update is called once per frame
