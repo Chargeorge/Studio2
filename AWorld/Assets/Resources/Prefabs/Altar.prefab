@@ -114,8 +114,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: .000872664503, w: .999999642}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: .5, y: .5, z: 1}
+  m_LocalPosition: {x: 0, y: .0799999982, z: 0}
+  m_LocalScale: {x: .800000012, y: .800000012, z: 1}
   m_Children: []
   m_Father: {fileID: 400000}
 --- !u!4 &400004
@@ -432,6 +432,7 @@ MonoBehaviour:
   brdY: 0
   gm: {fileID: 0}
   baseScoreScale: .74000001
+  symbol: {fileID: 0}
   scoreLeft: 0
   Praying: {fileID: 8300000, guid: 5f04b5131e2e8ba4ebc222b4780541e6, type: 3}
 --- !u!1001 &100100000

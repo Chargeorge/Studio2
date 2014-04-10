@@ -18,6 +18,8 @@ public class Altar : MonoBehaviour {
 	private GameObject _scoreBar;
 	public float baseScoreScale = .74f;
 
+	public Transform symbol;
+
 	public GameObject scoreBar {
 		get {
 			if(_scoreBar == null){
@@ -76,6 +78,7 @@ public class Altar : MonoBehaviour {
 		Material loaded =  (Material)Resources.Load(string.Format("Sprites/Materials/{0}", altarType.ToString()));
 		gm = GameManager.GameManagerInstance;
 		transform.FindChild("Quad").renderer.material = loaded;
+		symbol = transform.FindChild("Quad");
 		scoreLeft = sRef.valScorePerMine;
 	}
 	
@@ -93,6 +96,11 @@ public class Altar : MonoBehaviour {
 		Vector3 newScale = scoreBar.transform.localScale;
 		newScale.x =  baseScoreScale * scoreLeft  / sRef.valScorePerMine;
 		scoreBar.transform.localScale = newScale;
+
+		Vector3 new2scale = symbol.localScale;
+		new2scale.x = baseScoreScale * scoreLeft  / sRef.valScorePerMine;
+		new2scale.y = baseScoreScale * scoreLeft  / sRef.valScorePerMine;
+		symbol.localScale = new2scale;
 		
 	}
 	
