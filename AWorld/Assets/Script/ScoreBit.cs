@@ -4,12 +4,19 @@ using System.Collections.Generic;
 
 public class ScoreBit : MonoBehaviour {
 	List<GameObject> targets;
+	private TeamInfo team;
 	// Use this for initialization
 	void Start () {
 		if(targets == null){
 			targets = new List<GameObject>();
 		}
 
+
+	}
+
+	public void setTeam(TeamInfo T){
+		team = T;
+		renderer.material.color = team.getHighLightColor();
 
 	}
 	
@@ -31,11 +38,13 @@ public class ScoreBit : MonoBehaviour {
 						targets.RemoveAt(0);
 					
 						setTarget(targets[0]);
-						GetComponent<ParticleSystem>().Emit(20);
+						GetComponent<ParticleSystem>().Emit(10);
 					}
 				}
 				if(collided.gameObject.tag == "ScoreBitFinalTarget"){
+					Debug.Log ("Collision detected");
 					collided.gameObject.SendMessage("PlayScoreAnimation");
+					Destroy(gameObject);
 				}
 			}
 		}
@@ -58,6 +67,7 @@ public class ScoreBit : MonoBehaviour {
 		tiles.ForEach(delegate (AStarholder tile){
 			targets.Add(tile.current.scoreBitTarget);
 		});
+		targets.Add (team.goGetHomeTile());
 		setTarget(targets[0]);
 	}
 }

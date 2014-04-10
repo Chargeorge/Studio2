@@ -14,6 +14,7 @@ public class FinalScoreTarget : MonoBehaviour {
 	}
 
 	void PlayScoreAnimation(){
+		Debug.Log("Message recieved");
 		GetComponent<ParticleSystem>().Emit (100);
 	}
 }
