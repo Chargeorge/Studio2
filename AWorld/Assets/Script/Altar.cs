@@ -17,7 +17,9 @@ public class Altar : MonoBehaviour {
 	private GameObject _lockedLayer;
 	private GameObject _scoreBar;
 	public float baseScoreScale = .74f;
-
+	public float scoreShotInterval = 1f;
+	private float timeToNextScoreShot;
+	public GameObject prfbScoreBit;
 	public Transform symbol;
 
 	public GameObject scoreBar {
@@ -107,7 +109,7 @@ public class Altar : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		//Am I controlled? 
-		
+
 		if(altarType != AltarType.MagicalMysteryScore){
 			scoreBar.renderer.enabled = false;
 			transform.FindChild("ScoreThingyBG").renderer.enabled = false;
@@ -128,15 +130,23 @@ public class Altar : MonoBehaviour {
 				}else{
 					List <AltarType> a = gm.getCapturedAltars(_currentControllingTeam);
 					if(scoreLeft >0){
-
-						Debug.Log("did a thing" + scoreLeft);
-						float scoreToAdd = sRef.vpsScorePerMinePerSecond * ((a.Contains(AltarType.Khepru)) ? sRef.coefKhepru : 1 )* Time.deltaTime;
-						if(scoreLeft - scoreToAdd < 0){
-							scoreToAdd = scoreLeft;
+						timeToNextScoreShot -= Time.deltaTime;
+						if(timeToNextScoreShot < 0){
+							float scoreToAdd = sRef.vpsScorePerMinePerSecond * ((a.Contains(AltarType.Khepru)) ? sRef.coefKhepru : 1 )* Time.deltaTime;
+							if(scoreLeft - scoreToAdd < 0){
+								scoreToAdd = scoreLeft;
+							}
+							scoreLeft -= scoreToAdd;
+							setScoreBarLen();
+							Vector3 scoreBitStartPos = transform.position;
+							scoreBitStartPos.z = -1.2f;
+							GameObject scoreBit = (GameObject)GameObject.Instantiate(prfbScoreBit, scoreBitStartPos, Quaternion.identity);
+							scoreBit.GetComponent<ScoreBit>().setTeam(currentControllingTeam);
+							scoreBit.GetComponent<ScoreBit>().start(networkToBase);
+							timeToNextScoreShot = scoreShotInterval;
+							//_currentControllingTeam.score += scoreToAdd;
 						}
-						scoreLeft -= scoreToAdd;
-						setScoreBarLen();
-						_currentControllingTeam.score += scoreToAdd;
+
 					}
 				}
 				

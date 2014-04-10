@@ -37,6 +37,20 @@ public class BaseTile : MonoBehaviour {
 		}
 	}	
 
+	private GameObject _scoreBitTarget;
+
+	public GameObject scoreBitTarget {
+		get {
+			if(_scoreBitTarget == null){
+				_scoreBitTarget = transform.FindChild("ScoreBitTarget").gameObject;
+			}
+			return _scoreBitTarget;
+		}
+		set {
+			_scoreBitTarget = value;
+		}
+	}
+
 	private GameObject _qudPulsingOwnedLayer;
 	public GameObject qudPulsingOwnedLayer {
 		get {
@@ -298,7 +312,7 @@ public class BaseTile : MonoBehaviour {
 //			transform.Find("OwnedLayer").GetComponent<MeshRenderer>().material.color = owningTeam.getHighLightColor();
 
 			if(_distanceToHomeBase.HasValue && _distanceToHomeBase > 0){
-				int indexVal = ((gm.currentMarquee  - distanceToHomeBase.Value) % sRef.marqueeCount);
+				int indexVal = ((gm.currentMarquee  - distanceToHomeBase.Value % sRef.marqueeCount) % sRef.marqueeCount);
 				//indexVal = (indexVal< 0) ? indexVal = 0 : indexVal;
 				Debug.Log (indexVal);
 				if(indexVal  < owningTeam.marqueeColorList.Count && indexVal >=0){
