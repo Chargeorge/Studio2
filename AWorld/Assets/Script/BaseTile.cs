@@ -37,6 +37,20 @@ public class BaseTile : MonoBehaviour {
 		}
 	}	
 
+	private GameObject _scoreBitTarget;
+
+	public GameObject scoreBitTarget {
+		get {
+			if(_scoreBitTarget == null){
+				_scoreBitTarget = transform.FindChild("ScoreBitTarget").gameObject;
+			}
+			return _scoreBitTarget;
+		}
+		set {
+			_scoreBitTarget = value;
+		}
+	}
+
 	private GameObject _qudPulsingOwnedLayer;
 	public GameObject qudPulsingOwnedLayer {
 		get {

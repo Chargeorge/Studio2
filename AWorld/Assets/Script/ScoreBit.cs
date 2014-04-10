@@ -7,18 +7,18 @@ public class ScoreBit : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		targets = new List<GameObject>();
-		targets.Add (GameObject.Find ( "ScoreBitTarget"));
-		targets.Add (GameObject.Find ( "ScoreBitFinalTarget"));
-		
-		setTarget(targets[0]);
+
+
 
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		Vector2 NewPos  =  Vector2.MoveTowards( (Vector2)transform.position, (Vector2)(targets[0].transform.position), .2f);
-		Vector3 NewPos3 = new Vector3(NewPos.x, NewPos.y, transform.position.z);
-		transform.position = NewPos3;
+		if(targets.Count > 0){
+			Vector2 NewPos  =  Vector2.MoveTowards( (Vector2)transform.position, (Vector2)(targets[0].transform.position), .2f);
+			Vector3 NewPos3 = new Vector3(NewPos.x, NewPos.y, transform.position.z);
+			transform.position = NewPos3;
+		}
 	}
 
 	void OnTriggerEnter2D(Collider2D collided){
@@ -47,5 +47,13 @@ public class ScoreBit : MonoBehaviour {
 		transform.eulerAngles = new Vector3(0,0,0);
 
 		transform.Rotate(new Vector3(0,0,angleTo));
+	}
+
+	public void start(List<AStarholder> tiles){
+		targets = new List<GameObject>();
+
+		tiles.ForEach(delegate (AStarholder tile){
+			targets.Add(tile.current.scoreBitTarget);
+		});
 	}
 }
