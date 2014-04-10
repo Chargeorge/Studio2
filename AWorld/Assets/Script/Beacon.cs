@@ -13,6 +13,7 @@ public class Beacon : MonoBehaviour {
 	public float percInfluenceComplete= 0;	//Countdown till another influence is popped
 	public float percRotateComplete = 0;
 	public float percUpgradeComplete = 0;
+	public float percSmaller = 100;
 	public float timeStoppedBuilding;
 	public bool selfDestructing = false;
 	public float timeStoppedUpgrading;
@@ -36,7 +37,10 @@ public class Beacon : MonoBehaviour {
 
 	private Material matBasic;
 	private Material matUpgraded;
+	private Material arrowUpgraded;
 	public Color32 neutralColor;
+	public Color32 neutralColorB;
+
 
 	// Use this for initialization
 	void Start () {
@@ -45,6 +49,7 @@ public class Beacon : MonoBehaviour {
 		sRef= GameObject.Find ("Settings").GetComponent<Settings>();
 		matBasic = (Material) Resources.Load ("Sprites/Materials/Base");
 		matUpgraded = (Material) Resources.Load ("Sprites/Materials/BaseUpg");
+		arrowUpgraded = (Material) Resources.Load ("Sprites/Materials/ArrowUpgraded");
 
 	}
 	
@@ -219,6 +224,7 @@ public class Beacon : MonoBehaviour {
 
 		transform.FindChild("Arrow").renderer.material.color = controllingTeamColor;
 		transform.FindChild("Base").renderer.material.color = controllingTeamColor;
+		transform.FindChild("Anim").renderer.material.color = controllingTeamColor;
 		transform.FindChild("Platform").renderer.material.color = platformColor;
 	}
 
@@ -234,16 +240,18 @@ public class Beacon : MonoBehaviour {
 
 			transform.FindChild("Arrow").renderer.material.color = controllingTeamColor;	
 			transform.FindChild("Base").renderer.material.color = controllingTeamColor;
+			transform.FindChild("Anim").renderer.material.color = controllingTeamColor;
 			transform.FindChild("Platform").renderer.material.color = platformColor;
 		}
 		else{
 
-			neutralColor = new Color32 (150, 150, 150, 255);
+			neutralColor = new Color32 (100, 100, 100, 255);
+			neutralColorB = new Color32 (200, 200, 200, 255);
 
 			controllingTeam = null;
 			transform.FindChild("Arrow").renderer.material.color = neutralColor;
 			transform.FindChild("Base").renderer.material.color = neutralColor;
-			transform.FindChild("Platform").renderer.material.color = neutralColor;
+			transform.FindChild("Platform").renderer.material.color = neutralColorB;
 		}	}
 	
 	/// <summary>
@@ -316,6 +324,23 @@ public class Beacon : MonoBehaviour {
 	
 	public void addUpgradeProgress (float rate) {
 		percUpgradeComplete += rate*Time.deltaTime;
+		percSmaller -= rate*Time.deltaTime;
+
+		Color32 animColor = transform.FindChild("Anim").renderer.material.color;
+		Transform animTrans = transform.FindChild("Anim");
+		animColor.a = (byte)255f;
+		transform.FindChild("Anim").renderer.material.color = animColor;
+
+		Vector3 newScale = animTrans.localScale;
+//		float newScale =  (0.5f * (percUpgradeComplete/100f)) ;
+//		newScale = (newScale >= 0.5f) ? 0.49f : newScale;		
+
+//		newScale.x = percSmaller  / 100f;
+//		newScale.y = percSmaller  / 100f;
+		newScale.x = 100f/percSmaller;
+		newScale.y = 100f/percSmaller;
+		animTrans.localScale = newScale;
+
 
 		//We need some visual representation for this	
 	}
@@ -323,10 +348,23 @@ public class Beacon : MonoBehaviour {
 	
 	public void subtractUpgradeProgress (float rate) {
 		percUpgradeComplete -= rate*Time.deltaTime;
-		
+		percSmaller += rate*Time.deltaTime;
+
+		Color32 animColor = transform.FindChild("Anim").renderer.material.color;
+
+
+		Transform animTrans = transform.FindChild("Anim");
+		Vector3 newScale = animTrans.localScale;
+		newScale.x = 100f/percSmaller;
+		newScale.y = 100f/percSmaller;
+		animTrans.localScale = newScale;
+
 		if (percUpgradeComplete <= 0f) {
 			percUpgradeComplete = 0f;
 			_currentState = BeaconState.Basic;
+			animColor.a = (byte)0f;
+			transform.FindChild("Anim").renderer.material.color = animColor;
+
 		}
 		
 		//We need some visual representation for this
@@ -863,15 +901,19 @@ public class Beacon : MonoBehaviour {
 		
 		_currentState = BeaconState.Advanced;
 		transform.FindChild("Base").renderer.material = matUpgraded;
+		transform.FindChild("Arrow").renderer.material = arrowUpgraded;
 		
 		//hax
 		setTeam ();
 		Color32 platformColor = transform.FindChild("Base").renderer.material.color;
 		Color32 beaconColor = transform.FindChild("Arrow").renderer.material.color;
+		Color32 animColor = transform.FindChild("Anim").renderer.material.color;
 		platformColor.a = 255;
 		beaconColor.a = 255;
+		animColor.a = 0;
 		transform.FindChild("Arrow").renderer.material.color = beaconColor;
 		transform.FindChild("Base").renderer.material.color = platformColor;
+		transform.FindChild("Anim").renderer.material.color = animColor;
 	}
 	
 	//Player stopped in the middle of an upgrade
