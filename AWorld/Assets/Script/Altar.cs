@@ -130,7 +130,9 @@ public class Altar : MonoBehaviour {
 							}
 							scoreLeft -= scoreToAdd;
 							setScoreBarLen();
-							GameObject ScoreBit = (GameObject)GameObject.Instantiate(prfbScoreBit, transform.position, Quaternion.identity);
+							Vector3 scoreBitStartPos = transform.position;
+							scoreBitStartPos.z = -1.2f;
+							GameObject ScoreBit = (GameObject)GameObject.Instantiate(prfbScoreBit, scoreBitStartPos, Quaternion.identity);
 							ScoreBit.GetComponent<ScoreBit>().start(networkToBase);
 							timeToNextScoreShot = scoreShotInterval;
 							//_currentControllingTeam.score += scoreToAdd;

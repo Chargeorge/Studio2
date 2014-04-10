@@ -6,8 +6,9 @@ public class ScoreBit : MonoBehaviour {
 	List<GameObject> targets;
 	// Use this for initialization
 	void Start () {
-		targets = new List<GameObject>();
-
+		if(targets == null){
+			targets = new List<GameObject>();
+		}
 
 
 	}
@@ -22,18 +23,20 @@ public class ScoreBit : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D collided){
-		if(collided.gameObject == targets[0]){
+		if(targets.Count>0){
+			if(collided.gameObject == targets[0]){
 
-			if(collided.gameObject.tag == "ScoreBitTarget"){
-				if(targets.Count > 0){
-					targets.RemoveAt(0);
-				
-					setTarget(targets[0]);
-					GetComponent<ParticleSystem>().Emit(20);
+				if(collided.gameObject.tag == "ScoreBitTarget"){
+					if(targets.Count > 0){
+						targets.RemoveAt(0);
+					
+						setTarget(targets[0]);
+						GetComponent<ParticleSystem>().Emit(20);
+					}
 				}
-			}
-			if(collided.gameObject.tag == "ScoreBitFinalTarget"){
-				collided.gameObject.SendMessage("PlayScoreAnimation");
+				if(collided.gameObject.tag == "ScoreBitFinalTarget"){
+					collided.gameObject.SendMessage("PlayScoreAnimation");
+				}
 			}
 		}
 	}
@@ -55,5 +58,6 @@ public class ScoreBit : MonoBehaviour {
 		tiles.ForEach(delegate (AStarholder tile){
 			targets.Add(tile.current.scoreBitTarget);
 		});
+		setTarget(targets[0]);
 	}
 }
