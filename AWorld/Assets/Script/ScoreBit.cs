@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class ScoreBit : MonoBehaviour {
 	List<GameObject> targets;
 	private TeamInfo team;
+
 	// Use this for initialization
 	void Start () {
 		if(targets == null){
@@ -38,7 +39,7 @@ public class ScoreBit : MonoBehaviour {
 						targets.RemoveAt(0);
 					
 						setTarget(targets[0]);
-						GetComponent<ParticleSystem>().Emit(10);
+
 					}
 				}
 
@@ -47,7 +48,8 @@ public class ScoreBit : MonoBehaviour {
 		if(collided.gameObject.tag == "ScoreBitFinalTarget"){
 			Debug.Log ("Collision detected");
 			collided.gameObject.SendMessage("PlayScoreAnimation");
-			Destroy(gameObject);
+			BulletPool.instance.PoolObject(gameObject);
+			team.addScore(Settings.SettingsInstance.vpsScorePerMinePerSecond);
 		}
 	}
 

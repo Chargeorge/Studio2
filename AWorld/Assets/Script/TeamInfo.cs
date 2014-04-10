@@ -79,6 +79,10 @@ public class TeamInfo
 	public GameObject goGetHomeTile(){
 		return  GameManager.GameManagerInstance.tiles[(int)startingLocation.x, (int)startingLocation.y];
 	}
+
+	public void addScore(float score){
+		this.score += score;
+	}
 	
 	
 }
