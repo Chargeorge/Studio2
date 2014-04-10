@@ -485,7 +485,7 @@ public Vector2 generateValidAltarPosition(Altar thisAltar, Vector2 startPos, boo
 		tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].GetComponent<BaseTile>().percControlled = 100f;
 		team1Home.transform.localPosition = new Vector3(0,0,-.5f);
 		team1Home.GetComponent<Home>().team = example.team;
-
+		//Destroy(team1Home.transform.parent.FindChild("ScoreBitTarget").gameObject);
 		
 		//ToSet = tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].GetComponent<BaseTile>();
 		

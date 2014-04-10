@@ -41,12 +41,13 @@ public class ScoreBit : MonoBehaviour {
 						GetComponent<ParticleSystem>().Emit(10);
 					}
 				}
-				if(collided.gameObject.tag == "ScoreBitFinalTarget"){
-					Debug.Log ("Collision detected");
-					collided.gameObject.SendMessage("PlayScoreAnimation");
-					Destroy(gameObject);
-				}
+
 			}
+		}
+		if(collided.gameObject.tag == "ScoreBitFinalTarget"){
+			Debug.Log ("Collision detected");
+			collided.gameObject.SendMessage("PlayScoreAnimation");
+			Destroy(gameObject);
 		}
 	}
 

@@ -154,11 +154,11 @@ ParticleSystem:
   looping: 0
   prewarm: 0
   playOnAwake: 0
-  moveWithTransform: 0
+  moveWithTransform: 1
   InitialModule:
     enabled: 1
     startLifetime:
-      scalar: .300000012
+      scalar: .0500000007
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -191,7 +191,7 @@ ParticleSystem:
         m_PostInfinity: 2
       minMaxState: 0
     startSpeed:
-      scalar: 5
+      scalar: 1.30999994
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -318,7 +318,7 @@ ParticleSystem:
         rgba: 4294967295
       minMaxState: 0
     startSize:
-      scalar: .119999997
+      scalar: .209999993
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -384,7 +384,7 @@ ParticleSystem:
         m_PostInfinity: 2
       minMaxState: 0
     gravityModifier: .230000004
-    inheritVelocity: 2.6400001
+    inheritVelocity: 0
     maxNumParticles: 1000
   ShapeModule:
     serializedVersion: 2

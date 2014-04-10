@@ -426,10 +426,10 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 842739086}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.63454533, y: -9.67855263, z: .740896225}
+  m_LocalPosition: {x: 9.79344845, y: 6.06284809, z: -3.47509766}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1843163359}
+  m_Father: {fileID: 0}
 --- !u!82 &842739089
 AudioSource:
   m_ObjectHideFlags: 0
@@ -750,8 +750,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 5.15890312, y: 15.7414007, z: -4.21599388}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 842739088}
+  m_Children: []
   m_Father: {fileID: 0}
 --- !u!1001 &2084754849
 Prefab:

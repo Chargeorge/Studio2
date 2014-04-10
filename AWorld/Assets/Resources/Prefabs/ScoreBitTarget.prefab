@@ -52,7 +52,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Radius: .5
+  m_Radius: .349999994
   m_Center: {x: 0, y: 0}
 --- !u!1001 &100100000
 Prefab:
