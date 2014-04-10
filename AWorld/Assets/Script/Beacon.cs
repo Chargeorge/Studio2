@@ -163,6 +163,9 @@ public class Beacon : MonoBehaviour {
 		
 	public void startBuilding(GameObject tileLocation, GameObject player, float valInit){
 		this.gameObject.transform.parent = tileLocation.transform;
+
+
+
 		this.facing = player.GetComponent<Player>().facing;
 		this.dirRotatingToward = facing;
 		this._currentState	= BeaconState.BuildingBasic;
@@ -172,6 +175,10 @@ public class Beacon : MonoBehaviour {
 		}
 		this.transform.localPosition = new Vector3(0f,0f,-.5f);
 		tileLocation.GetComponent<BaseTile>().beacon = this.gameObject;
+
+		this.transform.FindChild("Base").localPosition = new Vector3(0f,0f,-.1f);
+		//Debug.Log(this.transform.FindChild("Base").localPosition);
+		
 		audio.Stop ();
 		audio.PlayOneShot(beaconBuilding, 0.9f);
 		
@@ -252,13 +259,17 @@ public class Beacon : MonoBehaviour {
 		newColor = (newColor >= 255) ? 254 : newColor;		
 		beaconColor.a = (byte)newColor;
 
-		//failed attempt at rising platform
-//		Transform platform = transform.FindChild ("Platform");
-//		Vector3 platformPos = platform.position;
-//		float newPos = (0.09f * (percBuildComplete/100f));
-//		newPos = (newPos >= 0.09f) ? 0.089f : newPos;
-//		platformPos.y = (byte)newPos;
-//		platform.position = platformPos;
+		//successful attempt at rising platform
+		Transform beaconbase = transform.FindChild ("Base");
+		Transform platform = transform.FindChild ("Platform");
+		Vector3 platformPos = platform.localPosition;
+		Vector3 beaconPos = beaconbase.localPosition;
+		float newPos = (0.09f * (percBuildComplete/100f));
+		newPos = (newPos >= 0.09f) ? 0.089f : newPos;
+		platformPos.y = newPos;
+		beaconPos.y = newPos;
+		platform.localPosition = platformPos;
+		beaconbase.localPosition = beaconPos;
 
 
 
