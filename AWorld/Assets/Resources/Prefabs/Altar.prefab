@@ -289,6 +289,8 @@ MonoBehaviour:
   brdX: 0
   brdY: 0
   gm: {fileID: 0}
+  baseScoreScale: .74000001
+  scoreLeft: 0
   Praying: {fileID: 8300000, guid: 5f04b5131e2e8ba4ebc222b4780541e6, type: 3}
 --- !u!1001 &100100000
 Prefab:
