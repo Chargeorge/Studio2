@@ -314,7 +314,7 @@ public class BaseTile : MonoBehaviour {
 			if(_distanceToHomeBase.HasValue && _distanceToHomeBase > 0){
 				int indexVal = ((gm.currentMarquee  - distanceToHomeBase.Value % sRef.marqueeCount) % sRef.marqueeCount);
 				//indexVal = (indexVal< 0) ? indexVal = 0 : indexVal;
-				Debug.Log (indexVal);
+				//Debug.Log (indexVal);
 				if(indexVal  < owningTeam.marqueeColorList.Count && indexVal >=0){
 					qudPulsingOwnedLayer.renderer.material.color = owningTeam.marqueeColorList[indexVal];
 				}

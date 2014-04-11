@@ -72,5 +72,13 @@ public class ScoreBit : MonoBehaviour {
 		});
 		targets.Add (team.goGetHomeTile());
 		setTarget(targets[0]);
+		Invoke ("remove", 3f);
 	}
+
+	public void remove(){
+		BulletPool.instance.PoolObject(gameObject);
+
+	
+	}
+	
 }

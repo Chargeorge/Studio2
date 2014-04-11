@@ -1038,21 +1038,21 @@ public class Player : MonoBehaviour {
 	}
 	
 	public void OnCollisionEnter2D(Collision2D Collided){
-	Debug.Log("In Enter");
+		//Debug.Log("In Enter");
 		GameObject go = Collided.gameObject;
-		if(go.tag == "Player" ){
-			Player p =  go.GetComponent<Player>();
-			if(p.team != team){
-				//Munalwa: Only teleport halfway home when teleporting
-				if (gm.getCapturedAltars (team).Contains (AltarType.Munalwa)) {
-					teleportTarget = (transform.position + team.goGetHomeTile().transform.position) / 2.0f;
-				}
-				else {
-					teleportTarget = team.goGetHomeTile().transform.position;
-				}			
-				p._currentState = PlayerState.teleporting;
-			}
-		}
+//		if(go.tag == "Player" ){
+//			Player p =  go.GetComponent<Player>();
+//			if(p.team != team){
+//				//Munalwa: Only teleport halfway home when teleporting
+//				if (gm.getCapturedAltars (team).Contains (AltarType.Munalwa)) {
+//					teleportTarget = (transform.position + team.goGetHomeTile().transform.position) / 2.0f;
+//				}
+//				else {
+//					teleportTarget = team.goGetHomeTile().transform.position;
+//				}			
+//				p._currentState = PlayerState.teleporting;
+//			}
+//		}
 	}
 	
 	public bool closeEnoughToTarget (Vector3 newPos, Vector3 target, float closeEnoughDistance) {

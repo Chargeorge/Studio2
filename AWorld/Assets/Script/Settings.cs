@@ -88,7 +88,7 @@ public class Settings : MonoBehaviour {
 		vpsBaseUpgrade = 25f;
 		vpsScorePerAltarPerSecond = 1f;
 		vpsBeaconBaseInfluence = 100f;
-		vpsScorePerMinePerSecond = 1f;
+		vpsScorePerMinePerSecond = 3f;
 		//Coefficients
 		coefMoveNeutral = 1f;
 		coefMoveAllied = 2f;
