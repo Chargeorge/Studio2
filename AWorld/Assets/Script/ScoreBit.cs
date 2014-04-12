@@ -17,7 +17,7 @@ public class ScoreBit : MonoBehaviour {
 
 	public void setTeam(TeamInfo T){
 		team = T;
-		renderer.material.color = team.getHighLightColor();
+	//	renderer.material.color = team.getHighLightColor();
 
 	}
 	
