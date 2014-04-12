@@ -186,9 +186,9 @@ public class BulletPool : MonoBehaviour
 					
 					pooledObject.transform.parent = null;
 					
-					pooledObject.SetActiveRecursively(true);
+					pooledObject.SetActive(true);
 					
-					
+					  
 					
 					return pooledObject;
 					

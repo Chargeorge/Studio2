@@ -171,11 +171,11 @@ public class Beacon : MonoBehaviour {
 
 
 
-		this.facing = player.GetComponent<Player>().facing;
+		this.facing = player.GetComponentInChildren<Player>().facing;
 		this.dirRotatingToward = facing;
 		this._currentState	= BeaconState.BuildingBasic;
 		if (controllingTeam == null) {
-			controllingTeam = player.GetComponent<Player>().team;
+			controllingTeam = player.GetComponentInChildren<Player>().team;
 			this.setTeam();
 		}
 		this.transform.localPosition = new Vector3(0f,0f,-.5f);

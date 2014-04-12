@@ -93,10 +93,10 @@ public class GameManager : MonoBehaviour {
 				GameObject Player3 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
 				GameObject Player4 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
 
-				Player p1 = Player1.GetComponent<Player>();
-				Player p2 = Player2.GetComponent<Player>();
-				Player p3 = Player3.GetComponent<Player>();
-				Player p4 = Player4.GetComponent<Player>();
+				Player p1 = Player1.GetComponentInChildren<Player>();
+				Player p2 = Player2.GetComponentInChildren<Player>();
+				Player p3 = Player3.GetComponentInChildren<Player>();
+				Player p4 = Player4.GetComponentInChildren<Player>();
 
 				p1.SetTeam(TeamInfo.GetTeamInfo(1));
 				p2.SetTeam(p1.team);
@@ -129,8 +129,8 @@ public class GameManager : MonoBehaviour {
 				_currentState = GameState.playing;
 				GameObject Player1 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
 				GameObject Player2 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
-				Player p1 = Player1.GetComponent<Player>();
-				Player p2 = Player2.GetComponent<Player>();
+				Player p1 = Player1.GetComponentInChildren<Player>();
+				Player p2 = Player2.GetComponentInChildren<Player>();
 				p1.SetTeam(TeamInfo.GetTeamInfo(1));
 				p2.SetTeam(TeamInfo.GetTeamInfo(2));
 				teams.Add(p1.team);
@@ -276,7 +276,7 @@ public class GameManager : MonoBehaviour {
 				}
 			}
 			foreach (GameObject o in players) {
-			 o.GetComponent<Player>().RevealTiles (); 
+			 o.GetComponentInChildren<Player>().RevealTiles (); 
 			 }
 			setup = false;
 			
@@ -299,9 +299,9 @@ public class GameManager : MonoBehaviour {
 			}
 		}
 		if(Input.GetButtonDown("Fire2")){
-			debugMouse.owningTeam = players[0].GetComponent<Player>().team;
+			debugMouse.owningTeam = players[0].GetComponentInChildren<Player>().team;
 			
-			debugMouse.controllingTeam = players[0].GetComponent<Player>().team;
+			debugMouse.controllingTeam = players[0].GetComponentInChildren<Player>().team;
 			
 			debugMouse.percControlled =100f;
 		}

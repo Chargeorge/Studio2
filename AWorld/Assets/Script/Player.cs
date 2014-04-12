@@ -65,7 +65,7 @@ public class Player : MonoBehaviour {
 			return _grdLocation;
 		}
 		set{
-			transform.position = GameManager.wrldPositionFromGrdPosition(value);
+			transform.parent.position = GameManager.wrldPositionFromGrdPosition(value);
 			
 			_grdLocation = value;
 		}
@@ -82,8 +82,8 @@ public class Player : MonoBehaviour {
 		altars = new List<AltarType>();
 		_currentState = PlayerState.standing;
 		_prfbBeacon = (GameObject)Resources.Load("Prefabs/Beacon");
-		sRef = GameObject.Find ("Settings").GetComponent<Settings>();
-		gm = GameObject.Find ("GameManager").GetComponent<GameManager>();
+		sRef = Settings.SettingsInstance;
+		gm = GameManager.GameManagerInstance;
 
 
 
@@ -103,7 +103,7 @@ public class Player : MonoBehaviour {
 		
 		DirectionEnum? x = getStickDirection();
 		//BaseTile currentTile = gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>();	//Not used with free movement
-		BaseTile currentTile = gm.tiles[(int) Mathf.Floor (transform.position.x + 0.5f), (int) Mathf.Floor (transform.position.y + 0.5f)].GetComponent<BaseTile>();
+		BaseTile currentTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
 		currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = true;
 		currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().material.color = team.highlightColor;
 		
@@ -123,10 +123,10 @@ public class Player : MonoBehaviour {
 					transform.position = Vector2.Lerp(transform.position, teleportTarget, sRef.teleportRate);
 				}
 */				
-				Vector3 newPos = Vector2.Lerp(transform.position, teleportTarget, sRef.teleportRate);
-				newPos.z = transform.position.z;
-				transform.position = newPos;
-				BaseTile newTile = gm.tiles[(int) Mathf.Floor (transform.position.x + 0.5f), (int) Mathf.Floor (transform.position.y + 0.5f)].GetComponent<BaseTile>();
+				Vector3 newPos = Vector2.Lerp(transform.parent.position, teleportTarget, sRef.teleportRate);
+				newPos.z = transform.parent.position.z;
+				transform.parent.position = newPos;
+			BaseTile newTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
 				if (newTile != currentTile) {
 					currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
 				}
@@ -318,17 +318,17 @@ public class Player : MonoBehaviour {
 					if (x.HasValue) {
 						setDirection(x.Value);	//Still need a 4-directional facing for building/rotating beacons
 						Vector3 posToCheck = new Vector3 (
-						transform.position.x + getPlayerXAxis() * sRef.vpsBaseFreeMoveSpeed * getTileSpeedBoost(currentTile) * getAltarSpeedBoost() * Time.deltaTime, 
-						transform.position.y + getPlayerYAxis() * sRef.vpsBaseFreeMoveSpeed * getTileSpeedBoost(currentTile) * getAltarSpeedBoost() * Time.deltaTime, 
-						transform.position.z);
+						transform.parent.position.x + getPlayerXAxis() * sRef.vpsBaseFreeMoveSpeed * getTileSpeedBoost(currentTile) * getAltarSpeedBoost() * Time.deltaTime, 
+						transform.parent.position.y + getPlayerYAxis() * sRef.vpsBaseFreeMoveSpeed * getTileSpeedBoost(currentTile) * getAltarSpeedBoost() * Time.deltaTime, 
+						transform.parent.position.z);
 						
 						if (!outOfBounds(posToCheck) && 
 							//!tooCloseToOpponent(posToCheck) &&
 							(!onWater(posToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) 
 						{	//Valid move
 							PlaySFX(playerMove, 0.2f);
-							transform.position = posToCheck;
-							BaseTile thisTile = gm.tiles[(int) Mathf.Floor (transform.position.x + 0.5f), (int) Mathf.Floor (transform.position.y + 0.5f)].GetComponent<BaseTile>();
+							transform.parent.position = posToCheck;
+						BaseTile thisTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
 							if (thisTile != currentTile) {
 								currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
 							}	
@@ -1003,8 +1003,8 @@ public class Player : MonoBehaviour {
 		float minDistanceApart = 1.5f;	//Should probably be set in Settings; players cannot be closer than this
 		
 		foreach (GameObject o in GameObject.Find ("GameManager").GetComponent<GameManager>().players) {
-			if (o.GetComponent<Player>().team != team) { //If it's an opponent, check its distance
-				if (minDistanceApart > (o.GetComponent<Player>().gameObject.transform.position - pos).magnitude) {
+			if (o.GetComponentInChildren<Player>().team != team) { //If it's an opponent, check its distance
+				if (minDistanceApart > (o.GetComponentInChildren<Player>().gameObject.transform.position - pos).magnitude) {
 					return true;
 				}
 			} 
@@ -1041,7 +1041,7 @@ public class Player : MonoBehaviour {
 		//Debug.Log("In Enter");
 		GameObject go = Collided.gameObject;
 //		if(go.tag == "Player" ){
-//			Player p =  go.GetComponent<Player>();
+//			Player p =  go.GetComponentInChildren<Player>();
 //			if(p.team != team){
 //				//Munalwa: Only teleport halfway home when teleporting
 //				if (gm.getCapturedAltars (team).Contains (AltarType.Munalwa)) {
@@ -1070,7 +1070,7 @@ public class Player : MonoBehaviour {
 			newPos = Vector2.Lerp(transform.position, tile.transform.position, sRef.moveToCenterRate);
 			newPos.z = transform.position.z;
 		}
-		transform.position = newPos;
+		transform.parent.position = newPos;
 		
 	}
 	
