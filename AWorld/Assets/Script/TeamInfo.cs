@@ -42,7 +42,7 @@ public class TeamInfo
 				break;
 			case 2:
 				returnable.teamColor = new Color32 (247, 180, 40, 255);
-				returnable.tileColor = new Color32 (247, 180, 40,255);
+				returnable.tileColor = new Color32 (255, 190, 50,255);
 		//		returnable.beaconColor = new Color32 (0, 165, 80, 255);
 				returnable.beaconColor = new Color32 (240, 139, 32, 255);
 				returnable.startingLocation = Settings.SettingsInstance.team2Start;
@@ -59,7 +59,7 @@ public class TeamInfo
 			                        ((byte)(returnable.tileColor.b-colorOffset)>= 0) ? (byte)(returnable.tileColor.b-colorOffset) : (byte)1,
 			(byte)255);
 			returnable.marqueeColorList.Insert (0,c);
-			colorOffset +=6;
+			colorOffset +=3;
 		}
 		return returnable;
 	}
