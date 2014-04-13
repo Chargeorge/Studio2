@@ -299,11 +299,13 @@ public class GameManager : MonoBehaviour {
 			}
 		}
 		if(Input.GetButtonDown("Fire2")){
-			debugMouse.owningTeam = players[0].GetComponentInChildren<Player>().team;
-			
-			debugMouse.controllingTeam = players[0].GetComponentInChildren<Player>().team;
-			
-			debugMouse.percControlled =100f;
+			if(debugMouse!= null){
+				debugMouse.owningTeam = players[0].GetComponentInChildren<Player>().team;
+				
+				debugMouse.controllingTeam = players[0].GetComponentInChildren<Player>().team;
+				
+				debugMouse.percControlled =100f;
+			}
 		}
 		_victoryString = "";
 		foreach (VictoryCondition v in victoryConditions){

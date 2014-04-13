@@ -936,4 +936,8 @@ public class BaseTile : MonoBehaviour {
 		}
 		return true;
 	}
+
+	public float percentInfluenced(){
+		return percControlled;
+	}
 }

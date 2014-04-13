@@ -12,7 +12,7 @@ public class Player : MonoBehaviour {
 	public GameManager gm;
 	
 	
-	private float currentActionProgress;
+	public float currentActionProgress;
 	public Settings sRef;
 	public DirectionEnum facing;
 	private GameObject _prfbBeacon;
@@ -55,6 +55,7 @@ public class Player : MonoBehaviour {
 		}
 	}
 
+	private GameObject qudProgessCircle;
 	/// <summary>
 	/// Gets or sets the grd location.  Sets transform to corresponding center square of tile.  
 	/// I'm not sure if I like that it does this, maybe we should break into seperate calls?  
@@ -84,7 +85,7 @@ public class Player : MonoBehaviour {
 		_prfbBeacon = (GameObject)Resources.Load("Prefabs/Beacon");
 		sRef = Settings.SettingsInstance;
 		gm = GameManager.GameManagerInstance;
-
+		qudProgessCircle = transform.parent.FindChild("ActionTimer").gameObject;
 
 
 		if(PlayerNumber == 1){
@@ -144,7 +145,9 @@ public class Player : MonoBehaviour {
 			case PlayerState.standing:
 			//If we are standing and we get an input, handle it.
 //			Debug.Log (string.Format("Player number {0}, buld button down: {1}", PlayerNumber, buildButtonDown));
+				qudProgessCircle.renderer.enabled = false;
 				if(x.HasValue && !buildButtonDown) {
+					
 					setDirection(x.Value);	//Still need a 4-directional facing for building/rotating beacons
 					Vector2 analogStickDirection = new Vector2 (getPlayerXAxis(), getPlayerYAxis());
 					_currentState = PlayerState.moving;
@@ -302,7 +305,7 @@ public class Player : MonoBehaviour {
 			//IF it changes, remove all progress (PLACEHOLDER, feel free to nuke)
 			//if it completes, move to next tile, set state to standing
 			case PlayerState.moving:
-			
+				qudProgessCircle.renderer.enabled = false;
 				currentTile.Reveal (_vision);
 			
 				//This lets you hit build button while moving to start doing stuff
@@ -389,12 +392,18 @@ public class Player : MonoBehaviour {
 			break;	
 			
 			case PlayerState.building:
+				
+
+				qudProgessCircle.renderer.enabled = true;
+				qudProgessCircle.renderer.material.SetFloat("_Cutoff", 1-(beaconInProgress.percBuildComplete/100));
+				
 				if(buildButtonDown && currentTile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
 				//	Jiggle ();	//Gotta jiggle
 					Pulsate ();
 					StopSFX();
 					
-									//Debug.Log ("In Build");
+					
+				//Debug.Log ("In Build");
 					if(currentTile.controllingTeam != null){
 //						Debug.Log ("current Team");
 						if(currentTile.controllingTeam.teamNumber == team.teamNumber){
@@ -404,6 +413,7 @@ public class Player : MonoBehaviour {
 								float vpsBuildRate = sRef.vpsBaseBuild * getAltarBuildBoost ();
 								beaconInProgress.addBuildingProgress(vpsBuildRate);
 								beaconInProgress.selfDestructing = false;
+
 								if(x.HasValue){
 									setDirection(x.Value);
 									beaconInProgress.setDirection(x.Value);
@@ -440,6 +450,8 @@ public class Player : MonoBehaviour {
 			break;
 			
 			case PlayerState.influencing:
+    			qudProgessCircle.renderer.enabled = true;
+				qudProgessCircle.renderer.material.SetFloat("_Cutoff", 1-(currentTile.percControlled /100f) );
 				if(buildButtonDown && currentTile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
 			//		Jiggle ();	//Gotta jiggle
 					Pulsate ();
@@ -553,7 +565,9 @@ public class Player : MonoBehaviour {
 			break;
 			
 			case PlayerState.rotating: 
-			
+				qudProgessCircle.renderer.enabled = true;
+				qudProgessCircle.renderer.material.SetFloat("_Cutoff", 1-(beaconInProgress.percRotateComplete/100f));
+
 				if (buildButtonDown) {
 				
 					Pulsate ();
@@ -608,7 +622,9 @@ public class Player : MonoBehaviour {
 			break;
 			
 			case PlayerState.upgrading:
-			
+				qudProgessCircle.renderer.enabled = true;
+				qudProgessCircle.renderer.material.SetFloat("_Cutoff", 1-(beaconInProgress.percUpgradeComplete/100));
+
 				if (buildButtonDown) {
 				
 					Pulsate ();
