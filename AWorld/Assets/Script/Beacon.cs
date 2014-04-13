@@ -207,6 +207,7 @@ public class Beacon : MonoBehaviour {
 	public void startUpgrading(){
 		audio.Stop();
 		this._currentState = BeaconState.BuildingAdvanced;
+		
 		audio.PlayOneShot(beaconUpgrading, 1.0f);
 	}
 	
@@ -324,23 +325,24 @@ public class Beacon : MonoBehaviour {
 	
 	public void addUpgradeProgress (float rate) {
 		percUpgradeComplete += rate*Time.deltaTime;
-		percSmaller -= rate*Time.deltaTime;
+//		percSmaller -= rate*Time.deltaTime;
 
 		Color32 animColor = transform.FindChild("Anim").renderer.material.color;
 		Transform animTrans = transform.FindChild("Anim");
-		animColor.a = (byte)255f;
+		animColor.a = (byte) (255f * ((sRef.upgradeCircleFinishAlpha - sRef.upgradeCircleStartAlpha) * percUpgradeComplete/100f + sRef.upgradeCircleStartAlpha));
 		transform.FindChild("Anim").renderer.material.color = animColor;
 
-		Vector3 newScale = animTrans.localScale;
+		float newScale = sRef.upgradeCircleStartScale - (sRef.upgradeCircleStartScale - 1.0f) * percUpgradeComplete/100f;
+		animTrans.localScale = new Vector3 (newScale, newScale, animTrans.localScale.z);
+//		Vector3 newScale = animTrans.localScale;
 //		float newScale =  (0.5f * (percUpgradeComplete/100f)) ;
 //		newScale = (newScale >= 0.5f) ? 0.49f : newScale;		
 
 //		newScale.x = percSmaller  / 100f;
 //		newScale.y = percSmaller  / 100f;
-		newScale.x = 100f/percSmaller;
-		newScale.y = 100f/percSmaller;
-		animTrans.localScale = newScale;
-
+//		newScale.x = 100f/percSmaller;
+//		newScale.y = 100f/percSmaller;
+//		animTrans.localScale = newScale;
 
 		//We need some visual representation for this	
 	}
