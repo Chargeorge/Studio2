@@ -329,15 +329,10 @@ public class Player : MonoBehaviour {
 							//!tooCloseToOpponent(posToCheck) &&
 							(!onWater(posToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) 
 						{	//Valid move
-<<<<<<< HEAD
+
 							PlaySFX(playerMove, 0.2f);
 							transform.parent.position = posToCheck;
-						BaseTile thisTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
-=======
-							audio.PlayOneShot(playerMove, 0.2f);
-							transform.position = posToCheck;
-							BaseTile thisTile = gm.tiles[(int) Mathf.Floor (transform.position.x + 0.5f), (int) Mathf.Floor (transform.position.y + 0.5f)].GetComponent<BaseTile>();
->>>>>>> origin/SFX_Polish
+							BaseTile thisTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
 							if (thisTile != currentTile) {
 								currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
 							}	

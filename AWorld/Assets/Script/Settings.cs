@@ -122,7 +122,7 @@ public class Settings : MonoBehaviour {
 		
 		//Board setup stuff
 		team1Start = new Vector2(4,6);
-		team2Start = new Vector2(20,6);
+		team2Start = new Vector2(12,6);
 		optPerlinLevel = 1800;
 		neutralBeaconCount = 12;
 		numAltars = 0;

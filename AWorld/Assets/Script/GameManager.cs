@@ -312,14 +312,10 @@ public class GameManager : MonoBehaviour {
 		foreach (VictoryCondition v in victoryConditions){
 			v.CheckState(this);
 			//Debug.Log("checstate done");
-<<<<<<< HEAD
-			if(v.isCompleted){
-				audio.PlayOneShot(Victory_Gong, 0.7f);
-=======
+
 			if(v.isCompleted && !isPlaying){
 				audio.PlayOneShot(Victory_Gong, 0.5f); //THIS IS THE ACTUAL VICTORY SOUND
 				isPlaying = true;
->>>>>>> origin/SFX_Polish
 				_currentState = GameState.gameWon;
 				_victoryString += v.getVictorySting();
 				vIsForVendetta = v;

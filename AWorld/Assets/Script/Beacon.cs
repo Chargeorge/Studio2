@@ -71,6 +71,7 @@ public class Beacon : MonoBehaviour {
 			if(!buildButtonDown){
 				audio.Stop();
 			}
+			if((_currentState == BeaconState.Basic || _currentState == BeaconState.BuildingAdvanced || _currentState == BeaconState.Advanced) && controllingTeam != null){
 
 				//find nearest convertable block
 				//FIND The first convertable tile, list is ordered by distance
