@@ -163,7 +163,8 @@ public class Beacon : MonoBehaviour {
 	/// <param name="valInit">Value init.</param>
 	/// 
 	private bool getPlayerBuild(){
-		return Input.GetButton("BuildPlayer"+PlayerNumber);	
+		int num = PlayerNumber + 1;
+		return Input.GetButton("BuildPlayer"+num);	
 	}
 		
 	public void startBuilding(GameObject tileLocation, GameObject player, float valInit){
