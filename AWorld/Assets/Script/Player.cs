@@ -117,11 +117,11 @@ public class Player : MonoBehaviour {
 		switch(currentState){
 			
 			case PlayerState.teleporting:
-/**				if (transform.position == teleportTarget) {
+/**				if (transform.parent.position == teleportTarget) {
 					_currentState = PlayerState.standing;
 				}
 				else {
-					transform.position = Vector2.Lerp(transform.position, teleportTarget, sRef.teleportRate);
+					transform.parent.position = Vector2.Lerp(transform.parent.position, teleportTarget, sRef.teleportRate);
 				}
 */				
 				Vector3 newPos = Vector2.Lerp(transform.parent.position, teleportTarget, sRef.teleportRate);
@@ -134,9 +134,9 @@ public class Player : MonoBehaviour {
 //				if(currentTile == team.goGetHomeTile().GetComponent<BaseTile>()){
 				if(closeEnoughToTarget(newPos, teleportTarget, sRef.closeEnoughDistanceTeleport)){
 			
-//					Vector3 homePos = currentTile.transform.position;
-//					homePos.z = transform.position.z;
-//					transform.position = homePos;
+//					Vector3 homePos = currentTile.transform.parent.position;
+//					homePos.z = transform.parent.position.z;
+//					transform.parent.position = homePos;
 					_currentState = PlayerState.standing;
 				}
 				
@@ -669,7 +669,7 @@ public class Player : MonoBehaviour {
 		
 		//Set position based on offset
 		/* Not with free movement!
-		transform.position = new Vector3 
+		transform.parent.position = new Vector3 
 			(GameManager.wrldPositionFromGrdPosition(grdLocation).x + _positionOffset.x / 2,
 			 GameManager.wrldPositionFromGrdPosition(grdLocation).y + _positionOffset.y / 2, -1);
 		*/			
@@ -785,8 +785,8 @@ public class Player : MonoBehaviour {
 		float currentRotAngle = getAngleForDir(facing);
 		
 		facing = N;
-//		transform.RotateAround(transform.position, new Vector3(0,0,1), currentRotAngle);
-//		transform.RotateAround(transform.position, new Vector3(0,0,-1), rotAngle);
+//		transform.RotateAround(transform.parent.position, new Vector3(0,0,1), currentRotAngle);
+//		transform.RotateAround(transform.parent.position, new Vector3(0,0,-1), rotAngle);
 		Vector2 normVec = new Vector2 (getPlayerXAxis(), getPlayerYAxis()).normalized;
 		float angle;
 		if (getPlayerXAxis() < 0) { 
@@ -811,7 +811,7 @@ public class Player : MonoBehaviour {
 	/// </summary>
 	public void RevealTiles () {
 		
-		BaseTile currentTile = GameManager.GameManagerInstance.tiles[(int) Mathf.Floor (transform.position.x + 0.5f), (int) Mathf.Floor (transform.position.y + 0.5f)].GetComponent<BaseTile>();
+		BaseTile currentTile = GameManager.GameManagerInstance.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
 		currentTile.Reveal(_vision);
 		/**
 		for (int i = _vision * -1; i <= _vision; i++) {
@@ -1027,7 +1027,7 @@ public class Player : MonoBehaviour {
 		
 		foreach (GameObject o in GameObject.Find ("GameManager").GetComponent<GameManager>().players) {
 			if (o.GetComponentInChildren<Player>().team != team) { //If it's an opponent, check its distance
-				if (minDistanceApart > (o.GetComponentInChildren<Player>().gameObject.transform.position - pos).magnitude) {
+				if (minDistanceApart > (o.GetComponentInChildren<Player>().gameObject.transform.parent.position - pos).magnitude) {
 					return true;
 				}
 			} 
@@ -1068,10 +1068,10 @@ public class Player : MonoBehaviour {
 //			if(p.team != team){
 //				//Munalwa: Only teleport halfway home when teleporting
 //				if (gm.getCapturedAltars (team).Contains (AltarType.Munalwa)) {
-//					teleportTarget = (transform.position + team.goGetHomeTile().transform.position) / 2.0f;
+//					teleportTarget = (transform.parent.position + team.goGetHomeTile().transform.parent.position) / 2.0f;
 //				}
 //				else {
-//					teleportTarget = team.goGetHomeTile().transform.position;
+//					teleportTarget = team.goGetHomeTile().transform.parent.position;
 //				}			
 //				p._currentState = PlayerState.teleporting;
 //			}
@@ -1086,12 +1086,12 @@ public class Player : MonoBehaviour {
 	public void moveTowardCenterOfTile (BaseTile tile) {
 		
 		Vector3 newPos;
-		if (closeEnoughToTarget (transform.position, tile.transform.position, sRef.closeEnoughDistanceMoveToCenter)) {
-			newPos = new Vector3 (tile.transform.position.x, tile.transform.position.y, transform.position.z);
+		if (closeEnoughToTarget (transform.parent.position, tile.transform.position, sRef.closeEnoughDistanceMoveToCenter)) {
+			newPos = new Vector3 (tile.transform.position.x, tile.transform.position.y, transform.parent.position.z);
 		}
 		else {
-			newPos = Vector2.Lerp(transform.position, tile.transform.position, sRef.moveToCenterRate);
-			newPos.z = transform.position.z;
+			newPos = Vector2.Lerp(transform.parent.position, tile.transform.position, sRef.moveToCenterRate);
+			newPos.z = transform.parent.position.z;
 		}
 		transform.parent.position = newPos;
 		
