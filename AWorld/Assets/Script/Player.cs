@@ -105,7 +105,7 @@ public class Player : MonoBehaviour {
 		//BaseTile currentTile = gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>();	//Not used with free movement
 		BaseTile currentTile = gm.tiles[(int) Mathf.Floor (transform.position.x + 0.5f), (int) Mathf.Floor (transform.position.y + 0.5f)].GetComponent<BaseTile>();
 		currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = true;
-		currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().material.color = team.getHighLightColor();
+		currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().material.color = team.highlightColor;
 		
 		bool buildButtonDown = getPlayerBuild();
 		//if(x.HasValue) Debug.Log(x.Value);
@@ -260,8 +260,11 @@ public class Player : MonoBehaviour {
 								addProgressToAction(vpsBuildRate);
 
 								GameObject beaconBeingBuilt;
+								
 								if (currentTile.beacon == null) { 
 									beaconBeingBuilt = (GameObject)GameObject.Instantiate(_prfbBeacon, new Vector3(0,0,0), Quaternion.identity);
+
+									
 								}
 								else {
 									beaconBeingBuilt = currentTile.beacon;
@@ -317,7 +320,7 @@ public class Player : MonoBehaviour {
 							//!tooCloseToOpponent(posToCheck) &&
 							(!onWater(posToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) 
 						{	//Valid move
-							PlaySFX(playerMove, 0.2f);
+							audio.PlayOneShot(playerMove, 0.2f);
 							transform.position = posToCheck;
 							BaseTile thisTile = gm.tiles[(int) Mathf.Floor (transform.position.x + 0.5f), (int) Mathf.Floor (transform.position.y + 0.5f)].GetComponent<BaseTile>();
 							if (thisTile != currentTile) {
@@ -445,14 +448,16 @@ public class Player : MonoBehaviour {
 								
 								if (currentTile.getLocalAltar () != null || currentTile.tooCloseToBeacon()) {
 									_currentState = PlayerState.standing;
+									//if(currentTile.tooCloseToBeacon()) audio.PlayOneShot(invalid_Input, 0.3f); //this also applies to the neutral beacon
 								}
 								
 								else {
 								
 									GameObject beaconBeingBuilt;
-									
+
 									if (currentTile.beacon == null) { 
 										beaconBeingBuilt = (GameObject)GameObject.Instantiate(_prfbBeacon, new Vector3(0,0,0), Quaternion.identity);
+										
 									}
 									else {
 										beaconBeingBuilt = currentTile.beacon;
@@ -472,6 +477,7 @@ public class Player : MonoBehaviour {
 									}
 								
 									else if (beaconInProgress.facing != facing) {
+										audio.Stop();
 										_currentState = PlayerState.rotating;
 										beaconInProgress.startRotating (facing);
 									}
@@ -480,6 +486,8 @@ public class Player : MonoBehaviour {
 									else {
 																	
 										if (beaconInProgress.currentState == BeaconState.Basic || beaconInProgress.currentState == BeaconState.BuildingAdvanced) {
+											audio.Stop();
+											audio.PlayOneShot(beaconBuilt, 1.0f);
 											_currentState = PlayerState.upgrading;
 											beaconInProgress.startUpgrading ();
 										}
@@ -527,14 +535,15 @@ public class Player : MonoBehaviour {
 						
 					} else{
 					///TODO catch fully influenced Tile!
-					PlaySFX(influenceDone, 1.0f);
+					audio.Stop();
+					audio.PlayOneShot(influenceDone, 1.0f);
 					}
 				}
 				else{
 				///TODO: add reset to tile in case of change
 					//need to reset currenttile to previousState
 					//StopSFX();
-					
+					audio.Stop();
 					_currentState = PlayerState.standing;
 				}	
 			break;
@@ -587,7 +596,7 @@ public class Player : MonoBehaviour {
 					currentActionProgress = 0;
 					currentTile.beacon.GetComponent<Beacon>().percRotateComplete = 0f;
 					_currentState = PlayerState.standing;
-					StopSFX ();				
+					currentTile.beacon.audio.Stop();				
 
 				}
 			
@@ -596,7 +605,7 @@ public class Player : MonoBehaviour {
 			case PlayerState.upgrading:
 			
 				if (buildButtonDown) {
-				
+					audio.Stop ();
 					Pulsate ();
 					//PlaySFX(beaconUpgrading, 1.0f);
 					float vpsUpgradeRate = sRef.vpsBaseUpgrade * getAltarUpgradeBoost ();

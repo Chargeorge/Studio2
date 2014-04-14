@@ -171,6 +171,7 @@ MonoBehaviour:
   scoreBarH: 30
   scoreTexture: {fileID: 0}
   winTexture: {fileID: 0}
+  teleportTarget: {x: 0, y: 0, z: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
