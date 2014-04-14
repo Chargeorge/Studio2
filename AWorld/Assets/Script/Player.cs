@@ -267,6 +267,8 @@ public class Player : MonoBehaviour {
 								
 								if (currentTile.beacon == null) { 
 									beaconBeingBuilt = (GameObject)GameObject.Instantiate(_prfbBeacon, new Vector3(0,0,0), Quaternion.identity);
+
+									
 								}
 								else {
 									beaconBeingBuilt = currentTile.beacon;
@@ -327,9 +329,15 @@ public class Player : MonoBehaviour {
 							//!tooCloseToOpponent(posToCheck) &&
 							(!onWater(posToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) 
 						{	//Valid move
+<<<<<<< HEAD
 							PlaySFX(playerMove, 0.2f);
 							transform.parent.position = posToCheck;
 						BaseTile thisTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
+=======
+							audio.PlayOneShot(playerMove, 0.2f);
+							transform.position = posToCheck;
+							BaseTile thisTile = gm.tiles[(int) Mathf.Floor (transform.position.x + 0.5f), (int) Mathf.Floor (transform.position.y + 0.5f)].GetComponent<BaseTile>();
+>>>>>>> origin/SFX_Polish
 							if (thisTile != currentTile) {
 								currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
 							}	
@@ -467,6 +475,7 @@ public class Player : MonoBehaviour {
 								
 								if (currentTile.getLocalAltar () != null || currentTile.tooCloseToBeacon()) {
 									_currentState = PlayerState.standing;
+									//if(currentTile.tooCloseToBeacon()) audio.PlayOneShot(invalid_Input, 0.3f); //this also applies to the neutral beacon
 								}
 								
 								else {
@@ -495,6 +504,7 @@ public class Player : MonoBehaviour {
 									}
 								
 									else if (beaconInProgress.facing != facing) {
+										audio.Stop();
 										_currentState = PlayerState.rotating;
 										beaconInProgress.startRotating (facing);
 									}
@@ -503,6 +513,8 @@ public class Player : MonoBehaviour {
 									else {
 																	
 										if (beaconInProgress.currentState == BeaconState.Basic || beaconInProgress.currentState == BeaconState.BuildingAdvanced) {
+											audio.Stop();
+											audio.PlayOneShot(beaconBuilt, 1.0f);
 											_currentState = PlayerState.upgrading;
 											beaconInProgress.startUpgrading ();
 										}
@@ -550,14 +562,15 @@ public class Player : MonoBehaviour {
 						
 					} else{
 					///TODO catch fully influenced Tile!
-					PlaySFX(influenceDone, 1.0f);
+					audio.Stop();
+					audio.PlayOneShot(influenceDone, 1.0f);
 					}
 				}
 				else{
 				///TODO: add reset to tile in case of change
 					//need to reset currenttile to previousState
 					//StopSFX();
-					
+					audio.Stop();
 					_currentState = PlayerState.standing;
 				}	
 			break;
@@ -613,7 +626,7 @@ public class Player : MonoBehaviour {
 					currentActionProgress = 0;
 					currentTile.beacon.GetComponent<Beacon>().percRotateComplete = 0f;
 					_currentState = PlayerState.standing;
-					StopSFX ();				
+					currentTile.beacon.audio.Stop();				
 
 				}
 			
@@ -622,7 +635,7 @@ public class Player : MonoBehaviour {
 			case PlayerState.upgrading:
 
 				if (buildButtonDown) {
-				
+					audio.Stop ();
 					Pulsate ();
 					//PlaySFX(beaconUpgrading, 1.0f);
 					float vpsUpgradeRate = sRef.vpsBaseUpgrade * getAltarUpgradeBoost ();

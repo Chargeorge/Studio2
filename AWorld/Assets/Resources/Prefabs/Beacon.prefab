@@ -393,12 +393,12 @@ MonoBehaviour:
   gm: {fileID: 0}
   tileBeingConverted: {fileID: 0}
   sRef: {fileID: 0}
-  beaconInfluenceProgress: {fileID: 8300000, guid: bcff877a3b52fec49b09b9216a5b38eb,
+  beaconInfluenceProgress: {fileID: 8300000, guid: 379b92f5122258d4daf57b88610b7e55,
     type: 3}
   beaconBuilding: {fileID: 8300000, guid: 6d5cea721a045f14d81cea941f96ced5, type: 3}
-  beaconBuilt: {fileID: 8300000, guid: 1f51dd9f8824c6546b3cb96f58295ba9, type: 3}
+  beaconBuilt: {fileID: 8300000, guid: 97f7000fbdbc84d4e99560bc26b4eb9d, type: 3}
   beaconUpgrading: {fileID: 8300000, guid: fb6a91a49e05fe540b927759c3f6933e, type: 3}
-  beaconUpgraded: {fileID: 8300000, guid: 6946113de98ec8941b43b5e0aae58888, type: 3}
+  beaconUpgraded: {fileID: 8300000, guid: d7cb0a39c63f1b74d89bccd2b85b6719, type: 3}
   beaconRotating: {fileID: 8300000, guid: c6cb66b0474b31949b668801a48003d7, type: 3}
   neutralColor:
     serializedVersion: 2

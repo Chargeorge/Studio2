@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour {
 	public VictoryCondition vIsForVendetta;	
 	public int currentMarquee;
 	public AudioClip Victory_Gong;
+	bool isPlaying = false;
 	public List<GameObject> beacons;
 
 	// Use this for initializatio
@@ -311,8 +312,14 @@ public class GameManager : MonoBehaviour {
 		foreach (VictoryCondition v in victoryConditions){
 			v.CheckState(this);
 			//Debug.Log("checstate done");
+<<<<<<< HEAD
 			if(v.isCompleted){
 				audio.PlayOneShot(Victory_Gong, 0.7f);
+=======
+			if(v.isCompleted && !isPlaying){
+				audio.PlayOneShot(Victory_Gong, 0.5f); //THIS IS THE ACTUAL VICTORY SOUND
+				isPlaying = true;
+>>>>>>> origin/SFX_Polish
 				_currentState = GameState.gameWon;
 				_victoryString += v.getVictorySting();
 				vIsForVendetta = v;
@@ -445,7 +452,7 @@ public Vector2 generateValidAltarPosition(Altar thisAltar, Vector2 startPos, boo
 					break;
 				}
 				case GameState.gameWon:{
-					audio.PlayOneShot(Victory_Gong, 0.7f);
+					
 					GUI.Box (new Rect (10,100,400,300), _victoryString);
 					
 					break;

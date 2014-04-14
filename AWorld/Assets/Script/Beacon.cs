@@ -9,6 +9,7 @@ public class Beacon : MonoBehaviour {
 	public DirectionEnum? dirRotatingToward;	//Used to set visual direction while rotating
 	public TeamInfo controllingTeam;
 	private BeaconState _currentState;
+	public int PlayerNumber;
 	public float percBuildComplete = 0;
 	public float percInfluenceComplete= 0;	//Countdown till another influence is popped
 	public float percRotateComplete = 0;
@@ -28,12 +29,15 @@ public class Beacon : MonoBehaviour {
 		}
 	}
 
+	bool buildButtonDown;
+
 	public AudioClip beaconInfluenceProgress;
 	public AudioClip beaconBuilding;
 	public AudioClip beaconBuilt;
 	public AudioClip beaconUpgrading;
 	public AudioClip beaconUpgraded;
 	public AudioClip beaconRotating;
+	public AudioClip beaconRotated;
 
 	private Material matBasic;
 	private Material matUpgraded;
@@ -62,20 +66,11 @@ public class Beacon : MonoBehaviour {
 			
 			setVisualDirection();	//Why is this happening every frame?
 
-			if(Input.GetKeyUp(KeyCode.Space)){
+			buildButtonDown = getPlayerBuild();
+
+			if(!buildButtonDown){
 				audio.Stop();
 			}
-
-			//influence work
-			// Find list of all influencible tiles
-			//Get closest tile in terms of distance and  begin influening it
-			//Add Influence till tile is at full
-			// move on to the next tile
-			//repeat till all tiles are full or influence is expended
-			
-			//This solution isn't "Correct" AKA, it doesn't resolve perfectly every frame, but over the aggregrate it should be correct
-			// We can move to fixed update to get closer to correct
-			if((_currentState == BeaconState.Basic || _currentState == BeaconState.BuildingAdvanced || _currentState == BeaconState.Advanced) && controllingTeam != null){
 
 				//find nearest convertable block
 				//FIND The first convertable tile, list is ordered by distance
@@ -165,6 +160,10 @@ public class Beacon : MonoBehaviour {
 	/// <param name="tileLocation">Tile location.</param>
 	/// <param name="player">Player.</param>
 	/// <param name="valInit">Value init.</param>
+	/// 
+	private bool getPlayerBuild(){
+		return Input.GetButton("BuildPlayer"+PlayerNumber);	
+	}
 		
 	public void startBuilding(GameObject tileLocation, GameObject player, float valInit){
 		this.gameObject.transform.parent = tileLocation.transform;
@@ -190,6 +189,7 @@ public class Beacon : MonoBehaviour {
 	}
 
 	public void buildNeutral(GameObject tileLocation){
+		audio.Stop();
 		this.gameObject.transform.parent = tileLocation.transform;
 		this.facing = (DirectionEnum)Random.Range(1,5);
 		this.dirRotatingToward = facing;
@@ -199,22 +199,22 @@ public class Beacon : MonoBehaviour {
 		tileLocation.GetComponent<BaseTile>().beacon = this.gameObject;
 
 		_currentState = BeaconState.Basic;
-		audio.Stop();
+
 		_patternList = createBasicInfluenceList(getAngleForDir(facing));
+
 		
 	}
 
 	public void startUpgrading(){
-		audio.Stop();
+		//audio.Stop();
 		this._currentState = BeaconState.BuildingAdvanced;
-		
-		audio.PlayOneShot(beaconUpgrading, 1.0f);
+		audio.PlayOneShot(beaconUpgrading, 0.7f);
 	}
 	
 	public void startRotating (DirectionEnum? dir) {
 		audio.Stop ();
 		dirRotatingToward = dir;
-		audio.PlayOneShot(beaconRotating, 1.0f);
+		audio.PlayOneShot(beaconRotating, 0.7f);
 	}
 	
 	public void setTeam(){
@@ -354,6 +354,7 @@ public class Beacon : MonoBehaviour {
 
 		if (percUpgradeComplete <= 0f) {
 			percUpgradeComplete = 0f;
+			//audio.Stop();
 			_currentState = BeaconState.Basic;
 			Color32 animColor = transform.FindChild("Anim").renderer.material.color;
 			animColor.a = (byte)0f;
@@ -814,6 +815,15 @@ public class Beacon : MonoBehaviour {
 		setDirection (N);
 		setVisualDirection ();
 		UpdateInfluencePatterns();
+
+		if(percRotateComplete <= 100f && !buildButtonDown){
+			audio.Stop();
+		}
+
+		if(percRotateComplete >= 100f){
+			audio.Stop();
+			audio.PlayOneShot(beaconRotated, 1.0f);	
+		}
 	
 	}
 	

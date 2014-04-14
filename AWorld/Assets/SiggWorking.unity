@@ -294,7 +294,7 @@ AudioSource:
     type: 2}
   m_PrefabInternal: {fileID: 1569035627}
   m_GameObject: {fileID: 473215124}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_audioClip: {fileID: 8300000, guid: 4a33269aa3ad0714b991aeaf11ea431a, type: 3}
   m_PlayOnAwake: 0
@@ -1911,7 +1911,8 @@ MonoBehaviour:
   winTexture1: {fileID: 2800000, guid: 1dfa2d3cefa714e41bcfaf8ad4318818, type: 3}
   winTexture2: {fileID: 2800000, guid: c14379d92aa39dd4a9ddbdcc57d52fac, type: 3}
   currentMarquee: 0
-  Victory_Gong: {fileID: 8300000, guid: 44e623b0750368a44b0288c8ee55df27, type: 3}
+  Victory_Gong: {fileID: 8300000, guid: d6194e64ff8f1314d91f1e04db8f27da, type: 3}
+  beacons: []
   beacons: []
 --- !u!4 &842739088
 Transform:
@@ -1934,19 +1935,19 @@ AudioSource:
   serializedVersion: 3
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: .689999998
   m_Pitch: 1
   Loop: 0
   Mute: 0
   Priority: 128
-  DopplerLevel: 1
+  DopplerLevel: 0
   MinDistance: 1
   MaxDistance: 500
   Pan2D: 0
   rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
+  BypassEffects: 1
+  BypassListenerEffects: 1
+  BypassReverbZones: 1
   rolloffCustomCurve:
     serializedVersion: 2
     m_Curve:
@@ -2055,6 +2056,32 @@ MeshFilter:
   m_PrefabInternal: {fileID: 1569035627}
   m_GameObject: {fileID: 995754460}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1042961793
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100006, guid: e23b1a1dde9f53e499c53f9c32c4f347, type: 3}
+  m_PrefabInternal: {fileID: 342832355}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1042961794}
+  m_Layer: 0
+  m_Name: nurbsCube1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1042961794
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400006, guid: e23b1a1dde9f53e499c53f9c32c4f347, type: 3}
+  m_PrefabInternal: {fileID: 342832355}
+  m_GameObject: {fileID: 1042961793}
+  m_LocalRotation: {x: 0, y: -0, z: 0, w: 1}
+  m_LocalPosition: {x: 4.50049305, y: .35145846, z: 1.51920903}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1707399966}
 --- !u!1 &1133556284
 GameObject:
   m_ObjectHideFlags: 0
@@ -2467,6 +2494,10 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400010, guid: 87f9a789346b544448cbc9bac6e40707, type: 2}
       propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8200000, guid: 87f9a789346b544448cbc9bac6e40707, type: 2}
+      propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

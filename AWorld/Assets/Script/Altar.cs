@@ -152,7 +152,7 @@ public class Altar : MonoBehaviour {
 					}
 				}
 				
-				//audio.PlayOneShot(Praying, 1.0f); //this is not the right place to put it, it apparently fucks up the other sounds ?
+				audio.PlayOneShot(Praying, 1.0f); //this is not the right place to put it, it apparently fucks up the other sounds ?
 			}
 			gm.debugString = string.Format(" Number: {0},\r\n Networked: {1}", _currentControllingTeam.teamNumber, networked);
 		}
@@ -195,6 +195,8 @@ public class Altar : MonoBehaviour {
 			List<AStarholder> As = 	BaseTile.aStarSearch(gameObject.transform.parent.gameObject.GetComponent<BaseTile>(),gm.getTeamBase(_currentControllingTeam),int.MaxValue, BaseTile.getLocalSameTeamTiles, _currentControllingTeam);
 			if(As.Count> 0){
 				networkToBase = As;
+				audio.Stop();
+				audio.PlayOneShot(Praying, 0.8f);
 				return true;
 				
 			}
@@ -245,7 +247,9 @@ public class Altar : MonoBehaviour {
 	
 	public int? owningTeamNetworkedAndLocked(){
 		if(isLocked && networked || !sRef.optLockTile && networked){
+			audio.PlayOneShot(Praying, 1.0f);
 			return currentControllingTeam.teamNumber;
+
 		}
 		else{
 			return null;
