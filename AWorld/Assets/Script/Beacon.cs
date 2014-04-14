@@ -325,15 +325,9 @@ public class Beacon : MonoBehaviour {
 	
 	public void addUpgradeProgress (float rate) {
 		percUpgradeComplete += rate*Time.deltaTime;
+		updateUpgradeAnim ();
 //		percSmaller -= rate*Time.deltaTime;
 
-		Color32 animColor = transform.FindChild("Anim").renderer.material.color;
-		Transform animTrans = transform.FindChild("Anim");
-		animColor.a = (byte) (255f * ((sRef.upgradeCircleFinishAlpha - sRef.upgradeCircleStartAlpha) * percUpgradeComplete/100f + sRef.upgradeCircleStartAlpha));
-		transform.FindChild("Anim").renderer.material.color = animColor;
-
-		float newScale = sRef.upgradeCircleStartScale - (sRef.upgradeCircleStartScale - 1.0f) * percUpgradeComplete/100f;
-		animTrans.localScale = new Vector3 (newScale, newScale, animTrans.localScale.z);
 //		Vector3 newScale = animTrans.localScale;
 //		float newScale =  (0.5f * (percUpgradeComplete/100f)) ;
 //		newScale = (newScale >= 0.5f) ? 0.49f : newScale;		
@@ -350,23 +344,20 @@ public class Beacon : MonoBehaviour {
 	
 	public void subtractUpgradeProgress (float rate) {
 		percUpgradeComplete -= rate*Time.deltaTime;
-		percSmaller += rate*Time.deltaTime;
+		updateUpgradeAnim ();		
 
-		Color32 animColor = transform.FindChild("Anim").renderer.material.color;
-
-
-		Transform animTrans = transform.FindChild("Anim");
-		Vector3 newScale = animTrans.localScale;
-		newScale.x = 100f/percSmaller;
-		newScale.y = 100f/percSmaller;
-		animTrans.localScale = newScale;
+//		percSmaller += rate*Time.deltaTime;		
+//		Vector3 newScale = animTrans.localScale;
+//		newScale.x = 100f/percSmaller;
+//		newScale.y = 100f/percSmaller;
+//		animTrans.localScale = newScale;
 
 		if (percUpgradeComplete <= 0f) {
 			percUpgradeComplete = 0f;
 			_currentState = BeaconState.Basic;
+			Color32 animColor = transform.FindChild("Anim").renderer.material.color;
 			animColor.a = (byte)0f;
 			transform.FindChild("Anim").renderer.material.color = animColor;
-
 		}
 		
 		//We need some visual representation for this
@@ -923,16 +914,13 @@ public class Beacon : MonoBehaviour {
 		audio.Stop();
 		losingUpgradeProgress = true;
 		timeStoppedUpgrading = Time.time;
-		Invoke ("CheckLoseUpgradeProgress", sRef.loseUpgradeProgressDelay);
-		Debug.Log ("Aborting upgrade...");
-		
+		Invoke ("CheckLoseUpgradeProgress", sRef.loseUpgradeProgressDelay);		
 	}
 	
 	public void CheckLoseUpgradeProgress () {
 		if (timeToLoseUpgradeProgress ()) {
 //			_currentState = BeaconState.Basic;
 //			percUpgradeComplete = 0f;
-			Debug.Log ("Lost upgrade progress");
 			StartCoroutine(loseUpgradeProgress());
 		}
 	}
@@ -946,6 +934,16 @@ public class Beacon : MonoBehaviour {
 			subtractUpgradeProgress (sRef.vpsBaseUpgrade);
 			yield return new WaitForEndOfFrame ();
 		}
+	}
+	
+	private void updateUpgradeAnim () {
+		Color32 animColor = transform.FindChild("Anim").renderer.material.color;
+		animColor.a = (byte) (255f * ((sRef.upgradeCircleFinishAlpha - sRef.upgradeCircleStartAlpha) * percUpgradeComplete/100f + sRef.upgradeCircleStartAlpha));
+		transform.FindChild("Anim").renderer.material.color = animColor;
+		
+		Transform animTrans = transform.FindChild("Anim");
+		float newScale = sRef.upgradeCircleStartScale - (sRef.upgradeCircleStartScale - 1.0f) * percUpgradeComplete/100f;
+		animTrans.localScale = new Vector3 (newScale, newScale, animTrans.localScale.z);
 	}
 	
 	private float getBaseBeaconStrength (int distance) {

@@ -267,8 +267,6 @@ public class Player : MonoBehaviour {
 								
 								if (currentTile.beacon == null) { 
 									beaconBeingBuilt = (GameObject)GameObject.Instantiate(_prfbBeacon, new Vector3(0,0,0), Quaternion.identity);
-
-									
 								}
 								else {
 									beaconBeingBuilt = currentTile.beacon;
@@ -565,8 +563,6 @@ public class Player : MonoBehaviour {
 			break;
 			
 			case PlayerState.rotating: 
-				qudProgessCircle.renderer.enabled = true;
-				qudProgessCircle.renderer.material.SetFloat("_Cutoff", 1-(beaconInProgress.percRotateComplete/100f));
 
 				if (buildButtonDown) {
 				
@@ -574,6 +570,8 @@ public class Player : MonoBehaviour {
 					//PlaySFX(beaconRotating, 1.0f);
 					
 					Beacon beacon = currentTile.beacon.GetComponent<Beacon>();
+					qudProgessCircle.renderer.enabled = true;
+					qudProgessCircle.renderer.material.SetFloat("_Cutoff", 1-(beacon.percRotateComplete/100f));
 				
 					/** This is to let players change facing mid-rotation 
 					if (x.HasValue) { 
@@ -622,8 +620,6 @@ public class Player : MonoBehaviour {
 			break;
 			
 			case PlayerState.upgrading:
-				qudProgessCircle.renderer.enabled = true;
-				qudProgessCircle.renderer.material.SetFloat("_Cutoff", 1-(beaconInProgress.percUpgradeComplete/100));
 
 				if (buildButtonDown) {
 				
@@ -635,6 +631,9 @@ public class Player : MonoBehaviour {
 					beacon.addUpgradeProgress (vpsUpgradeRate);
 					beacon.losingUpgradeProgress = false;
 					
+					qudProgessCircle.renderer.enabled = true;
+					qudProgessCircle.renderer.material.SetFloat("_Cutoff", 1-(beacon.percUpgradeComplete/100));
+				
 					if (beacon.percUpgradeComplete >= 100f) {
 					
 						currentActionProgress = 0;
