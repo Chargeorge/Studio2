@@ -70,6 +70,7 @@ public class Settings : MonoBehaviour {
 	public float percMaxInfluenceColor;	//Percentage of color that tile fills in when just before 100% influence
 	public int colorOffSet;
 	public float upgradeCircleStartScale; //The scale at which the upgrade circle anim thing starts
+	public float upgradeCircleFinishScale; //The scale the upgrade circle anim thing is at around 99% complete
 	public float upgradeCircleStartAlpha; //The alpha at which the upgrade circle anim thing starts
 	public float upgradeCircleFinishAlpha; //The alpha the upgrade circle anim thing is at around 99% complete 
 	
@@ -136,6 +137,7 @@ public class Settings : MonoBehaviour {
 		marqueeCount = 16;
 		colorOffSet = 2;
 		upgradeCircleStartScale = 5.0f; //The scale at which the upgrade circle anim thing starts
+		upgradeCircleFinishScale = 0.5f; //The scale the upgrade circle anim thing is at around 99% complete
 		upgradeCircleStartAlpha = 0.1f; //The alpha at which the upgrade circle anim thing starts
 		upgradeCircleFinishAlpha = 0.8f; //The alpha the upgrade circle anim thing is at around 99% complete 
 		

@@ -942,7 +942,7 @@ public class Beacon : MonoBehaviour {
 		transform.FindChild("Anim").renderer.material.color = animColor;
 		
 		Transform animTrans = transform.FindChild("Anim");
-		float newScale = sRef.upgradeCircleStartScale - (sRef.upgradeCircleStartScale - 1.0f) * percUpgradeComplete/100f;
+		float newScale = sRef.upgradeCircleStartScale - (sRef.upgradeCircleStartScale - sRef.upgradeCircleFinishScale) * percUpgradeComplete/100f;
 		animTrans.localScale = new Vector3 (newScale, newScale, animTrans.localScale.z);
 	}
 	

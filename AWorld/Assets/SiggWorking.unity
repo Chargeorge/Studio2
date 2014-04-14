@@ -2805,6 +2805,7 @@ MonoBehaviour:
   percMaxInfluenceColor: 0
   colorOffSet: 0
   upgradeCircleStartScale: 0
+  upgradeCircleFinishScale: 0
   upgradeCircleStartAlpha: 0
   upgradeCircleFinishAlpha: 0
   teleportRate: 0
