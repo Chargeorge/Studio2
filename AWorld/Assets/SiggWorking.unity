@@ -626,7 +626,7 @@ MonoBehaviour:
   boardY: 13
   numberOfAltars: 0
   ranjitRangeTileTypes: 
-  fogOn: 0
+  fogOn: 1
 --- !u!4 &1669248506
 Transform:
   m_ObjectHideFlags: 0
