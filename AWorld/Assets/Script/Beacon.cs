@@ -31,7 +31,6 @@ public class Beacon : MonoBehaviour {
 
 	bool buildButtonDown;
 
-	public AudioClip beaconInfluenceProgress;
 	public AudioClip beaconBuilding;
 	public AudioClip beaconBuilt;
 	public AudioClip beaconUpgrading;
@@ -125,7 +124,7 @@ public class Beacon : MonoBehaviour {
 
 	//			 
 	//			 else{
-	//				gm.PlaySFX(beaconInfluencing, 0.8f);
+	//				
 	//			 //TODO: Handle situations where other tiles are influencing.  
 	//				Debug.Log("Trying to influence at rate " + patternConverting.vpsInfluence );
 	//				if(tileBeingConverted.GetComponent<BaseTile>().addProgressToInfluence(patternConverting.vpsInfluence, controllingTeam)){
