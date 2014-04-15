@@ -112,7 +112,7 @@ public class Settings : MonoBehaviour {
 		optTilesGiveScore = true;
 		valTileConvertScore = 1f;
 		valPointsToWin = 300;
-		valScorePerMine = 100f;
+		valScorePerMine = 2f;
 		//Beacon stuff
 		beaconBasicRange = 4;
 		beaconAdvancedRange = 8;
@@ -122,7 +122,7 @@ public class Settings : MonoBehaviour {
 		
 		//Board setup stuff
 		team1Start = new Vector2(4,6);
-		team2Start = new Vector2(12,6);
+		team2Start = new Vector2(18,6);
 		optPerlinLevel = 1800;
 		neutralBeaconCount = 12;
 		numAltars = 0;
