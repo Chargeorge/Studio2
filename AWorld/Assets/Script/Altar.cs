@@ -182,7 +182,8 @@ public class Altar : MonoBehaviour {
 				}
 				
 			}else{
-				renderer.material.color = new Color32(220, 30, 47, 255);
+				renderer.material.color = new Color32(237, 20, 90, 255);
+				//pink (237, 20, 90, 255)
 			}
 		}
 			

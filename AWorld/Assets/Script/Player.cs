@@ -86,7 +86,7 @@ public class Player : MonoBehaviour {
 		sRef = Settings.SettingsInstance;
 		gm = GameManager.GameManagerInstance;
 		qudProgessCircle = transform.parent.FindChild("ActionTimer").gameObject;
-		qudProgessCircle.renderer.material.color = team.tileColor;
+		qudProgessCircle.renderer.material.color = team.beaconColor;
 
 		if(PlayerNumber == 1){
 			scoreTexture = gm.scoreTexture1;

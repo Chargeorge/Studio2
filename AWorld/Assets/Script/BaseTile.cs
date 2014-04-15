@@ -255,6 +255,9 @@ public class BaseTile : MonoBehaviour {
 		gm = GameObject.Find("GameManager").GetComponent<GameManager>();
 		transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
 		sRef = Settings.SettingsInstance;
+
+		transform.Find("NoBuildLayer").renderer.material.color = new Color32 (100,100,100,255);
+
 	}
 	
 	public BaseTile GetDirection(DirectionEnum dir){
@@ -270,10 +273,12 @@ public class BaseTile : MonoBehaviour {
 	void Update () {
 			
 		if(controllingTeam != null){
-			
+
+
 			qudInfluenceLayer.SetActive(true);
 			Color32 controllingTeamColor = controllingTeam.tileColor;
 			//controllingTeamColor.a = (byte) (255*(percControlled/100f));
+			transform.Find("NoBuildLayer").renderer.material.color = controllingTeam.beaconColor;
 			
 			if (owningTeam != null && owningTeam == controllingTeam) {
 				controllingTeamColor.a = (byte) (255-255*((1.0f-percControlled/100f) * (1.0f - sRef.percMaxInfluenceColor)));
