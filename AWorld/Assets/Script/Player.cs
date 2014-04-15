@@ -36,11 +36,6 @@ public class Player : MonoBehaviour {
 	public AudioClip playerMove;
 	public AudioClip influenceStart;
 	public AudioClip influenceDone;
-	public AudioClip beaconBuilding;
-	public AudioClip beaconBuilt;
-	public AudioClip beaconRotating;
-	public AudioClip beaconUpgrading;
-	public AudioClip beaconUpgraded;
 	public AudioClip invalid_Input;
 
 	public float scoreBarH = 30;
@@ -194,7 +189,7 @@ public class Player : MonoBehaviour {
 						
 //						setDirection(x.Value);
 						
-//						PlaySFX(beaconRotating, 1.0f);
+
 						currentTile.beacon.GetComponent<Beacon>().startRotating (facing);
 						_currentState = PlayerState.rotating;
 						
@@ -257,7 +252,8 @@ public class Player : MonoBehaviour {
 									currentTile.buildable ())
 							{
 								Pulsate ();
-//								PlaySFX(influenceDone, 1.0f);
+								audio.Stop ();
+								audio.PlayOneShot(influenceDone, 0.7f);
 								_currentState = PlayerState.building;
 								
 								float vpsBuildRate = sRef.vpsBaseBuild * getAltarBuildBoost ();
@@ -401,7 +397,6 @@ public class Player : MonoBehaviour {
 				if(buildButtonDown && currentTile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
 				//	Jiggle ();	//Gotta jiggle
 					Pulsate ();
-					StopSFX();
 					
 					
 				//Debug.Log ("In Build");
@@ -420,9 +415,7 @@ public class Player : MonoBehaviour {
 									beaconInProgress.setDirection(x.Value);
 								}
 								if(beaconInProgress.percBuildComplete > 100f){
-								
-									//gm.StopSFX();
-									//PlaySFX(beaconBuilt, 1.0f);
+
 									beaconInProgress.Build();
 									_currentState = PlayerState.standing;
 									currentActionProgress = 0f;
@@ -469,6 +462,7 @@ public class Player : MonoBehaviour {
 //								_currentState = PlayerState.standing;
 								
 								if (currentTile.getLocalAltar () != null || currentTile.tooCloseToBeacon()) {
+								audio.Stop ();
 									_currentState = PlayerState.standing;
 									//if(currentTile.tooCloseToBeacon()) audio.PlayOneShot(invalid_Input, 0.3f); //this also applies to the neutral beacon
 								}
@@ -490,6 +484,8 @@ public class Player : MonoBehaviour {
 									if (currentTile.buildable () && 
 										(beaconInProgress.currentState == null || beaconInProgress.currentState == BeaconState.BuildingBasic)) 
 									{
+										audio.Stop ();
+										audio.PlayOneShot(influenceDone, 0.7f);
 										_currentState = PlayerState.building;
 										float vpsBuildRate = sRef.vpsBaseBuild * getAltarBuildBoost ();	
 										addProgressToAction(vpsBuildRate);
@@ -509,7 +505,6 @@ public class Player : MonoBehaviour {
 																	
 										if (beaconInProgress.currentState == BeaconState.Basic || beaconInProgress.currentState == BeaconState.BuildingAdvanced) {
 											audio.Stop();
-											//audio.PlayOneShot(beaconBuilt, 1.0f);
 											_currentState = PlayerState.upgrading;
 											beaconInProgress.startUpgrading ();
 										}
@@ -525,7 +520,7 @@ public class Player : MonoBehaviour {
 							float test = currentTile.subTractInfluence(  sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime, team);
 							if(test > 0f){
 								currentTile.addInfluenceReturnOverflow(test);
-								PlaySFX(invalid_Input, 1.0f);
+								audio.PlayOneShot(invalid_Input, 1.0f);
 							}
 						}
 						/*
@@ -545,9 +540,9 @@ public class Player : MonoBehaviour {
 							currentActionProgress = 0;
 						}*/
 
-						if(currentTile.percControlled >= 100f){
+						if(currentTile.percControlled == 100f){
 //						Debug.Log ("INLFUENCE DONE");
-							PlaySFX(influenceDone, 1.0f);
+							audio.PlayOneShot(influenceDone, 1.0f);
 						}
 						
 						if (x.HasValue) { 
@@ -575,7 +570,6 @@ public class Player : MonoBehaviour {
 				if (buildButtonDown) {
 				
 					Pulsate ();
-					//PlaySFX(beaconRotating, 1.0f);
 					
 					Beacon beacon = currentTile.beacon.GetComponent<Beacon>();
 					qudProgessCircle.renderer.enabled = true;
@@ -631,8 +625,7 @@ public class Player : MonoBehaviour {
 
 				if (buildButtonDown) {
 					audio.Stop ();
-					Pulsate ();
-					//PlaySFX(beaconUpgrading, 1.0f);
+					Pulsate ();;
 					float vpsUpgradeRate = sRef.vpsBaseUpgrade * getAltarUpgradeBoost ();
 					addProgressToAction (vpsUpgradeRate);
 					Beacon beacon = currentTile.beacon.GetComponent<Beacon>();
@@ -648,8 +641,7 @@ public class Player : MonoBehaviour {
 						beacon.Upgrade ();
 						beacon.percUpgradeComplete = 0f;
 						_currentState = PlayerState.standing;
-						StopSFX ();
-						PlaySFX(beaconUpgraded, 1.0f);
+						
 					}
 					moveTowardCenterOfTile (currentTile);
 				}

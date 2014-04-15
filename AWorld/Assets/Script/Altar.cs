@@ -132,6 +132,7 @@ public class Altar : MonoBehaviour {
 					if(scoreLeft >0){
 						timeToNextScoreShot -= Time.deltaTime;
 						if(timeToNextScoreShot < 0){
+							audio.PlayOneShot(Praying, 0.9f);
 							float scoreToAdd = sRef.vpsScorePerMinePerSecond * ((a.Contains(AltarType.Khepru)) ? sRef.coefKhepru : 1 )* Time.deltaTime;
 							if(scoreLeft - scoreToAdd < 0){
 								scoreToAdd = scoreLeft;
@@ -152,8 +153,6 @@ public class Altar : MonoBehaviour {
 
 					}
 				}
-				
-				audio.PlayOneShot(Praying, 1.0f); //this is not the right place to put it, it apparently fucks up the other sounds ?
 			}
 			gm.debugString = string.Format(" Number: {0},\r\n Networked: {1}", _currentControllingTeam.teamNumber, networked);
 		}
@@ -193,12 +192,15 @@ public class Altar : MonoBehaviour {
 
 	
 	public bool checkNetwork(){
+
 		if(_currentControllingTeam != null){
 			List<AStarholder> As = 	BaseTile.aStarSearch(gameObject.transform.parent.gameObject.GetComponent<BaseTile>(),gm.getTeamBase(_currentControllingTeam),int.MaxValue, BaseTile.getLocalSameTeamTiles, _currentControllingTeam);
 			if(As.Count> 0){
 				networkToBase = As;
-				audio.Stop();
-				audio.PlayOneShot(Praying, 0.8f);
+
+
+
+
 				return true;
 				
 			}
@@ -209,7 +211,8 @@ public class Altar : MonoBehaviour {
 		return false;
 	}
 	
-	public bool doCapture(TeamInfo T){
+	public bool doCapture(TeamInfo T){ //Doesn't get called anymore
+
 		if(sRef.optLockTile){
 			if(!isLocked){
 				if(currentControllingTeam.teamNumber == T.teamNumber){
@@ -226,7 +229,6 @@ public class Altar : MonoBehaviour {
 						foreach (GameObject go in beacons) {
 							go.GetComponent<Beacon>().UpdateInfluencePatterns();
 						}
-						audio.PlayOneShot(Praying, 1.0f);
 						return true;
 					}
 				}
@@ -249,7 +251,6 @@ public class Altar : MonoBehaviour {
 	
 	public int? owningTeamNetworkedAndLocked(){
 		if(isLocked && networked || !sRef.optLockTile && networked){
-			audio.PlayOneShot(Praying, 1.0f);
 			return currentControllingTeam.teamNumber;
 
 		}
