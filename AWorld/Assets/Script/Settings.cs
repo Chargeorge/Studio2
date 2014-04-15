@@ -84,12 +84,12 @@ public class Settings : MonoBehaviour {
 	void Start () {
 
 		//Base values per second
-		vpsBaseBuild = 25f;
+		vpsBaseBuild = 50f;
 		vpsBaseMove = 100f;
 		vpsBaseFreeMoveSpeed = 2.0f;
 		vpsBasePlayerInfluence =  25f;
 		vpsBaseRotate = 50f;
-		vpsBaseUpgrade = 25f;
+		vpsBaseUpgrade = 50f;
 		vpsScorePerAltarPerSecond = 1f;
 		vpsBeaconBaseInfluence = 100f;
 		vpsScorePerMinePerSecond = 3f;
