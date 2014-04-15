@@ -282,22 +282,23 @@ public class Beacon : MonoBehaviour {
 		platform.localPosition = platformPos;
 		beaconbase.localPosition = beaconPos;
 
-
+		updateBuildAnim ();
 
 //		platform.Translate(Vector3.up * platformPos);
 
 		transform.FindChild("Arrow").renderer.material.color = beaconColor;		
-		transform.FindChild("Base").renderer.material.color = beaconColor;	
 		transform.FindChild("Platform").renderer.material.color = platformColor;
-
-		if(percBuildComplete >= 100){
-			//audio.PlayOneShot(beaconBuilt, 1.0f);
-		}
+		
+		Color32 baseColor = transform.FindChild ("Arrow").renderer.material.color;
+		baseColor.a = 0;
+		transform.FindChild("Base").renderer.material.color = baseColor;	
 	}
 	
 	public void subtractBuildingProgress(float rate) {
 	
 		percBuildComplete -= rate*Time.deltaTime;
+		
+		updateBuildAnim ();
 		
 		if (percBuildComplete <= 0f) {
 			GameObject.Destroy (this.gameObject);
@@ -310,8 +311,11 @@ public class Beacon : MonoBehaviour {
 			newColor = (newColor >= 255) ? 254 : newColor;		
 			beaconColor.a = (byte)newColor;
 			transform.FindChild("Arrow").renderer.material.color = beaconColor; 
-			transform.FindChild("Base").renderer.material.color = beaconColor; 
 			transform.FindChild("Platform").renderer.material.color = platformColor;
+
+			Color32 baseColor = transform.FindChild ("Arrow").renderer.material.color;
+			baseColor.a = 0;
+			transform.FindChild("Base").renderer.material.color = baseColor;		
 		}
 	}
 	
@@ -328,6 +332,11 @@ public class Beacon : MonoBehaviour {
 	public void addUpgradeProgress (float rate) {
 		percUpgradeComplete += rate*Time.deltaTime;
 		updateUpgradeAnim ();
+		
+		Color32 baseColor = transform.FindChild ("Arrow").renderer.material.color;
+		baseColor.a = 255;
+		transform.FindChild("Base").renderer.material.color = baseColor;	
+		
 //		percSmaller -= rate*Time.deltaTime;
 
 //		Vector3 newScale = animTrans.localScale;
@@ -849,8 +858,6 @@ public class Beacon : MonoBehaviour {
 		///TODO: add end semaphore stuff her
 		selfDestructing = false;
 		
-
-		
 		if(percBuildComplete >= 100f){
 			percBuildComplete = 100f;
 			audio.Stop();
@@ -867,6 +874,15 @@ public class Beacon : MonoBehaviour {
 				}
 			}
 		}
+		
+		Color32 baseColor = transform.FindChild ("Arrow").renderer.material.color;
+		baseColor.a = 255;
+		transform.FindChild("Base").renderer.material.color = baseColor;	
+		
+		Color32 animColor = transform.FindChild("Anim").renderer.material.color;
+		animColor.a = 0;
+		transform.FindChild("Anim").renderer.material.color = animColor;
+		
 	}
 	
 	
@@ -951,11 +967,11 @@ public class Beacon : MonoBehaviour {
 	
 	private void updateBuildAnim () {
 		Color32 animColor = transform.FindChild("Anim").renderer.material.color;
-		animColor.a = (byte) (255f * ((sRef.upgradeCircleFinishAlpha - sRef.upgradeCircleStartAlpha) * percUpgradeComplete/100f + sRef.upgradeCircleStartAlpha));
+		animColor.a = (byte) (255f * ((sRef.buildCircleFinishAlpha - sRef.buildCircleStartAlpha) * percBuildComplete/100f + sRef.buildCircleStartAlpha));
 		transform.FindChild("Anim").renderer.material.color = animColor;
 		
 		Transform animTrans = transform.FindChild("Anim");
-		float newScale = sRef.upgradeCircleStartScale - (sRef.upgradeCircleStartScale - sRef.upgradeCircleFinishScale) * percUpgradeComplete/100f;
+		float newScale = sRef.buildCircleStartScale - (sRef.buildCircleStartScale - sRef.buildCircleFinishScale) * percBuildComplete/100f;
 		animTrans.localScale = new Vector3 (newScale, newScale, animTrans.localScale.z);
 	}
 	
