@@ -87,7 +87,7 @@ public class Settings : MonoBehaviour {
 		vpsBaseBuild = 50f;
 		vpsBaseMove = 100f;
 		vpsBaseFreeMoveSpeed = 2.0f;
-		vpsBasePlayerInfluence =  25f;
+		vpsBasePlayerInfluence =  50f;
 		vpsBaseRotate = 50f;
 		vpsBaseUpgrade = 50f;
 		vpsScorePerAltarPerSecond = 1f;
@@ -122,7 +122,7 @@ public class Settings : MonoBehaviour {
 		
 		//Board setup stuff
 		team1Start = new Vector2(4,6);
-		team2Start = new Vector2(18,6);
+		team2Start = new Vector2(22,6);
 		optPerlinLevel = 1800;
 		neutralBeaconCount = 12;
 		numAltars = 0;
