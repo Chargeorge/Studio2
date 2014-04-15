@@ -81,7 +81,7 @@ public class Beacon : MonoBehaviour {
 					bool waterFound = false;	
 					list.ForEach(delegate (InfluencePatternHolder p){
 						if (!waterFound) {
-							gm.PlaySFX(beaconInfluenceProgress, 0.1f);
+
 							if(influenceThisFrame > 0f){
 								int x = (int)brdX + (int)Mathf.RoundToInt(p.relCoordRotated.x);
 								int y = (int)brdY + (int)Mathf.RoundToInt(p.relCoordRotated.y);
@@ -208,9 +208,9 @@ public class Beacon : MonoBehaviour {
 	}
 
 	public void startUpgrading(){
-		//audio.Stop();
+
 		this._currentState = BeaconState.BuildingAdvanced;
-		audio.PlayOneShot(beaconUpgrading, 0.7f);
+		audio.PlayOneShot(beaconUpgrading, 1.0f);
 	}
 	
 	public void startRotating (DirectionEnum? dir) {
@@ -291,7 +291,7 @@ public class Beacon : MonoBehaviour {
 		transform.FindChild("Platform").renderer.material.color = platformColor;
 
 		if(percBuildComplete >= 100){
-			gm.PlaySFX(beaconBuilt, 1.0f);
+			//audio.PlayOneShot(beaconBuilt, 1.0f);
 		}
 	}
 	
@@ -818,7 +818,7 @@ public class Beacon : MonoBehaviour {
 		setVisualDirection ();
 		UpdateInfluencePatterns();
 
-		if(percRotateComplete <= 100f && !buildButtonDown){
+		if(percRotateComplete < 100f && !buildButtonDown){
 			audio.Stop();
 		}
 
@@ -849,11 +849,12 @@ public class Beacon : MonoBehaviour {
 		///TODO: add end semaphore stuff her
 		selfDestructing = false;
 		
-		audio.Stop();
+
 		
 		if(percBuildComplete >= 100f){
 			percBuildComplete = 100f;
-			
+			audio.Stop();
+			audio.PlayOneShot(beaconBuilt, 1.0f);
 			
 			_currentState = BeaconState.Basic;
 			_patternList = createBasicInfluenceList(getAngleForDir(facing));

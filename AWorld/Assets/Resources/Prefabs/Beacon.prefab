@@ -401,7 +401,7 @@ MonoBehaviour:
   beaconUpgrading: {fileID: 8300000, guid: fb6a91a49e05fe540b927759c3f6933e, type: 3}
   beaconUpgraded: {fileID: 8300000, guid: d7cb0a39c63f1b74d89bccd2b85b6719, type: 3}
   beaconRotating: {fileID: 8300000, guid: c6cb66b0474b31949b668801a48003d7, type: 3}
-  beaconRotated: {fileID: 0}
+  beaconRotated: {fileID: 8300000, guid: e7c355a13a423aa4c8712cc9816c462f, type: 3}
   neutralColor:
     serializedVersion: 2
     rgba: 0

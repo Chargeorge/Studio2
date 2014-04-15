@@ -422,7 +422,7 @@ public class Player : MonoBehaviour {
 								if(beaconInProgress.percBuildComplete > 100f){
 								
 									//gm.StopSFX();
-									PlaySFX(beaconBuilt, 1.0f);
+									//PlaySFX(beaconBuilt, 1.0f);
 									beaconInProgress.Build();
 									_currentState = PlayerState.standing;
 									currentActionProgress = 0f;
@@ -509,7 +509,7 @@ public class Player : MonoBehaviour {
 																	
 										if (beaconInProgress.currentState == BeaconState.Basic || beaconInProgress.currentState == BeaconState.BuildingAdvanced) {
 											audio.Stop();
-											audio.PlayOneShot(beaconBuilt, 1.0f);
+											//audio.PlayOneShot(beaconBuilt, 1.0f);
 											_currentState = PlayerState.upgrading;
 											beaconInProgress.startUpgrading ();
 										}
