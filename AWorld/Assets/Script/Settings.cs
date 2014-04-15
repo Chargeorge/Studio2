@@ -112,12 +112,12 @@ public class Settings : MonoBehaviour {
 		coefMunalwaScale = 2.0f;	//Multiplier applied to physical scale of player with Munalwa
 	
 		//Score stuff
-		scoreOnCapture = 50f;
+		scoreOnCapture = 60f;
 		optLockTile = false;
 		optTilesGiveScore = true;
 		valTileConvertScore = 1f;
 		valPointsToWin = 300;
-		valScorePerMine = 2f;
+		valScorePerMine = 2.5f;
 		//Beacon stuff
 		beaconBasicRange = 4;
 		beaconAdvancedRange = 8;
