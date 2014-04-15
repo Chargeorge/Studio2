@@ -13,8 +13,8 @@ public class FinalScoreTarget : MonoBehaviour {
 	
 	}
 
-	void PlayScoreAnimation(){
-		Debug.Log("Message recieved");
+	public void PlayScoreAnimation(){
+//		Debug.Log("Message recieved");
 		GetComponent<ParticleSystem>().Emit (100);
 	}
 }

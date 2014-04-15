@@ -42,6 +42,8 @@ public class GameManager : MonoBehaviour {
 	public Texture scoreTexture2;
 	public Texture winTexture1;
 	public Texture winTexture2;
+	public GameObject home1;
+	public GameObject home2;
 	private GameObject prfbBeacon;
 	public VictoryCondition vIsForVendetta;	
 	public int currentMarquee;
@@ -483,19 +485,25 @@ public Vector2 generateValidAltarPosition(Altar thisAltar, Vector2 startPos, boo
 	}
 
 	private GameObject setUpTeamHome(Player example){
-		GameObject team1Home = (GameObject)Instantiate(prfbHome, Vector3.zero, Quaternion.identity);
-		team1Home.transform.parent= tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].transform;
+		GameObject teamHome = (GameObject)Instantiate(prfbHome, Vector3.zero, Quaternion.identity);
+		teamHome.transform.parent= tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].transform;
 		tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].GetComponent<BaseTile>().controllingTeam = example.team;
 		tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].GetComponent<BaseTile>().owningTeam = example.team;
 		tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].GetComponent<BaseTile>().percControlled = 100f;
-		team1Home.transform.localPosition = new Vector3(0,0,-.5f);
-		team1Home.GetComponent<Home>().team = example.team;
-		team1Home.GetComponentInChildren<ParticleSystem>().startColor = example.team.highlightColor;
+		teamHome.transform.localPosition = new Vector3(0,0,-.5f);
+		teamHome.GetComponent<Home>().team = example.team;
+		teamHome.GetComponentInChildren<ParticleSystem>().startColor = example.team.highlightColor;
+		if (example.teamNumber == 1) {
+			home1 = teamHome;
+		}
+		if (example.teamNumber == 2) {
+			home2 = teamHome;
+		}
 		//Destroy(team1Home.transform.parent.FindChild("ScoreBitTarget").gameObject);
 		
 		//ToSet = tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].GetComponent<BaseTile>();
 		
-		return team1Home;
+		return teamHome;
 	}
 	
 	public BaseTile getTeamBase(TeamInfo T){

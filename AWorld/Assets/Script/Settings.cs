@@ -69,6 +69,10 @@ public class Settings : MonoBehaviour {
 	public int marqueeCount;
 	public float percMaxInfluenceColor;	//Percentage of color that tile fills in when just before 100% influence
 	public int colorOffSet;
+	public float buildCircleStartScale; //The scale at which the upgrade circle anim thing starts
+	public float buildCircleFinishScale; //The scale the upgrade circle anim thing is at around 99% complete
+	public float buildCircleStartAlpha; //The alpha at which the upgrade circle anim thing starts
+	public float buildCircleFinishAlpha; //The alpha the upgrade circle anim thing is at around 99% complete 
 	public float upgradeCircleStartScale; //The scale at which the upgrade circle anim thing starts
 	public float upgradeCircleFinishScale; //The scale the upgrade circle anim thing is at around 99% complete
 	public float upgradeCircleStartAlpha; //The alpha at which the upgrade circle anim thing starts
@@ -79,6 +83,7 @@ public class Settings : MonoBehaviour {
 	public float closeEnoughDistanceTeleport;
 	public float moveToCenterRate;
 	public float closeEnoughDistanceMoveToCenter;
+	public float closeEnoughDistanceScoreBit;
 	
 	// Use this for initialization
 	void Start () {
@@ -136,7 +141,11 @@ public class Settings : MonoBehaviour {
 		secMarqueeUpgradeTime = .08f;
 		marqueeCount = 16;
 		colorOffSet = 2;
-		upgradeCircleStartScale = 5.0f; //The scale at which the upgrade circle anim thing starts
+		buildCircleStartScale = 5.0f; //The scale at which the upgrade circle anim thing starts
+		buildCircleFinishScale = 1.0f; //The scale the upgrade circle anim thing is at around 99% complete
+		buildCircleStartAlpha = 0.1f; //The alpha at which the upgrade circle anim thing starts
+		buildCircleFinishAlpha = 0.8f; //The alpha the upgrade circle anim thing is at around 99% complete 
+		upgradeCircleStartScale = 7.0f; //The scale at which the upgrade circle anim thing starts
 		upgradeCircleFinishScale = 0.5f; //The scale the upgrade circle anim thing is at around 99% complete
 		upgradeCircleStartAlpha = 0.1f; //The alpha at which the upgrade circle anim thing starts
 		upgradeCircleFinishAlpha = 0.8f; //The alpha the upgrade circle anim thing is at around 99% complete 
@@ -146,6 +155,7 @@ public class Settings : MonoBehaviour {
 		closeEnoughDistanceTeleport = 0.2f;
 		moveToCenterRate = 0.014f;
 		closeEnoughDistanceMoveToCenter = 0.012f;
+		closeEnoughDistanceScoreBit = 0.1f;
 	}
 	
 	// Update is called once per frame

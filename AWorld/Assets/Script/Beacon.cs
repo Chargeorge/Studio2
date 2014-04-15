@@ -949,6 +949,16 @@ public class Beacon : MonoBehaviour {
 		}
 	}
 	
+	private void updateBuildAnim () {
+		Color32 animColor = transform.FindChild("Anim").renderer.material.color;
+		animColor.a = (byte) (255f * ((sRef.upgradeCircleFinishAlpha - sRef.upgradeCircleStartAlpha) * percUpgradeComplete/100f + sRef.upgradeCircleStartAlpha));
+		transform.FindChild("Anim").renderer.material.color = animColor;
+		
+		Transform animTrans = transform.FindChild("Anim");
+		float newScale = sRef.upgradeCircleStartScale - (sRef.upgradeCircleStartScale - sRef.upgradeCircleFinishScale) * percUpgradeComplete/100f;
+		animTrans.localScale = new Vector3 (newScale, newScale, animTrans.localScale.z);
+	}
+	
 	private void updateUpgradeAnim () {
 		Color32 animColor = transform.FindChild("Anim").renderer.material.color;
 		animColor.a = (byte) (255f * ((sRef.upgradeCircleFinishAlpha - sRef.upgradeCircleStartAlpha) * percUpgradeComplete/100f + sRef.upgradeCircleStartAlpha));
