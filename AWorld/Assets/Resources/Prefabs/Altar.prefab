@@ -432,11 +432,11 @@ MonoBehaviour:
   brdY: 0
   gm: {fileID: 0}
   baseScoreScale: .74000001
-  symbol: {fileID: 0}
   scoreShotInterval: 1
   prfbScoreBit: {fileID: 100000, guid: 27aebcbed125f1741ba74d62b6a56d23, type: 2}
+  symbol: {fileID: 0}
   scoreLeft: 0
-  Praying: {fileID: 8300000, guid: 5f04b5131e2e8ba4ebc222b4780541e6, type: 3}
+  Praying: {fileID: 8300000, guid: 049296ee51d7c18488d0443262e64f9f, type: 3}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
