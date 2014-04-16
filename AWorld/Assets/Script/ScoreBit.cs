@@ -91,6 +91,7 @@ public class ScoreBit : MonoBehaviour {
 
 	public void remove(){
 		BulletPool.instance.PoolObject(gameObject);
+		team.addScore(Settings.SettingsInstance.vpsScorePerMinePerSecond);
 	}
 	
 	public bool closeEnoughToTarget (Vector3 newPos, Vector3 target, float closeEnoughDistance) {

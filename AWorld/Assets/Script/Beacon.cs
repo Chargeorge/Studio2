@@ -162,8 +162,11 @@ public class Beacon : MonoBehaviour {
 	/// <param name="valInit">Value init.</param>
 	/// 
 	private bool getPlayerBuild(){
-		int num = PlayerNumber + 1;
-		return Input.GetButton("BuildPlayer"+num);	
+		int num = PlayerNumber;
+		if(num != 0){
+			return Input.GetButton("BuildPlayer"+num);	
+		}
+		else return false;
 	}
 		
 	public void startBuilding(GameObject tileLocation, GameObject player, float valInit){
@@ -184,10 +187,13 @@ public class Beacon : MonoBehaviour {
 		this.transform.FindChild("Base").localPosition = new Vector3(0f,0f,-.1f);
 		//Debug.Log(this.transform.FindChild("Base").localPosition);
 		
-		audio.Stop ();
-		audio.PlayOneShot(beaconBuilding, 0.9f);
+		audio.Stop ()	;
+		audio.PlayOneShot(beaconBuilding, .09f);
+		
+		
 		
 	}
+	
 
 	public void buildNeutral(GameObject tileLocation){
 		audio.Stop();
@@ -903,6 +909,7 @@ public class Beacon : MonoBehaviour {
 		while (selfDestructing) {
 			subtractBuildingProgress (sRef.vpsBaseBuild);
 			yield return new WaitForEndOfFrame ();
+			
 		}
 	}
 	

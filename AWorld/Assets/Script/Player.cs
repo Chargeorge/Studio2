@@ -473,7 +473,7 @@ public class Player : MonoBehaviour {
 
 									if (currentTile.beacon == null) { 
 										beaconBeingBuilt = (GameObject)GameObject.Instantiate(_prfbBeacon, new Vector3(0,0,0), Quaternion.identity);
-										
+										beaconBeingBuilt.GetComponent<Beacon>().PlayerNumber = PlayerNumber;
 									}
 									else {
 										beaconBeingBuilt = currentTile.beacon;
