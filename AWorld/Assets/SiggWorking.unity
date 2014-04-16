@@ -114,6 +114,118 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+--- !u!1001 &347342215
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 400000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 17.0807457
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 7.53615665
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 3.06646585
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2600000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 4fc8a21e7e8f010449f1f7a337599213, type: 2}
+    - target: {fileID: 1500000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
+      propertyPath: m_Ellipsoid.x
+      value: 31.1000004
+      objectReference: {fileID: 0}
+    - target: {fileID: 1500000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
+      propertyPath: Simulate in Worldspace?
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1500000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
+      propertyPath: localVelocity.y
+      value: .100000001
+      objectReference: {fileID: 0}
+    - target: {fileID: 1500000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
+      propertyPath: m_Ellipsoid.y
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1500000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
+      propertyPath: maxEmission
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 1500000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
+      propertyPath: minEmission
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 1500000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
+      propertyPath: minSize
+      value: 2.1099999
+      objectReference: {fileID: 0}
+    - target: {fileID: 1500000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
+      propertyPath: maxSize
+      value: 3.11999989
+      objectReference: {fileID: 0}
+    - target: {fileID: 1500000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
+      propertyPath: maxEnergy
+      value: 11.6199999
+      objectReference: {fileID: 0}
+    - target: {fileID: 1500000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
+      propertyPath: rndVelocity.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1500000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
+      propertyPath: rndRotation
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1200000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
+      propertyPath: colorAnimation[1].rgba
+      value: 543306496
+      objectReference: {fileID: 0}
+    - target: {fileID: 1200000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
+      propertyPath: colorAnimation[2].rgba
+      value: 726280960
+      objectReference: {fileID: 0}
+    - target: {fileID: 1200000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
+      propertyPath: colorAnimation[3].rgba
+      value: 825697024
+      objectReference: {fileID: 0}
+    - target: {fileID: 1200000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
+      propertyPath: worldRotationAxis.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1200000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
+      propertyPath: Does Animate Color?
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1200000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
+      propertyPath: damping
+      value: .0599999987
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
+  m_RootGameObject: {fileID: 1553147952}
+  m_IsPrefabParent: 0
+  m_IsExploded: 1
 --- !u!1 &478547186
 GameObject:
   m_ObjectHideFlags: 0
@@ -253,126 +365,6 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
---- !u!1 &784669579
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 100000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
-  m_PrefabInternal: {fileID: 2084754849}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 784669583}
-  - 15: {fileID: 784669582}
-  - 12: {fileID: 784669581}
-  - 26: {fileID: 784669580}
-  m_Layer: 0
-  m_Name: Detailed Smoke
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!26 &784669580
-ParticleRenderer:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 2600000, guid: 7795cf6029a65bb44805415a08f2d7ab,
-    type: 2}
-  m_PrefabInternal: {fileID: 2084754849}
-  m_GameObject: {fileID: 784669579}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_LightmapIndex: 255
-  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
-  m_Materials:
-  - {fileID: 2100000, guid: 4fc8a21e7e8f010449f1f7a337599213, type: 2}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_UseLightProbes: 0
-  m_LightProbeAnchor: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_SortingLayerID: 0
-  serializedVersion: 2
-  m_CameraVelocityScale: 0
-  m_StretchParticles: 0
-  m_LengthScale: 2
-  m_VelocityScale: 0
-  m_MaxParticleSize: .25
-  UV Animation:
-    x Tile: 1
-    y Tile: 1
-    cycles: 1
---- !u!12 &784669581
-ParticleAnimator:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 1200000, guid: 7795cf6029a65bb44805415a08f2d7ab,
-    type: 2}
-  m_PrefabInternal: {fileID: 2084754849}
-  m_GameObject: {fileID: 784669579}
-  Does Animate Color?: 1
-  colorAnimation[0]:
-    serializedVersion: 2
-    rgba: 986895
-  colorAnimation[1]:
-    serializedVersion: 2
-    rgba: 543306496
-  colorAnimation[2]:
-    serializedVersion: 2
-    rgba: 726280960
-  colorAnimation[3]:
-    serializedVersion: 2
-    rgba: 825697024
-  colorAnimation[4]:
-    serializedVersion: 2
-    rgba: 12500670
-  worldRotationAxis: {x: 0, y: 0, z: 0}
-  localRotationAxis: {x: 0, y: 0, z: 0}
-  sizeGrow: .100000001
-  rndForce: {x: 0, y: 0, z: 0}
-  force: {x: 0, y: 0, z: 0}
-  damping: .0599999987
-  stopSimulation: 0
-  autodestruct: 0
---- !u!15 &784669582
-EllipsoidParticleEmitter:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 1500000, guid: 7795cf6029a65bb44805415a08f2d7ab,
-    type: 2}
-  m_PrefabInternal: {fileID: 2084754849}
-  m_GameObject: {fileID: 784669579}
-  serializedVersion: 2
-  m_Enabled: 1
-  m_Emit: 1
-  minSize: 2.1099999
-  maxSize: 3.11999989
-  minEnergy: 10
-  maxEnergy: 11.6199999
-  minEmission: 45
-  maxEmission: 45
-  worldVelocity: {x: 0, y: 0, z: 0}
-  localVelocity: {x: 0, y: .100000001, z: 0}
-  rndVelocity: {x: 0, y: 1, z: 0}
-  emitterVelocityScale: .0500000007
-  tangentVelocity: {x: .100000001, y: 0, z: .100000001}
-  angularVelocity: 35
-  rndAngularVelocity: -10
-  rndRotation: 0
-  Simulate in Worldspace?: 0
-  m_OneShot: 0
-  m_Ellipsoid: {x: 31.1000004, y: 20, z: 1.10000002}
-  m_MinEmitterRange: 0
---- !u!4 &784669583
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 400000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
-  m_PrefabInternal: {fileID: 2084754849}
-  m_GameObject: {fileID: 784669579}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 17.0807457, y: 7.53615665, z: 3.06646585}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
 --- !u!1 &842739086
 GameObject:
   m_ObjectHideFlags: 0
@@ -638,6 +630,126 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+--- !u!1 &1553147952
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
+  m_PrefabInternal: {fileID: 347342215}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1553147956}
+  - 15: {fileID: 1553147955}
+  - 12: {fileID: 1553147954}
+  - 26: {fileID: 1553147953}
+  m_Layer: 0
+  m_Name: Detailed Smoke
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!26 &1553147953
+ParticleRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 2600000, guid: 7795cf6029a65bb44805415a08f2d7ab,
+    type: 2}
+  m_PrefabInternal: {fileID: 347342215}
+  m_GameObject: {fileID: 1553147952}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 2100000, guid: 4fc8a21e7e8f010449f1f7a337599213, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
+  serializedVersion: 2
+  m_CameraVelocityScale: 0
+  m_StretchParticles: 0
+  m_LengthScale: 2
+  m_VelocityScale: 0
+  m_MaxParticleSize: .25
+  UV Animation:
+    x Tile: 1
+    y Tile: 1
+    cycles: 1
+--- !u!12 &1553147954
+ParticleAnimator:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 1200000, guid: 7795cf6029a65bb44805415a08f2d7ab,
+    type: 2}
+  m_PrefabInternal: {fileID: 347342215}
+  m_GameObject: {fileID: 1553147952}
+  Does Animate Color?: 1
+  colorAnimation[0]:
+    serializedVersion: 2
+    rgba: 986895
+  colorAnimation[1]:
+    serializedVersion: 2
+    rgba: 543306496
+  colorAnimation[2]:
+    serializedVersion: 2
+    rgba: 726280960
+  colorAnimation[3]:
+    serializedVersion: 2
+    rgba: 825697024
+  colorAnimation[4]:
+    serializedVersion: 2
+    rgba: 12500670
+  worldRotationAxis: {x: 0, y: 0, z: 0}
+  localRotationAxis: {x: 0, y: 0, z: 0}
+  sizeGrow: .100000001
+  rndForce: {x: 0, y: 0, z: 0}
+  force: {x: 0, y: 0, z: 0}
+  damping: .0599999987
+  stopSimulation: 0
+  autodestruct: 0
+--- !u!15 &1553147955
+EllipsoidParticleEmitter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 1500000, guid: 7795cf6029a65bb44805415a08f2d7ab,
+    type: 2}
+  m_PrefabInternal: {fileID: 347342215}
+  m_GameObject: {fileID: 1553147952}
+  serializedVersion: 2
+  m_Enabled: 1
+  m_Emit: 1
+  minSize: 2.1099999
+  maxSize: 3.11999989
+  minEnergy: 10
+  maxEnergy: 11.6199999
+  minEmission: 45
+  maxEmission: 45
+  worldVelocity: {x: 0, y: 0, z: 0}
+  localVelocity: {x: 0, y: .100000001, z: 0}
+  rndVelocity: {x: 0, y: 1, z: 0}
+  emitterVelocityScale: .0500000007
+  tangentVelocity: {x: .100000001, y: 0, z: .100000001}
+  angularVelocity: 35
+  rndAngularVelocity: -10
+  rndRotation: 0
+  Simulate in Worldspace?: 0
+  m_OneShot: 0
+  m_Ellipsoid: {x: 31.1000004, y: 20, z: 1.10000002}
+  m_MinEmitterRange: 0
+--- !u!4 &1553147956
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
+  m_PrefabInternal: {fileID: 347342215}
+  m_GameObject: {fileID: 1553147952}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 17.0807457, y: 7.53615665, z: 3.06646585}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
 --- !u!1 &1669248504
 GameObject:
   m_ObjectHideFlags: 0
@@ -850,115 +962,3 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
---- !u!1001 &2084754849
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 400000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 17.0807457
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 7.53615665
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 3.06646585
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2600000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 4fc8a21e7e8f010449f1f7a337599213, type: 2}
-    - target: {fileID: 1500000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
-      propertyPath: m_Ellipsoid.x
-      value: 31.1000004
-      objectReference: {fileID: 0}
-    - target: {fileID: 1500000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
-      propertyPath: Simulate in Worldspace?
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1500000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
-      propertyPath: localVelocity.y
-      value: .100000001
-      objectReference: {fileID: 0}
-    - target: {fileID: 1500000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
-      propertyPath: m_Ellipsoid.y
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 1500000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
-      propertyPath: maxEmission
-      value: 45
-      objectReference: {fileID: 0}
-    - target: {fileID: 1500000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
-      propertyPath: minEmission
-      value: 45
-      objectReference: {fileID: 0}
-    - target: {fileID: 1500000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
-      propertyPath: minSize
-      value: 2.1099999
-      objectReference: {fileID: 0}
-    - target: {fileID: 1500000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
-      propertyPath: maxSize
-      value: 3.11999989
-      objectReference: {fileID: 0}
-    - target: {fileID: 1500000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
-      propertyPath: maxEnergy
-      value: 11.6199999
-      objectReference: {fileID: 0}
-    - target: {fileID: 1500000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
-      propertyPath: rndVelocity.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1500000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
-      propertyPath: rndRotation
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1200000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
-      propertyPath: colorAnimation[1].rgba
-      value: 543306496
-      objectReference: {fileID: 0}
-    - target: {fileID: 1200000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
-      propertyPath: colorAnimation[2].rgba
-      value: 726280960
-      objectReference: {fileID: 0}
-    - target: {fileID: 1200000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
-      propertyPath: colorAnimation[3].rgba
-      value: 825697024
-      objectReference: {fileID: 0}
-    - target: {fileID: 1200000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
-      propertyPath: worldRotationAxis.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1200000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
-      propertyPath: Does Animate Color?
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1200000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
-      propertyPath: damping
-      value: .0599999987
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
-  m_RootGameObject: {fileID: 784669579}
-  m_IsPrefabParent: 0
-  m_IsExploded: 1
