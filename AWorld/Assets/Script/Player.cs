@@ -540,10 +540,7 @@ public class Player : MonoBehaviour {
 							currentActionProgress = 0;
 						}*/
 
-						if(currentTile.percControlled == 100f){
-//						Debug.Log ("INLFUENCE DONE");
-							audio.PlayOneShot(influenceDone, 1.0f);
-						}
+						if(currentTile.percControlled == 100f){}
 						
 						if (x.HasValue) { 
 							setDirection (x.Value);
@@ -559,7 +556,7 @@ public class Player : MonoBehaviour {
 				else{
 				///TODO: add reset to tile in case of change
 					//need to reset currenttile to previousState
-					//StopSFX();
+					
 					audio.Stop();
 					_currentState = PlayerState.standing;
 				}	
@@ -604,7 +601,7 @@ public class Player : MonoBehaviour {
 							beacon.Rotate (facing);
 							beacon.percRotateComplete = 0f;
 							_currentState = PlayerState.standing;
-							StopSFX ();					
+												
 						}
 					}
 					moveTowardCenterOfTile (currentTile);
@@ -624,7 +621,7 @@ public class Player : MonoBehaviour {
 			case PlayerState.upgrading:
 
 				if (buildButtonDown) {
-					audio.Stop ();
+					//audio.Stop ();
 					Pulsate ();;
 					float vpsUpgradeRate = sRef.vpsBaseUpgrade * getAltarUpgradeBoost ();
 					addProgressToAction (vpsUpgradeRate);

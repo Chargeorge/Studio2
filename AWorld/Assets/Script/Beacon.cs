@@ -185,7 +185,7 @@ public class Beacon : MonoBehaviour {
 		//Debug.Log(this.transform.FindChild("Base").localPosition);
 		
 		audio.Stop ();
-		audio.PlayOneShot(beaconBuilding, 0.9f);
+		audio.PlayOneShot(beaconBuilding, 1.0f);
 		
 	}
 
@@ -364,7 +364,7 @@ public class Beacon : MonoBehaviour {
 
 		if (percUpgradeComplete <= 0f) {
 			percUpgradeComplete = 0f;
-			//audio.Stop();
+			audio.Stop();
 			_currentState = BeaconState.Basic;
 			Color32 animColor = transform.FindChild("Anim").renderer.material.color;
 			animColor.a = (byte)0f;
