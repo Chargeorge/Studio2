@@ -97,8 +97,8 @@ public class Player : MonoBehaviour {
 			winTexture = gm.winTexture2;
 		}
 		
-		TeamRect = new Rect(0,(Screen.height - scoreBarH)*(PlayerNumber-1), Screen.width, scoreBarH);
-		ScoreRect  = new Rect(0,(Screen.height - scoreBarH)*(PlayerNumber-1), 0, scoreBarH);
+		TeamRect = new Rect((Screen.width - scoreBarW)*(PlayerNumber-1)+ 2, 0, scoreBarW, Screen.height);
+		ScoreRect  = new Rect((Screen.width - scoreBarW)*(PlayerNumber-1)+ 2, Screen.height, scoreBarW,0);
 	}
 	
 	
@@ -892,15 +892,16 @@ public class Player : MonoBehaviour {
 	private void OnGUI(){
 
 		float perScore = team.score / sRef.valPointsToWin;
-		ScoreRect.width = Screen.width * perScore;
+		ScoreRect.height =-Screen.height *perScore;
+
 		GUI.DrawTexture(TeamRect, gm.scoreBgTexture, ScaleMode.StretchToFill, true, 1.0f);
 		GUI.DrawTexture(ScoreRect, scoreTexture, ScaleMode.StretchToFill, true, 1.0f);
 
 	//	GUI.DrawTexture(new Rect(0,(Screen.height - scoreBarH)*(PlayerNumber-1), Screen.width, scoreBarH), gm.scoreBgTexture, ScaleMode.StretchToFill, true, 1.0f);
 	//	GUI.DrawTexture(new Rect(0,(Screen.height - scoreBarH)*(PlayerNumber-1), Screen.width * perScore, scoreBarH), scoreTexture, ScaleMode.StretchToFill, true, 1.0f);
 
-		GUI.DrawTexture(new Rect((Screen.width - scoreBarW)*(PlayerNumber-1)+ 2, 0, scoreBarW, Screen.height), gm.scoreBgTexture, ScaleMode.StretchToFill,true, 1.0f);
-		GUI.DrawTexture(new Rect((Screen.width - scoreBarW)*(PlayerNumber-1)+ 2, Screen.height, scoreBarW, -Screen.height *perScore),scoreTexture, ScaleMode.StretchToFill, true, 1.0f);
+//		GUI.DrawTexture(new Rect((Screen.width - scoreBarW)*(PlayerNumber-1)+ 2, 0, scoreBarW, Screen.height), gm.scoreBgTexture, ScaleMode.StretchToFill,true, 1.0f);
+//		GUI.DrawTexture(new Rect((Screen.width - scoreBarW)*(PlayerNumber-1)+ 2, Screen.height, scoreBarW, -Screen.height *perScore),scoreTexture, ScaleMode.StretchToFill, true, 1.0f);
 
 
 		int boxWidth = 1600;
