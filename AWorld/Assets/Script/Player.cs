@@ -884,7 +884,7 @@ public class Player : MonoBehaviour {
 
 
 
-	private void OnGUI(){
+	private void OnGUIHidden(){
 
 		float perScore = team.score / sRef.valPointsToWin;
 
