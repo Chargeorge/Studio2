@@ -41,6 +41,7 @@ public class Player : MonoBehaviour {
 	public AudioClip invalid_Input;
 
 	public float scoreBarH = 30;
+	public float scoreBarW = 75;
 	public Texture scoreTexture;
 	public Texture winTexture;
 	
@@ -400,7 +401,6 @@ public class Player : MonoBehaviour {
 			break;	
 			
 			case PlayerState.building:
-				
 
 				qudProgessCircle.renderer.enabled = true;
 				qudProgessCircle.renderer.material.SetFloat("_Cutoff", 1-(beaconInProgress.percBuildComplete/100));
@@ -895,6 +895,13 @@ public class Player : MonoBehaviour {
 		ScoreRect.width = Screen.width * perScore;
 		GUI.DrawTexture(TeamRect, gm.scoreBgTexture, ScaleMode.StretchToFill, true, 1.0f);
 		GUI.DrawTexture(ScoreRect, scoreTexture, ScaleMode.StretchToFill, true, 1.0f);
+
+	//	GUI.DrawTexture(new Rect(0,(Screen.height - scoreBarH)*(PlayerNumber-1), Screen.width, scoreBarH), gm.scoreBgTexture, ScaleMode.StretchToFill, true, 1.0f);
+	//	GUI.DrawTexture(new Rect(0,(Screen.height - scoreBarH)*(PlayerNumber-1), Screen.width * perScore, scoreBarH), scoreTexture, ScaleMode.StretchToFill, true, 1.0f);
+
+		GUI.DrawTexture(new Rect((Screen.width - scoreBarW)*(PlayerNumber-1)+ 2, 0, scoreBarW, Screen.height), gm.scoreBgTexture, ScaleMode.StretchToFill,true, 1.0f);
+		GUI.DrawTexture(new Rect((Screen.width - scoreBarW)*(PlayerNumber-1)+ 2, Screen.height, scoreBarW, -Screen.height *perScore),scoreTexture, ScaleMode.StretchToFill, true, 1.0f);
+
 
 		int boxWidth = 1600;
 		int boxHeight = 900;

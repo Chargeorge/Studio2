@@ -41,8 +41,8 @@ MonoBehaviour:
   prfbTile: {fileID: 100010, guid: 87f9a789346b544448cbc9bac6e40707, type: 2}
   matTest: {fileID: 0}
   manager: {fileID: 0}
-  boardX: 26
-  boardY: 13
+  boardX: 22
+  boardY: 14
   numberOfAltars: 0
   ranjitRangeTileTypes: 
   fogOn: 1
