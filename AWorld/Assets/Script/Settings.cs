@@ -43,12 +43,11 @@ public class Settings : MonoBehaviour {
 	public float valPointsToWin;
 	public float valScorePerMine;
 	
-	
 	//Beacon stuff
-	public int beaconBasicRange = 4;
-	public int beaconAdvancedRange = 8;
+	public int beaconBasicRange;
+	public int beaconAdvancedRange;
 	public int beaconNoBuildRange;
-	public float selfDestructDelay;	//How long you wait after player stops building before destroying a beacon
+	public float selfDestructDelay;	 //How long you wait after player stops building before destroying a beacon
 	public float loseUpgradeProgressDelay;	//How long you wait after player stops upgrading before clearing upgrade progress
 	
 	//Board setup stuff
@@ -78,12 +77,13 @@ public class Settings : MonoBehaviour {
 	public float upgradeCircleStartAlpha; //The alpha at which the upgrade circle anim thing starts
 	public float upgradeCircleFinishAlpha; //The alpha the upgrade circle anim thing is at around 99% complete 
 	
-	//Movement rate stuff
+	//Misc
 	public float teleportRate;
 	public float closeEnoughDistanceTeleport;
 	public float moveToCenterRate;
 	public float closeEnoughDistanceMoveToCenter;
 	public float closeEnoughDistanceScoreBit;
+	public int influenceRevealRange;  //Radius of fog reveal when tile is influenced
 	
 	// Use this for initialization
 	void Start () {
@@ -98,6 +98,7 @@ public class Settings : MonoBehaviour {
 		vpsScorePerAltarPerSecond = 1f;
 		vpsBeaconBaseInfluence = 100f;
 		vpsScorePerMinePerSecond = 3f;
+		
 		//Coefficients
 		coefMoveNeutral = 1f;
 		coefMoveAllied = 2f;
@@ -118,12 +119,13 @@ public class Settings : MonoBehaviour {
 		valTileConvertScore = 1f;
 		valPointsToWin = 300;
 		valScorePerMine = 1f;
+		
 		//Beacon stuff
 		beaconBasicRange = 4;
 		beaconAdvancedRange = 8;
 		beaconNoBuildRange = 1;
-		selfDestructDelay = 0.5f;
-		loseUpgradeProgressDelay = 0.5f;	
+		selfDestructDelay = 0.5f;  //How long you wait after player stops building before destroying a beacon
+		loseUpgradeProgressDelay = 0.5f;  //How long you wait after player stops upgrading before clearing upgrade progress
 		
 		//Board setup stuff
 		team1Start = new Vector2(2,7);
@@ -132,6 +134,7 @@ public class Settings : MonoBehaviour {
 		neutralBeaconCount = 12;
 		numAltars = 0;
 		numScoringAltars = 5;
+		
 		//Mode switches
 		debugMode = true;
 		gameMode = Mode.OneVOne;
@@ -150,12 +153,14 @@ public class Settings : MonoBehaviour {
 		upgradeCircleStartAlpha = 0.1f; //The alpha at which the upgrade circle anim thing starts
 		upgradeCircleFinishAlpha = 0.8f; //The alpha the upgrade circle anim thing is at around 99% complete 
 		
-		//Misc?
+		//Misc
 		teleportRate = .2f;
 		closeEnoughDistanceTeleport = 0.2f;
 		moveToCenterRate = 0.014f;
 		closeEnoughDistanceMoveToCenter = 0.012f;
 		closeEnoughDistanceScoreBit = 0.1f;
+		influenceRevealRange = 3;  //Radius of fog reveal when tile is influenced
+		
 	}
 	
 	// Update is called once per frame

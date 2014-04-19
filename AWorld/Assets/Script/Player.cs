@@ -390,7 +390,6 @@ public class Player : MonoBehaviour {
 			break;	
 			
 			case PlayerState.building:
-				
 
 				qudProgessCircle.renderer.enabled = true;
 				qudProgessCircle.renderer.material.SetFloat("_Cutoff", 1-(beaconInProgress.percBuildComplete/100));

@@ -1051,6 +1051,7 @@ MonoBehaviour:
   moveToCenterRate: 0
   closeEnoughDistanceMoveToCenter: 0
   closeEnoughDistanceScoreBit: 0
+  influenceRevealRange: 0
 --- !u!4 &1843163359
 Transform:
   m_ObjectHideFlags: 0
