@@ -272,7 +272,7 @@ public class Player : MonoBehaviour {
 								
 								if (currentTile.beacon == null) { 
 									beaconBeingBuilt = (GameObject)GameObject.Instantiate(_prfbBeacon, new Vector3(0,0,0), Quaternion.identity);
-
+									beaconBeingBuilt.name = "Beacon for" + team.teamNumber;
 									
 								}
 								else {
@@ -484,6 +484,7 @@ public class Player : MonoBehaviour {
 
 									if (currentTile.beacon == null) { 
 										beaconBeingBuilt = (GameObject)GameObject.Instantiate(_prfbBeacon, new Vector3(0,0,0), Quaternion.identity);
+										beaconBeingBuilt.name = "Beacon:  " + team.teamNumber;
 										beaconBeingBuilt.GetComponent<Beacon>().PlayerNumber = PlayerNumber;
 									}
 									else {

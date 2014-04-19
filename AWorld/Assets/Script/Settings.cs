@@ -129,7 +129,7 @@ public class Settings : MonoBehaviour {
 		team1Start = new Vector2(4,6);
 		team2Start = new Vector2(22,6);
 		optPerlinLevel = 1800;
-		neutralBeaconCount = 12;
+		neutralBeaconCount = 0;
 		numAltars = 0;
 		numScoringAltars = 5;
 		//Mode switches

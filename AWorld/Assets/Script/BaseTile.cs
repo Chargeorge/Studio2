@@ -302,7 +302,7 @@ public class BaseTile : MonoBehaviour {
 		if(IsHover){
 
 		}
-		
+		/*
 		Component[] meshes = qudSelectedLayer.GetComponentsInChildren<MeshRenderer>(); 
 		//if(IsSelected) Debug.Log ("Selected");
 		for (int i = 0; i< meshes.Length; i++){
@@ -310,7 +310,7 @@ public class BaseTile : MonoBehaviour {
 			((MeshRenderer)meshes[i]).enabled = IsSelected;	
 			
 		}
-		
+		*/
 		if(owningTeam== null){
 			//transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
 		}
@@ -815,6 +815,7 @@ public class BaseTile : MonoBehaviour {
 	/// </summary>
 	public void finishInfluence(){
 		audio.PlayOneShot(influenceDone, 0.7f);
+		//Debug.Log("Why am I here?");
 		///TODO: add end semaphore stuff her
 		if(controllingTeam != owningTeam){
 			if(percControlled > 100f){
