@@ -166,12 +166,16 @@ public class Altar : MonoBehaviour {
 		if(!isLocked){
 			if(team!=null) {
 				Color32 copy = team.beaconColor;
-				renderer.material.color = copy;
+				//renderer.material.color = copy;
 				//renderer.material.color = team.teamColor;
+
 				_currentControllingTeam = team;
 				checkNetwork();
 //				StartCoroutine(AnimateTiles());
-				
+				copy.a = 200;
+				symbol.renderer.material.color = copy;
+
+
 				//TODO - fix - not sure why this doesn't work...
 				if (!sRef.optLockTile) {
 					//Update all existing beacons to match new altar effects
@@ -184,6 +188,7 @@ public class Altar : MonoBehaviour {
 			}else{
 				renderer.material.color = new Color32(237, 20, 90, 255);
 				//pink (237, 20, 90, 255)
+				//symbol.renderer.material.color = new Color32(255, 255, 255, 255);
 			}
 		}
 			

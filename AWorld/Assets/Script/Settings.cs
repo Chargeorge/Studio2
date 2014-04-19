@@ -126,8 +126,8 @@ public class Settings : MonoBehaviour {
 		loseUpgradeProgressDelay = 0.5f;	
 		
 		//Board setup stuff
-		team1Start = new Vector2(4,6);
-		team2Start = new Vector2(22,6);
+		team1Start = new Vector2(2,7);
+		team2Start = new Vector2(19,7);
 		optPerlinLevel = 1800;
 		neutralBeaconCount = 12;
 		numAltars = 0;

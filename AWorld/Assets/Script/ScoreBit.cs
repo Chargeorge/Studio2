@@ -18,6 +18,7 @@ public class ScoreBit : MonoBehaviour {
 	public void setTeam(TeamInfo T){
 		team = T;
 	//	renderer.material.color = team.getHighLightColor();
+		renderer.material.color = new Color32(237, 20, 90, 180);
 		switch (T.teamNumber) {
 			case 1: 
 				finalTarget = GameObject.Find ("GameManager").GetComponent<GameManager>().home1.transform.FindChild ("ScoreBitFinalTarget").gameObject.GetComponent<FinalScoreTarget>();
