@@ -14,18 +14,87 @@ public class BaseTile : MonoBehaviour {
 	public float percControlled;
 	public TeamInfo owningTeam;  //OWNING team is the official owning team, use it for defining networks and movement cost.
 	
+	private Settings sRef;
+	private GameManager gm;
 	public GameObject beacon;
 	private Animator anim;
+	private GameObject _scoreBitTarget;
 			
 	public TileState currentState;
 	private int _brdXPos;
 	private int _brdYPos;
+	public bool jiggling;
 	public TileTypeEnum currentType;
 	private int _ident;
 	public List<AStarholder> networkToBase;
-	private GameObject _qudFogLayerUpper;
-	private GameObject _qudFogLayerLower;
+	private int? _distanceToHomeBase;
+	//Delegate used for different A* methods
+	public delegate List<BaseTile> GetLocalTiles(BaseTile Base, TeamInfo T);
+	
+	private GameObject _qudBaseLayer;
+	private GameObject _qudFogLowerLayer;
+	private GameObject _qudFogUpperLayer;
 	private GameObject _qudNoBuildLayer;
+	private GameObject _qudOwnedLayer;
+	private GameObject _qudPulsingOwnedLayer;
+	
+	public AudioClip influenceDone;
+		
+	private bool _isRevealed;
+	private bool _isHover;
+	private bool _isHighlighted;
+	private bool _isSelected;
+	
+	private BaseTile _North;
+	private BaseTile _South;
+	private BaseTile _East;
+	private BaseTile _West;
+	
+	private int _MoveCost;
+	private float _DamageModifier;
+	private float _jiggleRange = 0.05f;  //Max distance from center of position the tile will jiggle
+	
+	private ParticleSystem _PS;
+	
+	private Color _highlightColor = new Color(0f,0f, 0f);
+	
+	#region get_n_set
+	public GameObject qudBaseLayer {
+		get {
+			if(_qudBaseLayer == null){
+				_qudBaseLayer = transform.FindChild("BaseLayer").gameObject;
+			}
+			return _qudBaseLayer;
+		}
+		set {
+			_qudBaseLayer = value;
+		}
+	}	
+	
+	public GameObject qudFogUpperLayer {
+		get {
+			if(_qudFogUpperLayer == null){
+				_qudFogUpperLayer = transform.FindChild("FogUpperLayer").gameObject;
+			}
+			return _qudFogUpperLayer;
+		}
+		set {
+			_qudFogUpperLayer = value;
+		}
+	}	
+	
+	public GameObject qudFogLowerLayer {
+		get {
+			if(_qudFogLowerLayer == null){
+				_qudFogLowerLayer = transform.FindChild("FogLowerLayer").gameObject;
+			}
+			return _qudFogLowerLayer;
+		}
+		set {
+			_qudFogLowerLayer = value;
+		}
+	}
+	
 	public GameObject qudNoBuildLayer {
 		get {
 			if(_qudNoBuildLayer == null){
@@ -38,8 +107,30 @@ public class BaseTile : MonoBehaviour {
 		}
 	}	
 
-	private GameObject _scoreBitTarget;
-
+	public GameObject qudPulsingOwnedLayer {
+		get {
+			if(_qudPulsingOwnedLayer == null){
+				_qudPulsingOwnedLayer = transform.FindChild("PulsingOwnedLayer").gameObject;
+			}
+			return _qudPulsingOwnedLayer;
+		}
+		set {
+			_qudPulsingOwnedLayer = value;
+		}
+	}
+		
+	public GameObject qudOwnedLayer {
+		get {
+			if(_qudOwnedLayer == null){
+				_qudOwnedLayer = transform.FindChild("OwnedLayer").gameObject;
+			}
+			return _qudOwnedLayer;
+		}
+		set {
+			_qudOwnedLayer = value;
+		}
+	}
+	
 	public GameObject scoreBitTarget {
 		get {
 			if(_scoreBitTarget == null){
@@ -52,63 +143,12 @@ public class BaseTile : MonoBehaviour {
 		}
 	}
 
-	private GameObject _qudPulsingOwnedLayer;
-	public GameObject qudPulsingOwnedLayer {
-		get {
-			if(_qudPulsingOwnedLayer == null){
-				_qudPulsingOwnedLayer = transform.FindChild("PulsingOwnedLayer").gameObject;
-			}
-			return _qudPulsingOwnedLayer;
-		}
-		set {
-			_qudPulsingOwnedLayer = value;
-		}
-	}	
-
-	private int? _distanceToHomeBase;
-
 	public int? distanceToHomeBase {
 		get {
 			return _distanceToHomeBase;
 		}
 
-	}
-
-
-	public AudioClip influenceDone;
-
-	public GameObject qudFogLayerUpper {
-		get {
-			if(_qudFogLayerUpper == null){
-				_qudFogLayerUpper = transform.FindChild("FogUpper").gameObject;
-			}
-			return _qudFogLayerUpper;
-		}
-		set {
-			_qudFogLayerUpper = value;
-		}
 	}	
-	
-	public GameObject qudFogLayerLower {
-		get {
-			if(_qudFogLayerLower == null){
-				_qudFogLayerLower = transform.FindChild("FogLower").gameObject;
-			}
-			return _qudFogLayerLower;
-		}
-		set {
-			_qudFogLayerLower = value;
-		}
-	}	
-
-	private Settings sRef;
-	
-	private int _influenceRevealRange = 3;
-	private GameManager gm;
-	//Delegate used for different A* methods
-	public delegate List<BaseTile> GetLocalTiles(BaseTile Base, TeamInfo T);
-
-	private Color _highlightColor = new Color(0f,0f, 0f);
 
 	public Color HighlightColor {
 		get {
@@ -140,20 +180,18 @@ public class BaseTile : MonoBehaviour {
 			_brdYPos = value;
 		}
 	}	
-	
-	private bool _isRevealed;
+
 	public bool IsRevealed {
 		get {
 			return this._isRevealed;
 		}
 		set {
 			_isRevealed = value;
-			qudFogLayerUpper.renderer.enabled = !value;
-			qudFogLayerLower.renderer.enabled = !value;
+			qudFogUpperLayer.renderer.enabled = !value;
+			qudFogLowerLayer.renderer.enabled = !value;
 		}
 	}
 	
-	private bool _isHover;
 	public bool IsHover {
 		get {
 			return this._isHover;
@@ -162,9 +200,7 @@ public class BaseTile : MonoBehaviour {
 			_isHover = value;
 		}
 	}	
-
-	private bool _isHighlighted;
-
+	
 	public bool IsHighlighted {
 		get {
 			return this._isHighlighted;
@@ -173,8 +209,7 @@ public class BaseTile : MonoBehaviour {
 			_isHighlighted = value;
 		}
 	}	
-	private bool _isSelected;
-
+	
 	public bool IsSelected {
 		get {
 			return this._isSelected;
@@ -183,20 +218,6 @@ public class BaseTile : MonoBehaviour {
 			_isSelected = value;
 		}
 	}	
-		
-	
-		
-	
-	private BaseTile _North;
-	private BaseTile _South;
-	private BaseTile _East;
-	private BaseTile _West;
-	
-	private int _MoveCost;
-	private float _DamageModifier;
-	
-	
-
 	
 	public BaseTile East {
 		get {
@@ -252,14 +273,15 @@ public class BaseTile : MonoBehaviour {
 			_MoveCost = value;
 		}
 	}
-	private ParticleSystem _PS;
-
+	
 	public ParticleSystem PS{
 		get{
 			if(_PS == null) {_PS = GetComponent<ParticleSystem>();}
 			return _PS;
 		}
 	}
+	
+#endregion			
 
 	// Use this for initialization
 	void Start () {
@@ -338,15 +360,22 @@ public class BaseTile : MonoBehaviour {
 					qudPulsingOwnedLayer.renderer.material.color = owningTeam.marqueeColorList[indexVal];
 				}
 			}
-			//			
 		}
-	}
-
-
-
-	
-	public static void createTile(TileTypeEnum et, GameObject currentTile){
 		
+		Vector3 jigglePos = transform.position;
+		
+		if (jiggling) {
+			Vector3 positionOffset = new Vector3 (UnityEngine.Random.Range (-1 * _jiggleRange, _jiggleRange), UnityEngine.Random.Range (-1 * _jiggleRange, _jiggleRange), 0);
+			jigglePos = transform.position + positionOffset;
+		}	
+		
+		qudBaseLayer.transform.position = new Vector3 (jigglePos.x, jigglePos.y, qudBaseLayer.transform.position.z);
+		qudSelectedLayer.transform.position = new Vector3 (jigglePos.x, jigglePos.y, qudSelectedLayer.transform.position.z);
+		qudInfluenceLayer.transform.position = new Vector3 (jigglePos.x, jigglePos.y, qudInfluenceLayer.transform.position.z);
+		qudOwnedLayer.transform.position = new Vector3 (jigglePos.x, jigglePos.y, qudOwnedLayer.transform.position.z);
+	}
+ 	
+	public static void createTile(TileTypeEnum et, GameObject currentTile){
 		
 		currentTile.GetComponent<BaseTile>().IsHover = false;
 		currentTile.GetComponent<BaseTile>().IsSelected = false;
@@ -354,12 +383,12 @@ public class BaseTile : MonoBehaviour {
 		
 		switch (et){
 			case TileTypeEnum.regular:
-				currentTile.renderer.material = (Material)Resources.Load("Sprites/Materials/Regular");
+				currentTile.GetComponent<BaseTile>().qudBaseLayer.renderer.material = (Material)Resources.Load("Sprites/Materials/Regular");
 				currentTile.GetComponent<BaseTile>().currentType = TileTypeEnum.regular;
 			break;
 
 			case TileTypeEnum.water:
-				currentTile.renderer.material = (Material)Resources.Load("Sprites/Materials/Water");
+				currentTile.GetComponent<BaseTile>().qudBaseLayer.renderer.material = (Material)Resources.Load("Sprites/Materials/Water");
 				currentTile.GetComponent<BaseTile>().currentType = TileTypeEnum.water;
 			break;
 		}
@@ -750,12 +779,12 @@ public class BaseTile : MonoBehaviour {
 	public float addInfluenceReturnOverflow(float amt){
 		if(percControlled < 100f){
 			percControlled += amt;
-			
+			jiggling = true;
 		}
 		if(percControlled >100f){
-			float returnable =  percControlled -100f;
-
+			float returnable = percControlled -100f;
 			finishInfluence();
+			jiggling = false;
 			return returnable;
 		}
 		return 0f;
@@ -813,7 +842,7 @@ public class BaseTile : MonoBehaviour {
 
 			}
 			
-			Reveal (_influenceRevealRange);
+			Reveal (sRef.influenceRevealRange);
 			//TODO: possible huge performance hit here
 			gm.tileSendMessage("setDistanceToHomeBase");
 			//setDistanceToHomeBase();

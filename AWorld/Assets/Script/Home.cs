@@ -13,7 +13,5 @@ public class Home : MonoBehaviour {
 //		Color32 copy = new Color32((byte)(team.teamColor.r +30), (byte)(team.teamColor.g-30), (byte)(team.teamColor.b+30), (byte)255);
 		Color32 copy = team.beaconColor;
 		renderer.material.color = copy;
-		
-
 	}
 }
