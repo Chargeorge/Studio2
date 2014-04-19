@@ -10,8 +10,10 @@ public class Player : MonoBehaviour {
 	private PlayerState _currentState;
 	public int PlayerNumber;
 	public GameManager gm;
-	
-	
+
+	public  Rect TeamRect;
+	public  Rect ScoreRect;
+
 	public float currentActionProgress;
 	public Settings sRef;
 	public DirectionEnum facing;
@@ -93,7 +95,9 @@ public class Player : MonoBehaviour {
 			scoreTexture = gm.scoreTexture2;
 			winTexture = gm.winTexture2;
 		}
-
+		
+		TeamRect = new Rect(0,(Screen.height - scoreBarH)*(PlayerNumber-1), Screen.width, scoreBarH);
+		ScoreRect  = new Rect(0,(Screen.height - scoreBarH)*(PlayerNumber-1), 0, scoreBarH);
 	}
 	
 	
@@ -884,38 +888,36 @@ public class Player : MonoBehaviour {
 
 
 
-	private void OnGUIHidden(){
+	private void OnGUI(){
 
 		float perScore = team.score / sRef.valPointsToWin;
-
-		GUI.DrawTexture(new Rect(0,(Screen.height - scoreBarH)*(PlayerNumber-1), Screen.width, scoreBarH), gm.scoreBgTexture, ScaleMode.StretchToFill, true, 1.0f);
-		GUI.DrawTexture(new Rect(0,(Screen.height - scoreBarH)*(PlayerNumber-1), Screen.width * perScore, scoreBarH), scoreTexture, ScaleMode.StretchToFill, true, 1.0f);
+		ScoreRect.width = Screen.width * perScore;
+		GUI.DrawTexture(TeamRect, gm.scoreBgTexture, ScaleMode.StretchToFill, true, 1.0f);
+		GUI.DrawTexture(ScoreRect, scoreTexture, ScaleMode.StretchToFill, true, 1.0f);
 
 		int boxWidth = 1600;
 		int boxHeight = 900;
 
 		switch (gm.currentState){
-		case GameState.gameWon:
-			if(gm.vIsForVendetta.completingTeam == this.team){
-			GUI.BeginGroup(new Rect(Screen.width/2 - boxWidth/2, Screen.height/2 - boxHeight/2, boxWidth, boxHeight));
-			GUI.DrawTexture(new Rect(0,0,boxWidth,boxHeight), winTexture, ScaleMode.StretchToFill, true, 1.0f);
-			GUI.EndGroup();
+			case GameState.gameWon:
+				if(gm.vIsForVendetta.completingTeam == this.team){
+				GUI.BeginGroup(new Rect(Screen.width/2 - boxWidth/2, Screen.height/2 - boxHeight/2, boxWidth, boxHeight));
+				GUI.DrawTexture(new Rect(0,0,boxWidth,boxHeight), winTexture, ScaleMode.StretchToFill, true, 1.0f);
+				GUI.EndGroup();
+				}
+				break;
+				
+			case GameState.playing:
+				break;
 			}
-			break;
-			
-		case GameState.playing:
-			break;
-		}
-		if(gm.debugGUI == true){
-		switch (gm.currentState){
-		case GameState.playing:
-			if(sRef.debugMode){
-				GUI.Box (new Rect (10+200*(PlayerNumber-1),10,200,90), string.Format("Player {0}\r\nState: {1}\r\npercentcomplete{2}\r\nScore: {3}",PlayerNumber, currentState,currentActionProgress, team.score));	
+			if(gm.debugGUI == true){
+				switch (gm.currentState){
+				case GameState.playing:
+					if(sRef.debugMode){
+						GUI.Box (new Rect (10+200*(PlayerNumber-1),10,200,90), string.Format("Player {0}\r\nState: {1}\r\npercentcomplete{2}\r\nScore: {3}",PlayerNumber, currentState,currentActionProgress, team.score));	
+					}
+				break;
 			}
-			break;
-		case GameState.gameWon:
-			break;
-		}
 		}
 	}
 		
@@ -1102,8 +1104,8 @@ public class Player : MonoBehaviour {
 		newTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = true;
 		newTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().material.color = team.highlightColor;
 
-		Debug.Log("In New Tile");
-		qudActionableGlow.renderer.material.color = (newTile.getActionable(team, this.getPlayerBuild())) ?  Color.green : Color.red;
+		//Debug.Log("In New Tile");
+	//	qudActionableGlow.renderer.material.color = (newTile.getActionable(team, this.getPlayerBuild())) ?  Color.green : Color.red;
 	}
 	
 }
