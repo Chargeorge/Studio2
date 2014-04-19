@@ -23,7 +23,8 @@ public class BaseTile : MonoBehaviour {
 	public TileTypeEnum currentType;
 	private int _ident;
 	public List<AStarholder> networkToBase;
-	private GameObject _qudFogLayer;
+	private GameObject _qudFogLayerUpper;
+	private GameObject _qudFogLayerLower;
 	private GameObject _qudNoBuildLayer;
 	public GameObject qudNoBuildLayer {
 		get {
@@ -76,18 +77,30 @@ public class BaseTile : MonoBehaviour {
 
 	public AudioClip influenceDone;
 
-	public GameObject qudFogLayer {
+	public GameObject qudFogLayerUpper {
 		get {
-			if(_qudFogLayer == null){
-				_qudFogLayer = transform.FindChild("Fog").gameObject;
+			if(_qudFogLayerUpper == null){
+				_qudFogLayerUpper = transform.FindChild("FogUpper").gameObject;
 			}
-			return _qudFogLayer;
+			return _qudFogLayerUpper;
 		}
 		set {
-			_qudFogLayer = value;
+			_qudFogLayerUpper = value;
 		}
 	}	
 	
+	public GameObject qudFogLayerLower {
+		get {
+			if(_qudFogLayerLower == null){
+				_qudFogLayerLower = transform.FindChild("FogLower").gameObject;
+			}
+			return _qudFogLayerLower;
+		}
+		set {
+			_qudFogLayerLower = value;
+		}
+	}	
+
 	private Settings sRef;
 	
 	private int _influenceRevealRange = 3;
@@ -135,7 +148,8 @@ public class BaseTile : MonoBehaviour {
 		}
 		set {
 			_isRevealed = value;
-			qudFogLayer.renderer.enabled = !value;
+			qudFogLayerUpper.renderer.enabled = !value;
+			qudFogLayerLower.renderer.enabled = !value;
 		}
 	}
 	
