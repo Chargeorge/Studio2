@@ -51,6 +51,8 @@ public class Player : MonoBehaviour {
 	}
 
 	private GameObject qudProgessCircle;
+	private GameObject qudActionableGlow;
+
 	/// <summary>
 	/// Gets or sets the grd location.  Sets transform to corresponding center square of tile.  
 	/// I'm not sure if I like that it does this, maybe we should break into seperate calls?  
@@ -82,6 +84,7 @@ public class Player : MonoBehaviour {
 		gm = GameManager.GameManagerInstance;
 		qudProgessCircle = transform.parent.FindChild("ActionTimer").gameObject;
 		qudProgessCircle.renderer.material.color = team.beaconColor;
+		qudActionableGlow = transform.parent.FindChild("ActionableGlow").gameObject;
 
 		if(PlayerNumber == 1){
 			scoreTexture = gm.scoreTexture1;
@@ -99,10 +102,9 @@ public class Player : MonoBehaviour {
 		
 		DirectionEnum? x = getStickDirection();
 		//BaseTile currentTile = gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>();	//Not used with free movement
+
 		BaseTile currentTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
-		currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = true;
-		currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().material.color = team.highlightColor;
-		
+
 		bool buildButtonDown = getPlayerBuild();
 		//if(x.HasValue) Debug.Log(x.Value);
 		_pulsating = false;	//Pulsate () sets this to true; if false at the end of this method, reset scale and _expanding
@@ -122,9 +124,12 @@ public class Player : MonoBehaviour {
 				Vector3 newPos = Vector2.Lerp(transform.parent.position, teleportTarget, sRef.teleportRate);
 				newPos.z = transform.parent.position.z;
 				transform.parent.position = newPos;
-			BaseTile newTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
+				
+				BaseTile newTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
 				if (newTile != currentTile) {
-					currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
+					Debug.Log ("Getting New Tile");
+					//currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
+					doNewTile(currentTile, newTile);
 				}
 //				if(currentTile == team.goGetHomeTile().GetComponent<BaseTile>()){
 				if(closeEnoughToTarget(newPos, teleportTarget, sRef.closeEnoughDistanceTeleport)){
@@ -330,8 +335,10 @@ public class Player : MonoBehaviour {
 							transform.parent.position = posToCheck;
 							BaseTile thisTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
 							if (thisTile != currentTile) {
-								currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
-							}	
+								Debug.Log ("Getting New Tile moving");
+								//currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
+								doNewTile(currentTile, thisTile);
+							}
 						}
 					}
 					
@@ -1087,6 +1094,16 @@ public class Player : MonoBehaviour {
 		}
 		transform.parent.position = newPos;
 		
+	}
+
+	public void doNewTile(BaseTile previousTile, BaseTile newTile){
+		previousTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
+
+		newTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = true;
+		newTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().material.color = team.highlightColor;
+
+		Debug.Log("In New Tile");
+		qudActionableGlow.renderer.material.color = (newTile.getActionable(team, this.getPlayerBuild())) ?  Color.green : Color.red;
 	}
 	
 }

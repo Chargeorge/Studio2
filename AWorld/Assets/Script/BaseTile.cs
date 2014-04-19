@@ -247,6 +247,8 @@ public class BaseTile : MonoBehaviour {
 		}
 	}
 
+	float[] influenceAdded;
+	private float influenceThisFrame;
 	// Use this for initialization
 	void Start () {
 		_ident = UnityEngine.Random.Range(1, 10000000);
@@ -255,7 +257,7 @@ public class BaseTile : MonoBehaviour {
 		gm = GameObject.Find("GameManager").GetComponent<GameManager>();
 		transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
 		sRef = Settings.SettingsInstance;
-
+		influenceAdded = new float[6];
 		transform.Find("NoBuildLayer").renderer.material.color = new Color32 (100,100,100,255);
 
 	}
@@ -310,7 +312,7 @@ public class BaseTile : MonoBehaviour {
 		}
 		
 		if(owningTeam== null){
-			transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
+			//transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
 		}
 		else{	//Removing this; will use outline to show where player is, not who owns it
 //			transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = true;
@@ -328,6 +330,39 @@ public class BaseTile : MonoBehaviour {
 		}
 	}
 
+
+	public bool getActionable(TeamInfo attemptingAction, bool playerInfluencing){
+		float influenceOffset = (playerInfluencing) ? sRef.vpsBasePlayerInfluence * Time.deltaTime : 0; 
+		float averageInfluence = getAverageInfluence();
+		if(controllingTeam != attemptingAction){
+			//check influence count
+			if(averageInfluence + influenceOffset - sRef.vpsBasePlayerInfluence * Time.deltaTime < 0){
+				return true;
+			}
+			else{
+				return false;
+			}
+
+		}
+		else{
+			if(beacon != null){
+				if(beacon.GetComponent<Beacon>().currentState == BeaconState.Advanced){
+					return false;
+				}
+				else{
+					return true;
+				}
+			}
+			else{
+				if(owningTeam == attemptingAction && !buildable()){
+					return false;
+				}
+				else{
+					return true;
+				}
+			}
+		}
+	}
 
 
 	
@@ -680,6 +715,7 @@ public class BaseTile : MonoBehaviour {
 	
 	public void addProgressToInfluence(float rate){
 		percControlled += rate*Time.deltaTime;
+		influenceThisFrame += rate*Time.deltaTime;
 	}
 	/// <summary>
 	/// adds influence, if influence is maxed it returns true
@@ -691,6 +727,7 @@ public class BaseTile : MonoBehaviour {
 		bool returnable  = false;
 		if(controllingTeam != null && controllingTeam.teamNumber != newTeam.teamNumber){
 			percControlled -= rate*Time.deltaTime;
+			influenceThisFrame -= rate*Time.deltaTime;
 			if(percControlled <=0) {
 				percControlled = 0;
 				flipInfluence(newTeam);
@@ -701,6 +738,7 @@ public class BaseTile : MonoBehaviour {
 			}
 			else{
 				percControlled += rate*Time.deltaTime;
+				influenceThisFrame += rate*Time.deltaTime;
 				if(percControlled >= 100) {
 					finishInfluence();
 					audio.PlayOneShot(influenceDone, 0.7f); //activate this if we want every tile influenced to trigger a sound, including the ones influenced by beacons
@@ -719,7 +757,7 @@ public class BaseTile : MonoBehaviour {
 	public float subTractInfluence(float amt, TeamInfo subtractingTeam){
 		if(percControlled > 0){
 			percControlled -= amt;
-			
+			influenceThisFrame -= amt;
 			return 0f;
 		}
 
@@ -736,7 +774,7 @@ public class BaseTile : MonoBehaviour {
 	public float addInfluenceReturnOverflow(float amt){
 		if(percControlled < 100f){
 			percControlled += amt;
-			
+			influenceThisFrame += amt;
 		}
 		if(percControlled >100f){
 			float returnable =  percControlled -100f;
@@ -945,4 +983,18 @@ public class BaseTile : MonoBehaviour {
 	public float percentInfluenced(){
 		return percControlled;
 	}
+
+	public void LateUpdate() 
+	{
+		if(influenceThisFrame != 0f){
+			influenceAdded[Time.frameCount % 5] = influenceThisFrame;
+			influenceThisFrame = 0;
+		}
+	}
+
+	public float getAverageInfluence(){
+
+		return influenceThisFrame;
+	}
 }
+
