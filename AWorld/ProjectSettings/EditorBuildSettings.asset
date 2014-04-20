@@ -7,3 +7,9 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/Charplaying.unity
+  - enabled: 1
+    path: Assets/PierreMenu.unity
+  - enabled: 1
+    path: Assets/SiggWorking.unity
+  - enabled: 1
+    path: Assets/PierreOptions.unity
