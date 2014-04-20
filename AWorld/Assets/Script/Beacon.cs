@@ -134,7 +134,10 @@ public class Beacon : MonoBehaviour {
 	//			 }
 			}
 		
-		UpdateInfluencePatterns();	//Probably shouldn't call this every frame, but just doing this for now
+
+		//With no powers this probably isn't necessary?
+
+		//UpdateInfluencePatterns();	//Probably shouldn't call this every frame, but just doing this for now
 		
 		/**
 		//Check self-destruction and losing upgrade progress - probably shouldn't call this every frame either, but I'm a rebel and I do what I want when I want 

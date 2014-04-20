@@ -416,6 +416,8 @@ MonoBehaviour:
   scoreTexture2: {fileID: 2800000, guid: 68d5de7dc03aeed4e8b0b0d3f0970bb2, type: 3}
   winTexture1: {fileID: 2800000, guid: ceec3b46a1180ac48abeb66c72f11728, type: 3}
   winTexture2: {fileID: 2800000, guid: bfca8ecba3fbdc64baa49e4be9cdb256, type: 3}
+  home1: {fileID: 0}
+  home2: {fileID: 0}
   currentMarquee: 0
   Victory_Gong: {fileID: 0}
   beacons: []
@@ -773,16 +775,25 @@ MonoBehaviour:
   numAltars: 0
   numScoringAltars: 0
   ranjitRangeAltars: 
-  debugMode: 1
+  debugMode: 0
   gameMode: 0
   secMarqueeUpgradeTime: 0
   marqueeCount: 0
   percMaxInfluenceColor: 0
   colorOffSet: 0
+  buildCircleStartScale: 0
+  buildCircleFinishScale: 0
+  buildCircleStartAlpha: 0
+  buildCircleFinishAlpha: 0
+  upgradeCircleStartScale: 0
+  upgradeCircleFinishScale: 0
+  upgradeCircleStartAlpha: 0
+  upgradeCircleFinishAlpha: 0
   teleportRate: 0
   closeEnoughDistanceTeleport: 0
   moveToCenterRate: 0
   closeEnoughDistanceMoveToCenter: 0
+  closeEnoughDistanceScoreBit: 0
 --- !u!4 &1843163359
 Transform:
   m_ObjectHideFlags: 0

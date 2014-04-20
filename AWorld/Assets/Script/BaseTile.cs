@@ -283,6 +283,8 @@ public class BaseTile : MonoBehaviour {
 	
 #endregion			
 
+	float[] influenceAdded;
+	private float influenceThisFrame;
 	// Use this for initialization
 	void Start () {
 		_ident = UnityEngine.Random.Range(1, 10000000);
@@ -291,7 +293,7 @@ public class BaseTile : MonoBehaviour {
 		gm = GameObject.Find("GameManager").GetComponent<GameManager>();
 		transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
 		sRef = Settings.SettingsInstance;
-
+		influenceAdded = new float[6];
 		transform.Find("NoBuildLayer").renderer.material.color = new Color32 (100,100,100,255);
 
 	}
@@ -336,7 +338,7 @@ public class BaseTile : MonoBehaviour {
 		if(IsHover){
 
 		}
-		
+		/*
 		Component[] meshes = qudSelectedLayer.GetComponentsInChildren<MeshRenderer>(); 
 		//if(IsSelected) Debug.Log ("Selected");
 		for (int i = 0; i< meshes.Length; i++){
@@ -344,9 +346,9 @@ public class BaseTile : MonoBehaviour {
 			((MeshRenderer)meshes[i]).enabled = IsSelected;	
 			
 		}
-		
+		*/
 		if(owningTeam== null){
-			transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
+			//transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
 		}
 		else{	//Removing this; will use outline to show where player is, not who owns it
 //			transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = true;
@@ -374,7 +376,43 @@ public class BaseTile : MonoBehaviour {
 		qudInfluenceLayer.transform.position = new Vector3 (jigglePos.x, jigglePos.y, qudInfluenceLayer.transform.position.z);
 		qudOwnedLayer.transform.position = new Vector3 (jigglePos.x, jigglePos.y, qudOwnedLayer.transform.position.z);
 	}
- 	
+
+
+	public bool getActionable(TeamInfo attemptingAction, bool playerInfluencing){
+		float influenceOffset = (playerInfluencing) ? sRef.vpsBasePlayerInfluence * Time.deltaTime : 0; 
+		float averageInfluence = getAverageInfluence();
+		if(controllingTeam != attemptingAction){
+			//check influence count
+			if(averageInfluence + influenceOffset - sRef.vpsBasePlayerInfluence * Time.deltaTime < 0){
+				return true;
+			}
+			else{
+				return false;
+			}
+
+		}
+		else{
+			if(beacon != null){
+				if(beacon.GetComponent<Beacon>().currentState == BeaconState.Advanced){
+					return false;
+				}
+				else{
+					return true;
+				}
+			}
+			else{
+				if(owningTeam == attemptingAction && !buildable()){
+					return false;
+				}
+				else{
+					return true;
+				}
+			}
+		}
+	}
+
+
+	
 	public static void createTile(TileTypeEnum et, GameObject currentTile){
 		
 		currentTile.GetComponent<BaseTile>().IsHover = false;
@@ -723,6 +761,7 @@ public class BaseTile : MonoBehaviour {
 	
 	public void addProgressToInfluence(float rate){
 		percControlled += rate*Time.deltaTime;
+		influenceThisFrame += rate*Time.deltaTime;
 	}
 	/// <summary>
 	/// adds influence, if influence is maxed it returns true
@@ -734,6 +773,7 @@ public class BaseTile : MonoBehaviour {
 		bool returnable  = false;
 		if(controllingTeam != null && controllingTeam.teamNumber != newTeam.teamNumber){
 			percControlled -= rate*Time.deltaTime;
+			influenceThisFrame -= rate*Time.deltaTime;
 			if(percControlled <=0) {
 				percControlled = 0;
 				flipInfluence(newTeam);
@@ -744,6 +784,7 @@ public class BaseTile : MonoBehaviour {
 			}
 			else{
 				percControlled += rate*Time.deltaTime;
+				influenceThisFrame += rate*Time.deltaTime;
 				if(percControlled >= 100) {
 					finishInfluence();
 					audio.PlayOneShot(influenceDone, 0.7f); //activate this if we want every tile influenced to trigger a sound, including the ones influenced by beacons
@@ -762,7 +803,7 @@ public class BaseTile : MonoBehaviour {
 	public float subTractInfluence(float amt, TeamInfo subtractingTeam){
 		if(percControlled > 0){
 			percControlled -= amt;
-			
+			influenceThisFrame -= amt;
 			return 0f;
 		}
 
@@ -780,6 +821,7 @@ public class BaseTile : MonoBehaviour {
 		if(percControlled < 100f){
 			percControlled += amt;
 			jiggling = true;
+			influenceThisFrame += amt;
 		}
 		if(percControlled >100f){
 			float returnable = percControlled -100f;
@@ -820,6 +862,7 @@ public class BaseTile : MonoBehaviour {
 	/// </summary>
 	public void finishInfluence(){
 		audio.PlayOneShot(influenceDone, 0.7f);
+		//Debug.Log("Why am I here?");
 		///TODO: add end semaphore stuff her
 		if(controllingTeam != owningTeam){
 			if(percControlled > 100f){
@@ -988,4 +1031,18 @@ public class BaseTile : MonoBehaviour {
 	public float percentInfluenced(){
 		return percControlled;
 	}
+
+	public void LateUpdate() 
+	{
+		if(influenceThisFrame != 0f){
+			influenceAdded[Time.frameCount % 5] = influenceThisFrame;
+			influenceThisFrame = 0;
+		}
+	}
+
+	public float getAverageInfluence(){
+
+		return influenceThisFrame;
+	}
 }
+

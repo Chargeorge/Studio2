@@ -10,8 +10,10 @@ public class Player : MonoBehaviour {
 	private PlayerState _currentState;
 	public int PlayerNumber;
 	public GameManager gm;
-	
-	
+
+	public  Rect TeamRect;
+	public  Rect ScoreRect;
+
 	public float currentActionProgress;
 	public Settings sRef;
 	public DirectionEnum facing;
@@ -52,6 +54,8 @@ public class Player : MonoBehaviour {
 	}
 
 	private GameObject qudProgessCircle;
+	private GameObject qudActionableGlow;
+
 	/// <summary>
 	/// Gets or sets the grd location.  Sets transform to corresponding center square of tile.  
 	/// I'm not sure if I like that it does this, maybe we should break into seperate calls?  
@@ -83,6 +87,7 @@ public class Player : MonoBehaviour {
 		gm = GameManager.GameManagerInstance;
 		qudProgessCircle = transform.parent.FindChild("ActionTimer").gameObject;
 		qudProgessCircle.renderer.material.color = team.beaconColor;
+		qudActionableGlow = transform.parent.FindChild("ActionableGlow").gameObject;
 
 		if(PlayerNumber == 1){
 			scoreTexture = gm.scoreTexture1;
@@ -91,7 +96,9 @@ public class Player : MonoBehaviour {
 			scoreTexture = gm.scoreTexture2;
 			winTexture = gm.winTexture2;
 		}
-
+		
+		TeamRect = new Rect((Screen.width - scoreBarW)*(PlayerNumber-1)+ 2, 0, scoreBarW, Screen.height);
+		ScoreRect  = new Rect((Screen.width - scoreBarW)*(PlayerNumber-1)+ 2, Screen.height, scoreBarW,0);
 	}
 	
 	
@@ -100,10 +107,9 @@ public class Player : MonoBehaviour {
 		
 		DirectionEnum? x = getStickDirection();
 		//BaseTile currentTile = gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>();	//Not used with free movement
+
 		BaseTile currentTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
-		currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = true;
-		currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().material.color = team.highlightColor;
-		
+
 		bool buildButtonDown = getPlayerBuild();
 		//if(x.HasValue) Debug.Log(x.Value);
 		_pulsating = false;	//Pulsate () sets this to true; if false at the end of this method, reset scale and _expanding
@@ -123,9 +129,12 @@ public class Player : MonoBehaviour {
 				Vector3 newPos = Vector2.Lerp(transform.parent.position, teleportTarget, sRef.teleportRate);
 				newPos.z = transform.parent.position.z;
 				transform.parent.position = newPos;
-			BaseTile newTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
+				
+				BaseTile newTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
 				if (newTile != currentTile) {
-					currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
+					Debug.Log ("Getting New Tile");
+					//currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
+					doNewTile(currentTile, newTile);
 				}
 //				if(currentTile == team.goGetHomeTile().GetComponent<BaseTile>()){
 				if(closeEnoughToTarget(newPos, teleportTarget, sRef.closeEnoughDistanceTeleport)){
@@ -264,7 +273,7 @@ public class Player : MonoBehaviour {
 								
 								if (currentTile.beacon == null) { 
 									beaconBeingBuilt = (GameObject)GameObject.Instantiate(_prfbBeacon, new Vector3(0,0,0), Quaternion.identity);
-
+									beaconBeingBuilt.name = "Beacon for" + team.teamNumber;
 									
 								}
 								else {
@@ -331,8 +340,10 @@ public class Player : MonoBehaviour {
 							transform.parent.position = posToCheck;
 							BaseTile thisTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
 							if (thisTile != currentTile) {
-								currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
-							}	
+								Debug.Log ("Getting New Tile moving");
+								//currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
+								doNewTile(currentTile, thisTile);
+							}
 						}
 					}
 					
@@ -473,6 +484,7 @@ public class Player : MonoBehaviour {
 
 									if (currentTile.beacon == null) { 
 										beaconBeingBuilt = (GameObject)GameObject.Instantiate(_prfbBeacon, new Vector3(0,0,0), Quaternion.identity);
+										beaconBeingBuilt.name = "Beacon:  " + team.teamNumber;
 										beaconBeingBuilt.GetComponent<Beacon>().PlayerNumber = PlayerNumber;
 									}
 									else {
@@ -880,39 +892,41 @@ public class Player : MonoBehaviour {
 	private void OnGUI(){
 
 		float perScore = team.score / sRef.valPointsToWin;
+		ScoreRect.height =-Screen.height *perScore;
+
+		GUI.DrawTexture(TeamRect, gm.scoreBgTexture, ScaleMode.StretchToFill, true, 1.0f);
+		GUI.DrawTexture(ScoreRect, scoreTexture, ScaleMode.StretchToFill, true, 1.0f);
 
 	//	GUI.DrawTexture(new Rect(0,(Screen.height - scoreBarH)*(PlayerNumber-1), Screen.width, scoreBarH), gm.scoreBgTexture, ScaleMode.StretchToFill, true, 1.0f);
 	//	GUI.DrawTexture(new Rect(0,(Screen.height - scoreBarH)*(PlayerNumber-1), Screen.width * perScore, scoreBarH), scoreTexture, ScaleMode.StretchToFill, true, 1.0f);
 
-		GUI.DrawTexture(new Rect((Screen.width - scoreBarW)*(PlayerNumber-1)+ 2, 0, scoreBarW, Screen.height), gm.scoreBgTexture, ScaleMode.StretchToFill,true, 1.0f);
-		GUI.DrawTexture(new Rect((Screen.width - scoreBarW)*(PlayerNumber-1)+ 2, Screen.height, scoreBarW, -Screen.height *perScore),scoreTexture, ScaleMode.StretchToFill, true, 1.0f);
+//		GUI.DrawTexture(new Rect((Screen.width - scoreBarW)*(PlayerNumber-1)+ 2, 0, scoreBarW, Screen.height), gm.scoreBgTexture, ScaleMode.StretchToFill,true, 1.0f);
+//		GUI.DrawTexture(new Rect((Screen.width - scoreBarW)*(PlayerNumber-1)+ 2, Screen.height, scoreBarW, -Screen.height *perScore),scoreTexture, ScaleMode.StretchToFill, true, 1.0f);
 
 
 		int boxWidth = 1600;
 		int boxHeight = 900;
 
 		switch (gm.currentState){
-		case GameState.gameWon:
-			if(gm.vIsForVendetta.completingTeam == this.team){
-			GUI.BeginGroup(new Rect(Screen.width/2 - boxWidth/2, Screen.height/2 - boxHeight/2, boxWidth, boxHeight));
-			GUI.DrawTexture(new Rect(0,0,boxWidth,boxHeight), winTexture, ScaleMode.StretchToFill, true, 1.0f);
-			GUI.EndGroup();
+			case GameState.gameWon:
+				if(gm.vIsForVendetta.completingTeam == this.team){
+				GUI.BeginGroup(new Rect(Screen.width/2 - boxWidth/2, Screen.height/2 - boxHeight/2, boxWidth, boxHeight));
+				GUI.DrawTexture(new Rect(0,0,boxWidth,boxHeight), winTexture, ScaleMode.StretchToFill, true, 1.0f);
+				GUI.EndGroup();
+				}
+				break;
+				
+			case GameState.playing:
+				break;
 			}
-			break;
-			
-		case GameState.playing:
-			break;
-		}
-		if(gm.debugGUI == true){
-		switch (gm.currentState){
-		case GameState.playing:
-			if(sRef.debugMode){
-				GUI.Box (new Rect (10+200*(PlayerNumber-1),10,200,90), string.Format("Player {0}\r\nState: {1}\r\npercentcomplete{2}\r\nScore: {3}",PlayerNumber, currentState,currentActionProgress, team.score));	
+			if(gm.debugGUI == true){
+				switch (gm.currentState){
+				case GameState.playing:
+					if(sRef.debugMode){
+						GUI.Box (new Rect (10+200*(PlayerNumber-1),10,200,90), string.Format("Player {0}\r\nState: {1}\r\npercentcomplete{2}\r\nScore: {3}",PlayerNumber, currentState,currentActionProgress, team.score));	
+					}
+				break;
 			}
-			break;
-		case GameState.gameWon:
-			break;
-		}
 		}
 	}
 		
@@ -1091,6 +1105,16 @@ public class Player : MonoBehaviour {
 		}
 		transform.parent.position = newPos;
 		
+	}
+
+	public void doNewTile(BaseTile previousTile, BaseTile newTile){
+		previousTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
+
+		newTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = true;
+		newTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().material.color = team.highlightColor;
+
+		//Debug.Log("In New Tile");
+	//	qudActionableGlow.renderer.material.color = (newTile.getActionable(team, this.getPlayerBuild())) ?  Color.green : Color.red;
 	}
 	
 }

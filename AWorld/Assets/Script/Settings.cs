@@ -131,7 +131,7 @@ public class Settings : MonoBehaviour {
 		team1Start = new Vector2(2,7);
 		team2Start = new Vector2(19,7);
 		optPerlinLevel = 1800;
-		neutralBeaconCount = 12;
+		neutralBeaconCount = 0;
 		numAltars = 0;
 		numScoringAltars = 5;
 		
