@@ -139,6 +139,7 @@ GameObject:
   - 33: {fileID: 3300014}
   - 64: {fileID: 6400012}
   - 23: {fileID: 2300014}
+  - 114: {fileID: 11400002}
   m_Layer: 0
   m_Name: FogUpperLayer
   m_TagString: Untagged
@@ -227,6 +228,7 @@ GameObject:
   - 33: {fileID: 3300020}
   - 64: {fileID: 6400018}
   - 23: {fileID: 2300020}
+  - 114: {fileID: 11400004}
   m_Layer: 0
   m_Name: FogLowerLayer
   m_TagString: Untagged
@@ -611,7 +613,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: fa2db59b400a20e42b6a3f5a66140e8c, type: 2}
+  - {fileID: 2100000, guid: 15d5fc2ce0e1fe941a199bd0ab5df826, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -945,6 +947,34 @@ MonoBehaviour:
   jiggling: 0
   currentType: 0
   influenceDone: {fileID: 8300000, guid: 4a33269aa3ad0714b991aeaf11ea431a, type: 3}
+--- !u!114 &11400002
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12f7446e7a84d4443a8bf22132a1ee7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  materialIndex: 0
+  uvAnimationRate: {x: .300000012, y: .100000001}
+  textureName: _MainTex
+--- !u!114 &11400004
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12f7446e7a84d4443a8bf22132a1ee7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  materialIndex: 0
+  uvAnimationRate: {x: -.100000001, y: 0}
+  textureName: _MainTex
 --- !u!198 &19800000
 ParticleSystem:
   m_ObjectHideFlags: 1
