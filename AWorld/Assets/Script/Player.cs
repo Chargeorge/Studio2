@@ -552,9 +552,14 @@ public class Player : MonoBehaviour {
 							currentActionProgress = 0;
 						}*/
 
-						if(currentTile.percControlled == 100f){
+						if(currentTile.percControlled == 100f) {
 //						Debug.Log ("INLFUENCE DONE");
+							currentTile.jigglingFromPlayer = false;
 							audio.PlayOneShot(influenceDone, 1.0f);
+						}
+						
+						else { 
+							currentTile.jigglingFromPlayer = true;
 						}
 						
 						if (x.HasValue) { 
@@ -572,6 +577,7 @@ public class Player : MonoBehaviour {
 				///TODO: add reset to tile in case of change
 					//need to reset currenttile to previousState
 					//StopSFX();
+					currentTile.jigglingFromPlayer = false;
 					audio.Stop();
 					_currentState = PlayerState.standing;
 				}	
