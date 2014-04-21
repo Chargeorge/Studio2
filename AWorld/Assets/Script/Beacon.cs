@@ -11,7 +11,6 @@ public class Beacon : MonoBehaviour {
 	private BeaconState _currentState;
 	public int PlayerNumber;
 	public float percBuildComplete = 0;
-	public float percInfluenceComplete= 0;	//Countdown till another influence is popped
 	public float percRotateComplete = 0;
 	public float percUpgradeComplete = 0;
 	public float percSmaller = 100;
@@ -99,10 +98,12 @@ public class Beacon : MonoBehaviour {
 								BaseTile Bt =  tile.GetComponent<BaseTile>();
 									if(Bt.controllingTeam == null){
 										Bt.startInfluence(influenceThisFrame, controllingTeam);
+										Bt.jigglingFromBeacon = true;
 										influenceThisFrame = 0;  //Assume a null controlled Tile will eat all influence.
 										//Debug.Log("influencing Null tile");
 									}
 									else if(Bt.controllingTeam.teamNumber != controllingTeam.teamNumber){
+										Bt.jigglingFromBeacon = true;
 										influenceThisFrame = Bt.subTractInfluence(influenceThisFrame * p.coefInfluenceFraction, controllingTeam);
 										//Debug.Log("Removing other influence");
 										if(influenceThisFrame > 0){
@@ -111,8 +112,12 @@ public class Beacon : MonoBehaviour {
 										}
 									}
 									else if(Bt.controllingTeam.teamNumber == controllingTeam.teamNumber && Bt.percControlled < 100f){
+										Bt.jigglingFromBeacon = true;
 										influenceThisFrame = Bt.addInfluenceReturnOverflow(influenceThisFrame * p.coefInfluenceFraction);
 										//Debug.Log ("Adding my influence");
+									}
+									else if (Bt.controllingTeam.teamNumber == controllingTeam.teamNumber && Bt.percControlled >= 100f) {
+										Bt.jigglingFromBeacon = false;
 									}
 			//						|| Bt.percControlled < 100f
 								}
@@ -326,13 +331,7 @@ public class Beacon : MonoBehaviour {
 			transform.FindChild("Base").renderer.material.color = baseColor;		
 		}
 	}
-	
-	public void addInfluenceProgress(float rate){
-		percInfluenceComplete += rate*Time.deltaTime;
-
-		//Debug.Log(percControlled);
-	}
-	
+		
 	public void addRotateProgress (float rate) {
 		percRotateComplete += rate*Time.deltaTime;
 	}
@@ -833,6 +832,7 @@ public class Beacon : MonoBehaviour {
 		//audio.PlayOneShot(beaconRotating, 1.0f);
 		setDirection (N);
 		setVisualDirection ();
+		ClearJiggle ();
 		UpdateInfluencePatterns();
 
 		if(percRotateComplete < 100f && !buildButtonDown){
@@ -844,6 +844,47 @@ public class Beacon : MonoBehaviour {
 			audio.PlayOneShot(beaconRotated, 1.0f);	
 		}
 	
+	}
+	
+	//Stops a-jiggling what ought not be a-jiggling - use before UpdateInfluencePatterns
+	public void ClearJiggle () {
+		
+		int brdX; int brdY;
+		if (transform.parent != null) { //Hax
+			brdX = transform.parent.gameObject.GetComponent<BaseTile>().brdXPos;
+			brdY = transform.parent.gameObject.GetComponent<BaseTile>().brdYPos;
+			
+			if((_currentState == BeaconState.Basic || _currentState == BeaconState.BuildingAdvanced || _currentState == BeaconState.Advanced) && controllingTeam != null){
+				
+				foreach (List<InfluencePatternHolder> list in _patternList) {
+					bool waterFound = false;	
+					list.ForEach(delegate (InfluencePatternHolder p){
+						if (!waterFound) {
+							
+							if(true == true){
+								int x = (int)brdX + (int)Mathf.RoundToInt(p.relCoordRotated.x);
+								int y = (int)brdY + (int)Mathf.RoundToInt(p.relCoordRotated.y);
+								GameObject tile;
+								
+								try { tile = gm.tiles[x, y]; }
+								catch { return; }
+								if (tile != null && 
+								    tile.GetComponent<BaseTile>().currentType == TileTypeEnum.water && 
+								    !gm.getCapturedAltars (controllingTeam).Contains (AltarType.Thotzeti)) 
+								{
+									waterFound = true;
+									return;
+								}
+								if(tile != null && tile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
+									BaseTile Bt =  tile.GetComponent<BaseTile>();
+									Bt.jigglingFromBeacon = false;
+								}								
+							}
+						}
+					});
+				}
+			}
+		}
 	}
 	
 	//Creates new influence patterns, for example when a new altar is captured or when the beacon is rotated.

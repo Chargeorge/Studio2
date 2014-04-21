@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.Linq;
-public class BaseTile : MonoBehaviour {
-	
+
+public class BaseTile : MonoBehaviour {	
 	
 	public GameObject qudBeaconLayer;
 	public GameObject qudSelectedLayer;
@@ -23,9 +23,9 @@ public class BaseTile : MonoBehaviour {
 	public TileState currentState;
 	private int _brdXPos;
 	private int _brdYPos;
-	public bool jiggling;
 	public TileTypeEnum currentType;
 	private int _ident;
+	private int _MoveCost;
 	public List<AStarholder> networkToBase;
 	private int? _distanceToHomeBase;
 	//Delegate used for different A* methods
@@ -50,8 +50,8 @@ public class BaseTile : MonoBehaviour {
 	private BaseTile _East;
 	private BaseTile _West;
 	
-	private int _MoveCost;
-	private float _DamageModifier;
+	public bool jigglingFromPlayer;
+	public bool jigglingFromBeacon;
 	private float _jiggleRange = 0.05f;  //Max distance from center of position the tile will jiggle
 	
 	private ParticleSystem _PS;
@@ -255,16 +255,6 @@ public class BaseTile : MonoBehaviour {
 		}
 	}
 	
-
-	public float DamageModifier {
-		get {
-			return this._DamageModifier;
-		}
-		set {
-			_DamageModifier = value;
-		}
-	}
-
 	public int MoveCost {
 		get {
 			return this._MoveCost;
@@ -366,7 +356,7 @@ public class BaseTile : MonoBehaviour {
 		
 		Vector3 jigglePos = transform.position;
 		
-		if (jiggling) {
+		if (jigglingFromPlayer || jigglingFromBeacon) {
 			Vector3 positionOffset = new Vector3 (UnityEngine.Random.Range (-1 * _jiggleRange, _jiggleRange), UnityEngine.Random.Range (-1 * _jiggleRange, _jiggleRange), 0);
 			jigglePos = transform.position + positionOffset;
 		}	
@@ -820,13 +810,11 @@ public class BaseTile : MonoBehaviour {
 	public float addInfluenceReturnOverflow(float amt){
 		if(percControlled < 100f){
 			percControlled += amt;
-			jiggling = true;
 			influenceThisFrame += amt;
 		}
 		if(percControlled >100f){
 			float returnable = percControlled -100f;
 			finishInfluence();
-			jiggling = false;
 			return returnable;
 		}
 		return 0f;

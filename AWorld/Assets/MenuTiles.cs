@@ -31,7 +31,6 @@ public class MenuTiles : MonoBehaviour {
 				tilesGameBoard[x,y] = (GameObject)Instantiate(prfbTile, new Vector3(x,y,0), Quaternion.identity);
 				tilesGameBoard[x,y].GetComponent<BaseTile>().IsHover = false;
 				tilesGameBoard[x,y].GetComponent<BaseTile>().IsRevealed = !fogOn;
-				tilesGameBoard[x,y].GetComponent<BaseTile>().MoveCost =1;	
 				tilesGameBoard[x,y].GetComponent<BaseTile>().brdXPos = x;
 				tilesGameBoard[x,y].GetComponent<BaseTile>().brdYPos = y;
 				
