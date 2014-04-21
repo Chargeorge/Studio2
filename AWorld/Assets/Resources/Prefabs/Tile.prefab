@@ -146,7 +146,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &100016
 GameObject:
   m_ObjectHideFlags: 0
@@ -944,9 +944,10 @@ MonoBehaviour:
   percControlled: 0
   beacon: {fileID: 0}
   currentState: 0
-  jiggling: 0
   currentType: 0
   influenceDone: {fileID: 8300000, guid: 4a33269aa3ad0714b991aeaf11ea431a, type: 3}
+  jigglingFromPlayer: 0
+  jigglingFromBeacon: 0
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
