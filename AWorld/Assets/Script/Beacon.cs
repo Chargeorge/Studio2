@@ -932,6 +932,8 @@ public class Beacon : MonoBehaviour {
 		animColor.a = 0;
 		transform.FindChild("Anim").renderer.material.color = animColor;
 		
+		transform.FindChild("Point light").GetComponent<Light>().enabled = true;
+		
 	}
 	
 	
