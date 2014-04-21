@@ -46,6 +46,8 @@ public class Player : MonoBehaviour {
 	public Texture winTexture;
 	
 	public Vector3 teleportTarget;
+	
+	public Vector2 moveVector;
 
 	public PlayerState currentState {
 		get {
@@ -154,7 +156,7 @@ public class Player : MonoBehaviour {
 				if(x.HasValue && !buildButtonDown) {
 					
 					setDirection(x.Value);	//Still need a 4-directional facing for building/rotating beacons
-					Vector2 analogStickDirection = new Vector2 (getPlayerXAxis(), getPlayerYAxis());
+					moveVector = new Vector2 (getPlayerXAxis(), getPlayerYAxis());
 					_currentState = PlayerState.moving;
 					
 					/**if(currentTile.GetDirection(x.Value) != null){
@@ -326,11 +328,31 @@ public class Player : MonoBehaviour {
 				else { 
 					if (x.HasValue) {
 						setDirection(x.Value);	//Still need a 4-directional facing for building/rotating beacons
+						
+						//Add acceleration
+						Vector2 vectorToAdd = new Vector2 (getPlayerXAxis(), getPlayerYAxis()) * sRef.playerAccelRate;
+						Debug.Log (vectorToAdd.y);
+						moveVector += vectorToAdd;
+						
+						//Apply friction
+						moveVector *= (1-sRef.playerFriction);
+												
+						//Make sure we're not going too fast
+						if (Mathf.Abs (moveVector.x) > sRef.playerMaxSpeed) moveVector.x = sRef.playerMaxSpeed * Mathf.Sign (moveVector.x);
+						if (Mathf.Abs (moveVector.y) > sRef.playerMaxSpeed) moveVector.y = sRef.playerMaxSpeed * Mathf.Sign (moveVector.y);
+						
+						//Go to new position				
+						Vector3 posToCheck = new Vector3 (
+						transform.parent.position.x + moveVector.x * sRef.vpsBaseFreeMoveSpeed * getTileSpeedBoost(currentTile) * getAltarSpeedBoost() * Time.deltaTime,
+						transform.parent.position.y + moveVector.y * sRef.vpsBaseFreeMoveSpeed * getTileSpeedBoost(currentTile) * getAltarSpeedBoost() * Time.deltaTime, 
+						transform.parent.position.z);
+						
+						/*
 						Vector3 posToCheck = new Vector3 (
 						transform.parent.position.x + getPlayerXAxis() * sRef.vpsBaseFreeMoveSpeed * getTileSpeedBoost(currentTile) * getAltarSpeedBoost() * Time.deltaTime, 
 						transform.parent.position.y + getPlayerYAxis() * sRef.vpsBaseFreeMoveSpeed * getTileSpeedBoost(currentTile) * getAltarSpeedBoost() * Time.deltaTime, 
 						transform.parent.position.z);
-						
+						*/
 						if (!outOfBounds(posToCheck) && 
 							//!tooCloseToOpponent(posToCheck) &&
 							(!onWater(posToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) 

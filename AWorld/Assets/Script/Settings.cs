@@ -29,11 +29,11 @@ public class Settings : MonoBehaviour {
 	public float coefConvert;
 	public float coefBuildBeacon; 
 	public float coefBaseBeaconInfluence;	//At 1.0f, takes 1 second to convert a neutral tile 1 space away
-	public float coefOnixtal;	//Percentage strength at which non-facing influence beams operate with Onixtal
-	public float coefTepwante;	//Percentage strength at which wider influence beams operate with Tepwante (currently 100% strength but we could change it)
-	public float coefKhepru;	//Multiplier applied to all score coming in with Khepru
-	public float coefYaxchay;	//Multiplier applied to range on altars with Yaxchay
-	public float coefMunalwaScale;	//Multiplier applied to physical scale of player with Munalwa
+	public float coefOnixtal;				//Percentage strength at which non-facing influence beams operate with Onixtal
+	public float coefTepwante;				//Percentage strength at which wider influence beams operate with Tepwante (currently 100% strength but we could change it)
+	public float coefKhepru;				//Multiplier applied to all score coming in with Khepru
+	public float coefYaxchay;				//Multiplier applied to range on altars with Yaxchay
+	public float coefMunalwaScale;			//Multiplier applied to physical scale of player with Munalwa
 	
 	//Score stuff
 	public float scoreOnCapture;
@@ -47,7 +47,7 @@ public class Settings : MonoBehaviour {
 	public int beaconBasicRange;
 	public int beaconAdvancedRange;
 	public int beaconNoBuildRange;
-	public float selfDestructDelay;	 //How long you wait after player stops building before destroying a beacon
+	public float selfDestructDelay;	 		//How long you wait after player stops building before destroying a beacon
 	public float loseUpgradeProgressDelay;	//How long you wait after player stops upgrading before clearing upgrade progress
 	
 	//Board setup stuff
@@ -66,16 +66,22 @@ public class Settings : MonoBehaviour {
 	//Visual stuff
 	public float secMarqueeUpgradeTime;
 	public int marqueeCount;
-	public float percMaxInfluenceColor;	//Percentage of color that tile fills in when just before 100% influence
+	public float percMaxInfluenceColor;		//Percentage of color that tile fills in when just before 100% influence
 	public int colorOffSet;
-	public float buildCircleStartScale; //The scale at which the upgrade circle anim thing starts
-	public float buildCircleFinishScale; //The scale the upgrade circle anim thing is at around 99% complete
-	public float buildCircleStartAlpha; //The alpha at which the upgrade circle anim thing starts
-	public float buildCircleFinishAlpha; //The alpha the upgrade circle anim thing is at around 99% complete 
-	public float upgradeCircleStartScale; //The scale at which the upgrade circle anim thing starts
-	public float upgradeCircleFinishScale; //The scale the upgrade circle anim thing is at around 99% complete
-	public float upgradeCircleStartAlpha; //The alpha at which the upgrade circle anim thing starts
-	public float upgradeCircleFinishAlpha; //The alpha the upgrade circle anim thing is at around 99% complete 
+	public float buildCircleStartScale; 	//The scale at which the upgrade circle anim thing starts
+	public float buildCircleFinishScale; 	//The scale the upgrade circle anim thing is at around 99% complete
+	public float buildCircleStartAlpha; 	//The alpha at which the upgrade circle anim thing starts
+	public float buildCircleFinishAlpha; 	//The alpha the upgrade circle anim thing is at around 99% complete 
+	public float upgradeCircleStartScale; 	//The scale at which the upgrade circle anim thing starts
+	public float upgradeCircleFinishScale; 	//The scale the upgrade circle anim thing is at around 99% complete
+	public float upgradeCircleStartAlpha; 	//The alpha at which the upgrade circle anim thing starts
+	public float upgradeCircleFinishAlpha; 	//The alpha the upgrade circle anim thing is at around 99% complete 
+	
+	//Player movement stuff
+	public float playerAccelRate;
+	public float playerFriction;
+	public float playerMaxSpeed;
+	public float playerMinSpeed;			//Below this, player speed automatically set to 0
 	
 	//Misc
 	public float teleportRate;
@@ -83,7 +89,7 @@ public class Settings : MonoBehaviour {
 	public float moveToCenterRate;
 	public float closeEnoughDistanceMoveToCenter;
 	public float closeEnoughDistanceScoreBit;
-	public int influenceRevealRange;  //Radius of fog reveal when tile is influenced
+	public int influenceRevealRange; 	 //Radius of fog reveal when tile is influenced
 	
 	// Use this for initialization
 	void Start () {
@@ -106,11 +112,11 @@ public class Settings : MonoBehaviour {
 		coefConvert = .5f;
 		coefBuildBeacon = .25f; 
 		coefBaseBeaconInfluence = 0.5f;	//At 1.0f, takes 1 second to convert a neutral tile 1 space away
-		coefOnixtal = 0.25f;	//Percentage strength at which non-facing influence beams operate with Onixtal
-		coefTepwante = 1.0f;	//Percentage strength at which wider influence beams operate with Tepwante (currently 100% strength but we could change it)
-		coefKhepru = 2.0f;		//Multiplier applied to all score coming in with Khepru
-		coefYaxchay = 2.0f;		//Multiplier for range of beacons with Yaxchay
-		coefMunalwaScale = 2.0f;	//Multiplier applied to physical scale of player with Munalwa
+		coefOnixtal = 0.25f;			//Percentage strength at which non-facing influence beams operate with Onixtal
+		coefTepwante = 1.0f;			//Percentage strength at which wider influence beams operate with Tepwante (currently 100% strength but we could change it)
+		coefKhepru = 2.0f;				//Multiplier applied to all score coming in with Khepru
+		coefYaxchay = 2.0f;				//Multiplier for range of beacons with Yaxchay
+		coefMunalwaScale = 2.0f;		//Multiplier applied to physical scale of player with Munalwa
 	
 		//Score stuff
 		scoreOnCapture = 60f;
@@ -124,8 +130,8 @@ public class Settings : MonoBehaviour {
 		beaconBasicRange = 4;
 		beaconAdvancedRange = 8;
 		beaconNoBuildRange = 1;
-		selfDestructDelay = 0.5f;  //How long you wait after player stops building before destroying a beacon
-		loseUpgradeProgressDelay = 0.5f;  //How long you wait after player stops upgrading before clearing upgrade progress
+		selfDestructDelay = 0.5f;  			//How long you wait after player stops building before destroying a beacon
+		loseUpgradeProgressDelay = 0.5f;  	//How long you wait after player stops upgrading before clearing upgrade progress
 		
 		//Board setup stuff
 		team1Start = new Vector2(2,7);
@@ -140,18 +146,24 @@ public class Settings : MonoBehaviour {
 		gameMode = Mode.OneVOne;
 		
 		//Visual stuff
-		percMaxInfluenceColor = 0.5f;	//Percentage of color that tile fills in when just before 100% influence
+		percMaxInfluenceColor = 0.5f;		//Percentage of color that tile fills in when just before 100% influence
 		secMarqueeUpgradeTime = .08f;
 		marqueeCount = 16;
 		colorOffSet = 2;
-		buildCircleStartScale = 5.0f; //The scale at which the upgrade circle anim thing starts
-		buildCircleFinishScale = 1.0f; //The scale the upgrade circle anim thing is at around 99% complete
-		buildCircleStartAlpha = 0.1f; //The alpha at which the upgrade circle anim thing starts
-		buildCircleFinishAlpha = 0.8f; //The alpha the upgrade circle anim thing is at around 99% complete 
-		upgradeCircleStartScale = 7.0f; //The scale at which the upgrade circle anim thing starts
-		upgradeCircleFinishScale = 0.5f; //The scale the upgrade circle anim thing is at around 99% complete
-		upgradeCircleStartAlpha = 0.1f; //The alpha at which the upgrade circle anim thing starts
-		upgradeCircleFinishAlpha = 0.8f; //The alpha the upgrade circle anim thing is at around 99% complete 
+		buildCircleStartScale = 5.0f; 		//The scale at which the upgrade circle anim thing starts
+		buildCircleFinishScale = 1.0f; 		//The scale the upgrade circle anim thing is at around 99% complete
+		buildCircleStartAlpha = 0.1f; 		//The alpha at which the upgrade circle anim thing starts
+		buildCircleFinishAlpha = 0.8f; 		//The alpha the upgrade circle anim thing is at around 99% complete 
+		upgradeCircleStartScale = 7.0f; 	//The scale at which the upgrade circle anim thing starts
+		upgradeCircleFinishScale = 0.5f; 	//The scale the upgrade circle anim thing is at around 99% complete
+		upgradeCircleStartAlpha = 0.1f; 	//The alpha at which the upgrade circle anim thing starts
+		upgradeCircleFinishAlpha = 0.8f; 	//The alpha the upgrade circle anim thing is at around 99% complete 
+		
+		//Player movement stuff
+		playerAccelRate = 0.38f;
+		playerFriction = 0.2f;
+		playerMaxSpeed = 0.85f;
+		playerMinSpeed = 0.1f;		//Below this, player speed automatically set to 0
 		
 		//Misc
 		teleportRate = .2f;
@@ -159,7 +171,7 @@ public class Settings : MonoBehaviour {
 		moveToCenterRate = 0.014f;
 		closeEnoughDistanceMoveToCenter = 0.012f;
 		closeEnoughDistanceScoreBit = 0.1f;
-		influenceRevealRange = 3;  //Radius of fog reveal when tile is influenced
+		influenceRevealRange = 3; 			//Radius of fog reveal when tile is influenced
 		
 	}
 	
