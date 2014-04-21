@@ -965,6 +965,10 @@ MonoBehaviour:
   upgradeCircleFinishScale: 0
   upgradeCircleStartAlpha: 0
   upgradeCircleFinishAlpha: 0
+  playerAccelRate: 0
+  playerFriction: 0
+  playerMaxSpeed: 0
+  playerMinSpeed: 0
   teleportRate: 0
   closeEnoughDistanceTeleport: 0
   moveToCenterRate: 0
