@@ -97,7 +97,7 @@ Transform:
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -.720000029}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalScale: {x: 2.5, y: 2.5, z: 1}
   m_Children: []
   m_Father: {fileID: 400004}
 --- !u!4 &400002
@@ -394,8 +394,6 @@ MonoBehaviour:
   gm: {fileID: 0}
   tileBeingConverted: {fileID: 0}
   sRef: {fileID: 0}
-  beaconInfluenceProgress: {fileID: 8300000, guid: 379b92f5122258d4daf57b88610b7e55,
-    type: 3}
   beaconBuilding: {fileID: 8300000, guid: 6d5cea721a045f14d81cea941f96ced5, type: 3}
   beaconBuilt: {fileID: 8300000, guid: 97f7000fbdbc84d4e99560bc26b4eb9d, type: 3}
   beaconUpgrading: {fileID: 8300000, guid: fb6a91a49e05fe540b927759c3f6933e, type: 3}

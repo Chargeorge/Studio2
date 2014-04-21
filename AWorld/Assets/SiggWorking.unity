@@ -404,8 +404,8 @@ MonoBehaviour:
   debugString: 
   debugGUI: 0
   scoreBgTexture: {fileID: 2800000, guid: 701131cd029900d41837b1e5331c8d2a, type: 3}
-  scoreTexture1: {fileID: 2800000, guid: f115d7c3e80eb604d8abc34c129110c1, type: 3}
-  scoreTexture2: {fileID: 2800000, guid: 68d5de7dc03aeed4e8b0b0d3f0970bb2, type: 3}
+  scoreTexture1: {fileID: 2800000, guid: 68287cf151661fe49ab1588b020a74d2, type: 3}
+  scoreTexture2: {fileID: 2800000, guid: cbd71a6c1392fc14d8182168bd6dfcd4, type: 3}
   winTexture1: {fileID: 2800000, guid: 1dfa2d3cefa714e41bcfaf8ad4318818, type: 3}
   winTexture2: {fileID: 2800000, guid: c14379d92aa39dd4a9ddbdcc57d52fac, type: 3}
   home1: {fileID: 0}
@@ -521,6 +521,10 @@ Prefab:
       propertyPath: manager
       value: 
       objectReference: {fileID: 842739086}
+    - target: {fileID: 11400000, guid: 8ed54849858a15841b2d469763640838, type: 2}
+      propertyPath: fogOn
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8ed54849858a15841b2d469763640838, type: 2}
   m_RootGameObject: {fileID: 1669248504}
@@ -881,91 +885,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialIndex: 0
   uvAnimationRate: {x: 1, y: 0}
-  textureName: _MainTex
---- !u!1 &1786219380
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 1786219384}
-  - 33: {fileID: 1786219383}
-  - 64: {fileID: 1786219382}
-  - 23: {fileID: 1786219381}
-  - 114: {fileID: 1786219385}
-  m_Layer: 0
-  m_Name: Quad
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!23 &1786219381
-Renderer:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1786219380}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_LightmapIndex: 255
-  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
-  m_Materials:
-  - {fileID: 2100000, guid: 5a1f2f937e4d15441a77906f405770f9, type: 2}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_UseLightProbes: 0
-  m_LightProbeAnchor: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_SortingLayerID: 0
---- !u!64 &1786219382
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1786219380}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_SmoothSphereCollisions: 0
-  m_Convex: 0
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!33 &1786219383
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1786219380}
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!4 &1786219384
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1786219380}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.2766223, y: 15.5512104, z: -4.21599388}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
---- !u!114 &1786219385
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1786219380}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12f7446e7a84d4443a8bf22132a1ee7c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  materialIndex: 0
-  uvAnimationRate: {x: 0, y: 1}
   textureName: _MainTex
 --- !u!1 &1843163357
 GameObject:

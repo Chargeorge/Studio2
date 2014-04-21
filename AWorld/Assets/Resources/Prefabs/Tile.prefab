@@ -146,7 +146,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &100016
 GameObject:
   m_ObjectHideFlags: 0
@@ -959,7 +959,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materialIndex: 0
-  uvAnimationRate: {x: .400000006, y: .200000003}
+  uvAnimationRate: {x: .100000001, y: .0500000007}
   textureName: _MainTex
 --- !u!114 &11400004
 MonoBehaviour:
@@ -973,7 +973,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materialIndex: 0
-  uvAnimationRate: {x: -.100000001, y: 0}
+  uvAnimationRate: {x: 0, y: 0}
   textureName: _MainTex
 --- !u!198 &19800000
 ParticleSystem:

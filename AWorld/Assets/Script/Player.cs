@@ -41,7 +41,7 @@ public class Player : MonoBehaviour {
 	public AudioClip invalid_Input;
 
 	public float scoreBarH = 30;
-	public float scoreBarW = 75;
+	public float scoreBarW = 65;
 	public Texture scoreTexture;
 	public Texture winTexture;
 	
@@ -894,7 +894,7 @@ public class Player : MonoBehaviour {
 		float perScore = team.score / sRef.valPointsToWin;
 		ScoreRect.height =-Screen.height *perScore;
 
-		GUI.DrawTexture(TeamRect, gm.scoreBgTexture, ScaleMode.StretchToFill, true, 1.0f);
+		//GUI.DrawTexture(TeamRect, gm.scoreBgTexture, ScaleMode.StretchToFill, true, 1.0f);
 		GUI.DrawTexture(ScoreRect, scoreTexture, ScaleMode.StretchToFill, true, 1.0f);
 
 	//	GUI.DrawTexture(new Rect(0,(Screen.height - scoreBarH)*(PlayerNumber-1), Screen.width, scoreBarH), gm.scoreBgTexture, ScaleMode.StretchToFill, true, 1.0f);

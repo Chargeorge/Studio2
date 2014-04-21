@@ -33,7 +33,9 @@ public class TeamInfo
 			case 1: 
 				returnable.teamColor = new Color32 (17, 75, 141, 255);
 				returnable.tileColor = new Color32 (88, 151, 209,255);
-				returnable.beaconColor = new Color32 (21, 86, 163, 255);
+				returnable.beaconColor = new Color32 (108, 55, 168, 255);
+			// maybe purple 133, 75, 198, 255
+			//good beacon color (21, 86, 163, 255)
 				returnable.startingLocation = Settings.SettingsInstance.team1Start;
 				returnable.teamNumber = teamNumber;
 				returnable.highlightColor = new Color32 (17, 75, 141, 150);
@@ -44,7 +46,8 @@ public class TeamInfo
 				returnable.teamColor = new Color32 (247, 180, 40, 255);
 				returnable.tileColor = new Color32 (255, 190, 50,255);
 		//		returnable.beaconColor = new Color32 (0, 165, 80, 255);
-				returnable.beaconColor = new Color32 (240, 139, 32, 255);
+				returnable.beaconColor = new Color32 (249, 98, 45, 255);
+			//239, 110, 34, 255
 				returnable.startingLocation = Settings.SettingsInstance.team2Start;
 				returnable.teamNumber = teamNumber;
 				returnable.highlightColor = new Color32 (247, 180, 40, 150);
