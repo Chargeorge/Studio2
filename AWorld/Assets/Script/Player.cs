@@ -331,7 +331,6 @@ public class Player : MonoBehaviour {
 						
 						//Add acceleration
 						Vector2 vectorToAdd = new Vector2 (getPlayerXAxis(), getPlayerYAxis()) * sRef.playerAccelRate;
-						Debug.Log (vectorToAdd.y);
 						moveVector += vectorToAdd;
 						
 						//Apply friction
@@ -353,6 +352,55 @@ public class Player : MonoBehaviour {
 						transform.parent.position.y + getPlayerYAxis() * sRef.vpsBaseFreeMoveSpeed * getTileSpeedBoost(currentTile) * getAltarSpeedBoost() * Time.deltaTime, 
 						transform.parent.position.z);
 						*/
+						
+						//posToCheck is illegal, so instead, see how far you can move horizontally and vertically
+						if (outOfBounds (posToCheck) || 
+							(onWater (posToCheck) && !gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) && currentTile.currentType != TileTypeEnum.water)) 
+						{					
+
+							//First, figure out where the posToCheck's tile is in relation to our own
+							int xRel = (int) Mathf.Floor (transform.parent.position.x + 0.5f) - (int) Mathf.Floor (posToCheck.x + 0.5f);
+							int yRel = (int) Mathf.Floor (transform.parent.position.y + 0.5f) - (int) Mathf.Floor (posToCheck.y + 0.5f);
+							string dir = "";
+							if (yRel == 1) 			dir += "south";
+							else if (yRel == -1) 	dir += "north";
+							if (xRel == 1) 			dir += "west";
+							else if (xRel == -1)	dir += "east"; 
+							Debug.Log (dir);
+							//If posToCheck's tile is north, south, east, or west, just put us on the border and move horizontally/vertically as appropriate
+							float xPos = transform.parent.position.x, yPos = transform.parent.position.y;
+							switch (dir) {
+								case "north":
+									xPos = posToCheck.x;
+									yPos = (int) Mathf.Floor (transform.parent.position.y + 0.5f) + 0.499f;
+									break;
+								case "south":
+									xPos = posToCheck.x;
+									yPos = (int) Mathf.Floor (transform.parent.position.y + 0.5f) - 0.499f;
+									break;
+								case "east":
+									xPos = (int) Mathf.Floor (transform.parent.position.x + 0.5f) + 0.499f;
+									yPos = posToCheck.y;
+									break;
+								case "west":
+									xPos = (int) Mathf.Floor (transform.parent.position.x + 0.5f) - 0.499f;
+									yPos = posToCheck.y;
+									break;
+								default:
+									xPos = transform.parent.position.x;
+									yPos = transform.parent.position.y;
+									break; 
+							}
+							
+							PlaySFX(playerMove, 0.2f);
+							transform.parent.position = new Vector3 (xPos, yPos, transform.parent.position.z);
+							BaseTile thisTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
+							if (thisTile != currentTile) {
+								//currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
+								doNewTile(currentTile, thisTile);
+							}
+						} 
+						
 						if (!outOfBounds(posToCheck) && 
 							//!tooCloseToOpponent(posToCheck) &&
 							(!onWater(posToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) 
@@ -362,7 +410,7 @@ public class Player : MonoBehaviour {
 							transform.parent.position = posToCheck;
 							BaseTile thisTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
 							if (thisTile != currentTile) {
-								Debug.Log ("Getting New Tile moving");
+							//	Debug.Log ("Getting New Tile moving");
 								//currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
 								doNewTile(currentTile, thisTile);
 							}
