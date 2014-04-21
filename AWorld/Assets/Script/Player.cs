@@ -329,6 +329,8 @@ public class Player : MonoBehaviour {
 					if (x.HasValue) {
 						setDirection(x.Value);	//Still need a 4-directional facing for building/rotating beacons
 						
+					#region movement
+						
 						//Add acceleration
 						Vector2 vectorToAdd = new Vector2 (getPlayerXAxis(), getPlayerYAxis()) * sRef.playerAccelRate;
 						moveVector += vectorToAdd;
@@ -354,10 +356,10 @@ public class Player : MonoBehaviour {
 						*/
 						
 						//posToCheck is illegal, so instead, see how far you can move horizontally and vertically
+						//Welcome to my nightmare
 						if (outOfBounds (posToCheck) || 
 							(onWater (posToCheck) && !gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) && currentTile.currentType != TileTypeEnum.water)) 
 						{					
-
 							//First, figure out where the posToCheck's tile is in relation to our own
 							int xRel = (int) Mathf.Floor (transform.parent.position.x + 0.5f) - (int) Mathf.Floor (posToCheck.x + 0.5f);
 							int yRel = (int) Mathf.Floor (transform.parent.position.y + 0.5f) - (int) Mathf.Floor (posToCheck.y + 0.5f);
@@ -366,34 +368,185 @@ public class Player : MonoBehaviour {
 							else if (yRel == -1) 	dir += "north";
 							if (xRel == 1) 			dir += "west";
 							else if (xRel == -1)	dir += "east"; 
-							Debug.Log (dir);
 							//If posToCheck's tile is north, south, east, or west, just put us on the border and move horizontally/vertically as appropriate
-							float xPos = transform.parent.position.x, yPos = transform.parent.position.y;
+							Vector2 safePos = new Vector2 (transform.parent.position.x, transform.parent.position.y);
 							switch (dir) {
 								case "north":
-									xPos = posToCheck.x;
-									yPos = (int) Mathf.Floor (transform.parent.position.y + 0.5f) + 0.499f;
+									safePos = new Vector2 (posToCheck.x, currentTile.transform.position.y + 0.499f);
 									break;
 								case "south":
-									xPos = posToCheck.x;
-									yPos = (int) Mathf.Floor (transform.parent.position.y + 0.5f) - 0.499f;
+									safePos = new Vector2 (posToCheck.x, currentTile.transform.position.y - 0.499f);
 									break;
 								case "east":
-									xPos = (int) Mathf.Floor (transform.parent.position.x + 0.5f) + 0.499f;
-									yPos = posToCheck.y;
+									safePos = new Vector2 (currentTile.transform.position.x + 0.499f, posToCheck.y);
 									break;
 								case "west":
-									xPos = (int) Mathf.Floor (transform.parent.position.x + 0.5f) - 0.499f;
-									yPos = posToCheck.y;
+									safePos = new Vector2 (currentTile.transform.position.x - 0.499f, posToCheck.y);
 									break;
-								default:
-									xPos = transform.parent.position.x;
-									yPos = transform.parent.position.y;
+								case "northeast":
+									if (Mathf.Abs (transform.position.x - currentTile.transform.position.x) > 
+										Mathf.Abs (transform.position.y - currentTile.transform.position.y)) {
+										
+										//Try to move east, then north if that fails, then put in corner if both fail
+										Vector2 newPosToCheck = new Vector2 (posToCheck.x, transform.position.y);
+										if (!outOfBounds(newPosToCheck) && 
+								            (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
+								         		safePos = newPosToCheck;
+								    	}
+								    	else {
+								    		newPosToCheck = new Vector2 (transform.position.x, posToCheck.y);
+											if (!outOfBounds(newPosToCheck) && 
+												(!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
+											safePos = newPosToCheck;
+											}
+											else {
+												safePos = new Vector2 (currentTile.transform.position.x + 0.499f, currentTile.transform.position.y + 0.499f);
+											}
+								    	}
+								    }
+									else {
+										//Try to move north, then east if that fails, then put in corner if both fail
+										Vector2 newPosToCheck = new Vector2 (transform.position.x, posToCheck.y);
+										if (!outOfBounds(newPosToCheck) && 
+										    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
+											safePos = newPosToCheck;
+										}
+										else {
+											newPosToCheck = new Vector2 (posToCheck.x, transform.position.y);
+											if (!outOfBounds(newPosToCheck) && 
+											    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
+												safePos = newPosToCheck;
+											}
+											else {
+												safePos = new Vector2 (currentTile.transform.position.x + 0.499f, currentTile.transform.position.y + 0.499f);
+											}
+										}						  
+									}
+									break;
+								case "northwest":
+									if (Mathf.Abs (transform.position.x - currentTile.transform.position.x) > 
+									    Mathf.Abs (transform.position.y - currentTile.transform.position.y)) {
+										
+										//Try to move west, then north if that fails, then put in corner if both fail
+										Vector2 newPosToCheck = new Vector2 (posToCheck.x, transform.position.y);
+										if (!outOfBounds(newPosToCheck) && 
+										    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
+											safePos = newPosToCheck;
+										}
+										else {
+											newPosToCheck = new Vector2 (transform.position.x, posToCheck.y);
+											if (!outOfBounds(newPosToCheck) && 
+											    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
+												safePos = newPosToCheck;
+											}
+											else {
+												safePos = new Vector2 (currentTile.transform.position.x - 0.499f, currentTile.transform.position.y + 0.499f);
+											}
+										}
+									}
+									else {
+										//Try to move north, then west if that fails, then put in corner if both fail
+										Vector2 newPosToCheck = new Vector2 (transform.position.x, posToCheck.y);
+										if (!outOfBounds(newPosToCheck) && 
+										    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
+											safePos = newPosToCheck;
+										}
+										else {
+											newPosToCheck = new Vector2 (posToCheck.x, transform.position.y);
+											if (!outOfBounds(newPosToCheck) && 
+											    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
+												safePos = newPosToCheck;
+											}
+											else {
+												safePos = new Vector2 (currentTile.transform.position.x - 0.499f, currentTile.transform.position.y + 0.499f);
+											}
+										}						  
+									}
+									break;
+								case "southeast":
+									if (Mathf.Abs (transform.position.x - currentTile.transform.position.x) > 
+									    Mathf.Abs (transform.position.y - currentTile.transform.position.y)) {
+										
+										//Try to move east, then south if that fails, then put in corner if both fail
+										Vector2 newPosToCheck = new Vector2 (posToCheck.x, transform.position.y);
+										if (!outOfBounds(newPosToCheck) && 
+										    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
+											safePos = newPosToCheck;
+										}
+										else {
+											newPosToCheck = new Vector2 (transform.position.x, posToCheck.y);
+											if (!outOfBounds(newPosToCheck) && 
+											    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
+												safePos = newPosToCheck;
+											}
+											else {
+												safePos = new Vector2 (currentTile.transform.position.x + 0.499f, currentTile.transform.position.y - 0.499f);
+											}
+										}
+									}
+									else {
+										//Try to move south, then east if that fails, then put in corner if both fail
+										Vector2 newPosToCheck = new Vector2 (transform.position.x, posToCheck.y);
+										if (!outOfBounds(newPosToCheck) && 
+										    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
+											safePos = newPosToCheck;
+										}
+										else {
+											newPosToCheck = new Vector2 (posToCheck.x, transform.position.y);
+											if (!outOfBounds(newPosToCheck) && 
+											    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
+												safePos = newPosToCheck;
+											}
+											else {
+												safePos = new Vector2 (currentTile.transform.position.x + 0.499f, currentTile.transform.position.y - 0.499f);
+											}
+										}						  
+									}
+									break;
+								case "southwest":
+									if (Mathf.Abs (transform.position.x - currentTile.transform.position.x) > 
+									    Mathf.Abs (transform.position.y - currentTile.transform.position.y)) {
+										
+										//Try to move west, then south if that fails, then put in corner if both fail
+										Vector2 newPosToCheck = new Vector2 (posToCheck.x, transform.position.y);
+										if (!outOfBounds(newPosToCheck) && 
+										    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
+											safePos = newPosToCheck;
+										}
+										else {
+											newPosToCheck = new Vector2 (transform.position.x, posToCheck.y);
+											if (!outOfBounds(newPosToCheck) && 
+											    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
+												safePos = newPosToCheck;
+											}
+											else {
+												safePos = new Vector2 (currentTile.transform.position.x - 0.499f, currentTile.transform.position.y - 0.499f);
+											}
+										}
+									}
+									else {
+										//Try to move south, then west if that fails, then put in corner if both fail
+										Vector2 newPosToCheck = new Vector2 (transform.position.x, posToCheck.y);
+										if (!outOfBounds(newPosToCheck) && 
+										    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
+											safePos = newPosToCheck;
+										}
+										else {
+											newPosToCheck = new Vector2 (posToCheck.x, transform.position.y);
+											if (!outOfBounds(newPosToCheck) && 
+											    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
+												safePos = newPosToCheck;
+											}
+											else {
+												safePos = new Vector2 (currentTile.transform.position.x - 0.499f, currentTile.transform.position.y - 0.499f);
+											}
+										}						  
+									}
 									break; 
 							}
-							
+						
 							PlaySFX(playerMove, 0.2f);
-							transform.parent.position = new Vector3 (xPos, yPos, transform.parent.position.z);
+							transform.parent.position = new Vector3 (safePos.x, safePos.y, transform.parent.position.z);
 							BaseTile thisTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
 							if (thisTile != currentTile) {
 								//currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
@@ -416,6 +569,8 @@ public class Player : MonoBehaviour {
 							}
 						}
 					}
+					
+					#endregion
 					
 					/**
 					if(x.HasValue && x.Value == facing){
@@ -1093,7 +1248,7 @@ public class Player : MonoBehaviour {
 	
 		//Assumes tile width and height of exactly 1; will screw up otherwise
 	
-		float minDistanceFromEdge = 0.3f; //Should probably be set in Settings; players cannot be closer to edge than this
+		float minDistanceFromEdge = 0.0f; //Should probably be set in Settings; players cannot be closer to edge than this
 	
 		return (pos.x < -0.5f + minDistanceFromEdge ||
 				pos.y < -0.5f + minDistanceFromEdge ||
