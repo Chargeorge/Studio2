@@ -287,8 +287,8 @@ public class Player : MonoBehaviour {
 								beaconInProgress.setDirection(facing);
 								beaconInProgress.selfDestructing = false;
 							}
-						} else if(currentTile.tooCloseToBeacon() && currentTile.beacon == null){
-								audio.PlayOneShot(invalid_Input, 1.0f);
+						//} else if(currentTile.tooCloseToBeacon() && currentTile.beacon == null){
+						//		audio.PlayOneShot(invalid_Input, 1.0f);
 						} else{
 							_currentState = PlayerState.influencing;
 						}
