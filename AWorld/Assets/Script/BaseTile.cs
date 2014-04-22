@@ -427,12 +427,12 @@ public class BaseTile : MonoBehaviour {
 	public void setTileType(TileTypeEnum TT){
 		switch (TT){
 		case TileTypeEnum.regular:
-			gameObject.renderer.material = (Material)Resources.Load("Sprites/Materials/Regular");
+			gameObject.transform.FindChild ("BaseLayer").renderer.material = (Material)Resources.Load("Sprites/Materials/Regular");
 			currentType = TileTypeEnum.regular;
 			break;
 			
 		case TileTypeEnum.water:
-			gameObject.renderer.material = (Material)Resources.Load("Sprites/Materials/Water");
+			gameObject.transform.FindChild ("BaseLayer").renderer.material = (Material)Resources.Load("Sprites/Materials/Water");
 			currentType = TileTypeEnum.water;
 			break;
 		}
