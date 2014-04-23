@@ -54,6 +54,10 @@ public class BaseTile : MonoBehaviour {
 	public bool jigglingFromBeacon;
 	private float _jiggleRange = 0.05f;  //Max distance from center of position the tile will jiggle
 	
+	private float _maxTiltAngle = 30f;
+	private float tiltLerpRate = 0.5f;
+	private bool tiltingLeft;
+	
 	private ParticleSystem _PS;
 	
 	private Color _highlightColor = new Color(0f,0f, 0f);
@@ -366,7 +370,6 @@ public class BaseTile : MonoBehaviour {
 		qudInfluenceLayer.transform.position = new Vector3 (jigglePos.x, jigglePos.y, qudInfluenceLayer.transform.position.z);
 		qudOwnedLayer.transform.position = new Vector3 (jigglePos.x, jigglePos.y, qudOwnedLayer.transform.position.z);
 	}
-
 
 	public bool getActionable(TeamInfo attemptingAction, bool playerInfluencing){
 		float influenceOffset = (playerInfluencing) ? sRef.vpsBasePlayerInfluence * Time.deltaTime : 0; 
