@@ -280,23 +280,23 @@ MonoBehaviour:
     m_StretchHeight: 0
   cursor: {fileID: 279154248}
   playersDisplay: {fileID: 607681213}
-  twoPlayersMat: {fileID: 2100000, guid: 5c6dfbad06ab2694dbe52fc8aee767c5, type: 2}
-  fourPlayersMat: {fileID: 2100000, guid: e8c2b49149b46f24e9eb37f5dd35eb4d, type: 2}
+  twoPlayersMat: {fileID: 2100000, guid: a9486d47ca639724ebed80b107d1c2e5, type: 2}
+  fourPlayersMat: {fileID: 2100000, guid: 29bf3045d98eba844ba98a199d828a29, type: 2}
   fogDisplay: {fileID: 1506547495}
-  fogOnMat: {fileID: 2100000, guid: 5c6dfbad06ab2694dbe52fc8aee767c5, type: 2}
-  fogOffMat: {fileID: 2100000, guid: e8c2b49149b46f24e9eb37f5dd35eb4d, type: 2}
+  fogOnMat: {fileID: 2100000, guid: 50c3a203843c4734d95348a48e65c09f, type: 2}
+  fogOffMat: {fileID: 2100000, guid: 8254337640a49c140a2c0729681fafbd, type: 2}
   terrainDisplay: {fileID: 1513881157}
-  terrainIntensity1: {fileID: 2100000, guid: 5c6dfbad06ab2694dbe52fc8aee767c5, type: 2}
-  terrainIntensity2: {fileID: 2100000, guid: e8c2b49149b46f24e9eb37f5dd35eb4d, type: 2}
-  terrainIntensity3: {fileID: 2100000, guid: bda8613fce289294a8ac9ba56c57b9d8, type: 2}
+  terrainIntensity1: {fileID: 2100000, guid: 8b0d69345f6f54d41851d3db1f46779c, type: 2}
+  terrainIntensity2: {fileID: 2100000, guid: d840aa9fe0178ef48a5c69f38e6a2e53, type: 2}
+  terrainIntensity3: {fileID: 2100000, guid: 99d2c6bd333830947ba106ccf685f60c, type: 2}
   sizeDisplay: {fileID: 286261615}
-  sizeNormalMat: {fileID: 2100000, guid: 5c6dfbad06ab2694dbe52fc8aee767c5, type: 2}
-  sizeSmallMat: {fileID: 2100000, guid: e8c2b49149b46f24e9eb37f5dd35eb4d, type: 2}
-  sizeLargeMat: {fileID: 2100000, guid: bda8613fce289294a8ac9ba56c57b9d8, type: 2}
+  sizeSmallMat: {fileID: 2100000, guid: ea97b4f4ed0c7a848b84435e37439999, type: 2}
+  sizeNormalMat: {fileID: 2100000, guid: ad7e4fffd945633409f667affe0f7f06, type: 2}
+  sizeLargeMat: {fileID: 2100000, guid: 8a0236c3ddb8996499a43be00125d414, type: 2}
   speedDisplay: {fileID: 1459212913}
-  speedNormalMat: {fileID: 2100000, guid: 5c6dfbad06ab2694dbe52fc8aee767c5, type: 2}
-  speedDoubleMat: {fileID: 2100000, guid: e8c2b49149b46f24e9eb37f5dd35eb4d, type: 2}
-  speedHalfMat: {fileID: 2100000, guid: bda8613fce289294a8ac9ba56c57b9d8, type: 2}
+  speedNormalMat: {fileID: 2100000, guid: f465543daf785fa4f85d33226573551a, type: 2}
+  speedDoubleMat: {fileID: 2100000, guid: 4edf17e134c52f942b31258121da2ccc, type: 2}
+  speedHalfMat: {fileID: 2100000, guid: 84372e2861532a8478b4ed6f00241fab, type: 2}
 --- !u!4 &39365711
 Transform:
   m_ObjectHideFlags: 0
@@ -421,7 +421,7 @@ Transform:
   m_GameObject: {fileID: 286261615}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -.599797249, y: -3.83611917, z: 8.5}
-  m_LocalScale: {x: 2, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: .899999976, z: 1}
   m_Children: []
   m_Father: {fileID: 368808248}
 --- !u!23 &286261617

@@ -35,8 +35,8 @@ public class OptionsManager : MonoBehaviour {
 
 	bool sizeSelected = false;
 	public GameObject sizeDisplay;
-	public Material sizeNormalMat;
 	public Material sizeSmallMat;
+	public Material sizeNormalMat;
 	public Material sizeLargeMat;
 	public static int terrainSize;
 
@@ -54,10 +54,15 @@ public class OptionsManager : MonoBehaviour {
 
 		//Set up the default values for the game
 		numberOfPlayers = 2;
+		playersDisplay.renderer.material = twoPlayersMat;
 		fogDisplayed = true;
+		fogDisplay.renderer.material = fogOnMat;
 		terrainIntensity = 2;
+		terrainDisplay.renderer.material = terrainIntensity2;
 		terrainSize = 2; //1 is small, 2 is normal, 3 is large;
+		sizeDisplay.renderer.material = sizeNormalMat;
 		gameSpeed = 2; //idem
+		speedDisplay.renderer.material = speedNormalMat;
 
 	
 	}
@@ -134,13 +139,13 @@ public class OptionsManager : MonoBehaviour {
 
 		if(terrainSelected && Input.GetButtonDown("BuildPlayer1")){
 			if(terrainIntensity == 1){ //change from small to medium
-				terrainDisplay.renderer.material = terrainIntensity2;
+				terrainDisplay.renderer.material = terrainIntensity1;
 				terrainIntensity = 2;
 			} else if(terrainIntensity == 2){ //change from small to medium
 				terrainDisplay.renderer.material = terrainIntensity3;
 				terrainIntensity = 3;
 			} else if(terrainIntensity == 3){ //change from small to medium
-				terrainDisplay.renderer.material = terrainIntensity1;
+				terrainDisplay.renderer.material = terrainIntensity2;
 				terrainIntensity = 1;
 			}
 		}
@@ -160,19 +165,19 @@ public class OptionsManager : MonoBehaviour {
 
 		if(sizeSelected && Input.GetButtonDown("BuildPlayer1")){
 			if(terrainSize == 1){
-				sizeDisplay.renderer.material = speedNormalMat;
+				sizeDisplay.renderer.material = sizeNormalMat;
 				terrainSize = 2;
 			} else if(terrainSize == 2){
-				sizeDisplay.renderer.material = speedDoubleMat;
+				sizeDisplay.renderer.material = sizeLargeMat;
 				terrainSize = 3;
 			} else if(terrainSize == 3){
-				sizeDisplay.renderer.material = speedHalfMat;
+				sizeDisplay.renderer.material = sizeSmallMat;
 				terrainSize = 1;
 			}
 		}
 
 		if(backSelected && Input.GetButtonDown("BuildPlayer1")){
-			Application.LoadLevel("PierreMenu");
+			Application.LoadLevel("SiggWorking");
 		}
 
 	}
@@ -192,7 +197,7 @@ public class OptionsManager : MonoBehaviour {
 		if(!sizeSelected) GUI.Label (new Rect((Screen.width/4)*2, height2, Screen.width/5, 50), "SIZE", subtitleStyle);
 		if(sizeSelected) GUI.Label (new Rect((Screen.width/4)*2, height2, Screen.width/5, 50), "SIZE", highlightStyle);
 
-		if(!backSelected) GUI.Label (new Rect((Screen.width/6)*4.8f, (Screen.height/6)*5, Screen.width/5, 50), "BACK", subtitleStyle);
-		if(backSelected) GUI.Label (new Rect((Screen.width/6)*4.8f, (Screen.height/6)*5, Screen.width/5, 50), "BACK", highlightStyle);
+		if(!backSelected) GUI.Label (new Rect((Screen.width/6)*4.8f, (Screen.height/6)*5, Screen.width/5, 50), "START", subtitleStyle);
+		if(backSelected) GUI.Label (new Rect((Screen.width/6)*4.8f, (Screen.height/6)*5, Screen.width/5, 50), "START", highlightStyle);
 	}
 }
