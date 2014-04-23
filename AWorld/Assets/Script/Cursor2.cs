@@ -26,9 +26,8 @@ public class Cursor2 : MonoBehaviour {
 		pos.x += x;
 		//pos.y += y;
 		
-		if(pos.x < 2.85f && pos.y == 0.9f){ //if the cursor is at the left edge of the top line, make it go to BACK
-			pos.x = 14.5f;
-			pos.y = -3.42f;
+		if(pos.x < 2.85f && pos.y == 0.9f){ //if the cursor is at the left edge of the top line, make it stay there
+			pos.x = 2.85f;
 		} else if(pos.x > 12.0f && pos.y == 0.9f){
 			pos.x = 4.85f;
 			pos.y = -2.6f;
@@ -42,10 +41,10 @@ public class Cursor2 : MonoBehaviour {
 			pos.y = 0.9f;
 		}
 
-		if(pos.y == -3.42f && pos.x > 15.3f){ // if the cursor is at the right edge of BACK, make it go back to the left edge of the top line
-			pos.y = 0.9f;
-			pos.x = 2.9f;
-		} else if(pos.y == -3.42f && pos.x < 13.7f){
+		if(pos.y == -3.42f && pos.x > 15.2f){ // if the cursor is at the right edge of BACK, make it gstay there
+			pos.x = 15.2f;
+		}
+		if(pos.y == -3.42f && pos.x < 13.7f){
 			pos.y = -2.6f;
 			pos.x = 9.6f;
 		}
