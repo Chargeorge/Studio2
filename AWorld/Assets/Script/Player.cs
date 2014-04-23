@@ -287,6 +287,17 @@ public class Player : MonoBehaviour {
 								beaconInProgress.setDirection(facing);
 								beaconInProgress.selfDestructing = false;
 							}
+							else{
+								if(!currentTile.buildable()){
+									
+									if(!audio.isPlaying){ 
+										audio.clip = invalid_Input;
+										audio.PlayOneShot(invalid_Input, 0.3f);
+										audio.Play();
+										
+									}
+								}
+							}
 						//} else if(currentTile.tooCloseToBeacon() && currentTile.beacon == null){
 						//		audio.PlayOneShot(invalid_Input, 1.0f);
 						} else{
@@ -693,14 +704,15 @@ public class Player : MonoBehaviour {
 							//Debug.Log("Adding Influence");
 							float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime);
 							moveTowardCenterOfTile (currentTile);
-						//	Debug.Log("test: " + test);
+						//	Debug.Log("test: " + test);f
 							if(test > 0f || (currentTile.owningTeam != null && currentTile.owningTeam == team)){
 //								_currentState = PlayerState.standing;
 								
 								if (currentTile.getLocalAltar () != null || currentTile.tooCloseToBeacon()) {
-								audio.Stop ();
+									audio.Stop ();
+									
 									_currentState = PlayerState.standing;
-									//if(currentTile.tooCloseToBeacon()) audio.PlayOneShot(invalid_Input, 0.3f); //this also applies to the neutral beacon
+									if(currentTile.tooCloseToBeacon() && currentTile.beacon == null) audio.PlayOneShot(invalid_Input, 0.3f); //this also applies to the neutral beacon
 								}
 								
 								else {
