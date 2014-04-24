@@ -34,17 +34,17 @@ public class Cursor2 : MonoBehaviour {
 		}
 
 		if(pos.y == -2.6f && pos.x > 9.7f){ // if the cursor is at the right edge of the bottom line, make it go to BACK
-			pos.x = 13.8f;
+			pos.x = 13f;
 			pos.y = -3.42f;
 		} else if(pos.x < 4.4f && pos.y == -2.6f){ //if the cursor is at the left edge of the bottom line, make it go to the right edge of the top line
 			pos.x = 11.75f;
 			pos.y = 0.9f;
 		}
 
-		if(pos.y == -3.42f && pos.x > 15.2f){ // if the cursor is at the right edge of BACK, make it gstay there
-			pos.x = 15.2f;
+		if(pos.y == -3.42f && pos.x > 14.5f){ // if the cursor is at the right edge of BACK, make it stay there
+			pos.x = 14.5f;
 		}
-		if(pos.y == -3.42f && pos.x < 13.7f){
+		if(pos.y == -3.42f && pos.x < 12.7f){
 			pos.y = -2.6f;
 			pos.x = 9.6f;
 		}

@@ -83,6 +83,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 39365711}
   - 114: {fileID: 39365710}
+  - 82: {fileID: 39365712}
   m_Layer: 0
   m_Name: OptionsManager
   m_TagString: Untagged
@@ -278,6 +279,8 @@ MonoBehaviour:
     m_FixedHeight: 0
     m_StretchWidth: 1
     m_StretchHeight: 0
+  select: {fileID: 8300000, guid: 6932c941edc63ba4dafaed9c1fdb4b98, type: 3}
+  launch: {fileID: 8300000, guid: 9618e8d8ad13c4942bf2d559e4f46891, type: 3}
   cursor: {fileID: 279154248}
   playersDisplay: {fileID: 607681213}
   twoPlayersMat: {fileID: 2100000, guid: a9486d47ca639724ebed80b107d1c2e5, type: 2}
@@ -286,9 +289,12 @@ MonoBehaviour:
   fogOnMat: {fileID: 2100000, guid: 50c3a203843c4734d95348a48e65c09f, type: 2}
   fogOffMat: {fileID: 2100000, guid: 8254337640a49c140a2c0729681fafbd, type: 2}
   terrainDisplay: {fileID: 1513881157}
-  terrainIntensity1: {fileID: 2100000, guid: 8b0d69345f6f54d41851d3db1f46779c, type: 2}
-  terrainIntensity2: {fileID: 2100000, guid: d840aa9fe0178ef48a5c69f38e6a2e53, type: 2}
-  terrainIntensity3: {fileID: 2100000, guid: 99d2c6bd333830947ba106ccf685f60c, type: 2}
+  terrainIntensityNoWater: {fileID: 2100000, guid: 8b0d69345f6f54d41851d3db1f46779c,
+    type: 2}
+  terrainIntensitySwamp: {fileID: 2100000, guid: d840aa9fe0178ef48a5c69f38e6a2e53,
+    type: 2}
+  terrainIntensityFlooded: {fileID: 2100000, guid: 99d2c6bd333830947ba106ccf685f60c,
+    type: 2}
   sizeDisplay: {fileID: 286261615}
   sizeSmallMat: {fileID: 2100000, guid: ea97b4f4ed0c7a848b84435e37439999, type: 2}
   sizeNormalMat: {fileID: 2100000, guid: ad7e4fffd945633409f667affe0f7f06, type: 2}
@@ -308,6 +314,64 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+--- !u!82 &39365712
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 39365709}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
 --- !u!1 &279154248
 GameObject:
   m_ObjectHideFlags: 0
