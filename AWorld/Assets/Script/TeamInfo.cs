@@ -20,6 +20,9 @@ public class TeamInfo
 	public int teamNumber;
 	public float score;
 	public List<Color32> marqueeColorList;
+	public Texture scoreTexture;
+	public Texture winTexture;
+	public Vector2 wrldFinalTargetLocation;
 	
 	public TeamInfo ()
 	{
@@ -39,7 +42,8 @@ public class TeamInfo
 				returnable.startingLocation = Settings.SettingsInstance.team1Start;
 				returnable.teamNumber = teamNumber;
 				returnable.highlightColor = new Color32 (17, 75, 141, 150);
-
+				returnable.scoreTexture = (Texture)Resources.Load("Sprites/ScorebgTextureblue");
+			returnable.winTexture = (Texture)Resources.Load("Sprites/victoryScreen-blue");
 
 				break;
 			case 2:
@@ -51,6 +55,8 @@ public class TeamInfo
 				returnable.startingLocation = Settings.SettingsInstance.team2Start;
 				returnable.teamNumber = teamNumber;
 				returnable.highlightColor = new Color32 (247, 180, 40, 150);
+			returnable.scoreTexture = (Texture)Resources.Load("Sprites/ScorebgTexturebyel");
+			returnable.winTexture = (Texture)Resources.Load("Sprites/victoryScreenYellow");
 				break;
 		}
 

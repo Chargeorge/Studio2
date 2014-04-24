@@ -54,6 +54,11 @@ public class BaseTile : MonoBehaviour {
 	public bool jigglingFromBeacon;
 	private float _jiggleRange = 0.05f;  //Max distance from center of position the tile will jiggle
 	
+	private float _maxTiltAngle = 10f;
+	private float tiltRate = Mathf.PI;
+	private float tiltTimer = 0f;
+	private bool tiltingLeft;
+	
 	private ParticleSystem _PS;
 	
 	private Color _highlightColor = new Color(0f,0f, 0f);
@@ -356,19 +361,53 @@ public class BaseTile : MonoBehaviour {
 			}
 		}
 		
-		Vector3 jigglePos = transform.position;
+//		Vector3 jigglePos = transform.position;
+//		Quaternion jiggleRot = transform.rotation;
+		float tiltZ = 0;
 		
 		if (jigglingFromPlayer || jigglingFromBeacon) {
-			Vector3 positionOffset = new Vector3 (UnityEngine.Random.Range (-1 * _jiggleRange, _jiggleRange), UnityEngine.Random.Range (-1 * _jiggleRange, _jiggleRange), 0);
-			jigglePos = transform.position + positionOffset;
-		}	
+//			Vector3 positionOffset = new Vector3 (UnityEngine.Random.Range (-1 * _jiggleRange, _jiggleRange), UnityEngine.Random.Range (-1 * _jiggleRange, _jiggleRange), 0);
+//			jigglePos = transform.position + positionOffset;
+			tiltTimer += Time.deltaTime;
+			tiltZ = Mathf.Sin(tiltTimer * tiltRate) * _maxTiltAngle;
+//			Debug.Log (percControlled);
+			/**
+			Quaternion toSlerp;
+			if (tiltingLeft) {
+				toSlerp = Quaternion.Euler (0, 0, _maxTiltAngle);
+			}
+			else {
+				toSlerp = Quaternion.Euler (0, 0, -1 * _maxTiltAngle);
+			}
+			*/
+						
+		}
 		
+		else { 
+			tiltingLeft = false;
+		}
+
+		/**
 		qudBaseLayer.transform.position = new Vector3 (jigglePos.x, jigglePos.y, qudBaseLayer.transform.position.z);
 		qudSelectedLayer.transform.position = new Vector3 (jigglePos.x, jigglePos.y, qudSelectedLayer.transform.position.z);
 		qudInfluenceLayer.transform.position = new Vector3 (jigglePos.x, jigglePos.y, qudInfluenceLayer.transform.position.z);
 		qudOwnedLayer.transform.position = new Vector3 (jigglePos.x, jigglePos.y, qudOwnedLayer.transform.position.z);
+		*/
+		
+		Vector3 endRot = new Vector3 (0,0,tiltZ);
+		
+		//Needs optimizizizization
+		qudBeaconLayer.transform.localEulerAngles = endRot;
+		qudBaseLayer.transform.localEulerAngles = endRot;
+		qudSelectedLayer.transform.localEulerAngles = endRot;
+		qudInfluenceLayer.transform.localEulerAngles = endRot;
+		qudOwnedLayer.transform.localEulerAngles = endRot;
+		
+		if (beacon != null) {
+			beacon.gameObject.transform.FindChild ("Platform").transform.localEulerAngles = endRot;
+		}
+		
 	}
-
 
 	public bool getActionable(TeamInfo attemptingAction, bool playerInfluencing){
 		float influenceOffset = (playerInfluencing) ? sRef.vpsBasePlayerInfluence * Time.deltaTime : 0; 
@@ -870,9 +909,8 @@ public class BaseTile : MonoBehaviour {
 				localAltar.setControl(owningTeam);
 			}
 			if(localBeacon!= null){
-
 				localBeacon.setTeam (owningTeam);
-
+				localBeacon.UpdateInfluencePatterns();
 			}
 			
 			Reveal (sRef.influenceRevealRange);

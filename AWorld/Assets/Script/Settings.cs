@@ -119,11 +119,11 @@ public class Settings : MonoBehaviour {
 		coefMunalwaScale = 2.0f;		//Multiplier applied to physical scale of player with Munalwa
 	
 		//Score stuff
-		scoreOnCapture = 60f;
+		scoreOnCapture = 120f;
 		optLockTile = false;
 		optTilesGiveScore = true;
 		valTileConvertScore = 1f;
-		valPointsToWin = 300;
+		valPointsToWin = 250;
 		valScorePerMine = 1f;
 		
 		//Beacon stuff
@@ -137,13 +137,13 @@ public class Settings : MonoBehaviour {
 		team1Start = new Vector2(2,7);
 		team2Start = new Vector2(19,7);
 		optPerlinLevel = 1800;
-		neutralBeaconCount = 0;
+		neutralBeaconCount = 12;
 		numAltars = 0;
 		numScoringAltars = 5;
 		
 		//Mode switches
 		debugMode = true;
-		gameMode = Mode.OneVOne;
+		gameMode = Mode.TwoVTwo;
 		
 		//Visual stuff
 		percMaxInfluenceColor = 0.5f;		//Percentage of color that tile fills in when just before 100% influence

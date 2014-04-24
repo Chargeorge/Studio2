@@ -11,8 +11,6 @@ public class Player : MonoBehaviour {
 	public int PlayerNumber;
 	public GameManager gm;
 
-	public  Rect TeamRect;
-	public  Rect ScoreRect;
 
 	public float currentActionProgress;
 	public Settings sRef;
@@ -40,9 +38,7 @@ public class Player : MonoBehaviour {
 	public AudioClip influenceDone;
 	public AudioClip invalid_Input;
 
-	public float scoreBarH = 30;
-	public float scoreBarW = 75;
-	public Texture scoreTexture;
+
 	public Texture winTexture;
 	
 	public Vector3 teleportTarget;
@@ -92,15 +88,12 @@ public class Player : MonoBehaviour {
 		qudActionableGlow = transform.parent.FindChild("ActionableGlow").gameObject;
 
 		if(PlayerNumber == 1){
-			scoreTexture = gm.scoreTexture1;
 			winTexture = gm.winTexture1;
 		} else {
-			scoreTexture = gm.scoreTexture2;
 			winTexture = gm.winTexture2;
 		}
 		
-		TeamRect = new Rect((Screen.width - scoreBarW)*(PlayerNumber-1)+ 2, 0, scoreBarW, Screen.height);
-		ScoreRect  = new Rect((Screen.width - scoreBarW)*(PlayerNumber-1)+ 2, Screen.height, scoreBarW,0);
+
 	}
 	
 	
@@ -286,6 +279,17 @@ public class Player : MonoBehaviour {
 								beaconInProgress.startBuilding(currentTile.gameObject, this.gameObject, vpsBuildRate);
 								beaconInProgress.setDirection(facing);
 								beaconInProgress.selfDestructing = false;
+							}
+							else{
+								if(!currentTile.buildable()){
+									
+									if(!audio.isPlaying){ 
+										audio.clip = invalid_Input;
+										audio.PlayOneShot(invalid_Input, 0.3f);
+										audio.Play();
+										
+									}
+								}
 							}
 						//} else if(currentTile.tooCloseToBeacon() && currentTile.beacon == null){
 						//		audio.PlayOneShot(invalid_Input, 1.0f);
@@ -693,14 +697,15 @@ public class Player : MonoBehaviour {
 							//Debug.Log("Adding Influence");
 							float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime);
 							moveTowardCenterOfTile (currentTile);
-						//	Debug.Log("test: " + test);
+						//	Debug.Log("test: " + test);f
 							if(test > 0f || (currentTile.owningTeam != null && currentTile.owningTeam == team)){
 //								_currentState = PlayerState.standing;
 								
 								if (currentTile.getLocalAltar () != null || currentTile.tooCloseToBeacon()) {
-								audio.Stop ();
+									audio.Stop ();
+									
 									_currentState = PlayerState.standing;
-									//if(currentTile.tooCloseToBeacon()) audio.PlayOneShot(invalid_Input, 0.3f); //this also applies to the neutral beacon
+									if(currentTile.tooCloseToBeacon() && currentTile.beacon == null) audio.PlayOneShot(invalid_Input, 0.3f); //this also applies to the neutral beacon
 								}
 								
 								else {
@@ -1120,46 +1125,7 @@ public class Player : MonoBehaviour {
 
 
 
-	private void OnGUI(){
 
-		float perScore = team.score / sRef.valPointsToWin;
-		ScoreRect.height =-Screen.height *perScore;
-
-		GUI.DrawTexture(TeamRect, gm.scoreBgTexture, ScaleMode.StretchToFill, true, 1.0f);
-		GUI.DrawTexture(ScoreRect, scoreTexture, ScaleMode.StretchToFill, true, 1.0f);
-
-	//	GUI.DrawTexture(new Rect(0,(Screen.height - scoreBarH)*(PlayerNumber-1), Screen.width, scoreBarH), gm.scoreBgTexture, ScaleMode.StretchToFill, true, 1.0f);
-	//	GUI.DrawTexture(new Rect(0,(Screen.height - scoreBarH)*(PlayerNumber-1), Screen.width * perScore, scoreBarH), scoreTexture, ScaleMode.StretchToFill, true, 1.0f);
-
-//		GUI.DrawTexture(new Rect((Screen.width - scoreBarW)*(PlayerNumber-1)+ 2, 0, scoreBarW, Screen.height), gm.scoreBgTexture, ScaleMode.StretchToFill,true, 1.0f);
-//		GUI.DrawTexture(new Rect((Screen.width - scoreBarW)*(PlayerNumber-1)+ 2, Screen.height, scoreBarW, -Screen.height *perScore),scoreTexture, ScaleMode.StretchToFill, true, 1.0f);
-
-
-		int boxWidth = 1600;
-		int boxHeight = 900;
-
-		switch (gm.currentState){
-			case GameState.gameWon:
-				if(gm.vIsForVendetta.completingTeam == this.team){
-				GUI.BeginGroup(new Rect(Screen.width/2 - boxWidth/2, Screen.height/2 - boxHeight/2, boxWidth, boxHeight));
-				GUI.DrawTexture(new Rect(0,0,boxWidth,boxHeight), winTexture, ScaleMode.StretchToFill, true, 1.0f);
-				GUI.EndGroup();
-				}
-				break;
-				
-			case GameState.playing:
-				break;
-			}
-			if(gm.debugGUI == true){
-				switch (gm.currentState){
-				case GameState.playing:
-					if(sRef.debugMode){
-						GUI.Box (new Rect (10+200*(PlayerNumber-1),10,200,90), string.Format("Player {0}\r\nState: {1}\r\npercentcomplete{2}\r\nScore: {3}",PlayerNumber, currentState,currentActionProgress, team.score));	
-					}
-				break;
-			}
-		}
-	}
 		
 	private float getTileSpeedBoost(BaseTile tile) {
 		if (tile.owningTeam == null) {
@@ -1347,5 +1313,15 @@ public class Player : MonoBehaviour {
 		//Debug.Log("In New Tile");
 	//	qudActionableGlow.renderer.material.color = (newTile.getActionable(team, this.getPlayerBuild())) ?  Color.green : Color.red;
 	}
-	
+	public void OnGUI(){
+		if(gm.debugGUI == true){
+			switch (gm.currentState){
+			case GameState.playing:
+				if(sRef.debugMode){
+					GUI.Box (new Rect (10+200*(PlayerNumber-1),10,200,90), string.Format("Player {0}\r\nState: {1}\r\npercentcomplete{2}\r\nScore: {3}",PlayerNumber, currentState,currentActionProgress, team.score));	
+				}
+				break;
+			}
+		}
+	}
 }
