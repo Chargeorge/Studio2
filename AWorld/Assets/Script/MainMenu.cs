@@ -13,6 +13,8 @@ public class MainMenu : MonoBehaviour {
 	bool optionsSelected;
 	bool quitSelected;
 	public float deadZone;
+	public AudioClip select;
+	public AudioClip launch;
 	bool joystickActive = true;
 
 	public GameObject cursor;
@@ -27,15 +29,15 @@ public class MainMenu : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		if(cursor.transform.position.y < -0.4 && cursor.transform.position.y > -1.2){
+		if(cursor.transform.position.y < -0.4 && cursor.transform.position.y > -1.4){
 			startSelected = true;
 			optionsSelected = false;
 			quitSelected = false;
-		} else if(cursor.transform.position.y < -1.7 && cursor.transform.position.y > -2.3){
+		} else if(cursor.transform.position.y < -1.4 && cursor.transform.position.y > -2.4){
 			startSelected = false;
 			optionsSelected = true;
 			quitSelected = false;
-		} else if(cursor.transform.position.y < -2.5 && cursor.transform.position.y > -3.1f){
+		} else if(cursor.transform.position.y < -2.4 && cursor.transform.position.y > -3.1f){
 			startSelected = false;
 			optionsSelected = false;
 			quitSelected = true;
@@ -85,15 +87,24 @@ public class MainMenu : MonoBehaviour {
 		}*/
 
 		if(Input.GetButtonDown("BuildPlayer1")){
-			if(startSelected) Application.LoadLevel("SiggWorking");
-			if(optionsSelected) Application.LoadLevel("PierreOptions");
+			if(startSelected){
+				audio.PlayOneShot(launch, 0.9f);
+				Invoke("launchGame", 1.5f);
+			}
+			if(optionsSelected){
+				audio.PlayOneShot(select, 1.0f);
+				Invoke ("launchOptions", 1.0f);
+			}
 			if(quitSelected) Application.Quit();
 		}
 	}
 
-	IEnumerator InputDelay(){
-		yield return new WaitForSeconds(1.0f);
-		joystickActive = true;
+	public void launchOptions(){
+		Application.LoadLevel("PierreOptions");
+	}
+
+	public void launchGame(){
+		Application.LoadLevel("SiggWorking");
 	}
 
 	void OnGUI(){
