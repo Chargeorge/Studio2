@@ -47,7 +47,10 @@ public class GameManager : MonoBehaviour {
 	private GameObject prfbBeacon;
 	public VictoryCondition vIsForVendetta;	
 	public int currentMarquee;
+
 	public AudioClip Victory_Gong;
+	public AudioClip Game_Launch;
+
 	bool isPlaying = false;
 	public List<GameObject> beacons;
 
@@ -64,6 +67,8 @@ public class GameManager : MonoBehaviour {
 		victoryConditions = new List<VictoryCondition>();
 		teams = new List<TeamInfo>();
 		StartCoroutine(doMarquee());
+
+		audio.PlayOneShot(Game_Launch, 0.9f);
 		
 	}
 	/// <summary>

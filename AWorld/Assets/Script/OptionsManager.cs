@@ -10,6 +10,9 @@ public class OptionsManager : MonoBehaviour {
 	int height1;
 	int height2;
 
+	public AudioClip select;
+	public AudioClip launch;
+
 	public GameObject cursor;
 
 	bool backSelected = false;
@@ -24,13 +27,13 @@ public class OptionsManager : MonoBehaviour {
 	public GameObject fogDisplay;
 	public Material fogOnMat;
 	public Material fogOffMat;
-	public static bool fogDisplayed;
+	public static int fogDisplayed; //0 is off, 1 is on
 
 	bool terrainSelected = false;
 	public GameObject terrainDisplay;
-	public Material terrainIntensity1;
-	public Material terrainIntensity2;
-	public Material terrainIntensity3;
+	public Material terrainIntensityNoWater;
+	public Material terrainIntensitySwamp;
+	public Material terrainIntensityFlooded;
 	public static int terrainIntensity;
 
 	bool sizeSelected = false;
@@ -55,10 +58,10 @@ public class OptionsManager : MonoBehaviour {
 		//Set up the default values for the game
 		numberOfPlayers = 2;
 		playersDisplay.renderer.material = twoPlayersMat;
-		fogDisplayed = true;
+		fogDisplayed = 1;
 		fogDisplay.renderer.material = fogOnMat;
 		terrainIntensity = 2;
-		terrainDisplay.renderer.material = terrainIntensity2;
+		terrainDisplay.renderer.material = terrainIntensitySwamp;
 		terrainSize = 2; //1 is small, 2 is normal, 3 is large;
 		sizeDisplay.renderer.material = sizeNormalMat;
 		gameSpeed = 2; //idem
@@ -69,6 +72,14 @@ public class OptionsManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+		PlayerPrefs.SetInt("numberOfPlayers", numberOfPlayers);
+		PlayerPrefs.SetInt("fogOn", fogDisplayed);
+		PlayerPrefs.SetInt("terrainIntensity", terrainIntensity);
+		PlayerPrefs.SetInt("terrainSize", terrainSize);
+		PlayerPrefs.SetInt("gameSpeed", gameSpeed);
+
+		Debug.Log("intensity :" + terrainIntensity);
 
 		//LET'S FIRST DEFINE WHAT IS SELECTED WHEN
 		if(cursor.transform.position.y == 0.9f){
@@ -117,40 +128,45 @@ public class OptionsManager : MonoBehaviour {
 
 
 		//LET'S MAKE SHIT HAPPEN WHEN SOMETHING IS SELECTED AND THE BUTTON IS PRESSED
+		if(Input.GetButtonDown("BuildPlayer1") && cursor.transform.position.y > -3.0f){
+
+			audio.Stop ();
+			audio.PlayOneShot(select, 0.8f);
+
 		if(playersSelected){
-			if(Input.GetButtonDown("BuildPlayer1") && numberOfPlayers == 2){
+			if(numberOfPlayers == 2){
 				playersDisplay.renderer.material = fourPlayersMat;
 				numberOfPlayers = 4;
-			} else if(Input.GetButtonDown("BuildPlayer1") && numberOfPlayers == 4){
+			} else if(numberOfPlayers == 4){
 				playersDisplay.renderer.material = twoPlayersMat;
 				numberOfPlayers = 2;
 			}
 		}
 
 		if(fogSelected){
-			if(Input.GetButtonDown("BuildPlayer1") && fogDisplayed){
+			if(fogDisplayed == 1){
 				fogDisplay.renderer.material = fogOffMat;
-				fogDisplayed = false;
-			} else if(Input.GetButtonDown("BuildPlayer1") && !fogDisplayed){
+				fogDisplayed = 0;
+			} else if(fogDisplayed == 0){
 				fogDisplay.renderer.material = fogOnMat;
-				fogDisplayed = true;
+				fogDisplayed = 1;
 			}
 		}
 
-		if(terrainSelected && Input.GetButtonDown("BuildPlayer1")){
+		if(terrainSelected){
 			if(terrainIntensity == 1){ //change from small to medium
-				terrainDisplay.renderer.material = terrainIntensity1;
+				terrainDisplay.renderer.material = terrainIntensitySwamp;
 				terrainIntensity = 2;
 			} else if(terrainIntensity == 2){ //change from small to medium
-				terrainDisplay.renderer.material = terrainIntensity3;
+				terrainDisplay.renderer.material = terrainIntensityFlooded;
 				terrainIntensity = 3;
 			} else if(terrainIntensity == 3){ //change from small to medium
-				terrainDisplay.renderer.material = terrainIntensity2;
+				terrainDisplay.renderer.material = terrainIntensityNoWater;
 				terrainIntensity = 1;
 			}
 		}
 
-		if(speedSelected && Input.GetButtonDown("BuildPlayer1")){
+		if(speedSelected){
 			if(gameSpeed == 1){
 				speedDisplay.renderer.material = speedNormalMat;
 				gameSpeed = 2;
@@ -163,7 +179,7 @@ public class OptionsManager : MonoBehaviour {
 			}
 		}
 
-		if(sizeSelected && Input.GetButtonDown("BuildPlayer1")){
+		if(sizeSelected){
 			if(terrainSize == 1){
 				sizeDisplay.renderer.material = sizeNormalMat;
 				terrainSize = 2;
@@ -175,11 +191,17 @@ public class OptionsManager : MonoBehaviour {
 				terrainSize = 1;
 			}
 		}
-
-		if(backSelected && Input.GetButtonDown("BuildPlayer1")){
-			Application.LoadLevel("SiggWorking");
 		}
 
+		if(backSelected && Input.GetButtonDown("BuildPlayer1")){
+			audio.PlayOneShot(launch, 0.9f);
+			Invoke ("launchGame", 1.5f);
+		}
+
+	}
+
+	public void launchGame(){
+		Application.LoadLevel("SiggWorking");
 	}
 
 	void OnGUI(){
