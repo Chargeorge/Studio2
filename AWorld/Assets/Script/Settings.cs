@@ -90,7 +90,7 @@ public class Settings : MonoBehaviour {
 	public float closeEnoughDistanceMoveToCenter;
 	public float closeEnoughDistanceScoreBit;
 	public int influenceRevealRange; 	 //Radius of fog reveal when tile is influenced
-	
+	public float secTillRestartable;
 	// Use this for initialization
 	void Start () {
 
@@ -143,7 +143,7 @@ public class Settings : MonoBehaviour {
 		
 		//Mode switches
 		debugMode = true;
-		gameMode = Mode.TwoVTwo;
+		gameMode = Mode.OneVOne;
 		
 		//Visual stuff
 		percMaxInfluenceColor = 0.5f;		//Percentage of color that tile fills in when just before 100% influence
@@ -172,7 +172,7 @@ public class Settings : MonoBehaviour {
 		closeEnoughDistanceMoveToCenter = 0.012f;
 		closeEnoughDistanceScoreBit = 0.1f;
 		influenceRevealRange = 3; 			//Radius of fog reveal when tile is influenced
-		
+		secTillRestartable = 3f;
 	}
 	
 	// Update is called once per frame

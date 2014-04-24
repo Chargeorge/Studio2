@@ -57,16 +57,24 @@ public class GUIManager : MonoBehaviour {
 		
 		int boxWidth = 1600;
 		int boxHeight = 900;
-		
+		TeamInfo winningTeam;
 		switch (gRef.currentState){
 		case GameState.gameWon:
-			TeamInfo winningTeam =gRef.vIsForVendetta.completingTeam;
+			winningTeam =gRef.vIsForVendetta.completingTeam;
 			GUI.BeginGroup(new Rect(Screen.width/2 - boxWidth/2, Screen.height/2 - boxHeight/2, boxWidth, boxHeight));
 			GUI.DrawTexture(new Rect(0,0,boxWidth,boxHeight), winningTeam.winTexture, ScaleMode.StretchToFill, true, 1.0f);
 			GUI.EndGroup();
 
 			break;
+		
+		case GameState.gameRestartable:
+			winningTeam =gRef.vIsForVendetta.completingTeam;
+			GUI.BeginGroup(new Rect(Screen.width/2 - boxWidth/2, Screen.height/2 - boxHeight/2, boxWidth, boxHeight));
+			GUI.DrawTexture(new Rect(0,0,boxWidth,boxHeight), winningTeam.winTexture, ScaleMode.StretchToFill, true, 1.0f);
+			GUI.EndGroup();
 			
+			break;
+
 		case GameState.playing:
 			break;
 		}

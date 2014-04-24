@@ -315,22 +315,40 @@ public class GameManager : MonoBehaviour {
 				debugMouse.percControlled =100f;
 			}
 		}
-		_victoryString = "";
-		foreach (VictoryCondition v in victoryConditions){
-			v.CheckState(this);
-			//Debug.Log("checstate done");
 
-			if(v.isCompleted && !isPlaying){
-				audio.PlayOneShot(Victory_Gong, 0.5f); //THIS IS THE ACTUAL VICTORY SOUND
-				isPlaying = true;
-				_currentState = GameState.gameWon;
-				_victoryString += v.getVictorySting();
-				vIsForVendetta = v;
+		if(_currentState == GameState.playing){
+			_victoryString = "";
+			foreach (VictoryCondition v in victoryConditions){
+				v.CheckState(this);
+				//Debug.Log("checstate done");
+
+				if(v.isCompleted && !isPlaying){
+					audio.PlayOneShot(Victory_Gong, 0.5f); //THIS IS THE ACTUAL VICTORY SOUND
+					isPlaying = true;
+					_currentState = GameState.gameWon;
+					_victoryString += v.getVictorySting();
+					vIsForVendetta = v;
+					Invoke("setRestartable", sRef.secTillRestartable);
+				}
+				
 			}
+		}
+		if(_currentState == GameState.gameWon){
 			
-		}	
+		}
+
+		if(_currentState == GameState.gameRestartable){
+			if(Input.GetButtonDown("BuildPlayer1")){
+				Application.LoadLevel(Application.loadedLevel);
+			}
+		}
+
+
 	}
 
+	public void setRestartable(){
+		_currentState = GameState.gameRestartable;
+	}
 public Vector2 generateValidAltarPosition(Altar thisAltar, Vector2 startPos, bool flip, int absoluteMagnitude){
 
 		int x, y;
