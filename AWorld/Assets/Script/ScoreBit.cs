@@ -42,6 +42,7 @@ public class ScoreBit : MonoBehaviour {
 			finalTarget.PlayScoreAnimation ();
 			BulletPool.instance.PoolObject(gameObject);
 			team.addScore(Settings.SettingsInstance.vpsScorePerMinePerSecond);
+			CancelInvoke();
 		}
 	}
 	
