@@ -143,7 +143,7 @@ public class Settings : MonoBehaviour {
 		
 		//Mode switches
 		debugMode = true;
-		gameMode = Mode.OneVOne;
+		gameMode = Mode.TwoVTwo;
 		
 		//Visual stuff
 		percMaxInfluenceColor = 0.5f;		//Percentage of color that tile fills in when just before 100% influence

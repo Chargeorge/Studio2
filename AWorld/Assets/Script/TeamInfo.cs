@@ -22,6 +22,7 @@ public class TeamInfo
 	public List<Color32> marqueeColorList;
 	public Texture scoreTexture;
 	public Texture winTexture;
+	public Vector2 wrldFinalTargetLocation;
 	
 	public TeamInfo ()
 	{
