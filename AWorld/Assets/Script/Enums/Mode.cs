@@ -15,9 +15,9 @@ using System;
 /// </summary>
 public enum Mode
 {
-	OneVOne,
-	TwoVTwo,
-	FourPFFA
+	OneVOne = 1,
+	TwoVTwo = 2,
+	FourPFFA = 3
 }
 
 

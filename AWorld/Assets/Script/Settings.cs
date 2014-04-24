@@ -91,6 +91,13 @@ public class Settings : MonoBehaviour {
 	public float closeEnoughDistanceScoreBit;
 	public int influenceRevealRange; 	 //Radius of fog reveal when tile is influenced
 	public float secTillRestartable;
+
+	//OverridOptions
+
+	public float[] perlinLevels;
+	public float[] coefSpeed;
+	public SizeSetting[] sizes;
+
 	// Use this for initialization
 	void Start () {
 
@@ -143,7 +150,7 @@ public class Settings : MonoBehaviour {
 		
 		//Mode switches
 		debugMode = true;
-		gameMode = Mode.OneVOne;
+		gameMode = Mode.TwoVTwo;
 		
 		//Visual stuff
 		percMaxInfluenceColor = 0.5f;		//Percentage of color that tile fills in when just before 100% influence
