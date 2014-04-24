@@ -284,7 +284,7 @@ public class BaseTile : MonoBehaviour {
 		transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
 		sRef = Settings.SettingsInstance;
 		influenceAdded = new float[6];
-		transform.Find("NoBuildLayer").renderer.material.color = new Color32 (100,100,100,255);
+		transform.Find("NoBuildLayer").renderer.material.color = new Color32 (200,200,200,255);
 
 	}
 	
@@ -306,7 +306,9 @@ public class BaseTile : MonoBehaviour {
 			qudInfluenceLayer.SetActive(true);
 			Color32 controllingTeamColor = controllingTeam.tileColor;
 			//controllingTeamColor.a = (byte) (255*(percControlled/100f));
-			transform.Find("NoBuildLayer").renderer.material.color = controllingTeam.beaconColor;
+
+
+			transform.Find("NoBuildLayer").renderer.material.color = controllingTeam.tileColor;
 			
 			if (owningTeam != null && owningTeam == controllingTeam) {
 				controllingTeamColor.a = (byte) (255-255*((1.0f-percControlled/100f) * (1.0f - sRef.percMaxInfluenceColor)));
