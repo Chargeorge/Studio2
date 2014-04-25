@@ -60,6 +60,7 @@ public class Settings : MonoBehaviour {
 	public int numAltars;
 	public int numScoringAltars;
 	public string ranjitRangeAltars;
+	public bool fogOn;
 
 	//Mode switches
 	public bool debugMode;
@@ -142,12 +143,7 @@ public class Settings : MonoBehaviour {
 		selfDestructDelay = 0.5f;  			//How long you wait after player stops building before destroying a beacon
 		loseUpgradeProgressDelay = 0.5f;  	//How long you wait after player stops upgrading before clearing upgrade progress
 		
-		//Board setup stuff
-		team1Start = new Vector2(2,7);
-		team2Start = new Vector2(19,7);
-		boardSize = new Vector2(1,1);
 
-		optPerlinLevel = 1800;
 		neutralBeaconCount = 12;
 		numAltars = 0;
 		numScoringAltars = 5;
@@ -185,8 +181,14 @@ public class Settings : MonoBehaviour {
 		influenceRevealRange = 3; 			//Radius of fog reveal when tile is influenced
 		secTillRestartable = 3f;
 
-		//Settings
+		//DO NOT SET MANUALLY, OVERIDDEN BY OPTION VALS
+		//Board setup stuff
+		team1Start = new Vector2(2,7);
+		team2Start = new Vector2(19,7);
+		boardSize = new Vector2(1,1);
+		optPerlinLevel = 1800;
 
+		//Settings
 		perlinLevels = new float[]{3000f, 1800f, 1400f};
 		sizes = new SizeSetting[]{new SizeSetting(new Vector2(16,12),new Vector2(2,6), new Vector2(19,6),7.08f),
 								  new SizeSetting(new Vector2(22,14),new Vector2(2,7), new Vector2(19,7), 7.08f),
@@ -196,7 +198,8 @@ public class Settings : MonoBehaviour {
 	}
 
 	void setPrefs(){
-		PlayerPrefs.GetInt(PreferencesOptions.numberOfPlayers.ToString());
+
+		gameMode = (PlayerPrefs.GetInt(PreferencesOptions.numberOfPlayers.ToString()) == 2) ? Mode.TwoVTwo : Mode.OneVOne;
 		PlayerPrefs.GetInt(PreferencesOptions.fogOn.ToString());
 		PlayerPrefs.GetInt(PreferencesOptions.terrainIntensity.ToString());
 		PlayerPrefs.GetInt(PreferencesOptions.terrainSize.ToString());

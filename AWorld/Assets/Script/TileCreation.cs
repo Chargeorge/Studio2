@@ -9,14 +9,38 @@ public class TileCreation : MonoBehaviour {
 	public Material matTest;
 	private GameManager gm;
 	public GameObject manager;
-	public int boardX, boardY;
+	private int _boardX;
+	private int _boardY;
+
+	public int boardX {
+		get {
+			return _boardX;
+		}
+	}
+
+		
+	public int boardY {
+		get {
+			return _boardY;
+		}
+	}
+
 	public int numberOfAltars;
 	public string ranjitRangeTileTypes;
-	public bool fogOn;
+	private bool _fogOn;
+
+	public bool fogOn {
+		get {
+			return _fogOn;
+		}
+	}
 	
 	// Use this for initialization
 	void Start () {
 		//Eventually procedural, for now random. Wee
+		_boardX = (int)Settings.SettingsInstance.boardSize.x;
+		_boardY = (int)Settings.SettingsInstance.boardSize.y;
+		_fogOn = Settings.SettingsInstance.fogOn;
 		textureResources =new Dictionary<int, Material>();
 		textureResources.Add((int)TileTypeEnum.regular, (Material)Resources.Load("Sprites/Materials/Regular"));
 		textureResources.Add((int)TileTypeEnum.water, (Material)Resources.Load("Sprites/Materials/Water"));
