@@ -151,7 +151,6 @@ public class Settings : MonoBehaviour {
 		
 		//Mode switches
 		debugMode = true;
-		gameMode = Mode.TwoVTwo;
 		
 		//Visual stuff
 		percMaxInfluenceColor = 0.5f;		//Percentage of color that tile fills in when just before 100% influence
@@ -186,18 +185,18 @@ public class Settings : MonoBehaviour {
 		//Board setup stuff 
 		team1Start = new Vector2(2,7);
 		team2Start = new Vector2(19,7);
-		boardSize = new Vector2(1,1);
+		boardSize = new Vector2(22,14);
 		optPerlinLevel = 1800;
 		cameraSize = 7.08f;
 		fogOn = true;
-
+		gameMode = Mode.TwoVTwo;
 		//Settings
 		perlinLevels = new int[]{3000, 1800, 1400};
-		sizes = new SizeSetting[]{new SizeSetting(new Vector2(16,12),new Vector2(2,6), new Vector2(19,6),7.08f),
+		sizes = new SizeSetting[]{new SizeSetting(new Vector2(16,12),new Vector2(2,6), new Vector2(14,6),7.08f),
 								  new SizeSetting(new Vector2(22,14),new Vector2(2,7), new Vector2(19,7), 7.08f),
 								  new SizeSetting(new Vector2(28,20),new Vector2(2,10), new Vector2(26,10),8.08f)};
 
-	
+		setPrefs();
 	}
 
 	void setPrefs(){
@@ -205,7 +204,7 @@ public class Settings : MonoBehaviour {
 
 
 
-		gameMode = (PlayerPrefs.GetInt(PreferencesOptions.numberOfPlayers.ToString()) == 2) ? Mode.TwoVTwo : Mode.OneVOne;
+		gameMode = (PlayerPrefs.GetInt(PreferencesOptions.numberOfPlayers.ToString()) == 2) ? Mode.OneVOne : Mode.TwoVTwo;
 		fogOn = (PlayerPrefs.GetInt(PreferencesOptions.fogOn.ToString()) == 1) ? true : false;
 		optPerlinLevel =  (perlinLevels[PlayerPrefs.GetInt(PreferencesOptions.terrainIntensity.ToString())]);
 		SizeSetting set = sizes[PlayerPrefs.GetInt(PreferencesOptions.terrainSize.ToString())];
