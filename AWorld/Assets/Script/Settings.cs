@@ -180,6 +180,13 @@ public class Settings : MonoBehaviour {
 		closeEnoughDistanceScoreBit = 0.1f;
 		influenceRevealRange = 3; 			//Radius of fog reveal when tile is influenced
 		secTillRestartable = 3f;
+
+		//Settings
+
+		perlinLevels = new float[]{3000f, 1800f, 1400f};
+		sizes = new SizeSetting[]{new SizeSetting(new Vector2(16,12),new Vector2(2,6), new Vector2(19,6),7.08f),
+								   new SizeSetting(new Vector2(22,14),	new Vector2(2,7), new Vector2(19,7), 7.08f),
+								new SizeSetting(new Vector2(28,20),new Vector2(2,10), new Vector2(26,10),8.08f)};
 	}
 	
 	// Update is called once per frame
