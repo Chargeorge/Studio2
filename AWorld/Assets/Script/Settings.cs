@@ -97,7 +97,8 @@ public class Settings : MonoBehaviour {
 
 	//OverridOptions
 
-	public float[] perlinLevels;
+	public float cameraSize;
+	public int[] perlinLevels;
 	public float[] coefSpeed;
 	public SizeSetting[] sizes;
 
@@ -181,15 +182,17 @@ public class Settings : MonoBehaviour {
 		influenceRevealRange = 3; 			//Radius of fog reveal when tile is influenced
 		secTillRestartable = 3f;
 
-		//DO NOT SET MANUALLY, OVERIDDEN BY OPTION VALS
-		//Board setup stuff
+		//THESE VALS ARE OVERIDDEN BY OPTIONS, THESE ARE ONLY IF PREFS NOT SET
+		//Board setup stuff 
 		team1Start = new Vector2(2,7);
 		team2Start = new Vector2(19,7);
 		boardSize = new Vector2(1,1);
 		optPerlinLevel = 1800;
+		cameraSize = 7.08f;
+		fogOn = true;
 
 		//Settings
-		perlinLevels = new float[]{3000f, 1800f, 1400f};
+		perlinLevels = new int[]{3000, 1800, 1400};
 		sizes = new SizeSetting[]{new SizeSetting(new Vector2(16,12),new Vector2(2,6), new Vector2(19,6),7.08f),
 								  new SizeSetting(new Vector2(22,14),new Vector2(2,7), new Vector2(19,7), 7.08f),
 								  new SizeSetting(new Vector2(28,20),new Vector2(2,10), new Vector2(26,10),8.08f)};
@@ -199,10 +202,19 @@ public class Settings : MonoBehaviour {
 
 	void setPrefs(){
 
+
+
+
 		gameMode = (PlayerPrefs.GetInt(PreferencesOptions.numberOfPlayers.ToString()) == 2) ? Mode.TwoVTwo : Mode.OneVOne;
-		PlayerPrefs.GetInt(PreferencesOptions.fogOn.ToString());
-		PlayerPrefs.GetInt(PreferencesOptions.terrainIntensity.ToString());
-		PlayerPrefs.GetInt(PreferencesOptions.terrainSize.ToString());
+		fogOn = (PlayerPrefs.GetInt(PreferencesOptions.fogOn.ToString()) == 1) ? true : false;
+		optPerlinLevel =  (perlinLevels[PlayerPrefs.GetInt(PreferencesOptions.terrainIntensity.ToString())]);
+		SizeSetting set = sizes[PlayerPrefs.GetInt(PreferencesOptions.terrainSize.ToString())];
+
+		boardSize = set.mapSize;
+		team1Start = set.team1Start;
+		team2Start = set.team2Start;
+		cameraSize = set.cameraSize;
+
 		PlayerPrefs.GetInt(PreferencesOptions.gameSpeed.ToString());
 
 	}

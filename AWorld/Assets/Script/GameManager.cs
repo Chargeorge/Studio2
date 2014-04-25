@@ -67,6 +67,7 @@ public class GameManager : MonoBehaviour {
 		victoryConditions = new List<VictoryCondition>();
 		teams = new List<TeamInfo>();
 		StartCoroutine(doMarquee());
+		Camera.main.orthographicSize = sRef.cameraSize;
 
 		audio.PlayOneShot(Game_Launch, 0.9f);
 		
