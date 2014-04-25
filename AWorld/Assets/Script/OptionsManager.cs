@@ -75,9 +75,9 @@ public class OptionsManager : MonoBehaviour {
 		
 		PlayerPrefs.SetInt(PreferencesOptions.numberOfPlayers.ToString(), numberOfPlayers);
 		PlayerPrefs.SetInt(PreferencesOptions.fogOn.ToString(), fogDisplayed);
-		PlayerPrefs.SetInt(PreferencesOptions.terrainIntensity.ToString(), terrainIntensity);
-		PlayerPrefs.SetInt(PreferencesOptions.terrainSize.ToString(), terrainSize);
-		PlayerPrefs.SetInt(PreferencesOptions.gameSpeed.ToString(), gameSpeed);
+		PlayerPrefs.SetInt(PreferencesOptions.terrainIntensity.ToString(), terrainIntensity-1);
+		PlayerPrefs.SetInt(PreferencesOptions.terrainSize.ToString(), terrainSize-1);
+		PlayerPrefs.SetInt(PreferencesOptions.gameSpeed.ToString(), gameSpeed-1);
 
 		Debug.Log("intensity :" + terrainIntensity);
 
@@ -204,9 +204,9 @@ public class OptionsManager : MonoBehaviour {
 		
 		PlayerPrefs.SetInt(PreferencesOptions.numberOfPlayers.ToString(), numberOfPlayers);
 		PlayerPrefs.SetInt(PreferencesOptions.fogOn.ToString(), fogDisplayed);
-		PlayerPrefs.SetInt(PreferencesOptions.terrainIntensity.ToString(), terrainIntensity);
-		PlayerPrefs.SetInt(PreferencesOptions.terrainSize.ToString(), terrainSize);
-		PlayerPrefs.SetInt(PreferencesOptions.gameSpeed.ToString(), gameSpeed);
+		PlayerPrefs.SetInt(PreferencesOptions.terrainIntensity.ToString(), terrainIntensity-1);
+		PlayerPrefs.SetInt(PreferencesOptions.terrainSize.ToString(), terrainSize-1);
+		PlayerPrefs.SetInt(PreferencesOptions.gameSpeed.ToString(), gameSpeed-1);
 
 		Application.LoadLevel("SiggWorking");
 

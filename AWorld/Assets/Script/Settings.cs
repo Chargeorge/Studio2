@@ -53,6 +53,8 @@ public class Settings : MonoBehaviour {
 	//Board setup stuff
 	public Vector2 team1Start;
 	public Vector2 team2Start;
+	public Vector2 boardSize;
+
 	public int optPerlinLevel;
 	public int neutralBeaconCount;
 	public int numAltars;
@@ -143,6 +145,8 @@ public class Settings : MonoBehaviour {
 		//Board setup stuff
 		team1Start = new Vector2(2,7);
 		team2Start = new Vector2(19,7);
+		boardSize = new Vector2(1,1);
+
 		optPerlinLevel = 1800;
 		neutralBeaconCount = 12;
 		numAltars = 0;
@@ -187,8 +191,19 @@ public class Settings : MonoBehaviour {
 		sizes = new SizeSetting[]{new SizeSetting(new Vector2(16,12),new Vector2(2,6), new Vector2(19,6),7.08f),
 								  new SizeSetting(new Vector2(22,14),new Vector2(2,7), new Vector2(19,7), 7.08f),
 								  new SizeSetting(new Vector2(28,20),new Vector2(2,10), new Vector2(26,10),8.08f)};
-	}
+
 	
+	}
+
+	void setPrefs(){
+		PlayerPrefs.GetInt(PreferencesOptions.numberOfPlayers.ToString());
+		PlayerPrefs.GetInt(PreferencesOptions.fogOn.ToString());
+		PlayerPrefs.GetInt(PreferencesOptions.terrainIntensity.ToString());
+		PlayerPrefs.GetInt(PreferencesOptions.terrainSize.ToString());
+		PlayerPrefs.GetInt(PreferencesOptions.gameSpeed.ToString());
+
+	}
+
 	// Update is called once per frame
 	void Update () {
 	

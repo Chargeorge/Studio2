@@ -2,7 +2,6 @@
 public enum PreferencesOptions
 {
 
-	
 	numberOfPlayers,
 	fogOn,
 	terrainIntensity,
