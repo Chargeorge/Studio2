@@ -220,8 +220,8 @@ public class OptionsManager : MonoBehaviour {
 		if(playersSelected) GUI.Label (new Rect(Screen.width/8, height1, Screen.width/4, 50), "PLAYERS", highlightStyle);
 		if(!fogSelected) GUI.Label (new Rect((Screen.width/8)*3, height1, Screen.width/4, 50), "FOG", subtitleStyle);
 		if(fogSelected) GUI.Label (new Rect((Screen.width/8)*3, height1, Screen.width/4, 50), "FOG", highlightStyle);
-		if(!terrainSelected) GUI.Label (new Rect((Screen.width/8)*5, height1, Screen.width/4, 50), "INTEGRITY", subtitleStyle);
-		if(terrainSelected) GUI.Label (new Rect((Screen.width/8)*5, height1, Screen.width/4, 50), "INTEGRITY", highlightStyle);
+		if(!terrainSelected) GUI.Label (new Rect((Screen.width/8)*5.1f, height1, Screen.width/4, 50), "WORLD", subtitleStyle);
+		if(terrainSelected) GUI.Label (new Rect((Screen.width/8)*5.1f, height1, Screen.width/4, 50), "WORLD", highlightStyle);
 
 		if(!speedSelected) GUI.Label (new Rect((Screen.width/4), height2, Screen.width/5, 50), "SPEED", subtitleStyle);
 		if(speedSelected) GUI.Label (new Rect((Screen.width/4), height2, Screen.width/5, 50), "SPEED", highlightStyle);
