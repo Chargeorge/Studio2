@@ -56,6 +56,6 @@ public class CursorMenu : MonoBehaviour {
 			rotateSpeed = restingRotateSpeed * rotatingLeft;
 		}
 		
-		transform.RotateAround (transform.position, Vector3.forward, rotateSpeed * Time.deltaTime);	
+		if (!menu.GetComponent<MainMenu>().screenChanging)  transform.RotateAround (transform.position, Vector3.forward, rotateSpeed * Time.deltaTime);	
 	}
 }
