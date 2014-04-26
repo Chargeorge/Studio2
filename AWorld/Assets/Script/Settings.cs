@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 
 public class Settings : MonoBehaviour {
 	//VPS -- Value Per Second, represents the amount of value added per second for building or moving.
@@ -75,11 +75,11 @@ public class Settings : MonoBehaviour {
 	public float buildCircleFinishScale; 	//The scale the upgrade circle anim thing is at around 99% complete
 	public float buildCircleStartAlpha; 	//The alpha at which the upgrade circle anim thing starts
 	public float buildCircleFinishAlpha; 	//The alpha the upgrade circle anim thing is at around 99% complete 
-	public float upgradeCircleStartScale; 	//The scale at which the upgrade circle anim thing starts
 	public float upgradeCircleFinishScale; 	//The scale the upgrade circle anim thing is at around 99% complete
 	public float upgradeCircleStartAlpha; 	//The alpha at which the upgrade circle anim thing starts
 	public float upgradeCircleFinishAlpha; 	//The alpha the upgrade circle anim thing is at around 99% complete 
 	
+	public float upgradeCircleStartScale; 	//The scale at which the upgrade circle anim thing starts
 	//Player movement stuff
 	public float playerAccelRate;
 	public float playerFriction;
@@ -101,6 +101,7 @@ public class Settings : MonoBehaviour {
 	public int[] perlinLevels;
 	public float[] coefSpeed;
 	public SizeSetting[] sizes;
+	public Vector3 cameraPosition;
 
 	// Use this for initialization
 	void Start () {
@@ -192,9 +193,9 @@ public class Settings : MonoBehaviour {
 		gameMode = Mode.TwoVTwo;
 		//Settings
 		perlinLevels = new int[]{3000, 1800, 1400};
-		sizes = new SizeSetting[]{new SizeSetting(new Vector2(16,12),new Vector2(2,6), new Vector2(14,6),7.08f),
-								  new SizeSetting(new Vector2(22,14),new Vector2(2,7), new Vector2(19,7), 7.08f),
-								  new SizeSetting(new Vector2(28,20),new Vector2(2,10), new Vector2(26,10),8.08f)};
+		sizes = new SizeSetting[]{new SizeSetting(new Vector2(16,12),new Vector2(2,6), new Vector2(14,6),7.08f, new Vector2(10.5f, 6.49f)),
+								new SizeSetting(new Vector2(22,14),new Vector2(2,7), new Vector2(19,7), 7.08f, new Vector2(10.5f, 6.49f)),
+			new SizeSetting(new Vector2(28,20),new Vector2(2,10), new Vector2(26,10),11.61f,new Vector2(13.65858f, 10.2f))};
 
 		setPrefs();
 	}
@@ -213,7 +214,7 @@ public class Settings : MonoBehaviour {
 		team1Start = set.team1Start;
 		team2Start = set.team2Start;
 		cameraSize = set.cameraSize;
-
+		cameraPosition = set.cameraPosition;
 		PlayerPrefs.GetInt(PreferencesOptions.gameSpeed.ToString());
 
 	}
