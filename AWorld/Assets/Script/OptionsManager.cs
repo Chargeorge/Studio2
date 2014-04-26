@@ -110,7 +110,7 @@ public class OptionsManager : MonoBehaviour {
 			terrainSelected = false;
 			backSelected = false;
 
-			if(cursor.transform.position.x > 4.85f && cursor.transform.position.x < 7.2f){
+			if(cursor.transform.position.x >= 4.85f && cursor.transform.position.x < 7.2f){
 				sizeSelected = false;
 				speedSelected = true;
 			} else if(cursor.transform.position.x > 7.2f && cursor.transform.position.x < 9.7f){
@@ -220,8 +220,8 @@ public class OptionsManager : MonoBehaviour {
 		if(playersSelected) GUI.Label (new Rect(Screen.width/8, height1, Screen.width/4, 50), "PLAYERS", highlightStyle);
 		if(!fogSelected) GUI.Label (new Rect((Screen.width/8)*3, height1, Screen.width/4, 50), "FOG", subtitleStyle);
 		if(fogSelected) GUI.Label (new Rect((Screen.width/8)*3, height1, Screen.width/4, 50), "FOG", highlightStyle);
-		if(!terrainSelected) GUI.Label (new Rect((Screen.width/8)*5, height1, Screen.width/4, 50), "INTEGRITY", subtitleStyle);
-		if(terrainSelected) GUI.Label (new Rect((Screen.width/8)*5, height1, Screen.width/4, 50), "INTEGRITY", highlightStyle);
+		if(!terrainSelected) GUI.Label (new Rect((Screen.width/8)*5.1f, height1, Screen.width/4, 50), "WORLD", subtitleStyle);
+		if(terrainSelected) GUI.Label (new Rect((Screen.width/8)*5.1f, height1, Screen.width/4, 50), "WORLD", highlightStyle);
 
 		if(!speedSelected) GUI.Label (new Rect((Screen.width/4), height2, Screen.width/5, 50), "SPEED", subtitleStyle);
 		if(speedSelected) GUI.Label (new Rect((Screen.width/4), height2, Screen.width/5, 50), "SPEED", highlightStyle);

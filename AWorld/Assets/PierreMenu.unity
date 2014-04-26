@@ -494,7 +494,7 @@ MonoBehaviour:
     m_RichText: 1
     m_TextClipping: 0
     m_ImagePosition: 0
-    m_ContentOffset: {x: 1, y: 14}
+    m_ContentOffset: {x: 1, y: 10}
     m_FixedWidth: 0
     m_FixedHeight: 0
     m_StretchWidth: 1
@@ -553,7 +553,7 @@ MonoBehaviour:
     m_RichText: 1
     m_TextClipping: 0
     m_ImagePosition: 0
-    m_ContentOffset: {x: 4, y: -52}
+    m_ContentOffset: {x: 4, y: -56}
     m_FixedWidth: 0
     m_FixedHeight: 0
     m_StretchWidth: 1
@@ -612,7 +612,7 @@ MonoBehaviour:
     m_RichText: 1
     m_TextClipping: 0
     m_ImagePosition: 0
-    m_ContentOffset: {x: 0, y: -52}
+    m_ContentOffset: {x: 0, y: -56}
     m_FixedWidth: 0
     m_FixedHeight: 0
     m_StretchWidth: 1
