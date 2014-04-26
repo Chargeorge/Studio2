@@ -16,6 +16,7 @@ public class MainMenu : MonoBehaviour {
 	public AudioClip select;
 	public AudioClip launch;
 	bool joystickActive = true;
+	public bool screenChanging;
 
 	public GameObject cursor;
 
@@ -24,6 +25,7 @@ public class MainMenu : MonoBehaviour {
 		startSelected = false;
 		optionsSelected = false;
 		quitSelected = false;
+		screenChanging = false;
 	}
 	
 	// Update is called once per frame
@@ -86,16 +88,22 @@ public class MainMenu : MonoBehaviour {
 		}
 		}*/
 
-		if(Input.GetButtonDown("BuildPlayer1")){
+		if(Input.GetButtonDown("BuildPlayer1") && !screenChanging){
 			if(startSelected){
 				audio.PlayOneShot(launch, 0.9f);
+				screenChanging = true;
 				Invoke("launchGame", 1.5f);
 			}
 			if(optionsSelected){
 				audio.PlayOneShot(select, 1.0f);
+				screenChanging = true;
 				Invoke ("launchOptions", 1.0f);
 			}
-			if(quitSelected) Application.Quit();
+			if(quitSelected){
+				audio.PlayOneShot (select, 1.0f);
+				screenChanging = true;
+				Invoke ("quitApp", 1.0f);
+			}
 		}
 	}
 
@@ -105,6 +113,10 @@ public class MainMenu : MonoBehaviour {
 
 	public void launchGame(){
 		Application.LoadLevel("SiggWorking");
+	}
+	
+	public void quitApp(){
+		Application.Quit();
 	}
 
 	void OnGUI(){

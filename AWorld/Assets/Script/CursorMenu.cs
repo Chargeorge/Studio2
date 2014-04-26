@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CursorMovement : MonoBehaviour {
+public class CursorMenu : MonoBehaviour {
 
 	public float speed;
 	public GameObject menu;
@@ -24,7 +24,7 @@ public class CursorMovement : MonoBehaviour {
 		float y = Input.GetAxis("VerticalPlayer1") * speed * Time.deltaTime;
 
 		//pos.x += x;
-		pos.y += y;
+		if (!menu.GetComponent<MainMenu>().screenChanging) pos.y += y;
 
 		if(pos.y > -0.4f){
 			pos.y = -0.4f;

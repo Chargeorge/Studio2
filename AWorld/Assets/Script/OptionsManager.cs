@@ -12,6 +12,7 @@ public class OptionsManager : MonoBehaviour {
 
 	public AudioClip select;
 	public AudioClip launch;
+	public bool launching;
 
 	public GameObject cursor;
 
@@ -67,7 +68,7 @@ public class OptionsManager : MonoBehaviour {
 		gameSpeed = 2; //idem
 		speedDisplay.renderer.material = speedNormalMat;
 
-	
+		launching = false;
 	}
 	
 	// Update is called once per frame
@@ -79,7 +80,7 @@ public class OptionsManager : MonoBehaviour {
 		PlayerPrefs.SetInt(PreferencesOptions.terrainSize.ToString(), terrainSize-1);
 		PlayerPrefs.SetInt(PreferencesOptions.gameSpeed.ToString(), gameSpeed-1);
 
-		Debug.Log("intensity :" + terrainIntensity);
+//		Debug.Log("intensity :" + terrainIntensity);
 
 		//LET'S FIRST DEFINE WHAT IS SELECTED WHEN
 		if(cursor.transform.position.y == 0.9f){
@@ -110,7 +111,7 @@ public class OptionsManager : MonoBehaviour {
 			terrainSelected = false;
 			backSelected = false;
 
-			if(cursor.transform.position.x > 4.85f && cursor.transform.position.x < 7.2f){
+			if(cursor.transform.position.x >= 4.85f && cursor.transform.position.x < 7.2f){
 				sizeSelected = false;
 				speedSelected = true;
 			} else if(cursor.transform.position.x > 7.2f && cursor.transform.position.x < 9.7f){
@@ -193,8 +194,9 @@ public class OptionsManager : MonoBehaviour {
 		}
 		}
 
-		if(backSelected && Input.GetButtonDown("BuildPlayer1")){
+		if(backSelected && Input.GetButtonDown("BuildPlayer1") && !launching){
 			audio.PlayOneShot(launch, 0.9f);
+			launching = true;
 			Invoke ("launchGame", 1.5f);
 		}
 
@@ -220,8 +222,8 @@ public class OptionsManager : MonoBehaviour {
 		if(playersSelected) GUI.Label (new Rect(Screen.width/8, height1, Screen.width/4, 50), "PLAYERS", highlightStyle);
 		if(!fogSelected) GUI.Label (new Rect((Screen.width/8)*3, height1, Screen.width/4, 50), "FOG", subtitleStyle);
 		if(fogSelected) GUI.Label (new Rect((Screen.width/8)*3, height1, Screen.width/4, 50), "FOG", highlightStyle);
-		if(!terrainSelected) GUI.Label (new Rect((Screen.width/8)*5, height1, Screen.width/4, 50), "INTEGRITY", subtitleStyle);
-		if(terrainSelected) GUI.Label (new Rect((Screen.width/8)*5, height1, Screen.width/4, 50), "INTEGRITY", highlightStyle);
+		if(!terrainSelected) GUI.Label (new Rect((Screen.width/8)*5.1f, height1, Screen.width/4, 50), "WORLD", subtitleStyle);
+		if(terrainSelected) GUI.Label (new Rect((Screen.width/8)*5.1f, height1, Screen.width/4, 50), "WORLD", highlightStyle);
 
 		if(!speedSelected) GUI.Label (new Rect((Screen.width/4), height2, Screen.width/5, 50), "SPEED", subtitleStyle);
 		if(speedSelected) GUI.Label (new Rect((Screen.width/4), height2, Screen.width/5, 50), "SPEED", highlightStyle);
