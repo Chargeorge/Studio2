@@ -12,6 +12,7 @@ public class OptionsManager : MonoBehaviour {
 
 	public AudioClip select;
 	public AudioClip launch;
+	public bool launching;
 
 	public GameObject cursor;
 
@@ -67,7 +68,7 @@ public class OptionsManager : MonoBehaviour {
 		gameSpeed = 2; //idem
 		speedDisplay.renderer.material = speedNormalMat;
 
-	
+		launching = false;
 	}
 	
 	// Update is called once per frame
@@ -79,7 +80,7 @@ public class OptionsManager : MonoBehaviour {
 		PlayerPrefs.SetInt(PreferencesOptions.terrainSize.ToString(), terrainSize-1);
 		PlayerPrefs.SetInt(PreferencesOptions.gameSpeed.ToString(), gameSpeed-1);
 
-		Debug.Log("intensity :" + terrainIntensity);
+//		Debug.Log("intensity :" + terrainIntensity);
 
 		//LET'S FIRST DEFINE WHAT IS SELECTED WHEN
 		if(cursor.transform.position.y == 0.9f){
@@ -193,8 +194,9 @@ public class OptionsManager : MonoBehaviour {
 		}
 		}
 
-		if(backSelected && Input.GetButtonDown("BuildPlayer1")){
+		if(backSelected && Input.GetButtonDown("BuildPlayer1") && !launching){
 			audio.PlayOneShot(launch, 0.9f);
+			launching = true;
 			Invoke ("launchGame", 1.5f);
 		}
 

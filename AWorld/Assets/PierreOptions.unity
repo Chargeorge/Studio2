@@ -281,6 +281,7 @@ MonoBehaviour:
     m_StretchHeight: 0
   select: {fileID: 8300000, guid: 6932c941edc63ba4dafaed9c1fdb4b98, type: 3}
   launch: {fileID: 8300000, guid: 9618e8d8ad13c4942bf2d559e4f46891, type: 3}
+  launching: 0
   cursor: {fileID: 279154248}
   playersDisplay: {fileID: 607681213}
   twoPlayersMat: {fileID: 2100000, guid: a9486d47ca639724ebed80b107d1c2e5, type: 2}
@@ -399,11 +400,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 279154248}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c0fe71b54ddfc14f85c68dd6633c25b, type: 3}
+  m_Script: {fileID: 11500000, guid: f352eef43d68f19409e39379726b1442, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 8
-  menu: {fileID: 39365709}
+  speed: 4
+  options: {fileID: 39365709}
 --- !u!23 &279154250
 Renderer:
   m_ObjectHideFlags: 0

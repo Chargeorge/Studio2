@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Cursor2 : MonoBehaviour {
+public class CursorOptions : MonoBehaviour {
 
 	public float speed;
-	public GameObject menu;
+	public GameObject options;
 	
 	// Use this for initialization
 	void Start () {
 		
-		OptionsManager optionsScript = menu.GetComponent<OptionsManager>();
+		OptionsManager optionsScript = options.GetComponent<OptionsManager>();
 		
 		//transform.position.x = startPos;
 		
@@ -23,7 +23,7 @@ public class Cursor2 : MonoBehaviour {
 		float x = Input.GetAxis("HorizontalPlayer1") * speed * Time.deltaTime;
 		float y = Input.GetAxis("VerticalPlayer1") * speed * Time.deltaTime;
 		
-		pos.x += x;
+		if (!options.GetComponent<OptionsManager>().launching) pos.x += x;
 		//pos.y += y;
 		
 		if(pos.x < 2.85f && pos.y == 0.9f){ //if the cursor is at the left edge of the top line, make it stay there
