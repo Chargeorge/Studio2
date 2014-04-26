@@ -13,7 +13,7 @@ GameObject:
   - 23: {fileID: 2300000}
   - 114: {fileID: 11400000}
   m_Layer: 0
-  m_Name: Cursor
+  m_Name: CursorMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26,8 +26,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.5, y: .25999999, z: -5.4385829}
-  m_LocalScale: {x: .300000012, y: .300000012, z: .400000006}
+  m_LocalPosition: {x: -3, y: -.400000006, z: -6}
+  m_LocalScale: {x: .699999988, y: .699999988, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
 --- !u!23 &2300000
@@ -79,12 +79,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e33376cdc9f8294f9f861aa11596de9, type: 3}
+  m_Script: {fileID: 11500000, guid: aa30c660a11fb8d4fb745c4a7362af6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2
+  speed: 8
   menu: {fileID: 0}
-  startPos: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
