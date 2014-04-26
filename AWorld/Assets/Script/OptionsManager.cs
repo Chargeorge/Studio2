@@ -110,7 +110,7 @@ public class OptionsManager : MonoBehaviour {
 			terrainSelected = false;
 			backSelected = false;
 
-			if(cursor.transform.position.x > 4.85f && cursor.transform.position.x < 7.2f){
+			if(cursor.transform.position.x >= 4.85f && cursor.transform.position.x < 7.2f){
 				sizeSelected = false;
 				speedSelected = true;
 			} else if(cursor.transform.position.x > 7.2f && cursor.transform.position.x < 9.7f){
