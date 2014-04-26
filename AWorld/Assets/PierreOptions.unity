@@ -284,8 +284,8 @@ MonoBehaviour:
   launching: 0
   cursor: {fileID: 279154248}
   playersDisplay: {fileID: 607681213}
-  twoPlayersMat: {fileID: 2100000, guid: a9486d47ca639724ebed80b107d1c2e5, type: 2}
-  fourPlayersMat: {fileID: 2100000, guid: 29bf3045d98eba844ba98a199d828a29, type: 2}
+  twoPlayersMat: {fileID: 2100000, guid: d942044f03668364bac299e3c8f35812, type: 2}
+  fourPlayersMat: {fileID: 2100000, guid: a4b220a3e441d784aba4e67ef9857f57, type: 2}
   fogDisplay: {fileID: 1506547495}
   fogOnMat: {fileID: 2100000, guid: 50c3a203843c4734d95348a48e65c09f, type: 2}
   fogOffMat: {fileID: 2100000, guid: 9dd1785320fa57a4fabc22ef1c4dbc75, type: 2}

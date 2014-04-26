@@ -688,11 +688,8 @@ MonoBehaviour:
   prfbTile: {fileID: 100010, guid: 87f9a789346b544448cbc9bac6e40707, type: 2}
   matTest: {fileID: 0}
   manager: {fileID: 842739086}
-  boardX: 22
-  boardY: 14
   numberOfAltars: 0
   ranjitRangeTileTypes: 
-  fogOn: 1
 --- !u!4 &1669248506
 Transform:
   m_ObjectHideFlags: 0
@@ -849,11 +846,13 @@ MonoBehaviour:
   loseUpgradeProgressDelay: 0
   team1Start: {x: 5, y: 5}
   team2Start: {x: 15, y: 5}
+  boardSize: {x: 0, y: 0}
   optPerlinLevel: 1500
   neutralBeaconCount: 12
   numAltars: 0
   numScoringAltars: 0
   ranjitRangeAltars: 
+  fogOn: 0
   debugMode: 1
   gameMode: 0
   secMarqueeUpgradeTime: 0
@@ -879,6 +878,9 @@ MonoBehaviour:
   closeEnoughDistanceScoreBit: 0
   influenceRevealRange: 0
   secTillRestartable: 0
+  cameraSize: 0
+  perlinLevels: 
+  coefSpeed: []
 --- !u!4 &1843163359
 Transform:
   m_ObjectHideFlags: 0
