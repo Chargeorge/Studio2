@@ -107,6 +107,7 @@ public class Settings : MonoBehaviour {
 	void Start () {
 
 		//Base values per second
+		//Overloaded by settings, use these vals if settings not set
 		vpsBaseBuild = 50f;
 		vpsBaseMove = 100f;
 		vpsBaseFreeMoveSpeed = 2.0f;
@@ -201,21 +202,72 @@ public class Settings : MonoBehaviour {
 	}
 
 	void setPrefs(){
-
-
-
-
-		gameMode = (PlayerPrefs.GetInt(PreferencesOptions.numberOfPlayers.ToString()) == 2) ? Mode.OneVOne : Mode.TwoVTwo;
-		fogOn = (PlayerPrefs.GetInt(PreferencesOptions.fogOn.ToString()) == 1) ? true : false;
-		optPerlinLevel =  (perlinLevels[PlayerPrefs.GetInt(PreferencesOptions.terrainIntensity.ToString())]);
-		SizeSetting set = sizes[PlayerPrefs.GetInt(PreferencesOptions.terrainSize.ToString())];
+		gameMode = (PlayerPrefs.GetInt (PreferencesOptions.numberOfPlayers.ToString ()) == 2) ? Mode.OneVOne : Mode.TwoVTwo;
+		fogOn = (PlayerPrefs.GetInt (PreferencesOptions.fogOn.ToString ()) == 1) ? true : false;
+		optPerlinLevel = (perlinLevels [PlayerPrefs.GetInt (PreferencesOptions.terrainIntensity.ToString ())]);
+		SizeSetting set = sizes [PlayerPrefs.GetInt (PreferencesOptions.terrainSize.ToString ())];
 
 		boardSize = set.mapSize;
 		team1Start = set.team1Start;
 		team2Start = set.team2Start;
 		cameraSize = set.cameraSize;
 		cameraPosition = set.cameraPosition;
-		PlayerPrefs.GetInt(PreferencesOptions.gameSpeed.ToString());
+		PlayerPrefs.GetInt (PreferencesOptions.gameSpeed.ToString ());
+
+		/*	public float vpsBaseBuild;
+	public float vpsBaseMove;
+	public float vpsBaseFreeMoveSpeed;
+	public float vpsBasePlayerInfluence;
+	public float vpsBaseRotate;
+	public float vpsBaseUpgrade;
+	public float vpsScorePerAltarPerSecond;
+	public float vpsBeaconBaseInfluence;
+	public float vpsScorePerMinePerSecond;
+		*/
+
+		switch (PlayerPrefs.GetInt (PreferencesOptions.gameSpeed.ToString())) {
+		case 0:
+			//Base values per second
+			vpsBaseBuild = 25f;
+			vpsBaseMove = 50f;
+			vpsBaseFreeMoveSpeed = 1.0f;
+			vpsBasePlayerInfluence =  25f;
+			vpsBaseRotate = 25f;
+			vpsBaseUpgrade = 25f;
+			vpsScorePerAltarPerSecond = 1f;
+			vpsBeaconBaseInfluence = 50f;
+			vpsScorePerMinePerSecond = 3f;
+
+			break;
+
+		case 1: 
+			//Base values per second
+			vpsBaseBuild = 50f;
+			vpsBaseMove = 100f;
+			vpsBaseFreeMoveSpeed = 2.0f;
+			vpsBasePlayerInfluence =  50f;
+			vpsBaseRotate = 50f;
+			vpsBaseUpgrade = 50f;
+			vpsScorePerAltarPerSecond = 1f;
+			vpsBeaconBaseInfluence = 100f;
+			vpsScorePerMinePerSecond = 3f;
+
+			break;
+
+		case 2: 
+			vpsBaseBuild = 100f;
+			vpsBaseMove = 200f;
+			vpsBaseFreeMoveSpeed = 4.0f;
+			vpsBasePlayerInfluence =  100f;
+			vpsBaseRotate = 100f;
+			vpsBaseUpgrade = 50f;
+			vpsScorePerAltarPerSecond = 1f;
+			vpsBeaconBaseInfluence = 200f;
+			vpsScorePerMinePerSecond = 3f;
+
+
+			break;
+		}
 
 	}
 
