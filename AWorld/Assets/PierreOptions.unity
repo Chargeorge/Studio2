@@ -288,7 +288,7 @@ MonoBehaviour:
   fourPlayersMat: {fileID: 2100000, guid: 29bf3045d98eba844ba98a199d828a29, type: 2}
   fogDisplay: {fileID: 1506547495}
   fogOnMat: {fileID: 2100000, guid: 50c3a203843c4734d95348a48e65c09f, type: 2}
-  fogOffMat: {fileID: 2100000, guid: 8254337640a49c140a2c0729681fafbd, type: 2}
+  fogOffMat: {fileID: 2100000, guid: 9dd1785320fa57a4fabc22ef1c4dbc75, type: 2}
   terrainDisplay: {fileID: 1513881157}
   terrainIntensityNoWater: {fileID: 2100000, guid: 8b0d69345f6f54d41851d3db1f46779c,
     type: 2}
@@ -828,7 +828,7 @@ GameObject:
   - 64: {fileID: 1461059136}
   - 23: {fileID: 1461059135}
   m_Layer: 0
-  m_Name: Plane
+  m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -147,9 +147,11 @@ public class OptionsManager : MonoBehaviour {
 		if(fogSelected){
 			if(fogDisplayed == 1){
 				fogDisplay.renderer.material = fogOffMat;
+				fogDisplay.transform.localScale = new Vector3 (1.5f, 1.5f, fogDisplay.transform.localScale.z);
 				fogDisplayed = 0;
 			} else if(fogDisplayed == 0){
 				fogDisplay.renderer.material = fogOnMat;
+				fogDisplay.transform.localScale = new Vector3 (2f, 1f, fogDisplay.transform.localScale.z);
 				fogDisplayed = 1;
 			}
 		}
@@ -212,7 +214,6 @@ public class OptionsManager : MonoBehaviour {
 
 		Application.LoadLevel("SiggWorking");
 
-
 	}
 
 	void OnGUI(){
@@ -220,8 +221,8 @@ public class OptionsManager : MonoBehaviour {
 
 		if(!playersSelected) GUI.Label (new Rect(Screen.width/8, height1, Screen.width/4, 50), "PLAYERS", subtitleStyle);
 		if(playersSelected) GUI.Label (new Rect(Screen.width/8, height1, Screen.width/4, 50), "PLAYERS", highlightStyle);
-		if(!fogSelected) GUI.Label (new Rect((Screen.width/8)*3, height1, Screen.width/4, 50), "FOG", subtitleStyle);
-		if(fogSelected) GUI.Label (new Rect((Screen.width/8)*3, height1, Screen.width/4, 50), "FOG", highlightStyle);
+		if(!fogSelected) GUI.Label (new Rect((Screen.width/8)*3.025f, height1, Screen.width/4, 50), "FOG", subtitleStyle);
+		if(fogSelected) GUI.Label (new Rect((Screen.width/8)*3.025f, height1, Screen.width/4, 50), "FOG", highlightStyle);
 		if(!terrainSelected) GUI.Label (new Rect((Screen.width/8)*5.1f, height1, Screen.width/4, 50), "WORLD", subtitleStyle);
 		if(terrainSelected) GUI.Label (new Rect((Screen.width/8)*5.1f, height1, Screen.width/4, 50), "WORLD", highlightStyle);
 
