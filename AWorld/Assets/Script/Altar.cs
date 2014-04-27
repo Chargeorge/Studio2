@@ -76,7 +76,7 @@ public class Altar : MonoBehaviour {
 		sRef = Settings.SettingsInstance;
 		//TODO OHH GOD THIS IS BAD I SHOULDN'T DO THIS
 //		altarType = GameManager.GetRandomEnum<AltarType>();
-		Debug.Log("altar: " +altarType.ToString());
+//			Debug.Log("altar: " +altarType.ToString());
 		Material loaded =  (Material)Resources.Load(string.Format("Sprites/Materials/{0}", altarType.ToString()));
 		gm = GameManager.GameManagerInstance;
 		transform.FindChild("Quad").renderer.material = loaded;

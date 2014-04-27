@@ -168,9 +168,9 @@ public class GameManager : MonoBehaviour {
 			BaseTile team1Tile, team2Tile;
 			team1Tile =tiles[(int)teams[0].startingLocation.x,(int)teams[0].startingLocation.y].GetComponent<BaseTile>();
 			team2Tile = tiles[(int)teams[1].startingLocation.x,(int)teams[1].startingLocation.y].GetComponent<BaseTile>();
-			while(!team1Tile.findEdges() && !team2Tile.findEdges()){
+			//while(!team1Tile.findEdges() && !team2Tile.findEdges()){
 				GameObject.Find("TileCreator").GetComponent<TileCreation>().perlinPass(TileTypeEnum.water, sRef.optPerlinLevel);
-			}
+			//}
 
 			checkFlipWater(team1Tile.brdXPos, team1Tile.brdYPos);
 			checkFlipWater(team2Tile.brdXPos, team2Tile.brdYPos);
