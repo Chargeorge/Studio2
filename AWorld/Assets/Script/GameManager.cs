@@ -153,9 +153,7 @@ public class GameManager : MonoBehaviour {
 				p2.PlayerNumber = 2;
 				players.Add(Player1);
 				players.Add(Player2);
-				
-				
-				
+								
 				//steps to ensure validity
 				team1Home = setUpTeamHome(p1);
 				team2Home = setUpTeamHome(p2);

@@ -697,11 +697,10 @@ public class Player : MonoBehaviour {
 							//Debug.Log("Adding Influence");
 							float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime);
 							moveTowardCenterOfTile (currentTile);
-						//	Debug.Log("test: " + test);f
-							if(test > 0f || (currentTile.owningTeam != null && currentTile.owningTeam == team)){
-//								_currentState = PlayerState.standing;
+
+								if(test > 0f || (currentTile.owningTeam != null && currentTile.owningTeam == team)){
 								
-								if (currentTile.getLocalAltar () != null || currentTile.tooCloseToBeacon()) {
+								if (currentTile.getLocalAltar () != null || currentTile.tooCloseToBeacon() || currentTile.gameObject.transform.FindChild ("Home(Clone)") != null) {
 									audio.Stop ();
 									
 									_currentState = PlayerState.standing;
