@@ -54,8 +54,16 @@ public class GameManager : MonoBehaviour {
 	bool isPlaying = false;
 	public List<GameObject> beacons;
 
+	private GameObject _prfbBar;
+	public GameObject teamBar1;
+	public GameObject teamBar2;
+
 	// Use this for initializatio
 	void Start () {
+
+		_prfbBar = (GameObject)Resources.Load("Prefabs/ScoreBar");
+
+
 		sRef = GameObject.Find ("Settings").GetComponent<Settings>();
 
 		beacons = new List<GameObject>();
@@ -161,6 +169,10 @@ public class GameManager : MonoBehaviour {
 				break;
 			}
 			}
+			teamBar1 = (GameObject)GameObject.Instantiate(_prfbBar, new Vector3(-1.33f,0,0), Quaternion.identity);
+			teamBar1.GetComponent<Bar>().team = teams[0];
+			teamBar2 = (GameObject)GameObject.Instantiate(_prfbBar, new Vector3(22.3f,0,0), Quaternion.identity);
+			teamBar2.GetComponent<Bar>().team = teams[1];
 			//Check for any homebase islands, if so regenerate
 			//Check for fairness?  
 			//Remove water where it's on an altar or home base

@@ -45,7 +45,7 @@ public class GUIManager : MonoBehaviour {
 		ScoreRect2.height =-Screen.height *perScore;
 		
 	//	GUI.DrawTexture(TeamRect2, gRef.scoreBgTexture, ScaleMode.StretchToFill, true, 1.0f);
-		GUI.DrawTexture(ScoreRect2, team.scoreTexture, ScaleMode.StretchToFill, true, 1.0f);
+	//	GUI.DrawTexture(ScoreRect2, team.scoreTexture, ScaleMode.StretchToFill, true, 1.0f);
 
 
 		//	GUI.DrawTexture(new Rect(0,(Screen.height - scoreBarH)*(PlayerNumber-1), Screen.width, scoreBarH), gRef.scoreBgTexture, ScaleMode.StretchToFill, true, 1.0f);
