@@ -209,7 +209,7 @@ public class GameManager : MonoBehaviour {
 			}
 			int absoluteMagnitude;
 			absoluteMagnitude = getRandomMagnitude(.2f,.35f);
-			Vector2[] alterPositions  = new Vector2[4]{new Vector2(10,2), new Vector2(10,10), new Vector2(15,2),new Vector2( 15,10)};
+			Vector2[] alterPositions  = new Vector2[4]{new Vector2(8,2), new Vector2(8,10), new Vector2(13,2),new Vector2( 13,10)};
 			
 			for (int i = 0; i< altars.Count; i++){
 				Altar thisAltar = altars[i].GetComponent<Altar>();

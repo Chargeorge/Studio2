@@ -124,7 +124,7 @@ public class Settings : MonoBehaviour {
 		optTilesGiveScore = true;
 		valTileConvertScore = 1f;
 		valPointsToWin = 250;
-		valScorePerMine = 1f;
+		valScorePerMine = 1.5f;
 		
 		//Beacon stuff
 		beaconBasicRange = 4;
@@ -143,7 +143,7 @@ public class Settings : MonoBehaviour {
 		
 		//Mode switches
 		debugMode = true;
-		gameMode = Mode.OneVOne;
+		gameMode = Mode.TwoVTwo;
 		
 		//Visual stuff
 		percMaxInfluenceColor = 0.5f;		//Percentage of color that tile fills in when just before 100% influence
