@@ -281,7 +281,7 @@ MonoBehaviour:
     m_StretchHeight: 0
   select: {fileID: 8300000, guid: 6932c941edc63ba4dafaed9c1fdb4b98, type: 3}
   launch: {fileID: 8300000, guid: 9618e8d8ad13c4942bf2d559e4f46891, type: 3}
-  launching: 0
+  screenChanging: 0
   cursor: {fileID: 279154248}
   playersDisplay: {fileID: 607681213}
   twoPlayersMat: {fileID: 2100000, guid: d942044f03668364bac299e3c8f35812, type: 2}

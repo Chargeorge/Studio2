@@ -13,6 +13,7 @@ using UnityEngine;
 public class TeamInfo
 {
 	public Color32 teamColor;
+	public Color32 teamColorAlt;
 	public Color32 tileColor;
 	public Color32 beaconColor;
 	public Color32 highlightColor;
@@ -35,6 +36,7 @@ public class TeamInfo
 		switch (teamNumber) {
 			case 1: 
 				returnable.teamColor = new Color32 (17, 75, 141, 255);
+				returnable.teamColorAlt = new Color32 (80, 204, 204, 255);
 				returnable.tileColor = new Color32 (88, 151, 209,255);
 				returnable.beaconColor = new Color32 (108, 55, 168, 255);
 			// maybe purple 133, 75, 198, 255
@@ -43,11 +45,11 @@ public class TeamInfo
 				returnable.teamNumber = teamNumber;
 				returnable.highlightColor = new Color32 (17, 75, 141, 150);
 				returnable.scoreTexture = (Texture)Resources.Load("Sprites/ScorebgTextureblue");
-			returnable.winTexture = (Texture)Resources.Load("Sprites/victoryScreen-blue");
-
+				returnable.winTexture = (Texture)Resources.Load("Sprites/victoryScreen-blue");
 				break;
 			case 2:
 				returnable.teamColor = new Color32 (247, 180, 40, 255);
+				returnable.teamColorAlt = new Color32 (247, 90, 40, 255);
 				returnable.tileColor = new Color32 (255, 190, 50,255);
 		//		returnable.beaconColor = new Color32 (0, 165, 80, 255);
 				returnable.beaconColor = new Color32 (249, 98, 45, 255);
