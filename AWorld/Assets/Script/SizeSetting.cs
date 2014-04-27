@@ -13,7 +13,7 @@ public struct SizeSetting
 			this.mapSize = mapSize;
 			this.team1Start = team1Start;
 			this.team2Start = team2Start;
-		this.cameraSize = cameraSize;
+			this.cameraSize = cameraSize;
 		}
 }
 

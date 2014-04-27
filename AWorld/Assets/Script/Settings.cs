@@ -200,20 +200,17 @@ public class Settings : MonoBehaviour {
 
 	void setPrefs(){
 
-
-
-
 		gameMode = (PlayerPrefs.GetInt(PreferencesOptions.numberOfPlayers.ToString()) == 2) ? Mode.OneVOne : Mode.TwoVTwo;
 		fogOn = (PlayerPrefs.GetInt(PreferencesOptions.fogOn.ToString()) == 1) ? true : false;
-		optPerlinLevel =  (perlinLevels[PlayerPrefs.GetInt(PreferencesOptions.terrainIntensity.ToString())]);
-		SizeSetting set = sizes[PlayerPrefs.GetInt(PreferencesOptions.terrainSize.ToString())];
+		optPerlinLevel =  (perlinLevels[PlayerPrefs.GetInt(PreferencesOptions.terrainIntensity.ToString())-1]);
+		SizeSetting set = sizes[PlayerPrefs.GetInt(PreferencesOptions.terrainSize.ToString())-1];
 
 		boardSize = set.mapSize;
 		team1Start = set.team1Start;
 		team2Start = set.team2Start;
 		cameraSize = set.cameraSize;
 
-		PlayerPrefs.GetInt(PreferencesOptions.gameSpeed.ToString());
+		//PlayerPrefs.GetInt(PreferencesOptions.gameSpeed.ToString());
 
 	}
 

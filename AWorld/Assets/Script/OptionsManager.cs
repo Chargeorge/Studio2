@@ -58,16 +58,65 @@ public class OptionsManager : MonoBehaviour {
 		height2 = (Screen.height/3)*2 - Screen.height/12;
 
 		//Set up the default values for the game
-		numberOfPlayers = 2;
-		playersDisplay.renderer.material = twoPlayersMat;
-		fogDisplayed = 1;
-		fogDisplay.renderer.material = fogOnMat;
-		terrainIntensity = 2;
-		terrainDisplay.renderer.material = terrainIntensitySwamp;
-		terrainSize = 2; //1 is small, 2 is normal, 3 is large;
-		sizeDisplay.renderer.material = sizeNormalMat;
-		gameSpeed = 2; //idem
-		speedDisplay.renderer.material = speedNormalMat;
+		numberOfPlayers = (PlayerPrefs.GetInt(PreferencesOptions.numberOfPlayers.ToString()) == 2) ? 2 : 4;
+		playersDisplay.renderer.material = (PlayerPrefs.GetInt(PreferencesOptions.numberOfPlayers.ToString()) == 2) ? twoPlayersMat : fourPlayersMat;
+		fogDisplayed = (PlayerPrefs.GetInt(PreferencesOptions.fogOn.ToString()) == 1) ? 1 : 0;
+		fogDisplay.renderer.material = (PlayerPrefs.GetInt(PreferencesOptions.fogOn.ToString()) == 1) ? fogOnMat : fogOffMat;
+		fogDisplay.transform.localScale = (PlayerPrefs.GetInt(PreferencesOptions.fogOn.ToString()) == 1) ? new Vector3 (2f, 1f, 1f) : new Vector3(1.5f, 1.5f, 1f);
+		terrainIntensity = PlayerPrefs.GetInt (PreferencesOptions.terrainIntensity.ToString ());
+		switch (terrainIntensity) {
+			case 1:
+				terrainDisplay.renderer.material = terrainIntensityNoWater;
+				break;
+			case 2:
+				terrainDisplay.renderer.material = terrainIntensitySwamp;
+				break;
+			case 3:
+				terrainDisplay.renderer.material = terrainIntensityFlooded;
+				break;
+			default:	//In case of errors
+				Debug.LogWarning ("Terrain intensity was a weird value in PlayerPrefs");
+				PlayerPrefs.SetInt(PreferencesOptions.terrainIntensity.ToString(), 2);
+				terrainIntensity = 2;
+				terrainDisplay.renderer.material = terrainIntensitySwamp;
+				break;
+		}
+		terrainSize = PlayerPrefs.GetInt (PreferencesOptions.terrainSize.ToString ()); //1 is small, 2 is normal, 3 is large;
+		switch (terrainSize) {
+			case 1:
+				sizeDisplay.renderer.material = sizeSmallMat;
+				break;
+			case 2:
+				sizeDisplay.renderer.material = sizeNormalMat;
+				break;
+			case 3:
+				sizeDisplay.renderer.material = sizeLargeMat;
+				break;
+			default:	//In case of errors
+				Debug.LogWarning ("Terrain size was a weird value in PlayerPrefs");
+				PlayerPrefs.SetInt(PreferencesOptions.terrainSize.ToString(), 2);
+				terrainSize = 2;
+				sizeDisplay.renderer.material = sizeNormalMat;
+				break;
+		}
+		gameSpeed = PlayerPrefs.GetInt (PreferencesOptions.gameSpeed.ToString ()); //idem
+		switch (gameSpeed) {
+			case 1:
+				speedDisplay.renderer.material = speedHalfMat;
+				break;
+			case 2:
+				speedDisplay.renderer.material = speedNormalMat;
+				break;
+			case 3:
+				speedDisplay.renderer.material = speedDoubleMat;
+				break;
+			default:	//In case of errors
+				Debug.LogWarning ("Game speed was a weird value in PlayerPrefs");
+				PlayerPrefs.SetInt(PreferencesOptions.gameSpeed.ToString(), 2);
+				gameSpeed = 2;
+				speedDisplay.renderer.material = speedNormalMat;
+				break;
+		}
 
 		screenChanging = false;
 	}
@@ -77,9 +126,9 @@ public class OptionsManager : MonoBehaviour {
 		
 		PlayerPrefs.SetInt(PreferencesOptions.numberOfPlayers.ToString(), numberOfPlayers);
 		PlayerPrefs.SetInt(PreferencesOptions.fogOn.ToString(), fogDisplayed);
-		PlayerPrefs.SetInt(PreferencesOptions.terrainIntensity.ToString(), terrainIntensity-1);
-		PlayerPrefs.SetInt(PreferencesOptions.terrainSize.ToString(), terrainSize-1);
-		PlayerPrefs.SetInt(PreferencesOptions.gameSpeed.ToString(), gameSpeed-1);
+		PlayerPrefs.SetInt(PreferencesOptions.terrainIntensity.ToString(), terrainIntensity);
+		PlayerPrefs.SetInt(PreferencesOptions.terrainSize.ToString(), terrainSize);
+		PlayerPrefs.SetInt(PreferencesOptions.gameSpeed.ToString(), gameSpeed);
 
 //		Debug.Log("intensity :" + terrainIntensity);
 
@@ -150,62 +199,62 @@ public class OptionsManager : MonoBehaviour {
 			if(numberOfPlayers == 2){
 				playersDisplay.renderer.material = fourPlayersMat;
 				numberOfPlayers = 4;
-			} else if(numberOfPlayers == 4){
-				playersDisplay.renderer.material = twoPlayersMat;
-				numberOfPlayers = 2;
+				} else if(numberOfPlayers == 4){
+					playersDisplay.renderer.material = twoPlayersMat;
+					numberOfPlayers = 2;
+				}
 			}
-		}
-
-		if(fogSelected){
-			if(fogDisplayed == 1){
-				fogDisplay.renderer.material = fogOffMat;
-				fogDisplay.transform.localScale = new Vector3 (1.5f, 1.5f, fogDisplay.transform.localScale.z);
-				fogDisplayed = 0;
-			} else if(fogDisplayed == 0){
-				fogDisplay.renderer.material = fogOnMat;
-				fogDisplay.transform.localScale = new Vector3 (2f, 1f, fogDisplay.transform.localScale.z);
-				fogDisplayed = 1;
+	
+			if(fogSelected){
+				if(fogDisplayed == 1){
+					fogDisplay.renderer.material = fogOffMat;
+					fogDisplay.transform.localScale = new Vector3 (1.5f, 1.5f, fogDisplay.transform.localScale.z);
+					fogDisplayed = 0;
+				} else if(fogDisplayed == 0){
+					fogDisplay.renderer.material = fogOnMat;
+					fogDisplay.transform.localScale = new Vector3 (2f, 1f, fogDisplay.transform.localScale.z);
+					fogDisplayed = 1;
+				}
 			}
-		}
-
-		if(terrainSelected){
-			if(terrainIntensity == 1){ //change from small to medium
-				terrainDisplay.renderer.material = terrainIntensitySwamp;
-				terrainIntensity = 2;
-			} else if(terrainIntensity == 2){ //change from small to medium
-				terrainDisplay.renderer.material = terrainIntensityFlooded;
-				terrainIntensity = 3;
-			} else if(terrainIntensity == 3){ //change from small to medium
-				terrainDisplay.renderer.material = terrainIntensityNoWater;
-				terrainIntensity = 1;
+	
+			if(terrainSelected){
+				if(terrainIntensity == 1){ //change from small to medium
+					terrainDisplay.renderer.material = terrainIntensitySwamp;
+					terrainIntensity = 2;
+				} else if(terrainIntensity == 2){ //change from small to medium
+					terrainDisplay.renderer.material = terrainIntensityFlooded;
+					terrainIntensity = 3;
+				} else if(terrainIntensity == 3){ //change from small to medium
+					terrainDisplay.renderer.material = terrainIntensityNoWater;
+					terrainIntensity = 1;
+				}
 			}
-		}
-
-		if(speedSelected){
-			if(gameSpeed == 1){
-				speedDisplay.renderer.material = speedNormalMat;
-				gameSpeed = 2;
-			} else if(gameSpeed == 2){
-				speedDisplay.renderer.material = speedDoubleMat;
-				gameSpeed = 3;
-			} else if(gameSpeed == 3){
-				speedDisplay.renderer.material = speedHalfMat;
-				gameSpeed = 1;
+	
+			if(speedSelected){
+				if(gameSpeed == 1){
+					speedDisplay.renderer.material = speedNormalMat;
+					gameSpeed = 2;
+				} else if(gameSpeed == 2){
+					speedDisplay.renderer.material = speedDoubleMat;
+					gameSpeed = 3;
+				} else if(gameSpeed == 3){
+					speedDisplay.renderer.material = speedHalfMat;
+					gameSpeed = 1;
+				}
 			}
-		}
-
-		if(sizeSelected){
-			if(terrainSize == 1){
-				sizeDisplay.renderer.material = sizeNormalMat;
-				terrainSize = 2;
-			} else if(terrainSize == 2){
-				sizeDisplay.renderer.material = sizeLargeMat;
-				terrainSize = 3;
-			} else if(terrainSize == 3){
-				sizeDisplay.renderer.material = sizeSmallMat;
-				terrainSize = 1;
+	
+			if(sizeSelected){
+				if(terrainSize == 1){
+					sizeDisplay.renderer.material = sizeNormalMat;
+					terrainSize = 2;
+				} else if(terrainSize == 2){
+					sizeDisplay.renderer.material = sizeLargeMat;
+					terrainSize = 3;
+				} else if(terrainSize == 3){
+					sizeDisplay.renderer.material = sizeSmallMat;
+					terrainSize = 1;
+				}
 			}
-		}
 		}
 
 		if(startSelected && Input.GetButtonDown("BuildPlayer1") && !screenChanging){
@@ -226,21 +275,20 @@ public class OptionsManager : MonoBehaviour {
 		
 		PlayerPrefs.SetInt(PreferencesOptions.numberOfPlayers.ToString(), numberOfPlayers);
 		PlayerPrefs.SetInt(PreferencesOptions.fogOn.ToString(), fogDisplayed);
-		PlayerPrefs.SetInt(PreferencesOptions.terrainIntensity.ToString(), terrainIntensity-1);
-		PlayerPrefs.SetInt(PreferencesOptions.terrainSize.ToString(), terrainSize-1);
-		PlayerPrefs.SetInt(PreferencesOptions.gameSpeed.ToString(), gameSpeed-1);
+		PlayerPrefs.SetInt(PreferencesOptions.terrainIntensity.ToString(), terrainIntensity);
+		PlayerPrefs.SetInt(PreferencesOptions.terrainSize.ToString(), terrainSize);
+		PlayerPrefs.SetInt(PreferencesOptions.gameSpeed.ToString(), gameSpeed);
 
 		Application.LoadLevel("SiggWorking");
-
 	}
 	
 	public void goToMainMenu(){
 	
 		PlayerPrefs.SetInt(PreferencesOptions.numberOfPlayers.ToString(), numberOfPlayers);
 		PlayerPrefs.SetInt(PreferencesOptions.fogOn.ToString(), fogDisplayed);
-		PlayerPrefs.SetInt(PreferencesOptions.terrainIntensity.ToString(), terrainIntensity-1);
-		PlayerPrefs.SetInt(PreferencesOptions.terrainSize.ToString(), terrainSize-1);
-		PlayerPrefs.SetInt(PreferencesOptions.gameSpeed.ToString(), gameSpeed-1);
+		PlayerPrefs.SetInt(PreferencesOptions.terrainIntensity.ToString(), terrainIntensity);
+		PlayerPrefs.SetInt(PreferencesOptions.terrainSize.ToString(), terrainSize);
+		PlayerPrefs.SetInt(PreferencesOptions.gameSpeed.ToString(), gameSpeed);
 
 		Application.LoadLevel("PierreMenu");
 	}
@@ -265,7 +313,5 @@ public class OptionsManager : MonoBehaviour {
 		
 		if(!backSelected) GUI.Label (new Rect((Screen.width/6)*0.0f, (Screen.height/6)*5, Screen.width/5, 50), "BACK", subtitleStyle);
 		if(backSelected) GUI.Label (new Rect((Screen.width/6)*0.0f, (Screen.height/6)*5, Screen.width/5, 50), "BACK", highlightStyle);
-		
-		
 	}
 }
