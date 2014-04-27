@@ -80,9 +80,7 @@ public class GameManager : MonoBehaviour {
 		while(true){
 			yield return new WaitForSeconds(sRef.secMarqueeUpgradeTime);
 			currentMarquee = (currentMarquee +1) % sRef.marqueeCount;
-		}
-		
-		
+		}		
 	}
 	// Update is called once per frame
 	void Update () {
@@ -93,7 +91,6 @@ public class GameManager : MonoBehaviour {
 			List<AltarType> altarTypes = System.Enum.GetValues(typeof(AltarType)).Cast<AltarType>().ToList();
 			if (sRef.numAltars > altarTypes.Count) Debug.LogError ("Too many altars and not enough altar types!"); 
 			
-
 			switch (sRef.gameMode){
 			case Mode.TwoVTwo:{
 				_currentState = GameState.playing;

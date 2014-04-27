@@ -12,11 +12,12 @@ public class OptionsManager : MonoBehaviour {
 
 	public AudioClip select;
 	public AudioClip launch;
-	public bool launching;
+	public bool screenChanging;
 
 	public GameObject cursor;
 
 	bool backSelected = false;
+	bool startSelected = false;
 
 	bool playersSelected = false;
 	public GameObject playersDisplay;
@@ -68,7 +69,7 @@ public class OptionsManager : MonoBehaviour {
 		gameSpeed = 2; //idem
 		speedDisplay.renderer.material = speedNormalMat;
 
-		launching = false;
+		screenChanging = false;
 	}
 	
 	// Update is called once per frame
@@ -87,9 +88,10 @@ public class OptionsManager : MonoBehaviour {
 
 			sizeSelected = false;
 			speedSelected = false;
+			startSelected = false;
 			backSelected = false;
 
-			if(cursor.transform.position.x > 2.80f && cursor.transform.position.x < 5.85f){
+			if(cursor.transform.position.x >= 1.80f && cursor.transform.position.x < 5.85f){
 				playersSelected = true;
 				fogSelected = false;
 				terrainSelected = false;
@@ -109,6 +111,7 @@ public class OptionsManager : MonoBehaviour {
 			playersSelected = false;
 			fogSelected = false;
 			terrainSelected = false;
+			startSelected = false;
 			backSelected = false;
 
 			if(cursor.transform.position.x >= 4.85f && cursor.transform.position.x < 7.2f){
@@ -119,12 +122,21 @@ public class OptionsManager : MonoBehaviour {
 				speedSelected = false;
 			}
 		} else if(cursor.transform.position.y == -3.42f){
+			
 			playersSelected = false;
 			fogSelected = false;
 			terrainSelected = false;
 			sizeSelected = false;
 			speedSelected = false;
-			backSelected = true;
+			
+			if (cursor.transform.position.x >= 12.7f) {
+				startSelected = true;
+				backSelected = false;
+				
+			} else if (cursor.transform.position.x <= 6.0f) {
+				backSelected = true;
+				startSelected = false;
+			}
 		}
 
 
@@ -147,9 +159,11 @@ public class OptionsManager : MonoBehaviour {
 		if(fogSelected){
 			if(fogDisplayed == 1){
 				fogDisplay.renderer.material = fogOffMat;
+				fogDisplay.transform.localScale = new Vector3 (1.5f, 1.5f, fogDisplay.transform.localScale.z);
 				fogDisplayed = 0;
 			} else if(fogDisplayed == 0){
 				fogDisplay.renderer.material = fogOnMat;
+				fogDisplay.transform.localScale = new Vector3 (2f, 1f, fogDisplay.transform.localScale.z);
 				fogDisplayed = 1;
 			}
 		}
@@ -194,10 +208,16 @@ public class OptionsManager : MonoBehaviour {
 		}
 		}
 
-		if(backSelected && Input.GetButtonDown("BuildPlayer1") && !launching){
+		if(startSelected && Input.GetButtonDown("BuildPlayer1") && !screenChanging){
 			audio.PlayOneShot(launch, 0.9f);
-			launching = true;
+			screenChanging = true;
 			Invoke ("launchGame", 1.5f);
+		}
+		
+		if(backSelected && Input.GetButton("BuildPlayer1") && !screenChanging){
+			audio.PlayOneShot(select, 0.8f);
+			screenChanging = true;
+			Invoke ("goToMainMenu", 1.0f);
 		}
 
 	}
@@ -212,7 +232,17 @@ public class OptionsManager : MonoBehaviour {
 
 		Application.LoadLevel("SiggWorking");
 
+	}
+	
+	public void goToMainMenu(){
+	
+		PlayerPrefs.SetInt(PreferencesOptions.numberOfPlayers.ToString(), numberOfPlayers);
+		PlayerPrefs.SetInt(PreferencesOptions.fogOn.ToString(), fogDisplayed);
+		PlayerPrefs.SetInt(PreferencesOptions.terrainIntensity.ToString(), terrainIntensity-1);
+		PlayerPrefs.SetInt(PreferencesOptions.terrainSize.ToString(), terrainSize-1);
+		PlayerPrefs.SetInt(PreferencesOptions.gameSpeed.ToString(), gameSpeed-1);
 
+		Application.LoadLevel("PierreMenu");
 	}
 
 	void OnGUI(){
@@ -220,8 +250,8 @@ public class OptionsManager : MonoBehaviour {
 
 		if(!playersSelected) GUI.Label (new Rect(Screen.width/8, height1, Screen.width/4, 50), "PLAYERS", subtitleStyle);
 		if(playersSelected) GUI.Label (new Rect(Screen.width/8, height1, Screen.width/4, 50), "PLAYERS", highlightStyle);
-		if(!fogSelected) GUI.Label (new Rect((Screen.width/8)*3, height1, Screen.width/4, 50), "FOG", subtitleStyle);
-		if(fogSelected) GUI.Label (new Rect((Screen.width/8)*3, height1, Screen.width/4, 50), "FOG", highlightStyle);
+		if(!fogSelected) GUI.Label (new Rect((Screen.width/8)*3.025f, height1, Screen.width/4, 50), "FOG", subtitleStyle);
+		if(fogSelected) GUI.Label (new Rect((Screen.width/8)*3.025f, height1, Screen.width/4, 50), "FOG", highlightStyle);
 		if(!terrainSelected) GUI.Label (new Rect((Screen.width/8)*5.1f, height1, Screen.width/4, 50), "WORLD", subtitleStyle);
 		if(terrainSelected) GUI.Label (new Rect((Screen.width/8)*5.1f, height1, Screen.width/4, 50), "WORLD", highlightStyle);
 
@@ -230,7 +260,12 @@ public class OptionsManager : MonoBehaviour {
 		if(!sizeSelected) GUI.Label (new Rect((Screen.width/4)*2, height2, Screen.width/5, 50), "SIZE", subtitleStyle);
 		if(sizeSelected) GUI.Label (new Rect((Screen.width/4)*2, height2, Screen.width/5, 50), "SIZE", highlightStyle);
 
-		if(!backSelected) GUI.Label (new Rect((Screen.width/6)*4.8f, (Screen.height/6)*5, Screen.width/5, 50), "START", subtitleStyle);
-		if(backSelected) GUI.Label (new Rect((Screen.width/6)*4.8f, (Screen.height/6)*5, Screen.width/5, 50), "START", highlightStyle);
+		if(!startSelected) GUI.Label (new Rect((Screen.width/6)*4.8f, (Screen.height/6)*5, Screen.width/5, 50), "START", subtitleStyle);
+		if(startSelected) GUI.Label (new Rect((Screen.width/6)*4.8f, (Screen.height/6)*5, Screen.width/5, 50), "START", highlightStyle);
+		
+		if(!backSelected) GUI.Label (new Rect((Screen.width/6)*0.0f, (Screen.height/6)*5, Screen.width/5, 50), "BACK", subtitleStyle);
+		if(backSelected) GUI.Label (new Rect((Screen.width/6)*0.0f, (Screen.height/6)*5, Screen.width/5, 50), "BACK", highlightStyle);
+		
+		
 	}
 }
