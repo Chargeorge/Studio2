@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 
 public class Settings : MonoBehaviour {
 	//VPS -- Value Per Second, represents the amount of value added per second for building or moving.
@@ -75,11 +75,11 @@ public class Settings : MonoBehaviour {
 	public float buildCircleFinishScale; 	//The scale the upgrade circle anim thing is at around 99% complete
 	public float buildCircleStartAlpha; 	//The alpha at which the upgrade circle anim thing starts
 	public float buildCircleFinishAlpha; 	//The alpha the upgrade circle anim thing is at around 99% complete 
-	public float upgradeCircleStartScale; 	//The scale at which the upgrade circle anim thing starts
 	public float upgradeCircleFinishScale; 	//The scale the upgrade circle anim thing is at around 99% complete
 	public float upgradeCircleStartAlpha; 	//The alpha at which the upgrade circle anim thing starts
 	public float upgradeCircleFinishAlpha; 	//The alpha the upgrade circle anim thing is at around 99% complete 
 	
+	public float upgradeCircleStartScale; 	//The scale at which the upgrade circle anim thing starts
 	//Player movement stuff
 	public float playerAccelRate;
 	public float playerFriction;
@@ -101,11 +101,13 @@ public class Settings : MonoBehaviour {
 	public int[] perlinLevels;
 	public float[] coefSpeed;
 	public SizeSetting[] sizes;
+	public Vector3 cameraPosition;
 
 	// Use this for initialization
 	void Start () {
 
 		//Base values per second
+		//Overloaded by settings, use these vals if settings not set
 		vpsBaseBuild = 50f;
 		vpsBaseMove = 100f;
 		vpsBaseFreeMoveSpeed = 2.0f;
@@ -192,29 +194,80 @@ public class Settings : MonoBehaviour {
 		gameMode = Mode.TwoVTwo;
 		//Settings
 		perlinLevels = new int[]{3000, 1800, 1400};
-		sizes = new SizeSetting[]{new SizeSetting(new Vector2(16,12),new Vector2(2,6), new Vector2(14,6),7.08f),
-								  new SizeSetting(new Vector2(22,14),new Vector2(2,7), new Vector2(19,7), 7.08f),
-								  new SizeSetting(new Vector2(28,20),new Vector2(2,10), new Vector2(26,10),8.08f)};
+		sizes = new SizeSetting[]{new SizeSetting(new Vector2(16,12),new Vector2(2,6), new Vector2(14,6),7.08f, new Vector2(10.5f, 6.49f)),
+								new SizeSetting(new Vector2(22,14),new Vector2(2,7), new Vector2(19,7), 7.08f, new Vector2(10.5f, 6.49f)),
+			new SizeSetting(new Vector2(28,20),new Vector2(2,10), new Vector2(26,10),11.61f,new Vector2(13.65858f, 10.2f))};
 
 		setPrefs();
 	}
 
 	void setPrefs(){
-
-
-
-
-		gameMode = (PlayerPrefs.GetInt(PreferencesOptions.numberOfPlayers.ToString()) == 2) ? Mode.OneVOne : Mode.TwoVTwo;
-		fogOn = (PlayerPrefs.GetInt(PreferencesOptions.fogOn.ToString()) == 1) ? true : false;
-		optPerlinLevel =  (perlinLevels[PlayerPrefs.GetInt(PreferencesOptions.terrainIntensity.ToString())]);
-		SizeSetting set = sizes[PlayerPrefs.GetInt(PreferencesOptions.terrainSize.ToString())];
+		gameMode = (PlayerPrefs.GetInt (PreferencesOptions.numberOfPlayers.ToString ()) == 2) ? Mode.OneVOne : Mode.TwoVTwo;
+		fogOn = (PlayerPrefs.GetInt (PreferencesOptions.fogOn.ToString ()) == 1) ? true : false;
+		optPerlinLevel = (perlinLevels [PlayerPrefs.GetInt (PreferencesOptions.terrainIntensity.ToString ())]);
+		SizeSetting set = sizes [PlayerPrefs.GetInt (PreferencesOptions.terrainSize.ToString ())];
 
 		boardSize = set.mapSize;
 		team1Start = set.team1Start;
 		team2Start = set.team2Start;
 		cameraSize = set.cameraSize;
+		cameraPosition = set.cameraPosition;
+		PlayerPrefs.GetInt (PreferencesOptions.gameSpeed.ToString ());
 
-		PlayerPrefs.GetInt(PreferencesOptions.gameSpeed.ToString());
+		/*	public float vpsBaseBuild;
+	public float vpsBaseMove;
+	public float vpsBaseFreeMoveSpeed;
+	public float vpsBasePlayerInfluence;
+	public float vpsBaseRotate;
+	public float vpsBaseUpgrade;
+	public float vpsScorePerAltarPerSecond;
+	public float vpsBeaconBaseInfluence;
+	public float vpsScorePerMinePerSecond;
+		*/
+
+		switch (PlayerPrefs.GetInt (PreferencesOptions.gameSpeed.ToString())) {
+		case 0:
+			//Base values per second
+			vpsBaseBuild = 25f;
+			vpsBaseMove = 50f;
+			vpsBaseFreeMoveSpeed = 1.0f;
+			vpsBasePlayerInfluence =  25f;
+			vpsBaseRotate = 25f;
+			vpsBaseUpgrade = 25f;
+			vpsScorePerAltarPerSecond = 1f;
+			vpsBeaconBaseInfluence = 50f;
+			vpsScorePerMinePerSecond = 3f;
+
+			break;
+
+		case 1: 
+			//Base values per second
+			vpsBaseBuild = 50f;
+			vpsBaseMove = 100f;
+			vpsBaseFreeMoveSpeed = 2.0f;
+			vpsBasePlayerInfluence =  50f;
+			vpsBaseRotate = 50f;
+			vpsBaseUpgrade = 50f;
+			vpsScorePerAltarPerSecond = 1f;
+			vpsBeaconBaseInfluence = 100f;
+			vpsScorePerMinePerSecond = 3f;
+
+			break;
+
+		case 2: 
+			vpsBaseBuild = 100f;
+			vpsBaseMove = 200f;
+			vpsBaseFreeMoveSpeed = 4.0f;
+			vpsBasePlayerInfluence =  100f;
+			vpsBaseRotate = 100f;
+			vpsBaseUpgrade = 50f;
+			vpsScorePerAltarPerSecond = 1f;
+			vpsBeaconBaseInfluence = 200f;
+			vpsScorePerMinePerSecond = 3f;
+
+
+			break;
+		}
 
 	}
 

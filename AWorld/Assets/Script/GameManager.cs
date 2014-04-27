@@ -68,6 +68,7 @@ public class GameManager : MonoBehaviour {
 		teams = new List<TeamInfo>();
 		StartCoroutine(doMarquee());
 		Camera.main.orthographicSize = sRef.cameraSize;
+		Camera.main.transform.position = sRef.cameraPosition;
 
 		audio.PlayOneShot(Game_Launch, 0.9f);
 		
