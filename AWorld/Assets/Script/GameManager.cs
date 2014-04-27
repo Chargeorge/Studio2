@@ -106,10 +106,15 @@ public class GameManager : MonoBehaviour {
 				Player p4 = Player4.GetComponentInChildren<Player>();
 
 				p1.SetTeam(TeamInfo.GetTeamInfo(1));
+				p1.SetColor (p1.team.teamColor);
 				p2.SetTeam(p1.team);
-
+				p2.SetColor(p1.team.teamColorAlt);
+				
 				p3.SetTeam(TeamInfo.GetTeamInfo(2));
+				p3.SetColor(p3.team.teamColor);
 				p4.SetTeam(p3.team);
+				p4.SetColor(p3.team.teamColorAlt);
+				
 				teams.Add(p1.team);
 				teams.Add(p3.team);
 				p1.PlayerNumber = 1;
@@ -139,7 +144,9 @@ public class GameManager : MonoBehaviour {
 				Player p1 = Player1.GetComponentInChildren<Player>();
 				Player p2 = Player2.GetComponentInChildren<Player>();
 				p1.SetTeam(TeamInfo.GetTeamInfo(1));
+				p1.SetColor (p1.team.teamColor);
 				p2.SetTeam(TeamInfo.GetTeamInfo(2));
+				p2.SetColor(p2.team.teamColor);
 				teams.Add(p1.team);
 				teams.Add(p2.team);
 				p1.PlayerNumber = 1;

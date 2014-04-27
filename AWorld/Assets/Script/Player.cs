@@ -934,8 +934,11 @@ public class Player : MonoBehaviour {
 	/// <param name="t">T.</param>
 	public void SetTeam(TeamInfo t){
 		team = t;
-		GetComponent<MeshRenderer> ().material.color = team.teamColor;
 		MoveToTeamStart ();
+	}
+	
+	public void SetColor (Color32 color) {
+		GetComponent<MeshRenderer> ().material.color = color;
 	}
 
 /// <summary>
