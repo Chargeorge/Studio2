@@ -101,8 +101,10 @@ public class MainMenu : MonoBehaviour {
 			}
 			if(quitSelected){
 				audio.PlayOneShot (select, 1.0f);
-				screenChanging = true;
-				Invoke ("quitApp", 1.0f);
+				if (!Application.isEditor) {
+					screenChanging = true;
+					Invoke ("quitApp", 1.0f);
+				}
 			}
 		}
 	}
