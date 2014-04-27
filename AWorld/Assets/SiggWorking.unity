@@ -1080,6 +1080,7 @@ MonoBehaviour:
   cameraSize: 0
   perlinLevels: 
   coefSpeed: []
+  cameraPosition: {x: 0, y: 0, z: 0}
 --- !u!4 &1843163359
 Transform:
   m_ObjectHideFlags: 0

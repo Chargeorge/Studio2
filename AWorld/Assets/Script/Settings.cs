@@ -1,11 +1,11 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 
 public class Settings : MonoBehaviour {
 	//VPS -- Value Per Second, represents the amount of value added per second for building or moving.
-	//Coef -- The coeficiant of that action, IE: movingt rhough enemy tile or building diffent structure.
+	//Coef -- The coefficient of that action, IE: moving through enemy tile or building different structure.
 
-	//USage:  Anytime we build every action takes 100 points.  Every frame (Update) we add vpsBase * coef * Time.deltaTime and add it to the current counter
+	//Usage:  Anytime we build every action takes 100 points.  Every frame (Update) we add vpsBase * coef * Time.deltaTime and add it to the current counter
 
 	//Right now this is an object we can instantiate.  Left as is for future iterations that read from the file system.  
 	
@@ -100,11 +100,13 @@ public class Settings : MonoBehaviour {
 	public int[] perlinLevels;
 	public float[] coefSpeed;
 	public SizeSetting[] sizes;
+	public Vector3 cameraPosition;
 
 	// Use this for initialization
 	void Start () {
 
 		//Base values per second
+		//Overloaded by settings, use these vals if settings not set
 		vpsBaseBuild = 50f;
 		vpsBaseMove = 100f;
 		vpsBaseFreeMoveSpeed = 2.0f;
@@ -191,9 +193,10 @@ public class Settings : MonoBehaviour {
 		gameMode = Mode.TwoVTwo;
 		//Settings
 		perlinLevels = new int[]{3000, 1800, 1400};
-		sizes = new SizeSetting[]{new SizeSetting(new Vector2(16,12),new Vector2(2,6), new Vector2(14,6),7.08f),
-								  new SizeSetting(new Vector2(22,14),new Vector2(2,7), new Vector2(19,7), 7.08f),
-								  new SizeSetting(new Vector2(28,20),new Vector2(2,10), new Vector2(26,10),8.08f)};
+		sizes = new SizeSetting[]{
+			new SizeSetting(new Vector2(16,12),new Vector2(2,6), new Vector2(14,6),6.7f, new Vector2(7.5f, 5.5f)),
+			new SizeSetting(new Vector2(22,14),new Vector2(2,7), new Vector2(19,7), 7.65f, new Vector2(10.5f, 6.49f)),
+			new SizeSetting(new Vector2(28,20),new Vector2(2,10), new Vector2(26,10),10.6f,new Vector2(13.4f, 9.5f)) };
 
 		setPrefs();
 	}
@@ -209,8 +212,61 @@ public class Settings : MonoBehaviour {
 		team1Start = set.team1Start;
 		team2Start = set.team2Start;
 		cameraSize = set.cameraSize;
+		cameraPosition = set.cameraPosition;
 
-		//PlayerPrefs.GetInt(PreferencesOptions.gameSpeed.ToString());
+		/*	public float vpsBaseBuild;
+	public float vpsBaseMove;
+	public float vpsBaseFreeMoveSpeed;
+	public float vpsBasePlayerInfluence;
+	public float vpsBaseRotate;
+	public float vpsBaseUpgrade;
+	public float vpsScorePerAltarPerSecond;
+	public float vpsBeaconBaseInfluence;
+	public float vpsScorePerMinePerSecond;
+		*/
+
+		switch (PlayerPrefs.GetInt (PreferencesOptions.gameSpeed.ToString())) {
+		case 1:
+			//Base values per second
+			vpsBaseBuild = 25f;
+			vpsBaseMove = 50f;
+			vpsBaseFreeMoveSpeed = 1.0f;
+			vpsBasePlayerInfluence =  25f;
+			vpsBaseRotate = 25f;
+			vpsBaseUpgrade = 25f;
+			vpsScorePerAltarPerSecond = 1f;
+			vpsBeaconBaseInfluence = 50f;
+			vpsScorePerMinePerSecond = 3f;
+
+			break;
+
+		case 2: 
+			//Base values per second
+			vpsBaseBuild = 50f;
+			vpsBaseMove = 100f;
+			vpsBaseFreeMoveSpeed = 2.0f;
+			vpsBasePlayerInfluence =  50f;
+			vpsBaseRotate = 50f;
+			vpsBaseUpgrade = 50f;
+			vpsScorePerAltarPerSecond = 1f;
+			vpsBeaconBaseInfluence = 100f;
+			vpsScorePerMinePerSecond = 3f;
+
+			break;
+
+		case 3: 
+			vpsBaseBuild = 100f;
+			vpsBaseMove = 200f;
+			vpsBaseFreeMoveSpeed = 4.0f;
+			vpsBasePlayerInfluence =  100f;
+			vpsBaseRotate = 100f;
+			vpsBaseUpgrade = 50f;
+			vpsScorePerAltarPerSecond = 1f;
+			vpsBeaconBaseInfluence = 200f;
+			vpsScorePerMinePerSecond = 3f;
+
+			break;
+		}
 
 	}
 
