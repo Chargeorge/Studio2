@@ -91,7 +91,7 @@ public class OptionsManager : MonoBehaviour {
 			startSelected = false;
 			backSelected = false;
 
-			if(cursor.transform.position.x > 2.80f && cursor.transform.position.x < 5.85f){
+			if(cursor.transform.position.x >= 1.80f && cursor.transform.position.x < 5.85f){
 				playersSelected = true;
 				fogSelected = false;
 				terrainSelected = false;
