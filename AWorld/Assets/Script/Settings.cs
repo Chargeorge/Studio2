@@ -137,7 +137,7 @@ public class Settings : MonoBehaviour {
 		optTilesGiveScore = true;
 		valTileConvertScore = 1f;
 		valPointsToWin = 250;
-		valScorePerMine = 1f;
+		valScorePerMine = 100f;
 		
 		//Beacon stuff
 		beaconBasicRange = 4;

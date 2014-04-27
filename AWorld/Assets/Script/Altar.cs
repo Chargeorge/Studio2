@@ -133,7 +133,7 @@ public class Altar : MonoBehaviour {
 						timeToNextScoreShot -= Time.deltaTime;
 						if(timeToNextScoreShot < 0){
 							audio.PlayOneShot(Praying, 0.9f);
-							float scoreToAdd = sRef.vpsScorePerMinePerSecond * ((a.Contains(AltarType.Khepru)) ? sRef.coefKhepru : 1 )* Time.deltaTime;
+							float scoreToAdd = sRef.vpsScorePerMinePerSecond * ((a.Contains(AltarType.Khepru)) ? sRef.coefKhepru : 1 );
 							if(scoreLeft - scoreToAdd < 0){
 								scoreToAdd = scoreLeft;
 							}
