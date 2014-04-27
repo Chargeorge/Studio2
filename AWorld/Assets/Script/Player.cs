@@ -11,7 +11,6 @@ public class Player : MonoBehaviour {
 	public int PlayerNumber;
 	public GameManager gm;
 
-
 	public float currentActionProgress;
 	public Settings sRef;
 	public DirectionEnum facing;
@@ -32,12 +31,16 @@ public class Player : MonoBehaviour {
 	
 	private List<AltarType> altars;
 
-	bool isPlaying = false;
-	public AudioClip playerMove;
-	public AudioClip influenceStart;
-	public AudioClip influenceDone;
-	public AudioClip invalid_Input;
-
+	//bool isPlaying = false;
+	//public AudioClip playerMove;
+	//public AudioClip influenceStart;
+	//public AudioClip influenceDone;
+	//public AudioClip invalid_Input;
+	
+	public AudioSource audioSourceMove;
+	public AudioSource audioSourceInvalid;
+	public AudioSource audioSourceInfluenceStart;
+	public AudioSource audioSourceInfluenceDone;
 
 	public Texture winTexture;
 	
@@ -93,7 +96,6 @@ public class Player : MonoBehaviour {
 			winTexture = gm.winTexture2;
 		}
 		
-
 	}
 	
 	
@@ -143,6 +145,11 @@ public class Player : MonoBehaviour {
 			break;
 			
 			case PlayerState.standing:
+			
+				if (audioSourceMove.volume > 0.0f) audioLerp (audioSourceMove, 0.0f, sRef.moveVolumeLerpRate);
+				if (audioSourceInfluenceStart.volume > 0.01f) { audioLerp (audioSourceInfluenceStart, 0.0f, sRef.playerInfluenceStartVolumeLerpRate); 
+					} else { audioSourceInfluenceStart.Stop (); }
+			
 			//If we are standing and we get an input, handle it.
 //			Debug.Log (string.Format("Player number {0}, buld button down: {1}", PlayerNumber, buildButtonDown));
 				qudProgessCircle.renderer.enabled = false;
@@ -180,6 +187,9 @@ public class Player : MonoBehaviour {
 				     currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingAdvanced || 	//Is there a better way of doing this?
 		 			 currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Advanced)) 
 		 		{
+					if (audioSourceInfluenceStart.volume > 0.01f) { audioLerp (audioSourceInfluenceStart, 0.0f, sRef.playerInfluenceStartVolumeLerpRate);
+						} else { audioSourceInfluenceStart.Stop (); }
+				
 		 			/**
 		 			//Tikumose: Instant rotation
 		 			if (gm.getCapturedAltars(team).Contains (AltarType.Tikumose) && currentTile.beacon.GetComponent<Beacon>().controllingTeam == team) {
@@ -208,7 +218,10 @@ public class Player : MonoBehaviour {
 					facing == currentTile.beacon.GetComponent<Beacon>().facing &&
 					(currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Basic ||
 					 currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingAdvanced)) 
-				{				
+				{
+					if (audioSourceInfluenceStart.volume > 0.01f) { audioLerp (audioSourceInfluenceStart, 0.0f, sRef.playerInfluenceStartVolumeLerpRate);
+						} else { audioSourceInfluenceStart.Stop (); }
+						
 					float vpsRate = sRef.vpsBaseUpgrade;
 					addProgressToAction (vpsRate);
 					_currentState = PlayerState.upgrading;
@@ -257,8 +270,8 @@ public class Player : MonoBehaviour {
 									currentTile.buildable ())
 							{
 								Pulsate ();
-								audio.Stop ();
-								audio.PlayOneShot(influenceDone, 0.7f);
+								audioSourceInfluenceDone.volume = sRef.playerInfluenceDoneVolume;
+								audioSourceInfluenceDone.Play ();
 								_currentState = PlayerState.building;
 								
 								float vpsBuildRate = sRef.vpsBaseBuild * getAltarBuildBoost ();
@@ -281,12 +294,20 @@ public class Player : MonoBehaviour {
 								beaconInProgress.selfDestructing = false;
 							}
 							else{
-								if(!currentTile.buildable()){
+								if ((!currentTile.buildable() && currentTile.beacon == null) || 
+									(currentTile.beacon != null && //If there's a beacon...
+										(currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Advanced && 
+										currentTile.beacon.GetComponent<Beacon>().facing == facing)	//...and it's advanced and you're not gonna rotate it...
+									))
 									
-									if(!audio.isPlaying){ 
-										audio.clip = invalid_Input;
-										audio.PlayOneShot(invalid_Input, 0.3f);
-										audio.Play();
+								{
+									
+									if(!audioSourceInvalid.isPlaying){ 
+										//audio.clip = invalid_Input;
+										Debug.Log ("playin");
+										audioSourceInvalid.volume = 0.3f;
+										audioSourceInvalid.Play ();
+										//audio.Play();
 										
 									}
 								}
@@ -317,6 +338,10 @@ public class Player : MonoBehaviour {
 			//IF it changes, remove all progress (PLACEHOLDER, feel free to nuke)
 			//if it completes, move to next tile, set state to standing
 			case PlayerState.moving:
+				if (audioSourceInfluenceStart.volume > 0.01f) { audioLerp (audioSourceInfluenceStart, 0.0f, sRef.playerInfluenceStartVolumeLerpRate);
+					} else { audioSourceInfluenceStart.Stop (); }			
+				audioLerp (audioSourceMove, sRef.moveVolume, sRef.moveVolumeLerpRate);
+	
 				qudProgessCircle.renderer.enabled = false;
 				currentTile.Reveal (_vision);
 			
@@ -548,8 +573,8 @@ public class Player : MonoBehaviour {
 									}
 									break; 
 							}
-						
-							PlaySFX(playerMove, 0.2f);
+							
+							//PlaySFX(playerMove, 0.2f);
 							transform.parent.position = new Vector3 (safePos.x, safePos.y, transform.parent.position.z);
 							BaseTile thisTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
 							if (thisTile != currentTile) {
@@ -563,7 +588,7 @@ public class Player : MonoBehaviour {
 							(!onWater(posToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) 
 						{	//Valid move
 
-							PlaySFX(playerMove, 0.2f);
+							//PlaySFX(playerMove, 0.2f);
 							transform.parent.position = posToCheck;
 							BaseTile thisTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
 							if (thisTile != currentTile) {
@@ -613,16 +638,12 @@ public class Player : MonoBehaviour {
 											
 								case DirectionEnum.South:
 									_positionOffset = new Vector2 (0, -1 * offset);
-									break;
-									
-							}
-							
-						}
-						
-						
+									break;		
+							}	
+						}						
 					}*/
 					else{
-						StopSFX();
+						audioLerp (audioSourceMove, 0.0f, sRef.moveVolumeLerpRate);
 						_currentState= PlayerState.standing; 
 						currentActionProgress = 0f;
 					}
@@ -630,7 +651,8 @@ public class Player : MonoBehaviour {
 			break;	
 			
 			case PlayerState.building:
-
+				if (audioSourceInfluenceStart.volume > 0.01f) { audioLerp (audioSourceInfluenceStart, 0.0f, sRef.playerInfluenceStartVolumeLerpRate);
+					} else { audioSourceInfluenceStart.Stop (); }
 				qudProgessCircle.renderer.enabled = true;
 				qudProgessCircle.renderer.material.SetFloat("_Cutoff", 1-(beaconInProgress.percBuildComplete/100));
 				
@@ -663,7 +685,10 @@ public class Player : MonoBehaviour {
 							}
 						}
 						else{
-							PlaySFX(invalid_Input, 1.0f);
+							if (!audioSourceInvalid.isPlaying) {
+								audioSourceInvalid.volume = 1.0f;
+								audioSourceInvalid.Play ();
+							}
 						}
 					}
 					else
@@ -678,18 +703,28 @@ public class Player : MonoBehaviour {
 					currentActionProgress = 0;
 					currentTile.beacon.GetComponent<Beacon>().AbortBuild();
 					_currentState = PlayerState.standing;
-					StopSFX ();
+					//StopSFX ();
+					if (audioSourceInvalid.isPlaying) {
+						audioSourceInvalid.volume = 1.0f;
+						audioSourceInvalid.Play ();
+					}
 					//PlaySFX(invalid_Input, 1.0f);
 					}
 			break;
 			
 			case PlayerState.influencing:
+				
+				audioLerp (audioSourceMove, 0.0f, sRef.moveVolumeLerpRate);
+				
     			qudProgessCircle.renderer.enabled = true;
 				qudProgessCircle.renderer.material.SetFloat("_Cutoff", 1-(currentTile.percControlled /100f) );
 				if(buildButtonDown && currentTile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
 			//		Jiggle ();	//Gotta jiggle
 					Pulsate ();
-					PlaySFX(influenceStart, 0.8f);
+					if (!audioSourceInfluenceStart.isPlaying) {
+						audioSourceInfluenceStart.Play ();
+					}
+					audioLerp (audioSourceInfluenceStart, sRef.playerInfluenceStartVolume, sRef.playerInfluenceStartVolumeLerpRate);
 					
 					if(currentTile.controllingTeam != null){
 						if(currentTile.controllingTeam.teamNumber == teamNumber)
@@ -701,10 +736,13 @@ public class Player : MonoBehaviour {
 								if(test > 0f || (currentTile.owningTeam != null && currentTile.owningTeam == team)){
 								
 								if (currentTile.getLocalAltar () != null || currentTile.tooCloseToBeacon() || currentTile.gameObject.transform.FindChild ("Home(Clone)") != null) {
-									audio.Stop ();
+									//audio.Stop ();
 									
 									_currentState = PlayerState.standing;
-									if(currentTile.tooCloseToBeacon() && currentTile.beacon == null) audio.PlayOneShot(invalid_Input, 0.3f); //this also applies to the neutral beacon
+									if(currentTile.tooCloseToBeacon() && currentTile.beacon == null && !audioSourceInvalid.isPlaying) {
+										audioSourceInvalid.volume = 0.3f;
+										audioSourceInvalid.Play (); //this also applies to the neutral beacon
+									}
 								}
 								
 								else {
@@ -725,8 +763,9 @@ public class Player : MonoBehaviour {
 									if (currentTile.buildable () && 
 										(beaconInProgress.currentState == null || beaconInProgress.currentState == BeaconState.BuildingBasic)) 
 									{
-										audio.Stop ();
-										audio.PlayOneShot(influenceDone, 0.7f);
+										//audio.Stop ();
+										audioSourceInfluenceDone.volume = sRef.playerInfluenceDoneVolume;
+										audioSourceInfluenceDone.Play ();
 										_currentState = PlayerState.building;
 										float vpsBuildRate = sRef.vpsBaseBuild * getAltarBuildBoost ();	
 										addProgressToAction(vpsBuildRate);
@@ -736,7 +775,7 @@ public class Player : MonoBehaviour {
 									}
 								
 									else if (beaconInProgress.facing != facing) {
-										audio.Stop();
+										//audio.Stop();
 										_currentState = PlayerState.rotating;
 										beaconInProgress.startRotating (facing);
 									}
@@ -745,7 +784,7 @@ public class Player : MonoBehaviour {
 									else {
 																	
 										if (beaconInProgress.currentState == BeaconState.Basic || beaconInProgress.currentState == BeaconState.BuildingAdvanced) {
-											audio.Stop();
+											//audio.Stop();
 											_currentState = PlayerState.upgrading;
 											beaconInProgress.startUpgrading ();
 										}
@@ -761,7 +800,10 @@ public class Player : MonoBehaviour {
 							float test = currentTile.subTractInfluence(  sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime, team);
 							if(test > 0f){
 								currentTile.addInfluenceReturnOverflow(test);
-								audio.PlayOneShot(invalid_Input, 1.0f);
+								if (!audioSourceInvalid.isPlaying) {
+									audioSourceInvalid.volume = 0.7f;
+									audioSourceInvalid.Play ();
+								}
 							}
 						}
 						/*
@@ -784,7 +826,8 @@ public class Player : MonoBehaviour {
 						if(currentTile.percControlled == 100f) {
 //						Debug.Log ("INLFUENCE DONE");
 							currentTile.jigglingFromPlayer = false;
-							audio.PlayOneShot(influenceDone, 1.0f);
+							audioSourceInfluenceDone.volume = sRef.playerInfluenceDoneVolume;
+							audioSourceInfluenceDone.Play ();
 						}
 						
 						else { 
@@ -798,8 +841,9 @@ public class Player : MonoBehaviour {
 						
 					} else{
 					///TODO catch fully influenced Tile!
-					audio.Stop();
-					audio.PlayOneShot(influenceDone, 1.0f);
+					//audio.Stop();
+					audioSourceInfluenceDone.volume = sRef.playerInfluenceDoneVolume;
+					audioSourceInfluenceDone.Play ();
 					}
 				}
 				else{
@@ -807,7 +851,7 @@ public class Player : MonoBehaviour {
 					//need to reset currenttile to previousState
 					//StopSFX();
 					currentTile.jigglingFromPlayer = false;
-					audio.Stop();
+					//audio.Stop();
 					_currentState = PlayerState.standing;
 				}	
 			break;
@@ -830,7 +874,7 @@ public class Player : MonoBehaviour {
 										
 					//This will only be called if players change facing mid-rotation - doesn't hurt anything so leaving it in for now
 					if (beacon.dirRotatingToward != facing) {
-						StopSFX ();
+						//StopSFX ();
 						currentActionProgress = 0;
 						beacon.Rotate (beacon.facing);
 						beacon.percRotateComplete = 0f;
@@ -851,7 +895,7 @@ public class Player : MonoBehaviour {
 							beacon.Rotate (facing);
 							beacon.percRotateComplete = 0f;
 							_currentState = PlayerState.standing;
-							StopSFX ();					
+							//StopSFX ();					
 						}
 					}
 					moveTowardCenterOfTile (currentTile);
@@ -871,7 +915,7 @@ public class Player : MonoBehaviour {
 			case PlayerState.upgrading:
 
 				if (buildButtonDown) {
-					audio.Stop ();
+					//audio.Stop ();
 					Pulsate ();;
 					float vpsUpgradeRate = sRef.vpsBaseUpgrade * getAltarUpgradeBoost ();
 					addProgressToAction (vpsUpgradeRate);
@@ -898,7 +942,7 @@ public class Player : MonoBehaviour {
 					currentActionProgress = 0;
 					currentTile.beacon.GetComponent<Beacon>().AbortUpgrade();
 					_currentState = PlayerState.standing;
-					StopSFX ();
+					//StopSFX ();
 				
 				}
 			
@@ -1245,8 +1289,9 @@ public class Player : MonoBehaviour {
 		return false;	
 	}
 
+	/**
 	public void PlaySFX(AudioClip clip, float _volume){
-		audio.PlayOneShot(clip);
+		//audio.PlayOneShot(clip);
 		
 		if(audio.volume <= _volume){
 			//audio.volume += 0.2f;
@@ -1263,11 +1308,13 @@ public class Player : MonoBehaviour {
 		//StartCoroutine(StopSFXCoroutine ());
 	}
 	
+	
 	public IEnumerator StopSFXCoroutine(){
 		audio.volume -= 0.1f;
 		yield return new WaitForSeconds(0.6f);
 		audio.Stop();
 	}
+	*/
 	
 	public void OnCollisionEnter2D(Collision2D Collided){
 		//Debug.Log("In Enter");
@@ -1325,5 +1372,9 @@ public class Player : MonoBehaviour {
 				break;
 			}
 		}
+	}
+	
+	public void audioLerp (AudioSource source, float target, float rate) {
+		source.volume = Mathf.Lerp (source.volume, target, rate);
 	}
 }

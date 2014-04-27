@@ -1069,8 +1069,8 @@ public class BaseTile : MonoBehaviour {
 	}
 
 	public float getAverageInfluence(){
-
 		return influenceThisFrame;
 	}
+
 }
 

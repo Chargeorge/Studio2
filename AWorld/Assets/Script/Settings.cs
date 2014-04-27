@@ -88,6 +88,13 @@ public class Settings : MonoBehaviour {
 	public float closeEnoughDistanceScoreBit;
 	public int influenceRevealRange; 	 //Radius of fog reveal when tile is influenced
 	public float secTillRestartable;
+	
+	//Audio stuff
+	public float moveVolume;
+	public float moveVolumeLerpRate;
+	public float playerInfluenceStartVolume;
+	public float playerInfluenceStartVolumeLerpRate;
+	public float playerInfluenceDoneVolume;
 
 	//Overridden by options - ignore
 	public Vector2 team1Start;
@@ -182,6 +189,13 @@ public class Settings : MonoBehaviour {
 		closeEnoughDistanceScoreBit = 0.1f;
 		influenceRevealRange = 3; 			//Radius of fog reveal when tile is influenced
 		secTillRestartable = 3f;
+
+		//Audio stuff
+		moveVolume = 0.5f;
+		moveVolumeLerpRate = 0.2f;
+		playerInfluenceStartVolume = 1.0f;
+		playerInfluenceStartVolumeLerpRate = 0.1f;
+		playerInfluenceDoneVolume = 0.8f;	
 
 		//THESE VALS ARE OVERIDDEN BY OPTIONS, THESE ARE ONLY IF PREFS NOT SET
 		team1Start = new Vector2(2,7);
