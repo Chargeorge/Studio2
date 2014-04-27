@@ -260,7 +260,7 @@ public class Settings : MonoBehaviour {
 			vpsBaseFreeMoveSpeed = 4.0f;
 			vpsBasePlayerInfluence =  100f;
 			vpsBaseRotate = 100f;
-			vpsBaseUpgrade = 50f;
+			vpsBaseUpgrade = 100f;
 			vpsScorePerAltarPerSecond = 1f;
 			vpsBeaconBaseInfluence = 200f;
 			vpsScorePerMinePerSecond = 3f;
