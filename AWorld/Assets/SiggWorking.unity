@@ -1042,15 +1042,9 @@ MonoBehaviour:
   beaconNoBuildRange: 2
   selfDestructDelay: 0
   loseUpgradeProgressDelay: 0
-  team1Start: {x: 5, y: 5}
-  team2Start: {x: 15, y: 5}
-  boardSize: {x: 0, y: 0}
-  optPerlinLevel: 1500
   neutralBeaconCount: 12
   numAltars: 0
   numScoringAltars: 0
-  ranjitRangeAltars: 
-  fogOn: 0
   debugMode: 1
   gameMode: 0
   secMarqueeUpgradeTime: 0
@@ -1065,6 +1059,7 @@ MonoBehaviour:
   upgradeCircleFinishScale: 0
   upgradeCircleStartAlpha: 0
   upgradeCircleFinishAlpha: 0
+  drainedAltarAlpha: 0
   playerAccelRate: 0
   playerFriction: 0
   playerMaxSpeed: 0
@@ -1076,6 +1071,12 @@ MonoBehaviour:
   closeEnoughDistanceScoreBit: 0
   influenceRevealRange: 0
   secTillRestartable: 0
+  team1Start: {x: 5, y: 5}
+  team2Start: {x: 15, y: 5}
+  boardSize: {x: 0, y: 0}
+  optPerlinLevel: 1500
+  ranjitRangeAltars: 
+  fogOn: 0
   cameraSize: 0
   perlinLevels: 
   coefSpeed: []

@@ -51,16 +51,9 @@ public class Settings : MonoBehaviour {
 	public float loseUpgradeProgressDelay;	//How long you wait after player stops upgrading before clearing upgrade progress
 	
 	//Board setup stuff
-	public Vector2 team1Start;
-	public Vector2 team2Start;
-	public Vector2 boardSize;
-
-	public int optPerlinLevel;
 	public int neutralBeaconCount;
 	public int numAltars;
 	public int numScoringAltars;
-	public string ranjitRangeAltars;
-	public bool fogOn;
 
 	//Mode switches
 	public bool debugMode;
@@ -78,7 +71,8 @@ public class Settings : MonoBehaviour {
 	public float upgradeCircleStartScale; 	//The scale at which the upgrade circle anim thing starts
 	public float upgradeCircleFinishScale; 	//The scale the upgrade circle anim thing is at around 99% complete
 	public float upgradeCircleStartAlpha; 	//The alpha at which the upgrade circle anim thing starts
-	public float upgradeCircleFinishAlpha; 	//The alpha the upgrade circle anim thing is at around 99% complete 
+	public float upgradeCircleFinishAlpha; 	//The alpha the upgrade circle anim thing is at around 99% complete
+	public float drainedAltarAlpha;
 	
 	//Player movement stuff
 	public float playerAccelRate;
@@ -95,8 +89,13 @@ public class Settings : MonoBehaviour {
 	public int influenceRevealRange; 	 //Radius of fog reveal when tile is influenced
 	public float secTillRestartable;
 
-	//OverridOptions
-
+	//Overridden by options - ignore
+	public Vector2 team1Start;
+	public Vector2 team2Start;
+	public Vector2 boardSize;
+	public int optPerlinLevel;
+	public string ranjitRangeAltars;
+	public bool fogOn;
 	public float cameraSize;
 	public int[] perlinLevels;
 	public float[] coefSpeed;
@@ -144,7 +143,7 @@ public class Settings : MonoBehaviour {
 		selfDestructDelay = 0.5f;  			//How long you wait after player stops building before destroying a beacon
 		loseUpgradeProgressDelay = 0.5f;  	//How long you wait after player stops upgrading before clearing upgrade progress
 		
-
+		//Board setup stuff
 		neutralBeaconCount = 12;
 		numAltars = 0;
 		numScoringAltars = 5;
@@ -164,7 +163,8 @@ public class Settings : MonoBehaviour {
 		upgradeCircleStartScale = 7.0f; 	//The scale at which the upgrade circle anim thing starts
 		upgradeCircleFinishScale = 0.5f; 	//The scale the upgrade circle anim thing is at around 99% complete
 		upgradeCircleStartAlpha = 0.1f; 	//The alpha at which the upgrade circle anim thing starts
-		upgradeCircleFinishAlpha = 0.8f; 	//The alpha the upgrade circle anim thing is at around 99% complete 
+		upgradeCircleFinishAlpha = 0.8f; 	//The alpha the upgrade circle anim thing is at around 99% complete
+		drainedAltarAlpha = 0.5f;
 		
 		//Player movement stuff
 		playerAccelRate = 0.38f;
@@ -182,7 +182,6 @@ public class Settings : MonoBehaviour {
 		secTillRestartable = 3f;
 
 		//THESE VALS ARE OVERIDDEN BY OPTIONS, THESE ARE ONLY IF PREFS NOT SET
-		//Board setup stuff 
 		team1Start = new Vector2(2,7);
 		team2Start = new Vector2(19,7);
 		boardSize = new Vector2(22,14);
