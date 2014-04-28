@@ -300,13 +300,19 @@ public class GameManager : MonoBehaviour {
 					weakTeam = teams[1];
 				}
 				
+				
+				bool stop = true;
+				
+				
 				Altar A = altars[Random.Range(0, altars.Count)].GetComponent<Altar>();
 				BaseTile AltarLoc = tiles[A.brdX, A.brdY].GetComponent<BaseTile>();
 				List<AStarholder> toHome = BaseTile.aStarSearch(AltarLoc, home,int.MaxValue, BaseTile.getLocalTraversableTiles,weakTeam);
 				try{
 					BaseTile next = toHome[1].current;
-					A.brdX = next.brdXPos;
-					A.brdY = next.brdYPos;
+					if(next.getLocalAltar() == null){
+						A.brdX = next.brdXPos;
+						A.brdY = next.brdYPos;
+					}
 				}catch{
 					Debug.Log("Altar next to base");
 				}
