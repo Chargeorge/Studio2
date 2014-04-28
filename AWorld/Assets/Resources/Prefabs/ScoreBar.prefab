@@ -324,18 +324,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   endScale: {x: 0, y: 0, z: 0}
-  teamScale1: {x: 0, y: 0, z: 0}
-  teamScale2: {x: 0, y: 0, z: 0}
+  teamScale: {x: 0, y: 0, z: 0}
   endPosY: 0
-  teamPos1: {x: 0, y: 0, z: 0}
+  teamPos: {x: 0, y: 0, z: 0}
   bar: {fileID: 0}
   barAlpha:
     serializedVersion: 2
     rgba: 0
   capture: {fileID: 0}
   backBar: {fileID: 0}
-  teamBar1: {fileID: 0}
-  teamBar2: {fileID: 0}
+  startPos: {x: 0, y: 0, z: 0}
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
