@@ -489,12 +489,12 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: e06d67d0593cd754485ffab3d09ed832, type: 3}
     m_FontSize: 64
     m_FontStyle: 0
-    m_Alignment: 7
+    m_Alignment: 4
     m_WordWrap: 0
     m_RichText: 1
     m_TextClipping: 0
     m_ImagePosition: 0
-    m_ContentOffset: {x: 1, y: 10}
+    m_ContentOffset: {x: 0, y: 0}
     m_FixedWidth: 0
     m_FixedHeight: 0
     m_StretchWidth: 1
@@ -548,12 +548,12 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: e06d67d0593cd754485ffab3d09ed832, type: 3}
     m_FontSize: 64
     m_FontStyle: 0
-    m_Alignment: 7
+    m_Alignment: 4
     m_WordWrap: 0
     m_RichText: 1
     m_TextClipping: 0
     m_ImagePosition: 0
-    m_ContentOffset: {x: 4, y: -56}
+    m_ContentOffset: {x: 0, y: 0}
     m_FixedWidth: 0
     m_FixedHeight: 0
     m_StretchWidth: 1
@@ -607,12 +607,12 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: e06d67d0593cd754485ffab3d09ed832, type: 3}
     m_FontSize: 64
     m_FontStyle: 0
-    m_Alignment: 7
+    m_Alignment: 4
     m_WordWrap: 0
     m_RichText: 1
     m_TextClipping: 0
     m_ImagePosition: 0
-    m_ContentOffset: {x: 0, y: -56}
+    m_ContentOffset: {x: 0, y: 0}
     m_FixedWidth: 0
     m_FixedHeight: 0
     m_StretchWidth: 1
