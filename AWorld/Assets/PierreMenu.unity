@@ -685,7 +685,7 @@ AudioSource:
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 100000, guid: 00ec697b73a02cb488edc5062796db47, type: 2}
-  m_PrefabInternal: {fileID: 1851341513}
+  m_PrefabInternal: {fileID: 1889330393}
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1542946971}
@@ -705,7 +705,7 @@ Renderer:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 2300000, guid: 00ec697b73a02cb488edc5062796db47,
     type: 2}
-  m_PrefabInternal: {fileID: 1851341513}
+  m_PrefabInternal: {fileID: 1889330393}
   m_GameObject: {fileID: 1542946967}
   m_Enabled: 1
   m_CastShadows: 1
@@ -727,7 +727,7 @@ MeshCollider:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 6400000, guid: 00ec697b73a02cb488edc5062796db47,
     type: 2}
-  m_PrefabInternal: {fileID: 1851341513}
+  m_PrefabInternal: {fileID: 1889330393}
   m_GameObject: {fileID: 1542946967}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -741,14 +741,14 @@ MeshFilter:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 3300000, guid: 00ec697b73a02cb488edc5062796db47,
     type: 2}
-  m_PrefabInternal: {fileID: 1851341513}
+  m_PrefabInternal: {fileID: 1889330393}
   m_GameObject: {fileID: 1542946967}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!4 &1542946971
 Transform:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 400000, guid: 00ec697b73a02cb488edc5062796db47, type: 2}
-  m_PrefabInternal: {fileID: 1851341513}
+  m_PrefabInternal: {fileID: 1889330393}
   m_GameObject: {fileID: 1542946967}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -2.5, y: -.400000006, z: -6}
@@ -760,7 +760,7 @@ MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 11400000, guid: 00ec697b73a02cb488edc5062796db47,
     type: 2}
-  m_PrefabInternal: {fileID: 1851341513}
+  m_PrefabInternal: {fileID: 1889330393}
   m_GameObject: {fileID: 1542946967}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -770,9 +770,9 @@ MonoBehaviour:
   moveSpeed: 4
   movingRotateSpeed: 100
   restingRotateSpeed: 20
-  loadingRotateSpeed: 400
+  loadingRotateSpeed: 500
   menu: {fileID: 1451874152}
---- !u!1001 &1851341513
+--- !u!1001 &1889330393
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -811,6 +811,10 @@ Prefab:
       propertyPath: menu
       value: 
       objectReference: {fileID: 1451874152}
+    - target: {fileID: 11400000, guid: 00ec697b73a02cb488edc5062796db47, type: 2}
+      propertyPath: loadingRotateSpeed
+      value: 500
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 00ec697b73a02cb488edc5062796db47, type: 2}
   m_RootGameObject: {fileID: 1542946967}
