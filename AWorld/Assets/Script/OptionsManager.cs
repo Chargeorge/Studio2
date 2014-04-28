@@ -12,7 +12,7 @@ public class OptionsManager : MonoBehaviour {
 
 	public AudioClip select;
 	public AudioClip launch;
-	public bool screenChanging;
+	public bool loadingNewScreen;
 
 	public GameObject cursor;
 
@@ -118,7 +118,7 @@ public class OptionsManager : MonoBehaviour {
 				break;
 		}
 
-		screenChanging = false;
+		loadingNewScreen = false;
 	}
 	
 	// Update is called once per frame
@@ -257,15 +257,15 @@ public class OptionsManager : MonoBehaviour {
 			}
 		}
 
-		if(startSelected && Input.GetButtonDown("BuildPlayer1") && !screenChanging){
+		if(startSelected && Input.GetButtonDown("BuildPlayer1") && !loadingNewScreen){
 			audio.PlayOneShot(launch, 0.9f);
-			screenChanging = true;
+			loadingNewScreen = true;
 			Invoke ("launchGame", 1.5f);
 		}
 		
-		if(backSelected && Input.GetButton("BuildPlayer1") && !screenChanging){
+		if(backSelected && Input.GetButton("BuildPlayer1") && !loadingNewScreen){
 			audio.PlayOneShot(select, 0.8f);
-			screenChanging = true;
+			loadingNewScreen = true;
 			Invoke ("goToMainMenu", 1.0f);
 		}
 
