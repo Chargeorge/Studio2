@@ -38,7 +38,7 @@ public class BaseTile : MonoBehaviour {
 	private GameObject _qudOwnedLayer;
 	private GameObject _qudPulsingOwnedLayer;
 	
-	public AudioClip influenceDone;
+//	public AudioClip influenceDone;
 		
 	private bool _isRevealed;
 	private bool _isHover;
@@ -818,7 +818,6 @@ public class BaseTile : MonoBehaviour {
 				influenceThisFrame += rate*Time.deltaTime;
 				if(percControlled >= 100) {
 					finishInfluence();
-					audio.PlayOneShot(influenceDone, 0.7f); //activate this if we want every tile influenced to trigger a sound, including the ones influenced by beacons
 					returnable = true;
 				}
 			}
@@ -890,13 +889,16 @@ public class BaseTile : MonoBehaviour {
 	/// Finish adding influence, set which team controls it
 	/// </summary>
 	public void finishInfluence(){
-		audio.PlayOneShot(influenceDone, 0.7f);
+		//audio.PlayOneShot(influenceDone, 0.7f);
 		//Debug.Log("Why am I here?");
 		///TODO: add end semaphore stuff her
 		if(controllingTeam != owningTeam){
 			if(percControlled > 100f){
 				percControlled = 100f;
 				currentState = TileState.normal;
+				if (!audio.isPlaying) {
+					audio.Play (); //activate this if we want every tile influenced to trigger a sound, including the ones influenced by beacons
+				}
 				//audio.PlayOneShot(influenceDone, 0.7f); 
 
 			}
