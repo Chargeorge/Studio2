@@ -149,6 +149,14 @@ public class Altar : MonoBehaviour {
 							scoreBit.GetComponent<ScoreBit>().sRef = sRef;
 							timeToNextScoreShot = scoreShotInterval;
 							//_currentControllingTeam.score += scoreToAdd;
+							
+							if (scoreLeft <= 0) {
+								gameObject.transform.renderer.material.shader = Shader.Find ("Transparent/Diffuse");
+								Color32 drainedColor = gameObject.transform.renderer.material.color;
+								drainedColor.a = (byte) (sRef.drainedAltarAlpha * 255f);
+								Debug.Log (drainedColor.a);
+								gameObject.transform.renderer.material.color = drainedColor;
+							}
 						}
 
 					}

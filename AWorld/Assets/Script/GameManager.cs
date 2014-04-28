@@ -6,6 +6,7 @@ using System.Linq;
 public class GameManager : MonoBehaviour {
 	
 	public Settings sRef;
+
 	#region Statics
 	/// <summary>
 	/// Converts the grd position into the absolute Unity world position
@@ -54,8 +55,16 @@ public class GameManager : MonoBehaviour {
 	bool isPlaying = false;
 	public List<GameObject> beacons;
 
+	private GameObject _prfbBar;
+	public GameObject teamBar1;
+	public GameObject teamBar2;
+
 	// Use this for initializatio
 	void Start () {
+
+		_prfbBar = (GameObject)Resources.Load("Prefabs/ScoreBar");
+
+
 		sRef = GameObject.Find ("Settings").GetComponent<Settings>();
 
 		beacons = new List<GameObject>();
@@ -106,10 +115,15 @@ public class GameManager : MonoBehaviour {
 				Player p4 = Player4.GetComponentInChildren<Player>();
 
 				p1.SetTeam(TeamInfo.GetTeamInfo(1));
+				p1.SetColor (p1.team.teamColor);
 				p2.SetTeam(p1.team);
-
+				p2.SetColor(p1.team.teamColorAlt);
+				
 				p3.SetTeam(TeamInfo.GetTeamInfo(2));
+				p3.SetColor(p3.team.teamColor);
 				p4.SetTeam(p3.team);
+				p4.SetColor(p3.team.teamColorAlt);
+				
 				teams.Add(p1.team);
 				teams.Add(p3.team);
 				p1.PlayerNumber = 1;
@@ -139,16 +153,16 @@ public class GameManager : MonoBehaviour {
 				Player p1 = Player1.GetComponentInChildren<Player>();
 				Player p2 = Player2.GetComponentInChildren<Player>();
 				p1.SetTeam(TeamInfo.GetTeamInfo(1));
+				p1.SetColor (p1.team.teamColor);
 				p2.SetTeam(TeamInfo.GetTeamInfo(2));
+				p2.SetColor(p2.team.teamColor);
 				teams.Add(p1.team);
 				teams.Add(p2.team);
 				p1.PlayerNumber = 1;
 				p2.PlayerNumber = 2;
 				players.Add(Player1);
 				players.Add(Player2);
-				
-				
-				
+								
 				//steps to ensure validity
 				team1Home = setUpTeamHome(p1);
 				team2Home = setUpTeamHome(p2);
@@ -162,6 +176,10 @@ public class GameManager : MonoBehaviour {
 				break;
 			}
 			}
+			teamBar1 = (GameObject)GameObject.Instantiate(_prfbBar, new Vector3(sRef.scorePos1.x, sRef.scorePos1.y,0), Quaternion.identity);
+			teamBar1.GetComponent<Bar>().team = teams[0];
+			teamBar2 = (GameObject)GameObject.Instantiate(_prfbBar, new Vector3(sRef.scorePos2.x, sRef.scorePos2.y,0), Quaternion.identity);
+			teamBar2.GetComponent<Bar>().team = teams[1];
 			//Check for any homebase islands, if so regenerate
 			//Check for fairness?  
 			//Remove water where it's on an altar or home base

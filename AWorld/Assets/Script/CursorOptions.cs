@@ -7,15 +7,17 @@ public class CursorOptions : MonoBehaviour {
 
 	public float movingRotateSpeed;
 	public float restingRotateSpeed;
+	public float loadingRotateSpeed;
 	private float rotateSpeed;
 	private float rotatingLeft;	//-1 if rotating right, 1 if rotating left
 
 	public GameObject options;
+	private OptionsManager optionsScript;
 	
 	// Use this for initialization
 	void Start () {
 		
-		OptionsManager optionsScript = options.GetComponent<OptionsManager>();
+		optionsScript = options.GetComponent<OptionsManager>();
 		rotateSpeed = restingRotateSpeed * -1;
 		rotatingLeft = -1;
 		
@@ -31,7 +33,7 @@ public class CursorOptions : MonoBehaviour {
 		float x = Input.GetAxis("HorizontalPlayer1") * moveSpeed * Time.deltaTime;
 		float y = Input.GetAxis("VerticalPlayer1") * moveSpeed * Time.deltaTime;
 		
-		if (!options.GetComponent<OptionsManager>().screenChanging) pos.x += x;
+		if (!options.GetComponent<OptionsManager>().loadingNewScreen) pos.x += x;
 		//pos.y += y;
 		
 		if (pos.x < 0.25f && pos.y == -3.42f){ //if the cursor is at the left edge of BACK, make it stay there
@@ -68,19 +70,25 @@ public class CursorOptions : MonoBehaviour {
 		//transform.position = new Vector3(-0.16f, Mathf.Clamp(Time.time, 0.26F, -1.2F), -5.4f);
 		transform.position = pos;			
 		
-		if (x > 0) {
-			rotateSpeed = -1 * movingRotateSpeed;
-			rotatingLeft = -1;
+		if (!optionsScript.loadingNewScreen) {
+			if (x > 0) {
+				rotateSpeed = -1 * movingRotateSpeed;
+				rotatingLeft = -1;
+			}
+			else if (x < 0) { 
+				rotateSpeed = movingRotateSpeed;
+				rotatingLeft = 1;
+			}
+			else {
+				rotateSpeed = restingRotateSpeed * rotatingLeft;
+			}
 		}
-		else if (x < 0) { 
-			rotateSpeed = movingRotateSpeed;
-			rotatingLeft = 1;
+			
+		if (optionsScript.loadingNewScreen) {
+			transform.RotateAround (transform.position, Vector3.forward, loadingRotateSpeed * rotatingLeft * Time.deltaTime);
 		}
 		else {
-			rotateSpeed = restingRotateSpeed * rotatingLeft;
+			transform.RotateAround (transform.position, Vector3.forward, rotateSpeed * Time.deltaTime);
 		}
-		
-		if (!options.GetComponent<OptionsManager>().screenChanging) transform.RotateAround (transform.position, Vector3.forward, rotateSpeed * Time.deltaTime);
-		
 	}
 }

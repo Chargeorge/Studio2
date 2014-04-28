@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class Settings : MonoBehaviour {
 	//VPS -- Value Per Second, represents the amount of value added per second for building or moving.
-	//Coef -- The coeficiant of that action, IE: movingt rhough enemy tile or building diffent structure.
+	//Coef -- The coefficient of that action, IE: moving through enemy tile or building different structure.
 
-	//USage:  Anytime we build every action takes 100 points.  Every frame (Update) we add vpsBase * coef * Time.deltaTime and add it to the current counter
+	//Usage:  Anytime we build every action takes 100 points.  Every frame (Update) we add vpsBase * coef * Time.deltaTime and add it to the current counter
 
 	//Right now this is an object we can instantiate.  Left as is for future iterations that read from the file system.  
 	
@@ -51,16 +51,9 @@ public class Settings : MonoBehaviour {
 	public float loseUpgradeProgressDelay;	//How long you wait after player stops upgrading before clearing upgrade progress
 	
 	//Board setup stuff
-	public Vector2 team1Start;
-	public Vector2 team2Start;
-	public Vector2 boardSize;
-
-	public int optPerlinLevel;
 	public int neutralBeaconCount;
 	public int numAltars;
 	public int numScoringAltars;
-	public string ranjitRangeAltars;
-	public bool fogOn;
 
 	//Mode switches
 	public bool debugMode;
@@ -75,11 +68,12 @@ public class Settings : MonoBehaviour {
 	public float buildCircleFinishScale; 	//The scale the upgrade circle anim thing is at around 99% complete
 	public float buildCircleStartAlpha; 	//The alpha at which the upgrade circle anim thing starts
 	public float buildCircleFinishAlpha; 	//The alpha the upgrade circle anim thing is at around 99% complete 
+	public float upgradeCircleStartScale; 	//The scale at which the upgrade circle anim thing starts
 	public float upgradeCircleFinishScale; 	//The scale the upgrade circle anim thing is at around 99% complete
 	public float upgradeCircleStartAlpha; 	//The alpha at which the upgrade circle anim thing starts
-	public float upgradeCircleFinishAlpha; 	//The alpha the upgrade circle anim thing is at around 99% complete 
+	public float upgradeCircleFinishAlpha; 	//The alpha the upgrade circle anim thing is at around 99% complete
+	public float drainedAltarAlpha;
 	
-	public float upgradeCircleStartScale; 	//The scale at which the upgrade circle anim thing starts
 	//Player movement stuff
 	public float playerAccelRate;
 	public float playerFriction;
@@ -94,14 +88,32 @@ public class Settings : MonoBehaviour {
 	public float closeEnoughDistanceScoreBit;
 	public int influenceRevealRange; 	 //Radius of fog reveal when tile is influenced
 	public float secTillRestartable;
+	
+	//Audio stuff
+	public float moveVolume;
+	public float moveVolumeLerpRate;
+	public float playerInfluenceStartVolume;
+	public float playerInfluenceStartVolumeLerpRate;
+	public float playerInfluenceDoneVolume;
 
-	//OverridOptions
-
+	//Overridden by options - ignore
+	public Vector2 team1Start;
+	public Vector2 team2Start;
+	public Vector2 boardSize;
+	public int optPerlinLevel;
+	public string ranjitRangeAltars;
+	public bool fogOn;
 	public float cameraSize;
 	public int[] perlinLevels;
 	public float[] coefSpeed;
 	public SizeSetting[] sizes;
 	public Vector3 cameraPosition;
+
+	public Vector2 scorePos1;
+	public Vector2 scorePos2;
+	public float scaleY;
+	public float bbLocalPosY;
+	public float sbMoveUp;
 
 	// Use this for initialization
 	void Start () {
@@ -146,7 +158,7 @@ public class Settings : MonoBehaviour {
 		selfDestructDelay = 0.5f;  			//How long you wait after player stops building before destroying a beacon
 		loseUpgradeProgressDelay = 0.5f;  	//How long you wait after player stops upgrading before clearing upgrade progress
 		
-
+		//Board setup stuff
 		neutralBeaconCount = 12;
 		numAltars = 0;
 		numScoringAltars = 5;
@@ -166,7 +178,8 @@ public class Settings : MonoBehaviour {
 		upgradeCircleStartScale = 7.0f; 	//The scale at which the upgrade circle anim thing starts
 		upgradeCircleFinishScale = 0.5f; 	//The scale the upgrade circle anim thing is at around 99% complete
 		upgradeCircleStartAlpha = 0.1f; 	//The alpha at which the upgrade circle anim thing starts
-		upgradeCircleFinishAlpha = 0.8f; 	//The alpha the upgrade circle anim thing is at around 99% complete 
+		upgradeCircleFinishAlpha = 0.8f; 	//The alpha the upgrade circle anim thing is at around 99% complete
+		drainedAltarAlpha = 0.5f;
 		
 		//Player movement stuff
 		playerAccelRate = 0.38f;
@@ -183,8 +196,14 @@ public class Settings : MonoBehaviour {
 		influenceRevealRange = 3; 			//Radius of fog reveal when tile is influenced
 		secTillRestartable = 3f;
 
+		//Audio stuff
+		moveVolume = 0.5f;
+		moveVolumeLerpRate = 0.2f;
+		playerInfluenceStartVolume = 1.0f;
+		playerInfluenceStartVolumeLerpRate = 0.1f;
+		playerInfluenceDoneVolume = 0.8f;	
+
 		//THESE VALS ARE OVERIDDEN BY OPTIONS, THESE ARE ONLY IF PREFS NOT SET
-		//Board setup stuff 
 		team1Start = new Vector2(2,7);
 		team2Start = new Vector2(19,7);
 		boardSize = new Vector2(22,14);
@@ -194,25 +213,31 @@ public class Settings : MonoBehaviour {
 		gameMode = Mode.TwoVTwo;
 		//Settings
 		perlinLevels = new int[]{3000, 1800, 1400};
-		sizes = new SizeSetting[]{new SizeSetting(new Vector2(16,12),new Vector2(2,6), new Vector2(14,6),7.08f, new Vector2(10.5f, 6.49f)),
-								new SizeSetting(new Vector2(22,14),new Vector2(2,7), new Vector2(19,7), 7.08f, new Vector2(10.5f, 6.49f)),
-			new SizeSetting(new Vector2(28,20),new Vector2(2,10), new Vector2(26,10),11.61f,new Vector2(13.65858f, 10.2f))};
-
+		sizes = new SizeSetting[]{
+			new SizeSetting(new Vector2(16,12),new Vector2(2,6), new Vector2(14,6),6.7f, new Vector2(7.5f, 5.5f), new Vector2(-2.340571f,0), new Vector2 (17.55239f,0), 11.5f, 5.788717f, 5.75f),
+			new SizeSetting(new Vector2(22,14),new Vector2(2,7), new Vector2(19,7), 7.65f, new Vector2(10.5f, 6.49f), new Vector2(-1.904194f,0), new Vector2 (22.76141f,0), 12.73845f, 6.695579f, 6.4f),
+			new SizeSetting(new Vector2(28,20),new Vector2(2,10), new Vector2(26,10),10.6f,new Vector2(13.4f, 9.5f), new Vector2(-3.085168f,0), new Vector2 (29.88822f,0), 19.1f, 9.857672f, 9.2f)};
+		
 		setPrefs();
 	}
 
 	void setPrefs(){
-		gameMode = (PlayerPrefs.GetInt (PreferencesOptions.numberOfPlayers.ToString ()) == 2) ? Mode.OneVOne : Mode.TwoVTwo;
-		fogOn = (PlayerPrefs.GetInt (PreferencesOptions.fogOn.ToString ()) == 1) ? true : false;
-		optPerlinLevel = (perlinLevels [PlayerPrefs.GetInt (PreferencesOptions.terrainIntensity.ToString ())]);
-		SizeSetting set = sizes [PlayerPrefs.GetInt (PreferencesOptions.terrainSize.ToString ())];
+
+		gameMode = (PlayerPrefs.GetInt(PreferencesOptions.numberOfPlayers.ToString()) == 2) ? Mode.OneVOne : Mode.TwoVTwo;
+		fogOn = (PlayerPrefs.GetInt(PreferencesOptions.fogOn.ToString()) == 1) ? true : false;
+		optPerlinLevel =  (perlinLevels[PlayerPrefs.GetInt(PreferencesOptions.terrainIntensity.ToString())-1]);
+		SizeSetting set = sizes[PlayerPrefs.GetInt(PreferencesOptions.terrainSize.ToString())-1];
 
 		boardSize = set.mapSize;
 		team1Start = set.team1Start;
 		team2Start = set.team2Start;
 		cameraSize = set.cameraSize;
 		cameraPosition = set.cameraPosition;
-		PlayerPrefs.GetInt (PreferencesOptions.gameSpeed.ToString ());
+		scorePos1 = set.scorePos1;
+		scorePos2 = set.scorePos2;
+		scaleY = set.scaleY;
+		bbLocalPosY = set.bbLocalPosY;
+		sbMoveUp = set.sbMoveUp;
 
 		/*	public float vpsBaseBuild;
 	public float vpsBaseMove;
@@ -226,7 +251,7 @@ public class Settings : MonoBehaviour {
 		*/
 
 		switch (PlayerPrefs.GetInt (PreferencesOptions.gameSpeed.ToString())) {
-		case 0:
+		case 1:
 			//Base values per second
 			vpsBaseBuild = 25f;
 			vpsBaseMove = 50f;
@@ -240,7 +265,7 @@ public class Settings : MonoBehaviour {
 
 			break;
 
-		case 1: 
+		case 2: 
 			//Base values per second
 			vpsBaseBuild = 50f;
 			vpsBaseMove = 100f;
@@ -254,17 +279,16 @@ public class Settings : MonoBehaviour {
 
 			break;
 
-		case 2: 
+		case 3: 
 			vpsBaseBuild = 100f;
 			vpsBaseMove = 200f;
 			vpsBaseFreeMoveSpeed = 4.0f;
 			vpsBasePlayerInfluence =  100f;
 			vpsBaseRotate = 100f;
-			vpsBaseUpgrade = 50f;
+			vpsBaseUpgrade = 100f;
 			vpsScorePerAltarPerSecond = 1f;
 			vpsBeaconBaseInfluence = 200f;
 			vpsScorePerMinePerSecond = 3f;
-
 
 			break;
 		}

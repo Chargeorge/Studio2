@@ -196,10 +196,7 @@ public class Beacon : MonoBehaviour {
 		//Debug.Log(this.transform.FindChild("Base").localPosition);
 		
 		audio.Stop ()	;
-		audio.PlayOneShot(beaconBuilding, .09f);
-		
-		
-		
+		audio.PlayOneShot(beaconBuilding, .5f);		
 	}
 	
 
