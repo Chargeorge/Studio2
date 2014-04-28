@@ -18,6 +18,7 @@ public class MainMenu : MonoBehaviour {
 	bool joystickActive = true;
 	public bool screenChanging;
 
+	public GameObject soundtrack;
 	public GameObject cursor;
 
 	// Use this for initialization
@@ -26,10 +27,14 @@ public class MainMenu : MonoBehaviour {
 		optionsSelected = false;
 		quitSelected = false;
 		screenChanging = false;
+
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
+
+		Debug.Log(soundtrack.audio.volume);
 
 		if(cursor.transform.position.y < -0.4 && cursor.transform.position.y > -1.4){
 			startSelected = true;
@@ -92,7 +97,8 @@ public class MainMenu : MonoBehaviour {
 			if(startSelected){
 				audio.PlayOneShot(launch, 0.9f);
 				screenChanging = true;
-				Invoke("launchGame", 1.5f);
+				soundtrack.audio.volume = Mathf.Lerp(soundtrack.audio.volume, 0, Time.deltaTime);
+				Invoke("launchGame", 1.0f);
 			}
 			if(optionsSelected){
 				audio.PlayOneShot(select, 1.0f);
@@ -103,17 +109,27 @@ public class MainMenu : MonoBehaviour {
 				audio.PlayOneShot (select, 1.0f);
 				if (!Application.isEditor) {
 					screenChanging = true;
+					StartCoroutine(FadeMusic());
 					Invoke ("quitApp", 1.0f);
 				}
 			}
 		}
 	}
 
+	IEnumerator FadeMusic(){
+		while(soundtrack.audio.volume > .05f){
+			soundtrack.audio.volume = Mathf.Lerp(soundtrack.audio.volume,0F, 1.0f);
+			yield return 0;
+		}
+	}
+
+
 	public void launchOptions(){
 		Application.LoadLevel("PierreOptions");
 	}
 
 	public void launchGame(){
+		Destroy(soundtrack);
 		Application.LoadLevel("SiggWorking");
 	}
 	

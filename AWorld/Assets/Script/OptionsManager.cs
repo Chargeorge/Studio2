@@ -14,6 +14,7 @@ public class OptionsManager : MonoBehaviour {
 	public AudioClip launch;
 	public bool screenChanging;
 
+	public GameObject soundtrack;
 	public GameObject cursor;
 
 	bool backSelected = false;
@@ -56,6 +57,8 @@ public class OptionsManager : MonoBehaviour {
 	void Start () {
 		height1 = Screen.height/3 - Screen.height/12;
 		height2 = (Screen.height/3)*2 - Screen.height/12;
+
+		soundtrack = GameObject.Find("Soundtrack");
 
 		//Set up the default values for the game
 		numberOfPlayers = (PlayerPrefs.GetInt(PreferencesOptions.numberOfPlayers.ToString()) == 2) ? 2 : 4;
@@ -260,6 +263,7 @@ public class OptionsManager : MonoBehaviour {
 		if(startSelected && Input.GetButtonDown("BuildPlayer1") && !screenChanging){
 			audio.PlayOneShot(launch, 0.9f);
 			screenChanging = true;
+			soundtrack.audio.volume = Mathf.Lerp(soundtrack.audio.volume, 0, Time.deltaTime);
 			Invoke ("launchGame", 1.5f);
 		}
 		
