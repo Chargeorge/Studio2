@@ -964,6 +964,9 @@ public class BaseTile : MonoBehaviour {
 				catch { tile = null; }
 				if (tile != null) {
 					tile.GetComponent<BaseTile>().IsRevealed = true;
+					if (tile.GetComponent<BaseTile>().beacon != null){
+						tile.GetComponent<BaseTile>().beacon.transform.FindChild ("Arrow").GetComponent<MeshRenderer>().enabled = true;	
+					}
 				}		
 			}
 		}
