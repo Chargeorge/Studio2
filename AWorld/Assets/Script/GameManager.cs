@@ -286,7 +286,7 @@ public class GameManager : MonoBehaviour {
 			
 			Debug.Log ("A star total yellow = " + AStarTotalTeam2);
 
-			while(Mathf.Abs(AStarTotalTeam1 - AStarTotalTeam2) >10){
+			while(Mathf.Abs(AStarTotalTeam1 - AStarTotalTeam2) >5){
 				//Grab a random altar
 				BaseTile home;
 				TeamInfo weakTeam;
