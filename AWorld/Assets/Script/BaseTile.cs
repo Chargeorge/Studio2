@@ -1043,7 +1043,7 @@ public class BaseTile : MonoBehaviour {
 	}
 
 	public bool buildable(){
-		if(gameObject.GetComponent<Altar>() != null){
+		if(getLocalAltar() != null){
 			return false;
 		}
 		if(currentType ==TileTypeEnum.water){

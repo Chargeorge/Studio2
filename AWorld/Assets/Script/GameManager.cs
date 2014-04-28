@@ -314,7 +314,6 @@ public class GameManager : MonoBehaviour {
 						A.brdY = next.brdYPos;
 					}
 				}catch{
-					Debug.Log("Altar next to base");
 				}
 				
 				Debug.Log ("Shifting Altar");	
@@ -338,12 +337,21 @@ public class GameManager : MonoBehaviour {
 			});
 
 			for(int beaconsBuilt = 0; beaconsBuilt < sRef.neutralBeaconCount; beaconsBuilt ++){
-				int x= Random.Range(0, tiles.GetLength(0));
-				int y = Random.Range(0, tiles.GetLength(1));
+				float xMin = beaconsBuilt*tiles.GetLength(0)/ sRef.neutralBeaconCount;
+				float yMin = beaconsBuilt*tiles.GetLength(1)/sRef.neutralBeaconCount;
+				
+				float xMax = (beaconsBuilt+1)*tiles.GetLength(0)/sRef.neutralBeaconCount;
+				float yMax = (beaconsBuilt+1)*tiles.GetLength(1)/sRef.neutralBeaconCount;
+				
+				
+				int x= Mathf.FloorToInt(Random.Range(xMin, xMax));
+				int y = Mathf.FloorToInt(Random.Range(yMin, yMax));
 
-				while(!addNeutralBeacon(x,y)) {
+				int maxWhile  = 0;
+				while(!addNeutralBeacon(x,y) && maxWhile < 5) {
 					 x= Random.Range(0, tiles.GetLength(0));
 					 y = Random.Range(0, tiles.GetLength(1));
+					 maxWhile++;
 				} ///Weird placeholder, just go till you find a decent spot
 			}
 			for(int x = 0; x<  tiles.GetLength(0); x++){
