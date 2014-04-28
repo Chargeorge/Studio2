@@ -86,6 +86,12 @@ public class CursorOptions : MonoBehaviour {
 			
 		if (optionsScript.loadingNewScreen) {
 			transform.RotateAround (transform.position, Vector3.forward, loadingRotateSpeed * rotatingLeft * Time.deltaTime);
+			if (transform.renderer.material.color.a > 0f) { 
+				Color32 newColor = transform.renderer.material.color;
+				newColor.a -= (byte) (0.021f * 255f);
+				transform.renderer.material.color = newColor;
+			}
+			
 		}
 		else {
 			transform.RotateAround (transform.position, Vector3.forward, rotateSpeed * Time.deltaTime);
