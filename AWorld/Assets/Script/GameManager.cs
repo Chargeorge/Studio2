@@ -6,6 +6,7 @@ using System.Linq;
 public class GameManager : MonoBehaviour {
 	
 	public Settings sRef;
+
 	#region Statics
 	/// <summary>
 	/// Converts the grd position into the absolute Unity world position
@@ -175,9 +176,9 @@ public class GameManager : MonoBehaviour {
 				break;
 			}
 			}
-			teamBar1 = (GameObject)GameObject.Instantiate(_prfbBar, new Vector3(-1.33f,0,0), Quaternion.identity);
+			teamBar1 = (GameObject)GameObject.Instantiate(_prfbBar, new Vector3(sRef.scorePos1.x, sRef.scorePos1.y,0), Quaternion.identity);
 			teamBar1.GetComponent<Bar>().team = teams[0];
-			teamBar2 = (GameObject)GameObject.Instantiate(_prfbBar, new Vector3(22.3f,0,0), Quaternion.identity);
+			teamBar2 = (GameObject)GameObject.Instantiate(_prfbBar, new Vector3(sRef.scorePos2.x, sRef.scorePos2.y,0), Quaternion.identity);
 			teamBar2.GetComponent<Bar>().team = teams[1];
 			//Check for any homebase islands, if so regenerate
 			//Check for fairness?  

@@ -271,7 +271,7 @@ public class Player : MonoBehaviour {
 							{
 								Pulsate ();
 								audioSourceInfluenceDone.volume = sRef.playerInfluenceDoneVolume;
-								audioSourceInfluenceDone.Play ();
+								//audioSourceInfluenceDone.Play ();
 								_currentState = PlayerState.building;
 								
 								float vpsBuildRate = sRef.vpsBaseBuild * getAltarBuildBoost ();
