@@ -1,6 +1,6 @@
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 using System.Linq;
 
 public class GameManager : MonoBehaviour {
@@ -186,9 +186,11 @@ public class GameManager : MonoBehaviour {
 			BaseTile team1Tile, team2Tile;
 			team1Tile =tiles[(int)teams[0].startingLocation.x,(int)teams[0].startingLocation.y].GetComponent<BaseTile>();
 			team2Tile = tiles[(int)teams[1].startingLocation.x,(int)teams[1].startingLocation.y].GetComponent<BaseTile>();
-			//while(!team1Tile.findEdges() && !team2Tile.findEdges()){
-				GameObject.Find("TileCreator").GetComponent<TileCreation>().perlinPass(TileTypeEnum.water, sRef.optPerlinLevel);
-			//}
+			while(!team1Tile.findEdges() && !team2Tile.findEdges()){
+			
+					tileSendMessage("Reset");
+					GameObject.Find("TileCreator").GetComponent<TileCreation>().perlinPass(TileTypeEnum.water, sRef.optPerlinLevel);
+			}
 
 			checkFlipWater(team1Tile.brdXPos, team1Tile.brdYPos);
 			checkFlipWater(team2Tile.brdXPos, team2Tile.brdYPos);
@@ -229,9 +231,6 @@ public class GameManager : MonoBehaviour {
 
 
 			Vector2[] alterPositions  = new Vector2[4]{new Vector2(sRef.boardSize.x*3/8,sRef.boardSize.y*2/8), new Vector2(sRef.boardSize.x*3/8,sRef.boardSize.y*6/8), new Vector2(sRef.boardSize.x*5/8,sRef.boardSize.y*2/8),new Vector2( sRef.boardSize.x*5/8,sRef.boardSize.y*6/8)};
-
-
-
 			for (int i = 0; i< altars.Count; i++){
 				Altar thisAltar = altars[i].GetComponent<Altar>();
 				if(i != altars.Count -1){
@@ -278,45 +277,49 @@ public class GameManager : MonoBehaviour {
 
 
 			int AStarTotalTeam1 = 0;
-			/*altars.ForEach(delegate (GameObject altarGO){
-				Altar a = altarGO.GetComponent<Altar>();
-				BaseTile tile = tiles[a.brdX, a.brdY].GetComponent<BaseTile>();
-				List<AStarHolder>  pathToHome = BaseTile.aStarSearch(tile, teams[0].goGetHomeTile().GetComponent<BaseTile>(),int.MaxValue, BaseTile.getLocalTraversableTiles,teams[0]);
-				AStarTotal += pathToHome.Count;
-			});*/
-			foreach(GameObject altarGO in altars){
-				Altar a = altarGO.GetComponent<Altar>();
-				BaseTile tile = tiles[a.brdX, a.brdY].GetComponent<BaseTile>();
-				List<AStarholder>  pathToHome;
-				pathToHome = BaseTile.aStarSearch(tile, teams[0].goGetHomeTile().GetComponent<BaseTile>(),int.MaxValue, BaseTile.getLocalTraversableTiles,teams[0]);
-				AStarTotalTeam1 += pathToHome.Count;
-				//A.transform.parent = tiles[A.brdX, A.brdY].transform;
-				//A.transform.localPosition = new Vector3(0,0,-1);
-				
-				//checkFlipWater(A.brdX, A.brdY);
-			}
-			Debug.Log ("A star total blue = " + AStarTotalTeam1);
 			int AStarTotalTeam2 = 0;
-			/*altars.ForEach(delegate (GameObject altarGO){
-				Altar a = altarGO.GetComponent<Altar>();
-				BaseTile tile = tiles[a.brdX, a.brdY].GetComponent<BaseTile>();
-				List<AStarHolder>  pathToHome = BaseTile.aStarSearch(tile, teams[0].goGetHomeTile().GetComponent<BaseTile>(),int.MaxValue, BaseTile.getLocalTraversableTiles,teams[0]);
-				AStarTotal += pathToHome.Count;
-			});*/
-			foreach(GameObject altarGO in altars){
-				Altar a = altarGO.GetComponent<Altar>();
-				BaseTile tile = tiles[a.brdX, a.brdY].GetComponent<BaseTile>();
-				List<AStarholder>  pathToHome;
-				pathToHome = BaseTile.aStarSearch(tile, teams[1].goGetHomeTile().GetComponent<BaseTile>(),int.MaxValue, BaseTile.getLocalTraversableTiles,teams[1]);
-				AStarTotalTeam2 += pathToHome.Count;
-				//A.transform.parent = tiles[A.brdX, A.brdY].transform;
-				//A.transform.localPosition = new Vector3(0,0,-1);
-				
-				//checkFlipWater(A.brdX, A.brdY);
-			}
+			
+			AStarTotalTeam1 = calculateDistanceToAltars(teams[0]);
+			Debug.Log ("A star total blue = " + AStarTotalTeam1);
+			
+			AStarTotalTeam2 = calculateDistanceToAltars(teams[1]);
+			
 			Debug.Log ("A star total yellow = " + AStarTotalTeam2);
 
-			
+			while(Mathf.Abs(AStarTotalTeam1 - AStarTotalTeam2) >10){
+				//Grab a random altar
+				BaseTile home;
+				TeamInfo weakTeam;
+				if(AStarTotalTeam1 > AStarTotalTeam2){
+					home = teams[0].goGetHomeTile().GetComponent<BaseTile>();
+					weakTeam = teams[0];
+				}
+				else{
+					
+					home = teams[1].goGetHomeTile().GetComponent<BaseTile>();
+					weakTeam = teams[1];
+				}
+				
+				Altar A = altars[Random.Range(0, altars.Count)].GetComponent<Altar>();
+				BaseTile AltarLoc = tiles[A.brdX, A.brdY].GetComponent<BaseTile>();
+				List<AStarholder> toHome = BaseTile.aStarSearch(AltarLoc, home,int.MaxValue, BaseTile.getLocalTraversableTiles,weakTeam);
+				try{
+					BaseTile next = toHome[1].current;
+					A.brdX = next.brdXPos;
+					A.brdY = next.brdYPos;
+				}catch{
+					Debug.Log("Altar next to base");
+				}
+				
+				Debug.Log ("Shifting Altar");	
+				AStarTotalTeam1 = calculateDistanceToAltars(teams[0]);
+				Debug.Log ("A star total blue = " + AStarTotalTeam1);
+				
+				AStarTotalTeam2 = calculateDistanceToAltars(teams[1]);
+				
+				Debug.Log ("A star total yellow = " + AStarTotalTeam2);
+				
+			}
 
 			altars.ForEach(delegate (GameObject altarGO){
 				Altar A = altarGO.GetComponent<Altar>();
@@ -682,8 +685,25 @@ public Vector2 generateValidAltarPosition(Altar thisAltar, Vector2 startPos, boo
 		return returnable;
 	}
 */
-			
 
+			
+	private int calculateDistanceToAltars(TeamInfo team){			
+		int returnable = 0;
+		foreach(GameObject altarGO in altars){
+			Altar a = altarGO.GetComponent<Altar>();
+			BaseTile tile = tiles[a.brdX, a.brdY].GetComponent<BaseTile>();
+			List<AStarholder>  pathToHome;
+			pathToHome = BaseTile.aStarSearch(tile, team.goGetHomeTile().GetComponent<BaseTile>(),int.MaxValue, BaseTile.getLocalTraversableTiles,team);
+			returnable += pathToHome.Count;
+			//A.transform.parent = tiles[A.brdX, A.brdY].transform;
+			//A.transform.localPosition = new Vector3(0,0,-1);
+			
+			//checkFlipWater(A.brdX, A.brdY);
+		}
+		return returnable;
+	}
+	
+	
 }
 
 

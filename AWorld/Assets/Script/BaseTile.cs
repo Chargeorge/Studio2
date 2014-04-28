@@ -1076,6 +1076,10 @@ public class BaseTile : MonoBehaviour {
 	public float getAverageInfluence(){
 		return influenceThisFrame;
 	}
-
+	
+	
+	public void Reset(){
+		this.setTileType(TileTypeEnum.regular);
+	}
 }
 
