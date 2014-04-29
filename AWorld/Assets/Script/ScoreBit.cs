@@ -46,8 +46,8 @@ public class ScoreBit : MonoBehaviour {
 	
 	void OnTriggerEnter2D(Collider2D collided){
 		if(targets.Count>0){
-			int target0Ident = targets[0].gameObject.GetComponent<BaseTile>().Ident;
-			int collidedTarget = collided.gameObject.GetComponent<BaseTile>().Ident;
+			//int target0Ident = targets[0].gameObject.GetComponent<BaseTile>().Ident;
+			//int collidedTarget = collided.gameObject.GetComponent<BaseTile>().Ident;
 			if(collided.gameObject == targets[0]){
 				
 				if(collided.gameObject.tag == "ScoreBitTarget"){
@@ -58,7 +58,6 @@ public class ScoreBit : MonoBehaviour {
 
 					}
 				}
-
 			}
 		}
 		if(collided.gameObject.tag == "ScoreBitFinalTarget"){
