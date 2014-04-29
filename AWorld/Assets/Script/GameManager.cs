@@ -717,6 +717,9 @@ public Vector2 generateValidAltarPosition(Altar thisAltar, Vector2 startPos, boo
 			GameObject beacon = (GameObject)Instantiate(prfbBeacon, Vector3.zero, Quaternion.identity);
 			beacon.GetComponent<Beacon>().buildNeutral(BT);
 			beacons.Add(beacon);
+			if (BT.GetComponent<BaseTile>().IsRevealed && BT.GetComponent<BaseTile>().beacon != null){
+				BT.GetComponent<BaseTile>().beacon.transform.FindChild ("Arrow").GetComponent<MeshRenderer>().enabled = true;	
+			} 	
 			return true;
 		}
 		else{
