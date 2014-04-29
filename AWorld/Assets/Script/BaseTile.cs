@@ -37,8 +37,6 @@ public class BaseTile : MonoBehaviour {
 	private GameObject _qudNoBuildLayer;
 	private GameObject _qudOwnedLayer;
 	private GameObject _qudPulsingOwnedLayer;
-	
-//	public AudioClip influenceDone;
 		
 	private bool _isRevealed;
 	private bool _isHover;
@@ -290,7 +288,6 @@ public class BaseTile : MonoBehaviour {
 		sRef = Settings.SettingsInstance;
 		influenceAdded = new float[6];
 		transform.Find("NoBuildLayer").renderer.material.color = new Color32 (200,200,200,255);
-
 	}
 	
 	public BaseTile GetDirection(DirectionEnum dir){
@@ -889,17 +886,19 @@ public class BaseTile : MonoBehaviour {
 	/// Finish adding influence, set which team controls it
 	/// </summary>
 	public void finishInfluence(){
-		//audio.PlayOneShot(influenceDone, 0.7f);
-		//Debug.Log("Why am I here?");
 		///TODO: add end semaphore stuff her
 		if(controllingTeam != owningTeam){
 			if(percControlled > 100f){
 				percControlled = 100f;
 				currentState = TileState.normal;
+				if(controllingTeam.teamNumber == 1)	audio.clip = sRef.InfluenceDoneLo;
+				if(controllingTeam.teamNumber == 2) audio.clip = sRef.InfluenceDoneHi;
+
+
 				if (!audio.isPlaying) {
+					audio.volume = 0.4f;
 					audio.Play (); //activate this if we want every tile influenced to trigger a sound, including the ones influenced by beacons
-				}
-				//audio.PlayOneShot(influenceDone, 0.7f); 
+				} 
 
 			}
 			owningTeam = controllingTeam;
@@ -964,6 +963,9 @@ public class BaseTile : MonoBehaviour {
 				catch { tile = null; }
 				if (tile != null) {
 					tile.GetComponent<BaseTile>().IsRevealed = true;
+					if (tile.GetComponent<BaseTile>().beacon != null){
+						tile.GetComponent<BaseTile>().beacon.transform.FindChild ("Arrow").GetComponent<MeshRenderer>().enabled = true;	
+					}
 				}		
 			}
 		}
@@ -1040,7 +1042,7 @@ public class BaseTile : MonoBehaviour {
 	}
 
 	public bool buildable(){
-		if(gameObject.GetComponent<Altar>() != null){
+		if(getLocalAltar() != null){
 			return false;
 		}
 		if(currentType ==TileTypeEnum.water){
@@ -1073,6 +1075,10 @@ public class BaseTile : MonoBehaviour {
 	public float getAverageInfluence(){
 		return influenceThisFrame;
 	}
-
+	
+	
+	public void Reset(){
+		this.setTileType(TileTypeEnum.regular);
+	}
 }
 

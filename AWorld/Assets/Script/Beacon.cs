@@ -220,7 +220,7 @@ public class Beacon : MonoBehaviour {
 	public void startUpgrading(){
 
 		this._currentState = BeaconState.BuildingAdvanced;
-		audio.PlayOneShot(beaconUpgrading, 1.0f);
+		audio.PlayOneShot(beaconUpgrading, 0.9f);
 	}
 	
 	public void startRotating (DirectionEnum? dir) {
@@ -234,6 +234,15 @@ public class Beacon : MonoBehaviour {
 		Color32 platformColor = controllingTeam.tileColor;
 		//TODO: custom sprites and colors per team
 		controllingTeamColor.a = 0;
+
+		if(controllingTeam.teamNumber == 1){
+			beaconBuilt = Resources.Load("SFX/Beacon_Built_Lo") as AudioClip;
+			beaconUpgraded = Resources.Load("SFX/Beacon_Upgraded_Lo_2") as AudioClip;
+		}
+		if(controllingTeam.teamNumber == 2) {
+			beaconBuilt = Resources.Load("SFX/Beacon_Built_Hi") as AudioClip;
+			beaconUpgraded = Resources.Load("SFX/Beacon_Upgraded_Hi_2") as AudioClip;
+		}
 
 		transform.FindChild("Arrow").renderer.material.color = controllingTeamColor;
 		transform.FindChild("Base").renderer.material.color = controllingTeamColor;
@@ -907,7 +916,7 @@ public class Beacon : MonoBehaviour {
 		if(percBuildComplete >= 100f){
 			percBuildComplete = 100f;
 			audio.Stop();
-			audio.PlayOneShot(beaconBuilt, 1.0f);
+			audio.PlayOneShot(beaconBuilt, 0.8f);
 			
 			_currentState = BeaconState.Basic;
 			_patternList = createBasicInfluenceList(getAngleForDir(facing));

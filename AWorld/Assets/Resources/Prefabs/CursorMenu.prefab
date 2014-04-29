@@ -85,6 +85,7 @@ MonoBehaviour:
   moveSpeed: 4
   movingRotateSpeed: 100
   restingRotateSpeed: 20
+  loadingRotateSpeed: 600
   menu: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:

@@ -16,7 +16,8 @@ public class MainMenu : MonoBehaviour {
 	public AudioClip select;
 	public AudioClip launch;
 	bool joystickActive = true;
-	public bool screenChanging;
+	public bool loadingNewScreen;
+	public bool quitting;
 
 	public GameObject cursor;
 
@@ -25,7 +26,8 @@ public class MainMenu : MonoBehaviour {
 		startSelected = false;
 		optionsSelected = false;
 		quitSelected = false;
-		screenChanging = false;
+		loadingNewScreen = false;
+		quitting = false;
 	}
 	
 	// Update is called once per frame
@@ -88,21 +90,21 @@ public class MainMenu : MonoBehaviour {
 		}
 		}*/
 
-		if(Input.GetButtonDown("BuildPlayer1") && !screenChanging){
+		if(Input.GetButtonDown("BuildPlayer1") && !loadingNewScreen){
 			if(startSelected){
 				audio.PlayOneShot(launch, 0.9f);
-				screenChanging = true;
+				loadingNewScreen = true;
 				Invoke("launchGame", 1.5f);
 			}
 			if(optionsSelected){
 				audio.PlayOneShot(select, 1.0f);
-				screenChanging = true;
+				loadingNewScreen = true;
 				Invoke ("launchOptions", 1.0f);
 			}
 			if(quitSelected){
 				audio.PlayOneShot (select, 1.0f);
 				if (!Application.isEditor) {
-					screenChanging = true;
+					quitting = true;
 					Invoke ("quitApp", 1.0f);
 				}
 			}
@@ -126,7 +128,7 @@ public class MainMenu : MonoBehaviour {
 		GUI.Label (new Rect(Screen.width/3, Screen.height/4, Screen.width/3, Screen.height/5),
 		           "a game by Pierre Depaz, Char George,\nSig Gunnarsson & Josh Raab", creditsStyle); //DRAW THE CREDITS
 
-		if(startSelected) GUI.Label (new Rect(Screen.width/2.5f, Screen.height*0.55f, Screen.width/5, Screen.height/8), "BEGIN", highlightStyle);
+		if(startSelected) GUI.Label (new Rect(Screen.width/3, Screen.height*0.55f, Screen.width/3, Screen.height/5), "BEGIN", highlightStyle);
 		if(!startSelected) GUI.Label (new Rect(Screen.width/3, Screen.height*0.55f, Screen.width/3, Screen.height/5), "BEGIN", neutralStyle);
 		if(optionsSelected) GUI.Label (new Rect(Screen.width/3, Screen.height*0.67f, Screen.width/3, Screen.height/5), "MODIFY", highlightStyleO);
 		if(!optionsSelected) GUI.Label (new Rect(Screen.width/3, Screen.height*0.67f, Screen.width/3, Screen.height/5), "MODIFY", neutralStyle);

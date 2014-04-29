@@ -92,10 +92,19 @@ public class Player : MonoBehaviour {
 
 		if(PlayerNumber == 1){
 			winTexture = gm.winTexture1;
+			audioSourceMove.clip = Resources.Load("SFX/Player_Moving_Lo") as AudioClip;
+			audioSourceInfluenceDone.clip = Resources.Load("SFX/Influence_Done_Lo") as AudioClip;
+			audioSourceInfluenceDone.Play();
+			audioSourceMove.Play();
 		} else {
 			winTexture = gm.winTexture2;
+			audioSourceMove.clip = Resources.Load("SFX/Player_Moving_Hi") as AudioClip;
+			audioSourceInfluenceDone.clip = Resources.Load("SFX/Influence_Done_Hi") as AudioClip;
+			audioSourceInfluenceDone.Play();
+			audioSourceMove.Play();
 		}
-		
+	
+
 	}
 	
 	
@@ -228,7 +237,6 @@ public class Player : MonoBehaviour {
 					currentTile.beacon.GetComponent<Beacon>().startUpgrading();
 					currentTile.beacon.GetComponent<Beacon>().losingUpgradeProgress = false;
 				} else {
-					//PlaySFX(invalid_Input, 1.0f);
 				}
 				
 				//If beacon
@@ -303,7 +311,6 @@ public class Player : MonoBehaviour {
 								{
 									
 									if(!audioSourceInvalid.isPlaying){ 
-										//audio.clip = invalid_Input;
 										Debug.Log ("playin");
 										audioSourceInvalid.volume = 0.3f;
 										audioSourceInvalid.Play ();
@@ -312,8 +319,6 @@ public class Player : MonoBehaviour {
 									}
 								}
 							}
-						//} else if(currentTile.tooCloseToBeacon() && currentTile.beacon == null){
-						//		audio.PlayOneShot(invalid_Input, 1.0f);
 						} else{
 							_currentState = PlayerState.influencing;
 						}
@@ -736,12 +741,13 @@ public class Player : MonoBehaviour {
 								if(test > 0f || (currentTile.owningTeam != null && currentTile.owningTeam == team)){
 								
 								if (currentTile.getLocalAltar () != null || currentTile.tooCloseToBeacon() || currentTile.gameObject.transform.FindChild ("Home(Clone)") != null) {
-									//audio.Stop ();
+						
 									
 									_currentState = PlayerState.standing;
 									if(currentTile.tooCloseToBeacon() && currentTile.beacon == null && !audioSourceInvalid.isPlaying) {
-										audioSourceInvalid.volume = 0.3f;
-										audioSourceInvalid.Play (); //this also applies to the neutral beacon
+									//Invoke("playInvalid", 1.0f);
+									audioSourceInvalid.volume = 0.3f;
+									audioSourceInvalid.Play ();
 									}
 								}
 								
@@ -763,7 +769,7 @@ public class Player : MonoBehaviour {
 									if (currentTile.buildable () && 
 										(beaconInProgress.currentState == null || beaconInProgress.currentState == BeaconState.BuildingBasic)) 
 									{
-										//audio.Stop ();
+										
 										audioSourceInfluenceDone.volume = sRef.playerInfluenceDoneVolume;
 										audioSourceInfluenceDone.Play ();
 										_currentState = PlayerState.building;
@@ -775,7 +781,7 @@ public class Player : MonoBehaviour {
 									}
 								
 									else if (beaconInProgress.facing != facing) {
-										//audio.Stop();
+										
 										_currentState = PlayerState.rotating;
 										beaconInProgress.startRotating (facing);
 									}
@@ -784,7 +790,7 @@ public class Player : MonoBehaviour {
 									else {
 																	
 										if (beaconInProgress.currentState == BeaconState.Basic || beaconInProgress.currentState == BeaconState.BuildingAdvanced) {
-											//audio.Stop();
+											
 											_currentState = PlayerState.upgrading;
 											beaconInProgress.startUpgrading ();
 										}
@@ -801,8 +807,10 @@ public class Player : MonoBehaviour {
 							if(test > 0f){
 								currentTile.addInfluenceReturnOverflow(test);
 								if (!audioSourceInvalid.isPlaying) {
-									audioSourceInvalid.volume = 0.7f;
-									audioSourceInvalid.Play ();
+								audioSourceInvalid.volume = 0.3f;
+								audioSourceInvalid.Play ();
+								//Invoke("playInvalid", 1.0f);
+								Debug.Log("waka waka hey hey");
 								}
 							}
 						}
@@ -841,7 +849,7 @@ public class Player : MonoBehaviour {
 						
 					} else{
 					///TODO catch fully influenced Tile!
-					//audio.Stop();
+
 					audioSourceInfluenceDone.volume = sRef.playerInfluenceDoneVolume;
 					audioSourceInfluenceDone.Play ();
 					}
@@ -851,7 +859,7 @@ public class Player : MonoBehaviour {
 					//need to reset currenttile to previousState
 					//StopSFX();
 					currentTile.jigglingFromPlayer = false;
-					//audio.Stop();
+					
 					_currentState = PlayerState.standing;
 				}	
 			break;
@@ -915,7 +923,7 @@ public class Player : MonoBehaviour {
 			case PlayerState.upgrading:
 
 				if (buildButtonDown) {
-					//audio.Stop ();
+					
 					Pulsate ();;
 					float vpsUpgradeRate = sRef.vpsBaseUpgrade * getAltarUpgradeBoost ();
 					addProgressToAction (vpsUpgradeRate);
@@ -969,6 +977,11 @@ public class Player : MonoBehaviour {
 	public void DoMove(BaseTile MoveTo){
 		grdLocation = new Vector2(MoveTo.brdXPos, MoveTo.brdYPos);
 		gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>().Reveal (_vision);
+	}
+
+	public void playInvalid(){
+		audioSourceInvalid.volume = 0.3f;
+		audioSourceInvalid.Play ();
 	}
 	
 	/// <summary>;
@@ -1288,33 +1301,6 @@ public class Player : MonoBehaviour {
 		
 		return false;	
 	}
-
-	/**
-	public void PlaySFX(AudioClip clip, float _volume){
-		//audio.PlayOneShot(clip);
-		
-		if(audio.volume <= _volume){
-			//audio.volume += 0.2f;
-			audio.volume = _volume;
-		}
-		if(audio.volume >= _volume){
-			audio.volume = _volume;
-		}		
-	}
-	
-	public void StopSFX(){
-		audio.Stop();
-		//audio.volume -= 0.2f;
-		//StartCoroutine(StopSFXCoroutine ());
-	}
-	
-	
-	public IEnumerator StopSFXCoroutine(){
-		audio.volume -= 0.1f;
-		yield return new WaitForSeconds(0.6f);
-		audio.Stop();
-	}
-	*/
 	
 	public void OnCollisionEnter2D(Collision2D Collided){
 		//Debug.Log("In Enter");

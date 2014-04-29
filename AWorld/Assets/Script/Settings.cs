@@ -95,6 +95,8 @@ public class Settings : MonoBehaviour {
 	public float playerInfluenceStartVolume;
 	public float playerInfluenceStartVolumeLerpRate;
 	public float playerInfluenceDoneVolume;
+	public AudioClip InfluenceDoneHi;
+	public AudioClip InfluenceDoneLo;
 
 	//Overridden by options - ignore
 	public Vector2 team1Start;
@@ -201,7 +203,10 @@ public class Settings : MonoBehaviour {
 		moveVolumeLerpRate = 0.2f;
 		playerInfluenceStartVolume = 1.0f;
 		playerInfluenceStartVolumeLerpRate = 0.1f;
-		playerInfluenceDoneVolume = 0.8f;	
+		playerInfluenceDoneVolume = 0.4f;
+
+		InfluenceDoneHi = Resources.Load("SFX/Influence_Done_Hi") as AudioClip;
+		InfluenceDoneLo = Resources.Load("SFX/Influence_Done_Lo") as AudioClip;
 
 		//THESE VALS ARE OVERIDDEN BY OPTIONS, THESE ARE ONLY IF PREFS NOT SET
 		team1Start = new Vector2(2,7);
@@ -219,6 +224,8 @@ public class Settings : MonoBehaviour {
 			new SizeSetting(new Vector2(28,20),new Vector2(2,10), new Vector2(26,10),10.6f,new Vector2(13.4f, 9.5f), new Vector2(-3.085168f,0), new Vector2 (29.88822f,0), 19.1f, 9.857672f, 9.2f)};
 		
 		setPrefs();
+
+
 	}
 
 	void setPrefs(){

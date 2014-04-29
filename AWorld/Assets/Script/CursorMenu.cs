@@ -7,15 +7,17 @@ public class CursorMenu : MonoBehaviour {
 
 	public float movingRotateSpeed;
 	public float restingRotateSpeed;
+	public float loadingRotateSpeed;
 	private float rotateSpeed;
 	private float rotatingLeft;	//-1 if rotating right, 1 if rotating left
 
 	public GameObject menu;
+	private MainMenu menuScript;
 
 	// Use this for initialization
 	void Start () {
 
-		MainMenu menuScript = menu.GetComponent<MainMenu>();
+		menuScript = menu.GetComponent<MainMenu>();
 		
 		rotateSpeed = restingRotateSpeed * -1;
 		rotatingLeft = -1;
@@ -33,7 +35,7 @@ public class CursorMenu : MonoBehaviour {
 		float y = Input.GetAxis("VerticalPlayer1") * moveSpeed * Time.deltaTime;
 
 		//pos.x += x;
-		if (!menu.GetComponent<MainMenu>().screenChanging) pos.y += y;
+		if (!menu.GetComponent<MainMenu>().loadingNewScreen) pos.y += y;
 
 		if(pos.y > -0.4f){
 			pos.y = -0.4f;
@@ -44,18 +46,29 @@ public class CursorMenu : MonoBehaviour {
 		//transform.position = new Vector3(-0.16f, Mathf.Clamp(Time.time, 0.26F, -1.2F), -5.4f);
 		transform.position = pos;
 		
-		if (y < 0) {
-			rotateSpeed = -1 * movingRotateSpeed;
-			rotatingLeft = -1;
+		if (!menuScript.quitting && !menuScript.loadingNewScreen) {
+			if (y < 0) {
+				rotateSpeed = -1 * movingRotateSpeed;
+				rotatingLeft = -1;
+			}
+			else if (y > 0) { 
+				rotateSpeed = movingRotateSpeed;
+				rotatingLeft = 1;
+			}
+			else {
+				rotateSpeed = restingRotateSpeed * rotatingLeft;
+			}
 		}
-		else if (y > 0) { 
-			rotateSpeed = movingRotateSpeed;
-			rotatingLeft = 1;
+		if (menuScript.loadingNewScreen) {
+			transform.RotateAround (transform.position, Vector3.forward, loadingRotateSpeed * rotatingLeft * Time.deltaTime);
+			if (transform.renderer.material.color.a > 0f) { 
+				Color32 newColor = transform.renderer.material.color;
+				newColor.a -= (byte) (0.021f * 255f);
+				transform.renderer.material.color = newColor;
+			}
 		}
-		else {
-			rotateSpeed = restingRotateSpeed * rotatingLeft;
-		}
-		
-		if (!menu.GetComponent<MainMenu>().screenChanging)  transform.RotateAround (transform.position, Vector3.forward, rotateSpeed * Time.deltaTime);	
+		else if (!menuScript.quitting) {	//Freeze rotation if quitting
+			transform.RotateAround (transform.position, Vector3.forward, rotateSpeed * Time.deltaTime);				
+		}		
 	}
 }

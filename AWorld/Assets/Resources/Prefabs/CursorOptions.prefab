@@ -83,8 +83,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 8
-  movingRotateSpeed: 20
-  restingRotateSpeed: 100
+  movingRotateSpeed: 100
+  restingRotateSpeed: 20
+  loadingRotateSpeed: 400
   options: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
