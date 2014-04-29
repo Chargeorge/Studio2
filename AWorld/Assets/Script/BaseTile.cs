@@ -14,8 +14,31 @@ public class BaseTile : MonoBehaviour {
 	public float percControlled;
 	public TeamInfo owningTeam;  //OWNING team is the official owning team, use it for defining networks and movement cost.
 	
-	private Settings sRef;
-	private GameManager gm;
+	private Settings _sRef;
+	public Settings sRef{
+		get{
+			if(_sRef == null){
+				_sRef = Settings.SettingsInstance;
+			}
+			return _sRef;
+		}
+		set{
+			_sRef = value;
+		}
+	}
+	
+	private GameManager _gm;
+	public GameManager gm{
+		get{
+			if(_gm == null){
+				_gm = GameManager.GameManagerInstance;
+			}
+			return _gm;
+		}
+		set{
+			_gm = value;
+		}
+	}
 	public GameObject beacon;
 	private Animator anim;
 	private GameObject _scoreBitTarget;

@@ -42,6 +42,8 @@ public class Settings : MonoBehaviour {
 	public float valTileConvertScore;
 	public float valPointsToWin;
 	public float valScorePerMine;
+	public float valTimePerScoreShot;
+	public float valScoreBaseCapture;
 	
 	//Beacon stuff
 	public int beaconBasicRange;
@@ -152,6 +154,9 @@ public class Settings : MonoBehaviour {
 		valTileConvertScore = 1f;
 		valPointsToWin = 250;
 		valScorePerMine = 100f;
+		valTimePerScoreShot  = 1f;
+		valScoreBaseCapture  = 150f;
+			
 		
 		//Beacon stuff
 		beaconBasicRange = 4;

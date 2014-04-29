@@ -152,6 +152,8 @@ public class Altar : MonoBehaviour {
 							scoreBit.GetComponent<ScoreBit>().setTeam(currentControllingTeam);
 							scoreBit.GetComponent<ScoreBit>().start(networkToBase);
 							scoreBit.GetComponent<ScoreBit>().sRef = sRef;
+							scoreBit.GetComponent<ScoreBit>().scoreAmt =scoreToAdd;
+							
 							timeToNextScoreShot = scoreShotInterval;
 							//_currentControllingTeam.score += scoreToAdd;
 							

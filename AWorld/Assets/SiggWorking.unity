@@ -234,6 +234,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sRef: {fileID: 0}
   speed: .200000003
+  scoreAmt: 0
 --- !u!23 &275293229
 Renderer:
   m_ObjectHideFlags: 0
@@ -1113,6 +1114,8 @@ MonoBehaviour:
   valTileConvertScore: 1
   valPointsToWin: 300
   valScorePerMine: 0
+  valTimePerScoreShot: 0
+  valScoreBaseCapture: 0
   beaconBasicRange: 4
   beaconAdvancedRange: 8
   beaconNoBuildRange: 2

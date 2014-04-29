@@ -8,6 +8,7 @@ public class ScoreBit : MonoBehaviour {
 	private FinalScoreTarget finalTarget;
 	public Settings sRef;
 	public float speed = .2f;
+	public float scoreAmt;
 	
 
 	// Use this for initialization
@@ -38,15 +39,17 @@ public class ScoreBit : MonoBehaviour {
 //			Debug.Log ("Collision detected");
 			finalTarget.PlayScoreAnimation ();
 			BulletPool.instance.PoolObject(gameObject);
-			team.addScore(Settings.SettingsInstance.vpsScorePerMinePerSecond);
+			team.addScore(scoreAmt);
 			CancelInvoke();
 		}
 	}
 	
 	void OnTriggerEnter2D(Collider2D collided){
 		if(targets.Count>0){
+			int target0Ident = targets[0].gameObject.GetComponent<BaseTile>().Ident;
+			int collidedTarget = collided.gameObject.GetComponent<BaseTile>().Ident;
 			if(collided.gameObject == targets[0]){
-
+				
 				if(collided.gameObject.tag == "ScoreBitTarget"){
 					if(targets.Count > 0){
 						targets.RemoveAt(0);
@@ -85,7 +88,7 @@ public class ScoreBit : MonoBehaviour {
 		});
 		targets.Add (team.ScoreBar.transform.Find ("ScoreBitFinalTarget").gameObject);
 		setTarget(targets[0]);
-		Invoke ("remove", 3f);
+		Invoke ("remove", 5f);
 	}
 
 	public void remove(){
