@@ -172,7 +172,7 @@ public class GameManager : MonoBehaviour {
 				
 				//victoryConditions.Add (new LockMajorityAltars(1) );
 				victoryConditions.Add (new ControlViaTime(1));
-				victoryConditions.Add (new NetworkEnemyBase(1));				
+				//victoryConditions.Add (new NetworkEnemyBase(1));				
 				break;
 			}
 			}
