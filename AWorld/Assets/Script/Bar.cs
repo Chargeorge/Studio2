@@ -17,9 +17,11 @@ public class Bar : MonoBehaviour {
 	public Transform capture;
 	public Transform backBar;
 	public Vector3 startPos;
+	public GameObject scoreBitFinal;
 
 	// Use this for initialization
 	void Start () {
+		scoreBitFinal = transform.FindChild("ScoreBitFinalTarget").gameObject;
 		sRef = Settings.SettingsInstance;
 		gRef = GameManager.GameManagerInstance;
 
@@ -39,7 +41,7 @@ public class Bar : MonoBehaviour {
 		//this might be a problem.
 		endPosY = sRef.sbMoveUp;
 
-
+		
 		//this.transform.position = startPos;
 
 		teamScale = new Vector3 (0.7f,0,0);
@@ -66,7 +68,8 @@ public class Bar : MonoBehaviour {
 	
 		teamScale.y = endScale.y *perScore;
 		teamPos.y = 0.3f + endPosY *perScore;
-
+		scoreBitFinal.transform.position = new Vector3(scoreBitFinal.transform.position.x, teamPos.y, -1);
+		
 		//teamScale1.y = 8;
 		bar.localScale = teamScale;
 		bar.localPosition = teamPos;
