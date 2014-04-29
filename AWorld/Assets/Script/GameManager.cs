@@ -94,6 +94,10 @@ public class GameManager : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
+	if(Input.GetKeyDown("r")) {
+		Application.LoadLevel("PierreOptions");
+	}
+	
 		if (setup){
 			GameObject team1Home, team2Home;
 			team1Home  = null;
