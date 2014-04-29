@@ -94,6 +94,10 @@ public class GameManager : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
+	if(Input.GetKeyDown("r")) {
+		Application.LoadLevel("PierreOptions");
+	}
+	
 		if (setup){
 			GameObject team1Home, team2Home;
 			team1Home  = null;
@@ -646,6 +650,7 @@ public Vector2 generateValidAltarPosition(Altar thisAltar, Vector2 startPos, boo
 		tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].GetComponent<BaseTile>().controllingTeam = example.team;
 		tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].GetComponent<BaseTile>().owningTeam = example.team;
 		tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].GetComponent<BaseTile>().percControlled = 100f;
+		tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].transform.FindChild("NoBuildLayer").GetComponent<MeshRenderer>().enabled = true;
 		teamHome.transform.localPosition = new Vector3(0,0,-.5f);
 		teamHome.GetComponent<Home>().team = example.team;
 //		teamHome.GetComponentInChildren<ParticleSystem>().startColor = example.team.highlightColor;
@@ -725,6 +730,9 @@ public Vector2 generateValidAltarPosition(Altar thisAltar, Vector2 startPos, boo
 			GameObject beacon = (GameObject)Instantiate(prfbBeacon, Vector3.zero, Quaternion.identity);
 			beacon.GetComponent<Beacon>().buildNeutral(BT);
 			beacons.Add(beacon);
+			if (BT.GetComponent<BaseTile>().IsRevealed && BT.GetComponent<BaseTile>().beacon != null){
+				BT.GetComponent<BaseTile>().beacon.transform.FindChild ("Arrow").GetComponent<MeshRenderer>().enabled = true;	
+			} 	
 			return true;
 		}
 		else{

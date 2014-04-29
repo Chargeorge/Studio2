@@ -97,6 +97,8 @@ public class Settings : MonoBehaviour {
 	public float playerInfluenceStartVolume;
 	public float playerInfluenceStartVolumeLerpRate;
 	public float playerInfluenceDoneVolume;
+	public AudioClip InfluenceDoneHi;
+	public AudioClip InfluenceDoneLo;
 
 	//Overridden by options - ignore
 	public Vector2 team1Start;
@@ -206,7 +208,10 @@ public class Settings : MonoBehaviour {
 		moveVolumeLerpRate = 0.2f;
 		playerInfluenceStartVolume = 1.0f;
 		playerInfluenceStartVolumeLerpRate = 0.1f;
-		playerInfluenceDoneVolume = 0.8f;	
+		playerInfluenceDoneVolume = 0.4f;
+
+		InfluenceDoneHi = Resources.Load("SFX/Influence_Done_Hi") as AudioClip;
+		InfluenceDoneLo = Resources.Load("SFX/Influence_Done_Lo") as AudioClip;
 
 		//THESE VALS ARE OVERIDDEN BY OPTIONS, THESE ARE ONLY IF PREFS NOT SET
 		team1Start = new Vector2(2,7);
@@ -219,11 +224,13 @@ public class Settings : MonoBehaviour {
 		//Settings
 		perlinLevels = new int[]{3000, 1800, 1400};
 		sizes = new SizeSetting[]{
-			new SizeSetting(new Vector2(16,12),new Vector2(2,6), new Vector2(14,6),6.7f, new Vector2(7.5f, 5.5f), new Vector2(-2.340571f,0), new Vector2 (17.55239f,0), 11.5f, 5.788717f, 5.75f),
-			new SizeSetting(new Vector2(22,14),new Vector2(2,7), new Vector2(19,7), 7.65f, new Vector2(10.5f, 6.49f), new Vector2(-1.904194f,0), new Vector2 (22.76141f,0), 12.73845f, 6.695579f, 6.4f),
-			new SizeSetting(new Vector2(28,20),new Vector2(2,10), new Vector2(26,10),10.6f,new Vector2(13.4f, 9.5f), new Vector2(-3.085168f,0), new Vector2 (29.88822f,0), 19.1f, 9.857672f, 9.2f)};
+			new SizeSetting(new Vector2(16,12),new Vector2(2,6), new Vector2(14,6),6.7f, new Vector2(7.5f, 5.5f), new Vector2(-2.340571f,0), new Vector2 (17.55239f,0), 10.95f, 6f, 5.75f),
+			new SizeSetting(new Vector2(22,14),new Vector2(2,7), new Vector2(19,7), 7.65f, new Vector2(10.5f, 6.49f), new Vector2(-1.904194f,0), new Vector2 (22.76141f,0), 13.1f, 7f, 6.4f),
+			new SizeSetting(new Vector2(28,20),new Vector2(2,10), new Vector2(26,10),10.6f,new Vector2(13.4f, 9.5f), new Vector2(-3.085168f,0), new Vector2 (29.88822f,0), 19.14f, 10f, 9.2f)};
 		
 		setPrefs();
+
+
 	}
 
 	void setPrefs(){
