@@ -7,6 +7,8 @@ public class ScoreBit : MonoBehaviour {
 	private TeamInfo team;
 	private FinalScoreTarget finalTarget;
 	public Settings sRef;
+	public float speed = .2f;
+	
 
 	// Use this for initialization
 	void Start () {
@@ -28,7 +30,7 @@ public class ScoreBit : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(targets.Count > 0){
-			Vector2 NewPos  =  Vector2.MoveTowards( (Vector2)transform.position, (Vector2)(targets[0].transform.position), .2f);
+			Vector2 NewPos  =  Vector2.MoveTowards( (Vector2)transform.position, (Vector2)(targets[0].transform.position), speed);
 			Vector3 NewPos3 = new Vector3(NewPos.x, NewPos.y, transform.position.z);
 			transform.position = NewPos3;
 		}
