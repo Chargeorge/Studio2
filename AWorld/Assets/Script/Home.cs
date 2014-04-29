@@ -45,6 +45,7 @@ public class Home : MonoBehaviour {
 				BigScoreBit.GetComponent<ScoreBit>().start(checkNetwork());
 				BigScoreBit.GetComponent<ScoreBit>().sRef = Settings.SettingsInstance;
 				BigScoreBit.GetComponent<ScoreBit>().scoreAmt= Settings.SettingsInstance.valScoreBaseCapture;
+				
 				finalChitLaunched  = true;
 			}
 		}
@@ -54,6 +55,7 @@ public class Home : MonoBehaviour {
 	public List<AStarholder> checkNetwork(){
 	
 		List<AStarholder> As = 	BaseTile.aStarSearch(HomeTile.GetComponent<BaseTile>(),HomeTile.owningTeam.goGetHomeTile().GetComponent<BaseTile>(),int.MaxValue, BaseTile.getLocalSameTeamTiles, HomeTile.owningTeam);
+		As.RemoveAt(0);
 		return As;
 	
 	}

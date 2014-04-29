@@ -30,7 +30,7 @@ public class ScoreBit : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(targets.Count > 0){
+			if(targets.Count > 0){
 			Vector2 NewPos  =  Vector2.MoveTowards( (Vector2)transform.position, (Vector2)(targets[0].transform.position), speed);
 			Vector3 NewPos3 = new Vector3(NewPos.x, NewPos.y, transform.position.z);
 			transform.position = NewPos3;
@@ -49,7 +49,7 @@ public class ScoreBit : MonoBehaviour {
 			//int target0Ident = targets[0].gameObject.GetComponent<BaseTile>().Ident;
 			//int collidedTarget = collided.gameObject.GetComponent<BaseTile>().Ident;
 			if(collided.gameObject == targets[0]){
-				
+				Debug.Log ("Collided");
 				if(collided.gameObject.tag == "ScoreBitTarget"){
 					if(targets.Count > 0){
 						targets.RemoveAt(0);

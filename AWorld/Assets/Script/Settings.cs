@@ -155,7 +155,7 @@ public class Settings : MonoBehaviour {
 		valPointsToWin = 250;
 		valScorePerMine = 100f;
 		valTimePerScoreShot  = 1f;
-		valScoreBaseCapture  = 150f;
+		valScoreBaseCapture  = 200f;
 			
 		
 		//Beacon stuff
