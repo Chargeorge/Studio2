@@ -68,7 +68,7 @@ public class Bar : MonoBehaviour {
 	
 		teamScale.y = endScale.y *perScore;
 		teamPos.y = 0.3f + endPosY *perScore;
-		scoreBitFinal.transform.position = new Vector3(scoreBitFinal.transform.position.x, teamPos.y, -1);
+		scoreBitFinal.transform.position = new Vector3(scoreBitFinal.transform.position.x, teamPos.y+teamScale.y/2, -1);
 		
 		//teamScale1.y = 8;
 		bar.localScale = teamScale;
