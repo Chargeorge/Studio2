@@ -574,6 +574,7 @@ public Vector2 generateValidAltarPosition(Altar thisAltar, Vector2 startPos, boo
 		tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].GetComponent<BaseTile>().controllingTeam = example.team;
 		tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].GetComponent<BaseTile>().owningTeam = example.team;
 		tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].GetComponent<BaseTile>().percControlled = 100f;
+		tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].transform.FindChild("NoBuildLayer").GetComponent<MeshRenderer>().enabled = true;
 		teamHome.transform.localPosition = new Vector3(0,0,-.5f);
 		teamHome.GetComponent<Home>().team = example.team;
 		teamHome.GetComponentInChildren<ParticleSystem>().startColor = example.team.highlightColor;
