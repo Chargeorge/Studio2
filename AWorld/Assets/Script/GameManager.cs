@@ -180,6 +180,9 @@ public class GameManager : MonoBehaviour {
 			teamBar1.GetComponent<Bar>().team = teams[0];
 			teamBar2 = (GameObject)GameObject.Instantiate(_prfbBar, new Vector3(sRef.scorePos2.x, sRef.scorePos2.y,0), Quaternion.identity);
 			teamBar2.GetComponent<Bar>().team = teams[1];
+			teams[0].ScoreBar = teamBar1;
+			teams[1].ScoreBar = teamBar2;
+			
 			//Check for any homebase islands, if so regenerate
 			//Check for fairness?  
 			//Remove water where it's on an altar or home base
@@ -637,7 +640,7 @@ public Vector2 generateValidAltarPosition(Altar thisAltar, Vector2 startPos, boo
 		tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].GetComponent<BaseTile>().percControlled = 100f;
 		teamHome.transform.localPosition = new Vector3(0,0,-.5f);
 		teamHome.GetComponent<Home>().team = example.team;
-		teamHome.GetComponentInChildren<ParticleSystem>().startColor = example.team.highlightColor;
+//		teamHome.GetComponentInChildren<ParticleSystem>().startColor = example.team.highlightColor;
 		if (example.teamNumber == 1) {
 			home1 = teamHome;
 		}

@@ -19,14 +19,9 @@ public class ScoreBit : MonoBehaviour {
 		team = T;
 	//	renderer.material.color = team.getHighLightColor();
 		renderer.material.color = new Color32(237, 20, 90, 180);
-		switch (T.teamNumber) {
-			case 1: 
-				finalTarget = GameObject.Find ("GameManager").GetComponent<GameManager>().home1.transform.FindChild ("ScoreBitFinalTarget").gameObject.GetComponent<FinalScoreTarget>();
-				break;
-			case 2: 
-				finalTarget = GameObject.Find ("GameManager").GetComponent<GameManager>().home2.transform.FindChild ("ScoreBitFinalTarget").gameObject.GetComponent<FinalScoreTarget>();
-				break;
-		}
+		
+		finalTarget = T.ScoreBar.transform.FindChild ("ScoreBitFinalTarget").gameObject.GetComponent<FinalScoreTarget>();
+		
 
 	}
 	
@@ -86,7 +81,7 @@ public class ScoreBit : MonoBehaviour {
 		tiles.ForEach(delegate (AStarholder tile){
 			targets.Add(tile.current.scoreBitTarget);
 		});
-		targets.Add (team.goGetHomeTile());
+		targets.Add (team.ScoreBar.transform.Find ("ScoreBitFinalTarget").gameObject);
 		setTarget(targets[0]);
 		Invoke ("remove", 3f);
 	}
