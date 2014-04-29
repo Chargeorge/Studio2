@@ -147,7 +147,7 @@ public class GameManager : MonoBehaviour {
 				
 				//victoryConditions.Add (new LockMajorityAltars(1) );
 				victoryConditions.Add (new ControlViaTime(1));
-				victoryConditions.Add (new NetworkEnemyBase(1));
+				// victoryConditions.Add (new NetworkEnemyBase(1));
 				break;
 			}
 			case Mode.OneVOne:{
@@ -193,15 +193,23 @@ public class GameManager : MonoBehaviour {
 			BaseTile team1Tile, team2Tile;
 			team1Tile =tiles[(int)teams[0].startingLocation.x,(int)teams[0].startingLocation.y].GetComponent<BaseTile>();
 			team2Tile = tiles[(int)teams[1].startingLocation.x,(int)teams[1].startingLocation.y].GetComponent<BaseTile>();
-			while(!team1Tile.findEdges() && !team2Tile.findEdges()){
+			int maxTries = 10;
 			
-					tileSendMessage("Reset");
-					GameObject.Find("TileCreator").GetComponent<TileCreation>().perlinPass(TileTypeEnum.water, sRef.optPerlinLevel);
-			}
-
+			
 			checkFlipWater(team1Tile.brdXPos, team1Tile.brdYPos);
 			checkFlipWater(team2Tile.brdXPos, team2Tile.brdYPos);
+			
+			while(!team1Tile.findEdges() && !team2Tile.findEdges() && maxTries > 0){
+					Debug.Log ("Attempt: " + maxTries);
+					tileSendMessage("Reset");
+					GameObject.Find("TileCreator").GetComponent<TileCreation>().perlinPass(TileTypeEnum.water, sRef.optPerlinLevel);
+					maxTries--;
+				
+				checkFlipWater(team1Tile.brdXPos, team1Tile.brdYPos);
+				checkFlipWater(team2Tile.brdXPos, team2Tile.brdYPos);
+			}
 
+			
 			for (int i=0; i<sRef.numAltars; i++){
 				Debug.Log ("in Altar");		
 				GameObject a = (GameObject)Instantiate(prfbAltar, Vector3.zero, Quaternion.identity);
@@ -226,7 +234,6 @@ public class GameManager : MonoBehaviour {
 			}
 			
 			for (int i=0; i<sRef.numScoringAltars; i++){
-				Debug.Log ("in Altar");		
 				GameObject a = (GameObject)Instantiate(prfbAltar, Vector3.zero, Quaternion.identity);
 				Altar aObj = a.GetComponent<Altar>();
 				aObj.setControl(null);
@@ -287,13 +294,13 @@ public class GameManager : MonoBehaviour {
 			int AStarTotalTeam2 = 0;
 			
 			AStarTotalTeam1 = calculateDistanceToAltars(teams[0]);
-			Debug.Log ("A star total blue = " + AStarTotalTeam1);
+			//Debug.Log ("A star total blue = " + AStarTotalTeam1);
 			
 			AStarTotalTeam2 = calculateDistanceToAltars(teams[1]);
 			
-			Debug.Log ("A star total yellow = " + AStarTotalTeam2);
-
-			while(Mathf.Abs(AStarTotalTeam1 - AStarTotalTeam2) >5){
+			//Debug.Log ("A star total yellow = " + AStarTotalTeam2);
+			maxTries= 20;
+			while(Mathf.Abs(AStarTotalTeam1 - AStarTotalTeam2) >5 && maxTries > 0){
 				//Grab a random altar
 				BaseTile home;
 				TeamInfo weakTeam;
@@ -323,13 +330,14 @@ public class GameManager : MonoBehaviour {
 				}catch{
 				}
 				
-				Debug.Log ("Shifting Altar");	
+				//Debug.Log ("Shifting Altar");	
 				AStarTotalTeam1 = calculateDistanceToAltars(teams[0]);
-				Debug.Log ("A star total blue = " + AStarTotalTeam1);
+				//Debug.Log ("A star total blue = " + AStarTotalTeam1);
 				
 				AStarTotalTeam2 = calculateDistanceToAltars(teams[1]);
 				
-				Debug.Log ("A star total yellow = " + AStarTotalTeam2);
+				//Debug.Log ("A star total yellow = " + AStarTotalTeam2);
+				maxTries --;
 				
 			}
 
@@ -380,7 +388,7 @@ public class GameManager : MonoBehaviour {
 						x= Mathf.FloorToInt(Random.Range(xMin, xMax));
 	                    y = Mathf.FloorToInt(Random.Range(yMin, yMax));
 						 maxWhile++;
-						 Debug.Log ("maxwhile: " + maxWhile);
+						 //Debug.Log ("maxwhile: " + maxWhile);
 					} ///Weird placeholder, just go till you find a decent spot
 				}
 			}
