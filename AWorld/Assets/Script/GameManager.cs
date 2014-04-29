@@ -300,15 +300,20 @@ public class GameManager : MonoBehaviour {
 					weakTeam = teams[1];
 				}
 				
+				
+				bool stop = true;
+				
+				
 				Altar A = altars[Random.Range(0, altars.Count)].GetComponent<Altar>();
 				BaseTile AltarLoc = tiles[A.brdX, A.brdY].GetComponent<BaseTile>();
 				List<AStarholder> toHome = BaseTile.aStarSearch(AltarLoc, home,int.MaxValue, BaseTile.getLocalTraversableTiles,weakTeam);
 				try{
 					BaseTile next = toHome[1].current;
-					A.brdX = next.brdXPos;
-					A.brdY = next.brdYPos;
+					if(next.getLocalAltar() == null){
+						A.brdX = next.brdXPos;
+						A.brdY = next.brdYPos;
+					}
 				}catch{
-					Debug.Log("Altar next to base");
 				}
 				
 				Debug.Log ("Shifting Altar");	
@@ -331,15 +336,68 @@ public class GameManager : MonoBehaviour {
 				checkFlipWater(A.brdX, A.brdY);
 			});
 
-			for(int beaconsBuilt = 0; beaconsBuilt < sRef.neutralBeaconCount; beaconsBuilt ++){
-				int x= Random.Range(0, tiles.GetLength(0));
-				int y = Random.Range(0, tiles.GetLength(1));
-
-				while(!addNeutralBeacon(x,y)) {
-					 x= Random.Range(0, tiles.GetLength(0));
-					 y = Random.Range(0, tiles.GetLength(1));
-				} ///Weird placeholder, just go till you find a decent spot
+			float xMin, yMin, xMax, yMax;
+			
+			//we are just going to assume a 4/3 x/y split here
+			
+			int beaconXcount = sRef.neutralBeaconCount / 3;
+			int beaconYcount = sRef.neutralBeaconCount / 4;
+			
+			float areaX = ((float)tiles.GetLength(0)/(float)beaconXcount);
+			
+			float areaY = ((float)tiles.GetLength(1)/(float)beaconYcount);
+			
+			//littlex/ * littley
+			//int width =  tiles.GetLength(1)/Mathf.Sqrt(sRef.neutralBeaconCount);
+			//Add Neutral beacons
+			
+			for(int xBeacons = 0; xBeacons < Mathf.RoundToInt(beaconXcount); xBeacons ++){
+				for(int yBeacons = 0; yBeacons < Mathf.RoundToInt(beaconYcount); yBeacons ++){
+					xMin = xBeacons * areaX;
+					xMax = (xBeacons * areaX) + areaX;
+					if(xMax > tiles.GetLength(0)){
+						xMax =  tiles.GetLength(0);
+					}
+					
+					yMin = yBeacons * areaY;
+					yMax = (yBeacons * areaY) + areaY;
+				
+					if(yMax > tiles.GetLength(1)){
+						yMax =  tiles.GetLength(1);
+					}
+					int x= Mathf.FloorToInt(Random.Range(xMin, xMax));
+					int y = Mathf.FloorToInt(Random.Range(yMin, yMax));
+	
+					int maxWhile  = 0;
+					while(!addNeutralBeacon(x,y) && maxWhile < 5) {
+						x= Mathf.FloorToInt(Random.Range(xMin, xMax));
+	                    y = Mathf.FloorToInt(Random.Range(yMin, yMax));
+						 maxWhile++;
+						 Debug.Log ("maxwhile: " + maxWhile);
+					} ///Weird placeholder, just go till you find a decent spot
+				}
 			}
+//			for(int beaconsBuilt = 0; beaconsBuilt < sRef.neutralBeaconCount; beaconsBuilt ++){
+//				float xMin = 
+//				float yMin = beaconsBuilt*tiles.GetLength(1)/sRef.neutralBeaconCount;
+//				
+//				
+//				float xMax = (beaconsBuilt+1)*tiles.GetLength(0)/sRef.neutralBeaconCount;
+//				float yMax = (beaconsBuilt+1)*tiles.GetLength(1)/sRef.neutralBeaconCount;
+//				
+//				
+//				int x= Mathf.FloorToInt(Random.Range(xMin, xMax));
+//				int y = Mathf.FloorToInt(Random.Range(yMin, yMax));
+//
+//				int maxWhile  = 0;
+//				while(!addNeutralBeacon(x,y) && maxWhile < 5) {
+//					 x= Random.Range(0, tiles.GetLength(0));
+//					 y = Random.Range(0, tiles.GetLength(1));
+//					 maxWhile++;
+//				} ///Weird placeholder, just go till you find a decent spot
+//			}
+//			
+			
 			for(int x = 0; x<  tiles.GetLength(0); x++){
 				for(int y =0 ; y< tiles.GetLength(1); y++){
 					if(tiles[x,y].GetComponent<BaseTile>().currentType != TileTypeEnum.water){
@@ -643,6 +701,7 @@ public Vector2 generateValidAltarPosition(Altar thisAltar, Vector2 startPos, boo
 			return _instance;
 		}
 	}
+	
 	/// <summary>
 	/// Adds the neutral beacon.
 	/// </summary>
@@ -669,7 +728,6 @@ public Vector2 generateValidAltarPosition(Altar thisAltar, Vector2 startPos, boo
 			}
 		}
 	}
-/**	
 	public List<AltarType> getNetworkedAltars(TeamInfo t){
 		List<AltarType> returnable = new List<AltarType>();
 		altars.ForEach(delegate (GameObject ToCheckGO) {
@@ -684,7 +742,7 @@ public Vector2 generateValidAltarPosition(Altar thisAltar, Vector2 startPos, boo
 		});		
 		return returnable;
 	}
-*/
+ 
 
 			
 	private int calculateDistanceToAltars(TeamInfo team){			
