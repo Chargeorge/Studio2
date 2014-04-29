@@ -24,6 +24,7 @@ public class TeamInfo
 	public Texture scoreTexture;
 	public Texture winTexture;
 	public Vector2 wrldFinalTargetLocation;
+	public GameObject ScoreBar;
 	
 	public TeamInfo ()
 	{
