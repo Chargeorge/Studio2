@@ -155,7 +155,7 @@ public class Player : MonoBehaviour {
 			
 			case PlayerState.standing:
 			
-				if (audioSourceMove.volume > 0.0f) audioLerp (audioSourceMove, 0.0f, sRef.moveVolumeLerpRate);
+				audioLerp (audioSourceMove, 0.0f, sRef.moveVolumeLerpRate);
 				if (audioSourceInfluenceStart.volume > 0.01f) { audioLerp (audioSourceInfluenceStart, 0.0f, sRef.playerInfluenceStartVolumeLerpRate); 
 					} else { audioSourceInfluenceStart.Stop (); }
 			
@@ -344,7 +344,7 @@ public class Player : MonoBehaviour {
 			//if it completes, move to next tile, set state to standing
 			case PlayerState.moving:
 				if (audioSourceInfluenceStart.volume > 0.01f) { audioLerp (audioSourceInfluenceStart, 0.0f, sRef.playerInfluenceStartVolumeLerpRate);
-					} else { audioSourceInfluenceStart.Stop (); }			
+					} else { audioSourceInfluenceStart.Stop (); }
 				audioLerp (audioSourceMove, sRef.moveVolume, sRef.moveVolumeLerpRate);
 	
 				qudProgessCircle.renderer.enabled = false;
@@ -721,10 +721,10 @@ public class Player : MonoBehaviour {
 
 			if(currentTile.controllingTeam.teamNumber != teamNumber && currentTile.controllingTeam.teamNumber != null){
 					audioSourceInfluenceStart.clip = Resources.Load("SFX/Player_DeInfluence") as AudioClip;
-					audioSourceInfluenceStart.Play();
+					//audioSourceInfluenceStart.Play();
 				} else {
 					audioSourceInfluenceDone.clip = Resources.Load("SFX/Player_Influencing") as AudioClip;
-					audioSourceInfluenceStart.Play();
+					//audioSourceInfluenceStart.Play();
 				}
 				audioLerp (audioSourceMove, 0.0f, sRef.moveVolumeLerpRate);
 				
@@ -814,10 +814,10 @@ public class Player : MonoBehaviour {
 							if(test > 0f){
 								currentTile.addInfluenceReturnOverflow(test);
 								if (!audioSourceInvalid.isPlaying) {
-								audioSourceInvalid.volume = 0.3f;
-								audioSourceInvalid.Play ();
-								//Invoke("playInvalid", 1.0f);
-								Debug.Log("waka waka hey hey");
+									audioSourceInvalid.volume = 0.3f;
+									//audioSourceInvalid.Play ();
+									//Invoke("playInvalid", 1.0f);
+									Debug.Log("waka waka hey hey");
 								}
 							}
 						}
@@ -1368,6 +1368,11 @@ public class Player : MonoBehaviour {
 	}
 	
 	public void audioLerp (AudioSource source, float target, float rate) {
-		source.volume = Mathf.Lerp (source.volume, target, rate);
+		if (Mathf.Abs (source.volume - target) <= 0.001f) {
+			source.volume = target;
+		}
+		else {
+			source.volume = Mathf.Lerp (source.volume, target, rate);
+		}
 	}
 }
