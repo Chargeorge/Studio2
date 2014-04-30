@@ -220,7 +220,7 @@ public class Beacon : MonoBehaviour {
 	public void startUpgrading(){
 
 		this._currentState = BeaconState.BuildingAdvanced;
-		audio.PlayOneShot(beaconUpgrading, 0.9f);
+		audio.PlayOneShot(beaconUpgrading, .8f);
 	}
 	
 	public void startRotating (DirectionEnum? dir) {
