@@ -343,13 +343,19 @@ public class Player : MonoBehaviour {
 			//IF it changes, remove all progress (PLACEHOLDER, feel free to nuke)
 			//if it completes, move to next tile, set state to standing
 			case PlayerState.moving:
-			if(currentTile.owningTeam != null){
-				if(currentTile.owningTeam.teamNumber != teamNumber){
+				if(currentTile.owningTeam != null && currentTile.owningTeam.teamNumber != teamNumber){
 					audioSourceMove.clip = Resources.Load("SFX/Moving_EnemyTerrain") as AudioClip;
 					audioLerp (audioSourceMove, sRef.moveVolume, sRef.moveVolumeLerpRate);
-				} else {
+					if(!audioSourceMove.isPlaying){
+						audioSourceMove.Play();
+					}
+				} 
+			if(currentTile.owningTeam == null || currentTile.owningTeam.teamNumber == teamNumber) {
 				if(PlayerNumber == 1) audioSourceMove.clip = Resources.Load ("SFX/Player_Moving_Lo") as AudioClip;
 				if(PlayerNumber == 2) audioSourceMove.clip = Resources.Load ("SFX/Player_Moving_Hi") as AudioClip;
+				audioLerp (audioSourceMove, sRef.moveVolume, sRef.moveVolumeLerpRate);
+				if(!audioSourceMove.isPlaying){
+					audioSourceMove.Play();
 				}
 			}
 
@@ -729,13 +735,13 @@ public class Player : MonoBehaviour {
 			
 			case PlayerState.influencing:
 
-			if(currentTile.controllingTeam.teamNumber != teamNumber && currentTile.controllingTeam.teamNumber != null){
-					audioSourceInfluenceStart.clip = Resources.Load("SFX/Player_DeInfluence") as AudioClip;
+			if(currentTile.controllingTeam.teamNumber != null && currentTile.controllingTeam.teamNumber != teamNumber){
+					audioSourceInfluenceStart.clip = Resources.Load("SFX/Player_DeInfluencing") as AudioClip;
 					//audioSourceInfluenceStart.Play();
-				} else {
-					audioSourceInfluenceDone.clip = Resources.Load("SFX/Player_Influencing") as AudioClip;
-					//audioSourceInfluenceStart.Play();
+				} else if(currentTile.owningTeam.teamNumber == null || currentTile.controllingTeam.teamNumber == teamNumber){
+					audioSourceInfluenceStart.clip = Resources.Load("SFX/Player_Influencing") as AudioClip;
 				}
+				
 				audioLerp (audioSourceMove, 0.0f, sRef.moveVolumeLerpRate);
 				
     			qudProgessCircle.renderer.enabled = true;
