@@ -735,6 +735,8 @@ public class Player : MonoBehaviour {
 			
 			case PlayerState.influencing:
 
+			moveTowardCenterOfTile (currentTile);
+
 			if(currentTile.controllingTeam.teamNumber != null && currentTile.controllingTeam.teamNumber != teamNumber){
 					audioSourceInfluenceStart.clip = Resources.Load("SFX/Player_DeInfluencing") as AudioClip;
 					//audioSourceInfluenceStart.Play();
@@ -745,6 +747,7 @@ public class Player : MonoBehaviour {
 				audioLerp (audioSourceMove, 0.0f, sRef.moveVolumeLerpRate);
 				
     			qudProgessCircle.renderer.enabled = true;
+    			if (currentTile.controllingTeam != null) { qudProgessCircle.renderer.material.color = currentTile.controllingTeam.teamColor; }	
 				qudProgessCircle.renderer.material.SetFloat("_Cutoff", 1-(currentTile.percControlled /100f) );
 				if(buildButtonDown && currentTile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
 			//		Jiggle ();	//Gotta jiggle
@@ -759,8 +762,7 @@ public class Player : MonoBehaviour {
 						{                                      
 							//Debug.Log("Adding Influence");
 							float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime);
-							moveTowardCenterOfTile (currentTile);
-
+							
 								if(test > 0f || (currentTile.owningTeam != null && currentTile.owningTeam == team)){
 								
 								if (currentTile.getLocalAltar () != null || currentTile.tooCloseToBeacon() || currentTile.gameObject.transform.FindChild ("Home(Clone)") != null) {
