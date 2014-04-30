@@ -121,8 +121,8 @@ public class Player : MonoBehaviour {
 		_pulsating = false;	//Pulsate () sets this to true; if false at the end of this method, reset scale and _expanding
 
 		//_positionOffset = new Vector2 (0,0);	//This can't possibly be the right way to do this - Josh
-				
-		switch(currentState){
+		if(gm.currentState == GameState.playing){
+			switch(currentState){
 			
 			case PlayerState.teleporting:
 /**				if (transform.parent.position == teleportTarget) {
@@ -963,7 +963,12 @@ public class Player : MonoBehaviour {
 			
 			break;
 		}
-		
+			if (!_pulsating) {
+				transform.localScale = new Vector3 (_defaultScale.x, _defaultScale.y, _defaultScale.z) * getScaleBoost ();
+				_expanding = true;
+				pulsateProgress = 0f;
+			}
+		}
 		
 		//Set position based on offset
 		/* Not with free movement!
@@ -972,11 +977,7 @@ public class Player : MonoBehaviour {
 			 GameManager.wrldPositionFromGrdPosition(grdLocation).y + _positionOffset.y / 2, -1);
 		*/			
 		//If not pulsating, reset scale and _expanding
-		if (!_pulsating) {
-			transform.localScale = new Vector3 (_defaultScale.x, _defaultScale.y, _defaultScale.z) * getScaleBoost ();
-			_expanding = true;
-			pulsateProgress = 0f;
-		}
+
 						
 	}
 	

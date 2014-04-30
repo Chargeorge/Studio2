@@ -109,72 +109,72 @@ public class Altar : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		//Am I controlled? 
-
-		if(altarType != AltarType.MagicalMysteryScore){
-			scoreBar.renderer.enabled = false;
-			transform.FindChild("ScoreThingyBG").renderer.enabled = false;
-		}
-		
-		if(_currentControllingTeam != null){
-			//check to see if I'm networked
-			if(currentControllingTeam.teamNumber == 1){
-				Praying = Resources.Load("SFX/Altar_Score_Lo") as AudioClip;
-			} else if(currentControllingTeam.teamNumber == 2){
-				Praying = Resources.Load("SFX/Altar_Score_Hi") as AudioClip;
+		if(gm.currentState == GameState.playing){
+			if(altarType != AltarType.MagicalMysteryScore){
+				scoreBar.renderer.enabled = false;
+				transform.FindChild("ScoreThingyBG").renderer.enabled = false;
 			}
-			networked= checkNetwork();
-			if(networked){
-				if(altarType !=  AltarType.MagicalMysteryScore){
-					List <AltarType> a = gm.getCapturedAltars(_currentControllingTeam);
-	 
-					if(a.Contains(AltarType.Khepru)){
-						_currentControllingTeam.score += sRef.vpsScorePerAltarPerSecond * sRef.coefKhepru * Time.deltaTime;
-					}else{
-						_currentControllingTeam.score += sRef.vpsScorePerAltarPerSecond * Time.deltaTime;
-					}
-				}else{
-					List <AltarType> a = gm.getCapturedAltars(_currentControllingTeam);
-					if(scoreLeft >0){
-						timeToNextScoreShot -= Time.deltaTime;
-						if(timeToNextScoreShot < 0){
-							audio.PlayOneShot(Praying, 0.9f);
-							float scoreToAdd = sRef.vpsScorePerMinePerSecond * ((a.Contains(AltarType.Khepru)) ? sRef.coefKhepru : 1 );
-							if(scoreLeft - scoreToAdd < 0){
-								scoreToAdd = scoreLeft;
-							}
-							scoreLeft -= scoreToAdd;
-							setScoreBarLen();
-							Vector3 scoreBitStartPos = transform.position;
-
-							scoreBitStartPos.z = -1.2f;
-							GameObject scoreBit = BulletPool.instance.GetObjectForType("ScoreBit", false);
-							scoreBit.transform.position = scoreBitStartPos;
-							scoreBit.GetComponent<ScoreBit>().setTeam(currentControllingTeam);
-							scoreBit.GetComponent<ScoreBit>().start(networkToBase);
-							scoreBit.GetComponent<ScoreBit>().sRef = sRef;
-							scoreBit.GetComponent<ScoreBit>().scoreAmt =scoreToAdd;
-							
-							timeToNextScoreShot = scoreShotInterval;
-							//_currentControllingTeam.score += scoreToAdd;
-							
-							if (scoreLeft <= 0) {
-								gameObject.transform.renderer.material.shader = Shader.Find ("Transparent/Diffuse");
-								Color32 drainedColor = gameObject.transform.renderer.material.color;
-								drainedColor.a = (byte) (sRef.drainedAltarAlpha * 255f);
-								Debug.Log (drainedColor.a);
-								gameObject.transform.renderer.material.color = drainedColor;
-							}
+			
+			if(_currentControllingTeam != null){
+				//check to see if I'm networked
+				if(currentControllingTeam.teamNumber == 1){
+					Praying = Resources.Load("SFX/Altar_Score_Lo") as AudioClip;
+				} else if(currentControllingTeam.teamNumber == 2){
+					Praying = Resources.Load("SFX/Altar_Score_Hi") as AudioClip;
+				}
+				networked= checkNetwork();
+				if(networked){
+					if(altarType !=  AltarType.MagicalMysteryScore){
+						List <AltarType> a = gm.getCapturedAltars(_currentControllingTeam);
+		 
+						if(a.Contains(AltarType.Khepru)){
+							_currentControllingTeam.score += sRef.vpsScorePerAltarPerSecond * sRef.coefKhepru * Time.deltaTime;
+						}else{
+							_currentControllingTeam.score += sRef.vpsScorePerAltarPerSecond * Time.deltaTime;
 						}
-
+					}else{
+						List <AltarType> a = gm.getCapturedAltars(_currentControllingTeam);
+						if(scoreLeft >0){
+							timeToNextScoreShot -= Time.deltaTime;
+							if(timeToNextScoreShot < 0){
+								audio.PlayOneShot(Praying, 0.9f);
+								float scoreToAdd = sRef.vpsScorePerMinePerSecond * ((a.Contains(AltarType.Khepru)) ? sRef.coefKhepru : 1 );
+								if(scoreLeft - scoreToAdd < 0){
+									scoreToAdd = scoreLeft;
+								}
+								scoreLeft -= scoreToAdd;
+								setScoreBarLen();
+								Vector3 scoreBitStartPos = transform.position;
+	
+								scoreBitStartPos.z = -1.2f;
+								GameObject scoreBit = BulletPool.instance.GetObjectForType("ScoreBit", false);
+								scoreBit.transform.position = scoreBitStartPos;
+								scoreBit.GetComponent<ScoreBit>().setTeam(currentControllingTeam);
+								scoreBit.GetComponent<ScoreBit>().start(networkToBase);
+								scoreBit.GetComponent<ScoreBit>().sRef = sRef;
+								scoreBit.GetComponent<ScoreBit>().scoreAmt =scoreToAdd;
+								
+								timeToNextScoreShot = scoreShotInterval;
+								//_currentControllingTeam.score += scoreToAdd;
+								
+								if (scoreLeft <= 0) {
+									gameObject.transform.renderer.material.shader = Shader.Find ("Transparent/Diffuse");
+									Color32 drainedColor = gameObject.transform.renderer.material.color;
+									drainedColor.a = (byte) (sRef.drainedAltarAlpha * 255f);
+									Debug.Log (drainedColor.a);
+									gameObject.transform.renderer.material.color = drainedColor;
+								}
+							}
+	
+						}
 					}
 				}
+				gm.debugString = string.Format(" Number: {0},\r\n Networked: {1}", _currentControllingTeam.teamNumber, networked);
 			}
-			gm.debugString = string.Format(" Number: {0},\r\n Networked: {1}", _currentControllingTeam.teamNumber, networked);
+			
+			//transform.GetComponent<MeshRenderer>().enabled = gm.tiles[brdX, brdY].GetComponent<BaseTile>().IsRevealed;
+			//transform.FindChild ("Quad").renderer.enabled = gm.tiles[brdX, brdY].GetComponent<BaseTile>().IsRevealed;
 		}
-		
-		//transform.GetComponent<MeshRenderer>().enabled = gm.tiles[brdX, brdY].GetComponent<BaseTile>().IsRevealed;
-		//transform.FindChild ("Quad").renderer.enabled = gm.tiles[brdX, brdY].GetComponent<BaseTile>().IsRevealed;
-		
 	}
 	
 	public void setControl(TeamInfo team){
