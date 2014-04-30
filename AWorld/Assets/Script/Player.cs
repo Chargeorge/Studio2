@@ -735,6 +735,8 @@ public class Player : MonoBehaviour {
 			
 			case PlayerState.influencing:
 
+			moveTowardCenterOfTile (currentTile);
+
 			if(currentTile.controllingTeam.teamNumber != null && currentTile.controllingTeam.teamNumber != teamNumber){
 					audioSourceInfluenceStart.clip = Resources.Load("SFX/Player_DeInfluencing") as AudioClip;
 					//audioSourceInfluenceStart.Play();
@@ -760,8 +762,7 @@ public class Player : MonoBehaviour {
 						{                                      
 							//Debug.Log("Adding Influence");
 							float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime);
-							moveTowardCenterOfTile (currentTile);
-
+							
 								if(test > 0f || (currentTile.owningTeam != null && currentTile.owningTeam == team)){
 								
 								if (currentTile.getLocalAltar () != null || currentTile.tooCloseToBeacon() || currentTile.gameObject.transform.FindChild ("Home(Clone)") != null) {

@@ -71,7 +71,7 @@ public class Beacon : MonoBehaviour {
 			buildButtonDown = getPlayerBuild();
 
 			if(!buildButtonDown){
-				audioLerp(audioSourceBeacon, 0.01f, lerpRate);
+			//	audioLerp(audioSourceBeacon, 0.01f, lerpRate);
 			}
 			if((_currentState == BeaconState.Basic || _currentState == BeaconState.BuildingAdvanced || _currentState == BeaconState.Advanced) && controllingTeam != null){
 
@@ -256,7 +256,9 @@ public class Beacon : MonoBehaviour {
 	}
 
 	public void setTeam(TeamInfo teamIn){
-	if(teamIn != null){controllingTeam = teamIn;
+	if(teamIn != null) {
+		PlayerNumber = teamIn.teamNumber;
+		controllingTeam = teamIn;
 		Color32 controllingTeamColor = controllingTeam.beaconColor;	
 			Color32 platformColor = controllingTeam.tileColor;
 		//TODO: custom sprites and colors per team
