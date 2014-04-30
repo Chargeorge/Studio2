@@ -267,7 +267,7 @@ public class Settings : MonoBehaviour {
 			//Base values per second
 			vpsBaseBuild = 25f;
 			vpsBaseMove = 50f;
-			vpsBaseFreeMoveSpeed = 1.0f;
+			vpsBaseFreeMoveSpeed = 2.0f;
 			vpsBasePlayerInfluence =  25f;
 			vpsBaseRotate = 25f;
 			vpsBaseUpgrade = 25f;
@@ -281,7 +281,7 @@ public class Settings : MonoBehaviour {
 			//Base values per second
 			vpsBaseBuild = 50f;
 			vpsBaseMove = 100f;
-			vpsBaseFreeMoveSpeed = 2.0f;
+			vpsBaseFreeMoveSpeed = 3.0f;
 			vpsBasePlayerInfluence =  50f;
 			vpsBaseRotate = 50f;
 			vpsBaseUpgrade = 50f;
