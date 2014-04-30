@@ -313,7 +313,7 @@ MonoBehaviour:
   home1: {fileID: 0}
   home2: {fileID: 0}
   currentMarquee: 0
-  Victory_Gong: {fileID: 8300000, guid: d6194e64ff8f1314d91f1e04db8f27da, type: 3}
+  Victory_Gong: {fileID: 8300000, guid: dab18255b6fb0c341b32b2c288ccddac, type: 3}
   Game_Launch: {fileID: 8300000, guid: 58317af52748881479113d2b24c1915c, type: 3}
   beacons: []
   teamBar1: {fileID: 0}
