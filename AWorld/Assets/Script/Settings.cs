@@ -155,7 +155,7 @@ public class Settings : MonoBehaviour {
 		valPointsToWin = 250;
 		valScorePerMine = 100f;
 		valTimePerScoreShot  = 1f;
-		valScoreBaseCapture  = this.valPointsToWin;
+		valScoreBaseCapture  = 200f;
 			
 		
 		//Beacon stuff
@@ -204,7 +204,7 @@ public class Settings : MonoBehaviour {
 		secTillRestartable = 3f;
 
 		//Audio stuff
-		moveVolume = 0.5f;
+		moveVolume = 0.6f;
 		moveVolumeLerpRate = 0.2f;
 		playerInfluenceStartVolume = 1.0f;
 		playerInfluenceStartVolumeLerpRate = 0.1f;
@@ -267,7 +267,7 @@ public class Settings : MonoBehaviour {
 			//Base values per second
 			vpsBaseBuild = 25f;
 			vpsBaseMove = 50f;
-			vpsBaseFreeMoveSpeed = 2.0f;
+			vpsBaseFreeMoveSpeed = 1.0f;
 			vpsBasePlayerInfluence =  25f;
 			vpsBaseRotate = 25f;
 			vpsBaseUpgrade = 25f;
@@ -281,7 +281,7 @@ public class Settings : MonoBehaviour {
 			//Base values per second
 			vpsBaseBuild = 50f;
 			vpsBaseMove = 100f;
-			vpsBaseFreeMoveSpeed = 3.0f;
+			vpsBaseFreeMoveSpeed = 2.0f;
 			vpsBasePlayerInfluence =  50f;
 			vpsBaseRotate = 50f;
 			vpsBaseUpgrade = 50f;

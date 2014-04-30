@@ -121,8 +121,8 @@ public class Player : MonoBehaviour {
 		_pulsating = false;	//Pulsate () sets this to true; if false at the end of this method, reset scale and _expanding
 
 		//_positionOffset = new Vector2 (0,0);	//This can't possibly be the right way to do this - Josh
-		if(gm.currentState == GameState.playing){
-			switch(currentState){
+				
+		switch(currentState){
 			
 			case PlayerState.teleporting:
 /**				if (transform.parent.position == teleportTarget) {
@@ -343,6 +343,16 @@ public class Player : MonoBehaviour {
 			//IF it changes, remove all progress (PLACEHOLDER, feel free to nuke)
 			//if it completes, move to next tile, set state to standing
 			case PlayerState.moving:
+			if(currentTile.owningTeam != null){
+				if(currentTile.owningTeam.teamNumber != teamNumber){
+					audioSourceMove.clip = Resources.Load("SFX/Moving_EnemyTerrain") as AudioClip;
+					audioLerp (audioSourceMove, sRef.moveVolume, sRef.moveVolumeLerpRate);
+				} else {
+				if(PlayerNumber == 1) audioSourceMove.clip = Resources.Load ("SFX/Player_Moving_Lo") as AudioClip;
+				if(PlayerNumber == 2) audioSourceMove.clip = Resources.Load ("SFX/Player_Moving_Hi") as AudioClip;
+				}
+			}
+
 				if (audioSourceInfluenceStart.volume > 0.01f) { audioLerp (audioSourceInfluenceStart, 0.0f, sRef.playerInfluenceStartVolumeLerpRate);
 					} else { audioSourceInfluenceStart.Stop (); }
 				audioLerp (audioSourceMove, sRef.moveVolume, sRef.moveVolumeLerpRate);
@@ -729,7 +739,6 @@ public class Player : MonoBehaviour {
 				audioLerp (audioSourceMove, 0.0f, sRef.moveVolumeLerpRate);
 				
     			qudProgessCircle.renderer.enabled = true;
-    			qudProgessCircle.renderer.material.color = currentTile.controllingTeam.teamColor;
 				qudProgessCircle.renderer.material.SetFloat("_Cutoff", 1-(currentTile.percControlled /100f) );
 				if(buildButtonDown && currentTile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
 			//		Jiggle ();	//Gotta jiggle
@@ -964,12 +973,7 @@ public class Player : MonoBehaviour {
 			
 			break;
 		}
-			if (!_pulsating) {
-				transform.localScale = new Vector3 (_defaultScale.x, _defaultScale.y, _defaultScale.z) * getScaleBoost ();
-				_expanding = true;
-				pulsateProgress = 0f;
-			}
-		}
+		
 		
 		//Set position based on offset
 		/* Not with free movement!
@@ -978,7 +982,11 @@ public class Player : MonoBehaviour {
 			 GameManager.wrldPositionFromGrdPosition(grdLocation).y + _positionOffset.y / 2, -1);
 		*/			
 		//If not pulsating, reset scale and _expanding
-
+		if (!_pulsating) {
+			transform.localScale = new Vector3 (_defaultScale.x, _defaultScale.y, _defaultScale.z) * getScaleBoost ();
+			_expanding = true;
+			pulsateProgress = 0f;
+		}
 						
 	}
 	

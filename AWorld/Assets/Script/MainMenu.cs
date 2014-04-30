@@ -19,6 +19,12 @@ public class MainMenu : MonoBehaviour {
 	public bool loadingNewScreen;
 	public bool quitting;
 
+	float startHeight = 0.55f;
+	float optionsHeight = 0.67f;
+	float quitHeight = 0.8f;
+
+
+
 	public GameObject cursor;
 
 	// Use this for initialization
@@ -97,12 +103,12 @@ public class MainMenu : MonoBehaviour {
 				Invoke("launchGame", 1.5f);
 			}
 			if(optionsSelected){
-				audio.PlayOneShot(select, 1.0f);
+				audio.PlayOneShot(select, .9f);
 				loadingNewScreen = true;
 				Invoke ("launchOptions", 1.0f);
 			}
 			if(quitSelected){
-				audio.PlayOneShot (select, 1.0f);
+				audio.PlayOneShot (select, .9f);
 				if (!Application.isEditor) {
 					quitting = true;
 					Invoke ("quitApp", 1.0f);
@@ -128,11 +134,11 @@ public class MainMenu : MonoBehaviour {
 		GUI.Label (new Rect(Screen.width/3, Screen.height/4, Screen.width/3, Screen.height/5),
 		           "a game by Pierre Depaz, Char George,\nSig Gunnarsson & Josh Raab", creditsStyle); //DRAW THE CREDITS
 
-		if(startSelected) GUI.Label (new Rect(Screen.width/3, Screen.height*0.55f, Screen.width/3, Screen.height/5), "BEGIN", highlightStyle);
-		if(!startSelected) GUI.Label (new Rect(Screen.width/3, Screen.height*0.55f, Screen.width/3, Screen.height/5), "BEGIN", neutralStyle);
-		if(optionsSelected) GUI.Label (new Rect(Screen.width/3, Screen.height*0.67f, Screen.width/3, Screen.height/5), "MODIFY", highlightStyleO);
-		if(!optionsSelected) GUI.Label (new Rect(Screen.width/3, Screen.height*0.67f, Screen.width/3, Screen.height/5), "MODIFY", neutralStyle);
-		if(quitSelected) GUI.Label (new Rect(Screen.width/3, Screen.height*0.8f, Screen.width/3, Screen.height/5), "ABANDON", highlightStyleQ);
-		if(!quitSelected) GUI.Label (new Rect(Screen.width/3, Screen.height*0.8f, Screen.width/3, Screen.height/5), "ABANDON", neutralStyle);
+		if(startSelected) GUI.Label (new Rect(Screen.width/3, Screen.height*startHeight, Screen.width/3, Screen.height/5), "BEGIN", highlightStyle);
+		if(!startSelected) GUI.Label (new Rect(Screen.width/3, Screen.height*startHeight, Screen.width/3, Screen.height/5), "BEGIN", neutralStyle);
+		if(optionsSelected) GUI.Label (new Rect(Screen.width/3, Screen.height*optionsHeight, Screen.width/3, Screen.height/5), "MODIFY", highlightStyleO);
+		if(!optionsSelected) GUI.Label (new Rect(Screen.width/3, Screen.height*optionsHeight, Screen.width/3, Screen.height/5), "MODIFY", neutralStyle);
+		if(quitSelected) GUI.Label (new Rect(Screen.width/3, Screen.height*quitHeight, Screen.width/3, Screen.height/5), "ABANDON", highlightStyleQ);
+		if(!quitSelected) GUI.Label (new Rect(Screen.width/3, Screen.height*quitHeight, Screen.width/3, Screen.height/5), "ABANDON", neutralStyle);
 	}
 }

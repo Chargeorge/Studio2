@@ -9,6 +9,7 @@ public class OptionsManager : MonoBehaviour {
 
 	int height1;
 	int height2;
+	int height3;
 
 	public AudioClip select;
 	public AudioClip launch;
@@ -52,10 +53,19 @@ public class OptionsManager : MonoBehaviour {
 	public Material speedHalfMat;
 	public static int gameSpeed;
 
+	float xFogPos = 3.025f;
+	float xPlayersPos = 1;
+	float xIntensityPos = 5.1f;
+	float xSpeedPos = 1;
+	float xSizePos = 2;
+	float xBackPos = 0.0f;
+	float xStartPos = 4.8f;
+
 	// Use this for initialization
 	void Start () {
 		height1 = Screen.height/3 - Screen.height/12;
 		height2 = (Screen.height/3)*2 - Screen.height/12;
+		height3 = (Screen.height/6)*5;
 
 		//Set up the default values for the game
 		numberOfPlayers = (PlayerPrefs.GetInt(PreferencesOptions.numberOfPlayers.ToString()) == 2) ? 2 : 4;
@@ -296,22 +306,22 @@ public class OptionsManager : MonoBehaviour {
 	void OnGUI(){
 		GUI.Label (new Rect(Screen.width/3, Screen.height/9, Screen.width/3, 50), "MODIFY", titleStyle);
 
-		if(!playersSelected) GUI.Label (new Rect(Screen.width/8, height1, Screen.width/4, 50), "PLAYERS", subtitleStyle);
-		if(playersSelected) GUI.Label (new Rect(Screen.width/8, height1, Screen.width/4, 50), "PLAYERS", highlightStyle);
-		if(!fogSelected) GUI.Label (new Rect((Screen.width/8)*3.025f, height1, Screen.width/4, 50), "FOG", subtitleStyle);
-		if(fogSelected) GUI.Label (new Rect((Screen.width/8)*3.025f, height1, Screen.width/4, 50), "FOG", highlightStyle);
-		if(!terrainSelected) GUI.Label (new Rect((Screen.width/8)*5.1f, height1, Screen.width/4, 50), "WATER", subtitleStyle);
-		if(terrainSelected) GUI.Label (new Rect((Screen.width/8)*5.1f, height1, Screen.width/4, 50), "WATER", highlightStyle);
+		if(!playersSelected) GUI.Label (new Rect((Screen.width/8)*xPlayersPos, height1, Screen.width/4, 50), "PLAYERS", subtitleStyle);
+		if(playersSelected) GUI.Label (new Rect((Screen.width/8)*xPlayersPos, height1, Screen.width/4, 50), "PLAYERS", highlightStyle);
+		if(!fogSelected) GUI.Label (new Rect((Screen.width/8)*xFogPos, height1, Screen.width/4, 50), "FOG", subtitleStyle);
+		if(fogSelected) GUI.Label (new Rect((Screen.width/8)*xFogPos, height1, Screen.width/4, 50), "FOG", highlightStyle);
+		if(!terrainSelected) GUI.Label (new Rect((Screen.width/8)*xIntensityPos, height1, Screen.width/4, 50), "WATER", subtitleStyle);
+		if(terrainSelected) GUI.Label (new Rect((Screen.width/8)*xIntensityPos, height1, Screen.width/4, 50), "WATER", highlightStyle);
 
-		if(!speedSelected) GUI.Label (new Rect((Screen.width/4), height2, Screen.width/5, 50), "SPEED", subtitleStyle);
-		if(speedSelected) GUI.Label (new Rect((Screen.width/4), height2, Screen.width/5, 50), "SPEED", highlightStyle);
-		if(!sizeSelected) GUI.Label (new Rect((Screen.width/4)*2, height2, Screen.width/5, 50), "SIZE", subtitleStyle);
-		if(sizeSelected) GUI.Label (new Rect((Screen.width/4)*2, height2, Screen.width/5, 50), "SIZE", highlightStyle);
+		if(!speedSelected) GUI.Label (new Rect((Screen.width/4)*xSpeedPos, height2, Screen.width/5, 50), "SPEED", subtitleStyle);
+		if(speedSelected) GUI.Label (new Rect((Screen.width/4)*xSpeedPos, height2, Screen.width/5, 50), "SPEED", highlightStyle);
+		if(!sizeSelected) GUI.Label (new Rect((Screen.width/4)*xSizePos, height2, Screen.width/5, 50), "SIZE", subtitleStyle);
+		if(sizeSelected) GUI.Label (new Rect((Screen.width/4)*xSizePos, height2, Screen.width/5, 50), "SIZE", highlightStyle);
 
-		if(!startSelected) GUI.Label (new Rect((Screen.width/6)*4.8f, (Screen.height/6)*5, Screen.width/5, 50), "START", subtitleStyle);
-		if(startSelected) GUI.Label (new Rect((Screen.width/6)*4.8f, (Screen.height/6)*5, Screen.width/5, 50), "START", highlightStyle);
+		if(!startSelected) GUI.Label (new Rect((Screen.width/6)*xStartPos, height3, Screen.width/5, 50), "START", subtitleStyle);
+		if(startSelected) GUI.Label (new Rect((Screen.width/6)*xStartPos, height3, Screen.width/5, 50), "START", highlightStyle);
 		
-		if(!backSelected) GUI.Label (new Rect((Screen.width/6)*0.0f, (Screen.height/6)*5, Screen.width/5, 50), "BACK", subtitleStyle);
-		if(backSelected) GUI.Label (new Rect((Screen.width/6)*0.0f, (Screen.height/6)*5, Screen.width/5, 50), "BACK", highlightStyle);
+		if(!backSelected) GUI.Label (new Rect((Screen.width/6)*xBackPos, height3, Screen.width/5, 50), "BACK", subtitleStyle);
+		if(backSelected) GUI.Label (new Rect((Screen.width/6)*xBackPos, height3, Screen.width/5, 50), "BACK", highlightStyle);
 	}
 }

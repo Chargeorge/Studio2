@@ -61,9 +61,8 @@ public class Beacon : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(gm.currentState == GameState.playing){
-			int brdX; int brdY;
-			if (transform.parent != null) { //Hax
+		int brdX; int brdY;
+		if (transform.parent != null) { //Hax
 			brdX = transform.parent.gameObject.GetComponent<BaseTile>().brdXPos;
 		 	brdY = transform.parent.gameObject.GetComponent<BaseTile>().brdYPos;
 			
@@ -160,7 +159,7 @@ public class Beacon : MonoBehaviour {
 		}
 		*/
 		}
-		}
+		
 	}
 	
 	//START BUILDING:
@@ -232,6 +231,7 @@ public class Beacon : MonoBehaviour {
 		audio.Stop ();
 		dirRotatingToward = dir;
 		audio.PlayOneShot(beaconRotating, 0.7f);
+		Debug.Log("shit's rotating yo");
 	}
 	
 	public void setTeam(){
