@@ -926,6 +926,8 @@ MonoBehaviour:
   valTileConvertScore: 1
   valPointsToWin: 300
   valScorePerMine: 0
+  valTimePerScoreShot: 0
+  valScoreBaseCapture: 0
   beaconBasicRange: 4
   beaconAdvancedRange: 8
   beaconNoBuildRange: 2

@@ -18,6 +18,7 @@ public class Bar : MonoBehaviour {
 	public Transform backBar;
 	public Vector3 startPos;
 	public GameObject scoreBitFinal;
+	public float fixIt;
 
 	// Use this for initialization
 	void Start () {
@@ -39,12 +40,13 @@ public class Bar : MonoBehaviour {
 		teamPos = new Vector3(0 ,0,0);
 
 		//this might be a problem.
-		endPosY = sRef.sbMoveUp;
+		endPosY = sRef.scaleY/2;
 
+		fixIt = sRef.bbLocalPosY - endPosY;
 		
 		//this.transform.position = startPos;
 
-		teamScale = new Vector3 (0.7f,0,0);
+		teamScale = new Vector3 (1f,0,0);
 		bar = this.transform.FindChild("Bar");
 		capture = this.transform.FindChild("Capture");
 		backBar = this.transform.FindChild("BarBack");
@@ -66,8 +68,12 @@ public class Bar : MonoBehaviour {
 
 		float perScore = team.score / sRef.valPointsToWin;
 	
-		teamScale.y = endScale.y *perScore;
-		teamPos.y = 0.3f + endPosY *perScore;
+		if(perScore <= 1){
+			teamScale.y = endScale.y *perScore;
+			teamPos.y = fixIt + endPosY *perScore;
+		} else {
+			teamPos.y = fixIt + endPosY;
+		}
 		scoreBitFinal.transform.position = new Vector3(scoreBitFinal.transform.position.x, teamPos.y+teamScale.y/2, -1);
 		
 		//teamScale1.y = 8;
@@ -77,8 +83,8 @@ public class Bar : MonoBehaviour {
 		bar.renderer.material.color = team.teamColor;
 		capture.renderer.material.color = team.beaconColor;
 
-		//Color32 backBarColor = team.tileColor;
-		Color32 backBarColor = new Color32 (200, 200, 200, 170);
+		Color32 backBarColor = team.tileColor;
+		//Color32 backBarColor = new Color32 (200, 200, 200, 170);
 		backBarColor.a = 100;
 		backBar.renderer.material.color = backBarColor;
 

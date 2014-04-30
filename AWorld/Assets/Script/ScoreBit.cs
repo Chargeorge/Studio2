@@ -7,6 +7,9 @@ public class ScoreBit : MonoBehaviour {
 	private TeamInfo team;
 	private FinalScoreTarget finalTarget;
 	public Settings sRef;
+	public float speed = .2f;
+	public float scoreAmt;
+	
 
 	// Use this for initialization
 	void Start () {
@@ -27,8 +30,8 @@ public class ScoreBit : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(targets.Count > 0){
-			Vector2 NewPos  =  Vector2.MoveTowards( (Vector2)transform.position, (Vector2)(targets[0].transform.position), .2f);
+			if(targets.Count > 0){
+			Vector2 NewPos  =  Vector2.MoveTowards( (Vector2)transform.position, (Vector2)(targets[0].transform.position), speed);
 			Vector3 NewPos3 = new Vector3(NewPos.x, NewPos.y, transform.position.z);
 			transform.position = NewPos3;
 		}
@@ -36,15 +39,17 @@ public class ScoreBit : MonoBehaviour {
 //			Debug.Log ("Collision detected");
 			finalTarget.PlayScoreAnimation ();
 			BulletPool.instance.PoolObject(gameObject);
-			team.addScore(Settings.SettingsInstance.vpsScorePerMinePerSecond);
+			team.addScore(scoreAmt);
 			CancelInvoke();
 		}
 	}
 	
 	void OnTriggerEnter2D(Collider2D collided){
 		if(targets.Count>0){
+			//int target0Ident = targets[0].gameObject.GetComponent<BaseTile>().Ident;
+			//int collidedTarget = collided.gameObject.GetComponent<BaseTile>().Ident;
 			if(collided.gameObject == targets[0]){
-
+				Debug.Log ("Collided");
 				if(collided.gameObject.tag == "ScoreBitTarget"){
 					if(targets.Count > 0){
 						targets.RemoveAt(0);
@@ -53,7 +58,6 @@ public class ScoreBit : MonoBehaviour {
 
 					}
 				}
-
 			}
 		}
 		if(collided.gameObject.tag == "ScoreBitFinalTarget"){
@@ -83,7 +87,7 @@ public class ScoreBit : MonoBehaviour {
 		});
 		targets.Add (team.ScoreBar.transform.Find ("ScoreBitFinalTarget").gameObject);
 		setTarget(targets[0]);
-		Invoke ("remove", 3f);
+		Invoke ("remove", 5f);
 	}
 
 	public void remove(){
