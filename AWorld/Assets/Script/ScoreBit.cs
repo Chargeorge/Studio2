@@ -30,17 +30,32 @@ public class ScoreBit : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-			if(targets.Count > 0){
+		if(targets.Count > 0){
 			Vector2 NewPos  =  Vector2.MoveTowards( (Vector2)transform.position, (Vector2)(targets[0].transform.position), speed);
 			Vector3 NewPos3 = new Vector3(NewPos.x, NewPos.y, transform.position.z);
+			
+			//I'm doing this twice just in case something sneaks inside the collider
+			if(transform.position == NewPos3){
+				
+				if(targets.Count > 0){
+					targets.RemoveAt(0);
+					
+					setTarget(targets[0]);
+					 NewPos  =  Vector2.MoveTowards( (Vector2)transform.position, (Vector2)(targets[0].transform.position), speed);
+					 NewPos3 = new Vector3(NewPos.x, NewPos.y, transform.position.z);
+					
+					}
+				}
+			
 			transform.position = NewPos3;
+			
 		}
 		if (finalTarget != null && closeEnoughToTarget (transform.position, finalTarget.transform.position, sRef.closeEnoughDistanceScoreBit)) {
 //			Debug.Log ("Collision detected");
 			finalTarget.PlayScoreAnimation ();
 			BulletPool.instance.PoolObject(gameObject);
 			team.addScore(scoreAmt);
-			CancelInvoke();
+			//CancelInvoke();
 		}
 	}
 	
@@ -76,7 +91,7 @@ public class ScoreBit : MonoBehaviour {
 //		Debug.Log (newTrans);
 		transform.eulerAngles = new Vector3(0,0,0);
 
-		transform.Rotate(new Vector3(0,0,angleTo));
+		//transform.Rotate(new Vector3(0,0,angleTo));
 	}
 
 	public void start(List<AStarholder> tiles){
@@ -87,7 +102,7 @@ public class ScoreBit : MonoBehaviour {
 		});
 		targets.Add (team.ScoreBar.transform.Find ("ScoreBitFinalTarget").gameObject);
 		setTarget(targets[0]);
-		Invoke ("remove", 5f);
+		//Invoke ("remove", 5f);
 	}
 
 	public void remove(){
