@@ -718,7 +718,14 @@ public class Player : MonoBehaviour {
 			break;
 			
 			case PlayerState.influencing:
-				
+
+			if(currentTile.controllingTeam.teamNumber != teamNumber && currentTile.controllingTeam.teamNumber != null){
+					audioSourceInfluenceStart.clip = Resources.Load("SFX/Player_DeInfluence") as AudioClip;
+					audioSourceInfluenceStart.Play();
+				} else {
+					audioSourceInfluenceDone.clip = Resources.Load("SFX/Player_Influencing") as AudioClip;
+					audioSourceInfluenceStart.Play();
+				}
 				audioLerp (audioSourceMove, 0.0f, sRef.moveVolumeLerpRate);
 				
     			qudProgessCircle.renderer.enabled = true;

@@ -440,7 +440,7 @@ public class GameManager : MonoBehaviour {
 //				}
 //			}
 			if(debugMouse != null){
-				Debug.Log (debugMouse.findEdges());
+//				Debug.Log (debugMouse.findEdges());
 			}
 		}
 		if(Input.GetButtonDown("Fire2")){

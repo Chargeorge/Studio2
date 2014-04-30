@@ -220,7 +220,7 @@ public class Beacon : MonoBehaviour {
 	public void startUpgrading(){
 
 		this._currentState = BeaconState.BuildingAdvanced;
-		audio.PlayOneShot(beaconUpgrading, 0.9f);
+		audio.PlayOneShot(beaconUpgrading, .8f);
 	}
 	
 	public void startRotating (DirectionEnum? dir) {
@@ -801,7 +801,7 @@ public class Beacon : MonoBehaviour {
 				else
 					angleRotatingToward = new Vector3 (0, -90f, 0f); 
 					
-				percRotatingToward = 80f;
+				percRotatingToward = 90f;
 				arrow.localEulerAngles += angleRotatingToward * percRotatingToward/100f * percRotateComplete/100f;
 			}
 			
@@ -812,7 +812,7 @@ public class Beacon : MonoBehaviour {
 			     (facing == DirectionEnum.East && dirRotatingToward == DirectionEnum.North)) 
 			{
 				angleRotatingToward = new Vector3 (0,0,90f);
-				percRotatingToward = 50f;
+				percRotatingToward = 75f;
 				arrow.localEulerAngles += angleRotatingToward * percRotatingToward/100f * percRotateComplete/100f;
 			}
 			
@@ -822,7 +822,7 @@ public class Beacon : MonoBehaviour {
 			     (facing == DirectionEnum.East && dirRotatingToward == DirectionEnum.South)) 
 			{
 				angleRotatingToward = new Vector3 (0,0,-90f);
-				percRotatingToward = 50f;
+				percRotatingToward = 75f;
 				arrow.localEulerAngles += angleRotatingToward * percRotatingToward/100f * percRotateComplete/100f;
 			}
 			
@@ -929,6 +929,8 @@ public class Beacon : MonoBehaviour {
 				}
 			}
 		}
+
+		transform.FindChild ("Arrow").GetComponent<MeshRenderer>().enabled = true;
 		
 		Color32 baseColor = transform.FindChild ("Arrow").renderer.material.color;
 		baseColor.a = 255;

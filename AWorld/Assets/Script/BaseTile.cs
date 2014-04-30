@@ -919,7 +919,7 @@ public class BaseTile : MonoBehaviour {
 
 
 				if (!audio.isPlaying) {
-					audio.volume = 0.4f;
+					audio.volume = 0.2f;
 					audio.Play (); //activate this if we want every tile influenced to trigger a sound, including the ones influenced by beacons
 				} 
 

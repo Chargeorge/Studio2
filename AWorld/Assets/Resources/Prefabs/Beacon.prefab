@@ -456,11 +456,11 @@ MonoBehaviour:
   gm: {fileID: 0}
   tileBeingConverted: {fileID: 0}
   sRef: {fileID: 0}
-  beaconBuilding: {fileID: 8300000, guid: 6d5cea721a045f14d81cea941f96ced5, type: 3}
+  beaconBuilding: {fileID: 8300000, guid: 94b2901bdfe54d448b2014594703b131, type: 3}
   beaconBuilt: {fileID: 8300000, guid: 97f7000fbdbc84d4e99560bc26b4eb9d, type: 3}
-  beaconUpgrading: {fileID: 8300000, guid: fb6a91a49e05fe540b927759c3f6933e, type: 3}
+  beaconUpgrading: {fileID: 8300000, guid: bf5ec58930db4bf468b8692133e96587, type: 3}
   beaconUpgraded: {fileID: 8300000, guid: d7cb0a39c63f1b74d89bccd2b85b6719, type: 3}
-  beaconRotating: {fileID: 8300000, guid: c6cb66b0474b31949b668801a48003d7, type: 3}
+  beaconRotating: {fileID: 8300000, guid: 718d2f24576090c4c8fbe2a70040862f, type: 3}
   beaconRotated: {fileID: 8300000, guid: e7c355a13a423aa4c8712cc9816c462f, type: 3}
   neutralColor:
     serializedVersion: 2

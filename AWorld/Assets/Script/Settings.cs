@@ -208,7 +208,7 @@ public class Settings : MonoBehaviour {
 		moveVolumeLerpRate = 0.2f;
 		playerInfluenceStartVolume = 1.0f;
 		playerInfluenceStartVolumeLerpRate = 0.1f;
-		playerInfluenceDoneVolume = 0.4f;
+		playerInfluenceDoneVolume = 0.2f;
 
 		InfluenceDoneHi = Resources.Load("SFX/Influence_Done_Hi") as AudioClip;
 		InfluenceDoneLo = Resources.Load("SFX/Influence_Done_Lo") as AudioClip;
