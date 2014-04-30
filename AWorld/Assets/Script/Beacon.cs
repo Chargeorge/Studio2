@@ -37,7 +37,6 @@ public class Beacon : MonoBehaviour {
 	public AudioClip beaconRotating;
 	public AudioClip beaconRotated;
 	public float lerpRate = 0.2f;
-	public AudioSource audioSourceBeacon;
 
 	private Material matBasic;
 	private Material matUpgraded;
@@ -55,7 +54,7 @@ public class Beacon : MonoBehaviour {
 		matUpgraded = (Material) Resources.Load ("Sprites/Materials/BaseUpg");
 		arrowUpgraded = (Material) Resources.Load ("Sprites/Materials/ArrowUpgraded");
 
-		audioSourceBeacon = this.GetComponent<AudioSource>();
+		//audioSourceBeacon = this.GetComponent<AudioSource>();
 
 	}
 	
@@ -72,7 +71,7 @@ public class Beacon : MonoBehaviour {
 			buildButtonDown = getPlayerBuild();
 
 			if(!buildButtonDown){
-				audioLerp(audioSourceBeacon, 0.01f, lerpRate);
+				audioLerp(audio, 0.01f, lerpRate);
 			}
 			if((_currentState == BeaconState.Basic || _currentState == BeaconState.BuildingAdvanced || _currentState == BeaconState.Advanced) && controllingTeam != null){
 
@@ -850,11 +849,11 @@ public class Beacon : MonoBehaviour {
 		UpdateInfluencePatterns();
 
 		if(percRotateComplete < 100f && !buildButtonDown){
-			audioLerp(audioSourceBeacon, 0.01f, lerpRate);
+			audioLerp(audio, 0.01f, lerpRate);
 		}
 
 		if(percRotateComplete >= 100f){
-			audioLerp(audioSourceBeacon, 0.01f, lerpRate);
+			audioLerp(audio, 0.01f, lerpRate);
 			audio.PlayOneShot(beaconRotated, 1.0f);	
 		}
 	
@@ -923,7 +922,7 @@ public class Beacon : MonoBehaviour {
 		
 		if(percBuildComplete >= 100f){
 			percBuildComplete = 100f;
-			audioLerp(audioSourceBeacon, 0.01f, lerpRate);
+			audioLerp(audio, 0.01f, lerpRate);
 			audio.PlayOneShot(beaconBuilt, 0.8f);
 			
 			_currentState = BeaconState.Basic;
@@ -954,7 +953,7 @@ public class Beacon : MonoBehaviour {
 	
 	
 	public void AbortBuild () {
-		audioLerp(audioSourceBeacon, 0.01f, lerpRate);
+		audioLerp(audio, 0.01f, lerpRate);
 		selfDestructing = true;
 		timeStoppedBuilding = Time.time;
 		Invoke ("CheckSelfDestruct", sRef.selfDestructDelay);
@@ -984,7 +983,7 @@ public class Beacon : MonoBehaviour {
 		losingUpgradeProgress = false;
 
 		//This block moved from old finishAction() function, now Build() 
-		audioLerp(audioSourceBeacon, 0.001f, lerpRate);
+		audioLerp(audio, 0.001f, lerpRate);
 		audio.Stop();
 		audio.PlayOneShot(beaconUpgraded, 1.0f);
 		//Invoke("stopAudio", 0.1f);
@@ -1010,7 +1009,7 @@ public class Beacon : MonoBehaviour {
 	
 	//Player stopped in the middle of an upgrade
 	public void AbortUpgrade () {
-		audioLerp(audioSourceBeacon, 0.01f, lerpRate);
+		audioLerp(audio, 0.01f, lerpRate);
 		losingUpgradeProgress = true;
 		timeStoppedUpgrading = Time.time;
 		Invoke ("CheckLoseUpgradeProgress", sRef.loseUpgradeProgressDelay);		
@@ -1108,6 +1107,6 @@ public class Beacon : MonoBehaviour {
 	}
 
 	public void stopAudio(){
-		audioLerp(audioSourceBeacon, 0.01f, lerpRate);
+		audioLerp(audio, 0.01f, lerpRate);
 	}
 }
