@@ -199,10 +199,10 @@ public class Beacon : MonoBehaviour {
 		audio.Stop ()	;
 		audio.PlayOneShot(beaconBuilding, .5f);		
 	}
-	
 
 	public void buildNeutral(GameObject tileLocation){
 		audio.Stop();
+		percBuildComplete = 100f;
 		this.gameObject.transform.parent = tileLocation.transform;
 		this.facing = (DirectionEnum)Random.Range(1,5);
 		this.dirRotatingToward = facing;
@@ -213,21 +213,24 @@ public class Beacon : MonoBehaviour {
 
 		_currentState = BeaconState.Basic;
 
-		_patternList = createBasicInfluenceList(getAngleForDir(facing));
-
-		
+		_patternList = createBasicInfluenceList(getAngleForDir(facing));		
 	}
 
 	public void startUpgrading(){
-
+		audio.Stop ();
 		this._currentState = BeaconState.BuildingAdvanced;
-		audio.PlayOneShot(beaconUpgrading, .8f);
+		audio.PlayOneShot(beaconUpgrading, 0.8f);
 	}
 	
 	public void startRotating (DirectionEnum? dir) {
 		audio.Stop ();
 		dirRotatingToward = dir;
-		audio.PlayOneShot(beaconRotating, 0.7f);
+		Debug.Log ("rotatin");
+		audio.clip = beaconRotating;
+		audio.Play ();
+		audio.volume = 1.0f;
+//		audio.PlayOneShot(beaconRotating, 0.7f);
+		Debug.Log (audio.isPlaying);
 	}
 	
 	public void setTeam(){
