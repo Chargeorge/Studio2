@@ -82,6 +82,7 @@ public class Altar : MonoBehaviour {
 		transform.FindChild("Quad").renderer.material = loaded;
 		symbol = transform.FindChild("Quad");
 		scoreLeft = sRef.valScorePerMine;
+		renderer.material.color = new Color32(237, 20, 90, 255);
 	}
 	
 	public void setScoreBarTeam(TeamInfo t ){
@@ -159,10 +160,10 @@ public class Altar : MonoBehaviour {
 								
 								if (scoreLeft <= 0) {
 									gameObject.transform.renderer.material.shader = Shader.Find ("Transparent/Diffuse");
-									Color32 drainedColor = gameObject.transform.renderer.material.color;
+									Color32 drainedColor = gameObject.renderer.material.color;
 									drainedColor.a = (byte) (sRef.drainedAltarAlpha * 255f);
 									Debug.Log (drainedColor.a);
-									gameObject.transform.renderer.material.color = drainedColor;
+									gameObject.renderer.material.color = drainedColor;
 								}
 							}
 	
@@ -201,7 +202,7 @@ public class Altar : MonoBehaviour {
 				}
 				
 			}else{
-				renderer.material.color = new Color32(237, 20, 90, 255);
+				
 				//pink (237, 20, 90, 255)
 				//symbol.renderer.material.color = new Color32(255, 255, 255, 255);
 			}
