@@ -729,6 +729,7 @@ public class Player : MonoBehaviour {
 				audioLerp (audioSourceMove, 0.0f, sRef.moveVolumeLerpRate);
 				
     			qudProgessCircle.renderer.enabled = true;
+    			qudProgessCircle.renderer.material.color = currentTile.controllingTeam.teamColor;
 				qudProgessCircle.renderer.material.SetFloat("_Cutoff", 1-(currentTile.percControlled /100f) );
 				if(buildButtonDown && currentTile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
 			//		Jiggle ();	//Gotta jiggle
