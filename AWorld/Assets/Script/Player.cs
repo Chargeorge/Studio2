@@ -784,11 +784,22 @@ public class Player : MonoBehaviour {
 							currentActionProgress = currentTile.percControlled;
 							
 							float averageActionProgress = getAverageActionProgress();
-							if(_currentState == PlayerState.influencing && Mathf.Abs(averageActionProgress - currentTile.percControlled) < 1.5f )  {
+						if(_currentState == PlayerState.influencing){
+							
+							Debug.Log (averageActionProgress*100 +" " +  currentTile.percControlled);
+							if(averageActionProgress*100 > currentTile.percControlled){
+								Debug.Log("In total");
+								_invalidAction = true;		
+							}
+							if(Mathf.Abs(getAverageActionProgressDifference()) < .001 ){  
+								Debug.Log(getAverageActionProgressDifference());
+								Debug.Log("In average");
+								
 								_invalidAction = true;	
 							}
-							
-							if(test > 0f || (currentTile.owningTeam != null && currentTile.owningTeam == team)){
+						}
+						
+						if(test > 0f || (currentTile.owningTeam != null && currentTile.owningTeam == team)){
 								
 								if (currentTile.getLocalAltar () != null || currentTile.tooCloseToBeacon() || currentTile.gameObject.transform.FindChild ("Home(Clone)") != null) {
 						
@@ -865,8 +876,20 @@ public class Player : MonoBehaviour {
 								}
 							}
 							float averageActionProgress = getAverageActionProgress();
-							if(_currentState == PlayerState.influencing && (averageActionProgress < currentTile.percControlled || (Mathf.Abs(averageActionProgress - currentTile.percControlled) < 1.5f) )){  
-								_invalidAction = true;	
+							
+							if(_currentState == PlayerState.influencing){
+								
+								Debug.Log (averageActionProgress*100 +" " +  currentTile.percControlled);
+							       if(averageActionProgress*100 < currentTile.percControlled){
+										Debug.Log("In total");
+											_invalidAction = true;		
+									}
+							    if(Mathf.Abs(getAverageActionProgressDifference()) < .001 ){  
+								Debug.Log(getAverageActionProgressDifference());
+								          Debug.Log("In average");
+								
+									_invalidAction = true;	
+								}
 							}
 						}
 						/*
@@ -1427,16 +1450,23 @@ public class Player : MonoBehaviour {
 	public void setProgressCircle(float progress){
 		qudProgessCircle.renderer.enabled = true;
 		qudProgessCircle.renderer.material.color = team.beaconColor;
-		qudProgessCircle.renderer.material.SetFloat("_Cutoff", 1.001f-progress);
-		actionProgressTicker = ++actionProgressTicker % actionProgress.Length-1;
+		float val = 1.001f-progress;
+		if (val<= 0) {val =.001f;}
+		qudProgessCircle.renderer.material.SetFloat("_Cutoff",val);
+		actionProgressTicker = (++actionProgressTicker) % actionProgress.Length;
 		actionProgress[actionProgressTicker] = progress;
 	}
 	
 	public void setProgressCircle(float progress, Color32 barColor){
 		qudProgessCircle.renderer.enabled = true;
 		qudProgessCircle.renderer.material.color = barColor;
-		qudProgessCircle.renderer.material.SetFloat("_Cutoff", 1.001f-progress);
-		actionProgressTicker = ++actionProgressTicker % actionProgress.Length-1;
+		float val = 1.001f-progress;
+		if (val<= 0) {val =.001f;}
+		
+		
+		qudProgessCircle.renderer.material.SetFloat("_Cutoff", val);
+	
+		actionProgressTicker = (++actionProgressTicker) % actionProgress.Length;
 		actionProgress[actionProgressTicker] = progress;
 		
 		
@@ -1460,6 +1490,23 @@ public class Player : MonoBehaviour {
 		
 		return total/(float)count;
 	}
+	
+	public float getAverageActionProgressDifference(){
+		float min=  float.MaxValue;
+		float max = 0;
+		int count = 0;
+		for(int i = 0; i <actionProgress.Length; i++){
+			if(actionProgress[i] != 0) {
+				if(actionProgress[i]< min) min = actionProgress[i];
+				if(actionProgress[i]> max) max = actionProgress[i];
+				
+				count++;
+			}
+		}
+		Debug.Log ("count: " + count);
+		return max-min;
+	}
+	
 	
 	public void audioLerp (AudioSource source, float target, float rate) {
 		if (Mathf.Abs (source.volume - target) <= 0.001f) {
