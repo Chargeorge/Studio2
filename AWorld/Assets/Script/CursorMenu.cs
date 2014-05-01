@@ -36,9 +36,9 @@ public class CursorMenu : MonoBehaviour {
 		rotateSpeed = restingRotateSpeed;
 		rotatingLeft = -1;
 	
-		startPos = new Vector3(-2.5f, -0.4f, cursorDepth);
-		optionsPos = new Vector3(-2.5f, -1.7f, cursorDepth);
-		quitPos = new Vector3(-2.5f, -3.0f, cursorDepth);
+		startPos = new Vector3(-2.5f, -0.45f, cursorDepth);
+		optionsPos = new Vector3(-2.5f, -1.65f, cursorDepth);
+		quitPos = new Vector3(-2.5f, -2.95f, cursorDepth);
 		lerping = false;
 		lerpRate = 0.2f;
 	

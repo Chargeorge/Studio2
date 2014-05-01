@@ -85,13 +85,9 @@ public class CursorOptions : MonoBehaviour {
 			newPos.x = Mathf.Lerp(newPos.x, target.x, lerpRate);
 			newPos.y = Mathf.Lerp(newPos.y, target.y, lerpRate);
 			transform.position = newPos;
-			if(Mathf.Abs(Vector3.Magnitude(newPos-target)) < 0.1f){
+			if(Mathf.Abs(Vector3.Magnitude(newPos-target)) < 0.07f){
 				transform.position = target;
-				lerping = false;
-				goingRight = false;
-				goingLeft = false;
-				goingUp = false;
-				goingDown = false;
+				Invoke ("TakeNewPosition", 0.01f);
 			}
 		}
 		
@@ -304,7 +300,7 @@ public class CursorOptions : MonoBehaviour {
 
 	IEnumerator waitMenu(){
 		if (goingRight) rotatingLeft = -1;
-		else if (goingRight) rotatingLeft = 1;
+		else if (goingLeft) rotatingLeft = 1;
 		if (goingUp) rotatingLeft = -1;
 		else if (goingDown) rotatingLeft = 1;
 		
@@ -312,5 +308,14 @@ public class CursorOptions : MonoBehaviour {
 		
 		yield return new WaitForSeconds(0.3f);
 		//lerping = false;
+	}
+	
+	//Sets movement check bools to false - ensures that the thing is selected before you start moving again
+	void TakeNewPosition () {
+		goingRight = false;
+		goingLeft = false;
+		goingUp = false;
+		goingDown = false;
+		lerping = false;
 	}
 }
