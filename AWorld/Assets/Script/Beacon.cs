@@ -71,7 +71,7 @@ public class Beacon : MonoBehaviour {
 			buildButtonDown = getPlayerBuild();
 
 			if(!buildButtonDown){
-			//	audioLerp(audioSourceBeacon, 0.01f, lerpRate);
+				audioLerp(audioSourceBeacon, 0.01f, lerpRate);
 			}
 			if((_currentState == BeaconState.Basic || _currentState == BeaconState.BuildingAdvanced || _currentState == BeaconState.Advanced) && controllingTeam != null){
 
