@@ -20,8 +20,8 @@ public class ScoreBit : MonoBehaviour {
 
 	public void setTeam(TeamInfo T){
 		team = T;
-	//	renderer.material.color = team.getHighLightColor();
-		renderer.material.color = new Color32(237, 20, 90, 180);
+		renderer.material.color = team.beaconColor;
+	//	renderer.material.color = new Color32(237, 20, 90, 180);
 		
 		finalTarget = T.ScoreBar.transform.FindChild ("ScoreBitFinalTarget").gameObject.GetComponent<FinalScoreTarget>();
 		
@@ -50,6 +50,9 @@ public class ScoreBit : MonoBehaviour {
 			transform.position = NewPos3;
 			
 		}
+
+
+
 		if (finalTarget != null && closeEnoughToTarget (transform.position, finalTarget.transform.position, sRef.closeEnoughDistanceScoreBit)) {
 //			Debug.Log ("Collision detected");
 			finalTarget.PlayScoreAnimation ();

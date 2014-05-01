@@ -107,22 +107,22 @@ TrailRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_SortingLayerID: 0
-  m_Time: .0599999987
-  m_StartWidth: .300000012
+  m_Time: 1.02999997
+  m_StartWidth: .310000002
   m_EndWidth: .100000001
   m_Colors:
     m_Color[0]:
       serializedVersion: 2
-      rgba: 2083462876
+      rgba: 2094845889
     m_Color[1]:
       serializedVersion: 2
-      rgba: 4284566015
+      rgba: 1341056220
     m_Color[2]:
       serializedVersion: 2
-      rgba: 4292133375
+      rgba: 922745340
     m_Color[3]:
       serializedVersion: 2
-      rgba: 4294967295
+      rgba: 469762047
     m_Color[4]:
       serializedVersion: 2
       rgba: 16777215
@@ -141,6 +141,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sRef: {fileID: 0}
   speed: .200000003
+  scoreAmt: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
