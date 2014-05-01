@@ -36,7 +36,7 @@ public class CursorOptions : MonoBehaviour {
 	void Start () {
 
 		lerping = false;
-		lerpRate = 0.1f;
+		lerpRate = 0.2f;
 		
 		optionsScript = options.GetComponent<OptionsManager>();
 		rotateSpeed = restingRotateSpeed * -1;
@@ -83,7 +83,6 @@ public class CursorOptions : MonoBehaviour {
 				goingLeft = false;
 			}
 		}
-		Debug.Log(lerping);
 		
 		float x = Input.GetAxis("HorizontalPlayer1") * moveSpeed * Time.deltaTime;
 		float y = Input.GetAxis("VerticalPlayer1") * moveSpeed * Time.deltaTime;

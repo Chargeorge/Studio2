@@ -232,83 +232,99 @@ public class OptionsManager : MonoBehaviour {
 
 
 		//LET'S MAKE SHIT HAPPEN WHEN SOMETHING IS SELECTED AND THE BUTTON IS PRESSED
-		if(Input.GetButtonDown("BuildPlayer1") && cursor.transform.position.y > -3.0f){
+		if(Input.GetButtonDown("BuildPlayer1")){
 
 			audio.Stop ();
 			audio.PlayOneShot(select, 0.8f);
 
-		if(playersSelected){
-			if(numberOfPlayers == 2){
-				playersDisplay.renderer.material = fourPlayersMat;
-				numberOfPlayers = 4;
-				} else if(numberOfPlayers == 4){
-					playersDisplay.renderer.material = twoPlayersMat;
-					numberOfPlayers = 2;
+			if(playersSelected){
+				if(numberOfPlayers == 2){
+					playersDisplay.renderer.material = fourPlayersMat;
+					numberOfPlayers = 4;
+					} else if(numberOfPlayers == 4){
+						playersDisplay.renderer.material = twoPlayersMat;
+						numberOfPlayers = 2;
+					}
 				}
-			}
+		
+				if(fogSelected){
+					if(fogDisplayed == 1){
+						fogDisplay.renderer.material = fogOffMat;
+						fogDisplay.transform.localScale = new Vector3 (1.5f, 1.5f, fogDisplay.transform.localScale.z);
+						fogDisplayed = 0;
+					} else if(fogDisplayed == 0){
+						fogDisplay.renderer.material = fogOnMat;
+						fogDisplay.transform.localScale = new Vector3 (2f, 1f, fogDisplay.transform.localScale.z);
+						fogDisplayed = 1;
+					}
+				}
+		
+				if(terrainSelected){
+					if(terrainIntensity == 1){ //change from small to medium
+						terrainDisplay.renderer.material = terrainIntensitySwamp;
+						terrainIntensity = 2;
+					} else if(terrainIntensity == 2){ //change from small to medium
+						terrainDisplay.renderer.material = terrainIntensityFlooded;
+						terrainIntensity = 3;
+					} else if(terrainIntensity == 3){ //change from small to medium
+						terrainDisplay.renderer.material = terrainIntensityNoWater;
+						terrainIntensity = 1;
+					}
+				}
+		
+				if(speedSelected){
+					if(gameSpeed == 1){
+						speedDisplay.renderer.material = speedNormalMat;
+						gameSpeed = 2;
+					} else if(gameSpeed == 2){
+						speedDisplay.renderer.material = speedDoubleMat;
+						gameSpeed = 3;
+					} else if(gameSpeed == 3){
+						speedDisplay.renderer.material = speedHalfMat;
+						gameSpeed = 1;
+					}
+				}
+		
+				if(sizeSelected){
+					if(terrainSize == 1){
+						sizeDisplay.renderer.material = sizeNormalMat;
+						terrainSize = 2;
+					} else if(terrainSize == 2){
+						sizeDisplay.renderer.material = sizeLargeMat;
+						terrainSize = 3;
+					} else if(terrainSize == 3){
+						sizeDisplay.renderer.material = sizeSmallMat;
+						terrainSize = 1;
+					}
+				}
 	
-			if(fogSelected){
-				if(fogDisplayed == 1){
-					fogDisplay.renderer.material = fogOffMat;
-					fogDisplay.transform.localScale = new Vector3 (1.5f, 1.5f, fogDisplay.transform.localScale.z);
-					fogDisplayed = 0;
-				} else if(fogDisplayed == 0){
-					fogDisplay.renderer.material = fogOnMat;
-					fogDisplay.transform.localScale = new Vector3 (2f, 1f, fogDisplay.transform.localScale.z);
-					fogDisplayed = 1;
+				if(tutorialSelected){
+					if(tutorialToggle == 1){
+						tutorialDisplay.renderer.material = tutorialOffMat;
+						tutorialToggle = 0;
+					} else if(tutorialToggle == 0){
+						tutorialDisplay.renderer.material = tutorialOnMat;
+						tutorialToggle = 1;
+					}
 				}
-			}
-	
-			if(terrainSelected){
-				if(terrainIntensity == 1){ //change from small to medium
-					terrainDisplay.renderer.material = terrainIntensitySwamp;
-					terrainIntensity = 2;
-				} else if(terrainIntensity == 2){ //change from small to medium
-					terrainDisplay.renderer.material = terrainIntensityFlooded;
-					terrainIntensity = 3;
-				} else if(terrainIntensity == 3){ //change from small to medium
-					terrainDisplay.renderer.material = terrainIntensityNoWater;
-					terrainIntensity = 1;
-				}
-			}
-	
-			if(speedSelected){
-				if(gameSpeed == 1){
-					speedDisplay.renderer.material = speedNormalMat;
-					gameSpeed = 2;
-				} else if(gameSpeed == 2){
-					speedDisplay.renderer.material = speedDoubleMat;
-					gameSpeed = 3;
-				} else if(gameSpeed == 3){
-					speedDisplay.renderer.material = speedHalfMat;
-					gameSpeed = 1;
-				}
-			}
-	
-			if(sizeSelected){
-				if(terrainSize == 1){
-					sizeDisplay.renderer.material = sizeNormalMat;
-					terrainSize = 2;
-				} else if(terrainSize == 2){
-					sizeDisplay.renderer.material = sizeLargeMat;
-					terrainSize = 3;
-				} else if(terrainSize == 3){
-					sizeDisplay.renderer.material = sizeSmallMat;
-					terrainSize = 1;
-				}
-			}
-
-			if(tutorialSelected){
-				if(tutorialToggle == 1){
-					tutorialDisplay.renderer.material = tutorialOffMat;
-					tutorialToggle = 0;
-				} else if(tutorialToggle == 0){
-					tutorialDisplay.renderer.material = tutorialOnMat;
-					tutorialToggle = 1;
-				}
+			
+			if (resetSelected){
+				playersDisplay.renderer.material = twoPlayersMat;
+				numberOfPlayers = 2;
+				fogDisplay.renderer.material = fogOnMat;
+				fogDisplay.transform.localScale = new Vector3 (2f, 1f, fogDisplay.transform.localScale.z);
+				fogDisplayed = 1;
+				terrainDisplay.renderer.material = terrainIntensitySwamp;
+				terrainIntensity = 2;
+				speedDisplay.renderer.material = speedNormalMat;
+				gameSpeed = 2;
+				sizeDisplay.renderer.material = sizeNormalMat;
+				terrainSize = 2;
+				tutorialDisplay.renderer.material = tutorialOnMat;
+				tutorialToggle = 1;
 			}
 		}
-
+		
 		if(startSelected && Input.GetButtonDown("BuildPlayer1") && !loadingNewScreen){
 			audio.PlayOneShot(launch, 0.9f);
 			loadingNewScreen = true;
