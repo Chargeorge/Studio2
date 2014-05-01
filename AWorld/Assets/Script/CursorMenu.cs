@@ -33,15 +33,14 @@ public class CursorMenu : MonoBehaviour {
 
 		menuScript = menu.GetComponent<MainMenu>();
 
-		rotateSpeed = restingRotateSpeed * -1;
+		rotateSpeed = restingRotateSpeed;
 		rotatingLeft = -1;
 	
-
-		startPos = new Vector3(-2.5f, -0.4f, cursorDepth);
-		optionsPos = new Vector3(-2.5f, -1.7f, cursorDepth);
-		quitPos = new Vector3(-2.5f, -3.0f, cursorDepth);
+		startPos = new Vector3(-2.5f, -0.45f, cursorDepth);
+		optionsPos = new Vector3(-2.5f, -1.65f, cursorDepth);
+		quitPos = new Vector3(-2.5f, -2.95f, cursorDepth);
 		lerping = false;
-		lerpRate =.1f;
+		lerpRate = 0.2f;
 	
 	}
 
@@ -56,7 +55,7 @@ public class CursorMenu : MonoBehaviour {
 			Vector3 newPos = transform.position;
 			newPos.y = Mathf.Lerp(transform.position.y, target.y, lerpRate);
 			transform.position = newPos;
-			if(Mathf.Abs(Vector3.Magnitude(newPos-target)) < 0.05f){
+			if(Mathf.Abs(Vector3.Magnitude(newPos-target)) < 0.01f){
 				transform.position = target;
 				lerping = false;
 				goingUpUpAndAway = false;
@@ -64,20 +63,18 @@ public class CursorMenu : MonoBehaviour {
 			}
 
 			if(goingUpUpAndAway){
-				rotateSpeed = -1 * movingRotateSpeed;
-				rotatingLeft = -1;
-			} else if(goingLowLowLow){
 				rotateSpeed = movingRotateSpeed;
 				rotatingLeft = 1;
+			} else if(goingLowLowLow){
+				rotateSpeed = movingRotateSpeed;
+				rotatingLeft = -1;
 			} else {
-				rotateSpeed = restingRotateSpeed * rotatingLeft;
+				rotateSpeed = restingRotateSpeed;
 			}
 		}
 
 		float x = Input.GetAxis("HorizontalPlayer1") * moveSpeed * Time.deltaTime;
 		float y = Input.GetAxis("VerticalPlayer1") * moveSpeed * Time.deltaTime;
-
-
 		
 		if (!menu.GetComponent<MainMenu>().loadingNewScreen && !lerping){
 			if(MainMenu.startSelected){
@@ -138,7 +135,7 @@ public class CursorMenu : MonoBehaviour {
 			}
 		}
 		else if (!menuScript.quitting) {	//Freeze rotation if quitting
-			transform.RotateAround (transform.position, Vector3.forward, rotateSpeed * Time.deltaTime);				
+			transform.RotateAround (transform.position, Vector3.forward, rotateSpeed * rotatingLeft * Time.deltaTime);				
 		}		
 	}
 }

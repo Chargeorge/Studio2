@@ -35,7 +35,7 @@ public class OptionsManager : MonoBehaviour {
 	public Material fogOffMat;
 	public static int fogDisplayed; //0 is off, 1 is on
 
-	public static bool terrainSelected = false;
+	public static bool waterSelected = false;
 	public GameObject terrainDisplay;
 	public Material terrainIntensityNoWater;
 	public Material terrainIntensitySwamp;
@@ -168,23 +168,23 @@ public class OptionsManager : MonoBehaviour {
 			if(cursor.transform.position.x >= 1.80f && cursor.transform.position.x < 5.85f){
 				playersSelected = true;
 				fogSelected = false;
-				terrainSelected = false;
+				waterSelected = false;
 
 			} else if(cursor.transform.position.x > 5.95f && cursor.transform.position.x < 9.0f){
 				playersSelected = false;
 				fogSelected = true;
-				terrainSelected = false;
+				waterSelected = false;
 			} else if(cursor.transform.position.x > 9.2f && cursor.transform.position.x < 12.0f){
 				playersSelected = false;
 				fogSelected = false;
-				terrainSelected = true;
+				waterSelected = true;
 			}
 
 		} else if(cursor.transform.position.y == -2.3f){
 
 			playersSelected = false;
 			fogSelected = false;
-			terrainSelected = false;
+			waterSelected = false;
 
 			startSelected = false;
 			backSelected = false;
@@ -208,7 +208,7 @@ public class OptionsManager : MonoBehaviour {
 			
 			playersSelected = false;
 			fogSelected = false;
-			terrainSelected = false;
+			waterSelected = false;
 
 			sizeSelected = false;
 			speedSelected = false;
@@ -232,83 +232,99 @@ public class OptionsManager : MonoBehaviour {
 
 
 		//LET'S MAKE SHIT HAPPEN WHEN SOMETHING IS SELECTED AND THE BUTTON IS PRESSED
-		if(Input.GetButtonDown("BuildPlayer1") && cursor.transform.position.y > -3.0f){
+		if(Input.GetButtonDown("BuildPlayer1")){
 
 			audio.Stop ();
 			audio.PlayOneShot(select, 0.8f);
 
-		if(playersSelected){
-			if(numberOfPlayers == 2){
-				playersDisplay.renderer.material = fourPlayersMat;
-				numberOfPlayers = 4;
-				} else if(numberOfPlayers == 4){
-					playersDisplay.renderer.material = twoPlayersMat;
-					numberOfPlayers = 2;
+			if(playersSelected){
+				if(numberOfPlayers == 2){
+					playersDisplay.renderer.material = fourPlayersMat;
+					numberOfPlayers = 4;
+					} else if(numberOfPlayers == 4){
+						playersDisplay.renderer.material = twoPlayersMat;
+						numberOfPlayers = 2;
+					}
 				}
-			}
+		
+				if(fogSelected){
+					if(fogDisplayed == 1){
+						fogDisplay.renderer.material = fogOffMat;
+						fogDisplay.transform.localScale = new Vector3 (1.5f, 1.5f, fogDisplay.transform.localScale.z);
+						fogDisplayed = 0;
+					} else if(fogDisplayed == 0){
+						fogDisplay.renderer.material = fogOnMat;
+						fogDisplay.transform.localScale = new Vector3 (2f, 1f, fogDisplay.transform.localScale.z);
+						fogDisplayed = 1;
+					}
+				}
+		
+				if(waterSelected){
+					if(terrainIntensity == 1){ //change from small to medium
+						terrainDisplay.renderer.material = terrainIntensitySwamp;
+						terrainIntensity = 2;
+					} else if(terrainIntensity == 2){ //change from small to medium
+						terrainDisplay.renderer.material = terrainIntensityFlooded;
+						terrainIntensity = 3;
+					} else if(terrainIntensity == 3){ //change from small to medium
+						terrainDisplay.renderer.material = terrainIntensityNoWater;
+						terrainIntensity = 1;
+					}
+				}
+		
+				if(speedSelected){
+					if(gameSpeed == 1){
+						speedDisplay.renderer.material = speedNormalMat;
+						gameSpeed = 2;
+					} else if(gameSpeed == 2){
+						speedDisplay.renderer.material = speedDoubleMat;
+						gameSpeed = 3;
+					} else if(gameSpeed == 3){
+						speedDisplay.renderer.material = speedHalfMat;
+						gameSpeed = 1;
+					}
+				}
+		
+				if(sizeSelected){
+					if(terrainSize == 1){
+						sizeDisplay.renderer.material = sizeNormalMat;
+						terrainSize = 2;
+					} else if(terrainSize == 2){
+						sizeDisplay.renderer.material = sizeLargeMat;
+						terrainSize = 3;
+					} else if(terrainSize == 3){
+						sizeDisplay.renderer.material = sizeSmallMat;
+						terrainSize = 1;
+					}
+				}
 	
-			if(fogSelected){
-				if(fogDisplayed == 1){
-					fogDisplay.renderer.material = fogOffMat;
-					fogDisplay.transform.localScale = new Vector3 (1.5f, 1.5f, fogDisplay.transform.localScale.z);
-					fogDisplayed = 0;
-				} else if(fogDisplayed == 0){
-					fogDisplay.renderer.material = fogOnMat;
-					fogDisplay.transform.localScale = new Vector3 (2f, 1f, fogDisplay.transform.localScale.z);
-					fogDisplayed = 1;
+				if(tutorialSelected){
+					if(tutorialToggle == 1){
+						tutorialDisplay.renderer.material = tutorialOffMat;
+						tutorialToggle = 0;
+					} else if(tutorialToggle == 0){
+						tutorialDisplay.renderer.material = tutorialOnMat;
+						tutorialToggle = 1;
+					}
 				}
-			}
-	
-			if(terrainSelected){
-				if(terrainIntensity == 1){ //change from small to medium
-					terrainDisplay.renderer.material = terrainIntensitySwamp;
-					terrainIntensity = 2;
-				} else if(terrainIntensity == 2){ //change from small to medium
-					terrainDisplay.renderer.material = terrainIntensityFlooded;
-					terrainIntensity = 3;
-				} else if(terrainIntensity == 3){ //change from small to medium
-					terrainDisplay.renderer.material = terrainIntensityNoWater;
-					terrainIntensity = 1;
-				}
-			}
-	
-			if(speedSelected){
-				if(gameSpeed == 1){
-					speedDisplay.renderer.material = speedNormalMat;
-					gameSpeed = 2;
-				} else if(gameSpeed == 2){
-					speedDisplay.renderer.material = speedDoubleMat;
-					gameSpeed = 3;
-				} else if(gameSpeed == 3){
-					speedDisplay.renderer.material = speedHalfMat;
-					gameSpeed = 1;
-				}
-			}
-	
-			if(sizeSelected){
-				if(terrainSize == 1){
-					sizeDisplay.renderer.material = sizeNormalMat;
-					terrainSize = 2;
-				} else if(terrainSize == 2){
-					sizeDisplay.renderer.material = sizeLargeMat;
-					terrainSize = 3;
-				} else if(terrainSize == 3){
-					sizeDisplay.renderer.material = sizeSmallMat;
-					terrainSize = 1;
-				}
-			}
-
-			if(tutorialSelected){
-				if(tutorialToggle == 1){
-					tutorialDisplay.renderer.material = tutorialOffMat;
-					tutorialToggle = 0;
-				} else if(tutorialToggle == 0){
-					tutorialDisplay.renderer.material = tutorialOnMat;
-					tutorialToggle = 1;
-				}
+			
+			if (resetSelected){
+				playersDisplay.renderer.material = twoPlayersMat;
+				numberOfPlayers = 2;
+				fogDisplay.renderer.material = fogOnMat;
+				fogDisplay.transform.localScale = new Vector3 (2f, 1f, fogDisplay.transform.localScale.z);
+				fogDisplayed = 1;
+				terrainDisplay.renderer.material = terrainIntensitySwamp;
+				terrainIntensity = 2;
+				speedDisplay.renderer.material = speedNormalMat;
+				gameSpeed = 2;
+				sizeDisplay.renderer.material = sizeNormalMat;
+				terrainSize = 2;
+				tutorialDisplay.renderer.material = tutorialOnMat;
+				tutorialToggle = 1;
 			}
 		}
-
+		
 		if(startSelected && Input.GetButtonDown("BuildPlayer1") && !loadingNewScreen){
 			audio.PlayOneShot(launch, 0.9f);
 			loadingNewScreen = true;
@@ -352,8 +368,8 @@ public class OptionsManager : MonoBehaviour {
 		if(playersSelected) GUI.Label (new Rect((Screen.width/8)*firstColumn, height1, Screen.width/4, 50), "PLAYERS", highlightStyle);
 		if(!fogSelected) GUI.Label (new Rect((Screen.width/8)*secondColumn, height1, Screen.width/4, 50), "FOG", subtitleStyle);
 		if(fogSelected) GUI.Label (new Rect((Screen.width/8)*secondColumn, height1, Screen.width/4, 50), "FOG", highlightStyle);
-		if(!terrainSelected) GUI.Label (new Rect((Screen.width/8)*thirdColumn, height1, Screen.width/4, 50), "WATER", subtitleStyle);
-		if(terrainSelected) GUI.Label (new Rect((Screen.width/8)*thirdColumn, height1, Screen.width/4, 50), "WATER", highlightStyle);
+		if(!waterSelected) GUI.Label (new Rect((Screen.width/8)*thirdColumn, height1, Screen.width/4, 50), "WATER", subtitleStyle);
+		if(waterSelected) GUI.Label (new Rect((Screen.width/8)*thirdColumn, height1, Screen.width/4, 50), "WATER", highlightStyle);
 
 		if(!speedSelected) GUI.Label (new Rect((Screen.width/8)*firstColumn, height2, Screen.width/4, 50), "SPEED", subtitleStyle);
 		if(speedSelected) GUI.Label (new Rect((Screen.width/8)*firstColumn, height2, Screen.width/4, 50), "SPEED", highlightStyle);

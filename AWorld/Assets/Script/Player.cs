@@ -48,6 +48,9 @@ public class Player : MonoBehaviour {
 	public Vector3 teleportTarget;
 	
 	public Vector2 moveVector;
+	
+	float[] actionProgress;		//CHARRR
+	int actionProgressTicker;	//CHARRR
 
 	public PlayerState currentState {
 		get {
@@ -155,7 +158,7 @@ public class Player : MonoBehaviour {
 			break;
 			
 			case PlayerState.standing:
-				_previousActionVal = 0;
+				int _previousActionVal = 0;	//CHARRR
 				audioLerp (audioSourceMove, 0.0f, sRef.moveVolumeLerpRate);
 				if (audioSourceInfluenceStart.volume > 0.01f) { audioLerp (audioSourceInfluenceStart, 0.0f, sRef.playerInfluenceStartVolumeLerpRate); 
 					} else { audioSourceInfluenceStart.Stop (); }
