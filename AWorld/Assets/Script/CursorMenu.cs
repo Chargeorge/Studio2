@@ -14,6 +14,10 @@ public class CursorMenu : MonoBehaviour {
 	public GameObject menu;
 	private MainMenu menuScript;
 
+	Vector2 startPos;
+	Vector2 optionsPos;
+	Vector3 quitPos;
+
 	// Use this for initialization
 	void Start () {
 
@@ -22,7 +26,9 @@ public class CursorMenu : MonoBehaviour {
 		rotateSpeed = restingRotateSpeed * -1;
 		rotatingLeft = -1;
 		
-		//transform.position.x = startPos;
+		startPos = new Vector2(-2.5f, -0.4f);
+		optionsPos = new Vector2(-2.5f, -1.7f);
+		quitPos = new Vector2(-2.5f, -2.9f);
 	
 	}
 	
@@ -35,7 +41,10 @@ public class CursorMenu : MonoBehaviour {
 		float y = Input.GetAxis("VerticalPlayer1") * moveSpeed * Time.deltaTime;
 
 		//pos.x += x;
-		if (!menu.GetComponent<MainMenu>().loadingNewScreen) pos.y += y;
+		if (!menu.GetComponent<MainMenu>().loadingNewScreen){
+		pos.y += y;
+
+		}
 
 		if(pos.y > -0.4f){
 			pos.y = -0.4f;
