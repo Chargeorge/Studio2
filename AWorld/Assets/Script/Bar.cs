@@ -73,6 +73,7 @@ public class Bar : MonoBehaviour {
 			teamPos.y = fixIt + endPosY *perScore;
 		} else {
 			teamPos.y = fixIt + endPosY;
+			teamScale.y = endScale.y;
 		}
 		scoreBitFinal.transform.position = new Vector3(scoreBitFinal.transform.position.x, teamPos.y+teamScale.y/2, -1);
 		
