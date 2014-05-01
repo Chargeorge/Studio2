@@ -47,7 +47,7 @@ public class CursorOptions : MonoBehaviour {
 		goingDown = false;
 		
 		optionsScript = options.GetComponent<OptionsManager>();
-		rotateSpeed = restingRotateSpeed * -1;
+		rotateSpeed = restingRotateSpeed;
 		rotatingLeft = -1;
 
 		float cursorDepth = -8.9f;
@@ -266,18 +266,19 @@ public class CursorOptions : MonoBehaviour {
 			}
 		}
 		
-		if (!optionsScript.loadingNewScreen) {
-			if (x > 0) {
-				rotateSpeed = -1 * movingRotateSpeed;
+		
+		if (!optionsScript.loadingNewScreen && !goingRight && !goingLeft && !goingUp && !goingDown) {
+			if (x > 0.0f || y > 0.0f) {
 				rotatingLeft = -1;
-			}
-			else if (x < 0) { 
 				rotateSpeed = movingRotateSpeed;
+			}
+			else if (x < 0.0f || y < 0.0f) {
 				rotatingLeft = 1;
+				rotateSpeed = movingRotateSpeed;
 			}
-			else {
-				rotateSpeed = restingRotateSpeed * rotatingLeft;
-			}
+			else { 
+				rotateSpeed = restingRotateSpeed;
+			}	
 		}
 			
 		if (optionsScript.loadingNewScreen) {
@@ -290,7 +291,7 @@ public class CursorOptions : MonoBehaviour {
 			
 		}
 		else {
-			transform.RotateAround (transform.position, Vector3.forward, rotateSpeed * Time.deltaTime);
+			transform.RotateAround (transform.position, Vector3.forward, rotateSpeed * rotatingLeft * Time.deltaTime);
 		}
 	}
 
@@ -302,6 +303,13 @@ public class CursorOptions : MonoBehaviour {
 	}
 
 	IEnumerator waitMenu(){
+		if (goingRight) rotatingLeft = -1;
+		else if (goingRight) rotatingLeft = 1;
+		if (goingUp) rotatingLeft = -1;
+		else if (goingDown) rotatingLeft = 1;
+		
+		rotateSpeed = movingRotateSpeed;
+		
 		yield return new WaitForSeconds(0.3f);
 		//lerping = false;
 	}
