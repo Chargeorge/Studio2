@@ -113,7 +113,7 @@ public class CursorOptions : MonoBehaviour {
 					goingLeft = false;
 					StartCoroutine("waitMenu");
 				}else if(OptionsManager.waterSelected){
-					StartCoroutine("waitMenuTranslate", speedPos);
+					//StartCoroutine("waitMenuTranslate", speedPos);
 				}else if(OptionsManager.speedSelected){
 					StartCoroutine("waitMenu");
 					lerping = true;
@@ -127,7 +127,7 @@ public class CursorOptions : MonoBehaviour {
 					target = tutorialPos;
 					StartCoroutine("waitMenu");
 				}else if(OptionsManager.tutorialSelected){
-					StartCoroutine("waitMenuTranslate", backPos);
+					//StartCoroutine("waitMenuTranslate", backPos);
 				}else if(OptionsManager.backSelected){
 					StartCoroutine("waitMenu");
 					lerping = true;
@@ -159,7 +159,7 @@ public class CursorOptions : MonoBehaviour {
 					target = fogPos;
 					StartCoroutine("waitMenu"); 
 				}else if(OptionsManager.speedSelected){
-					StartCoroutine("waitMenuTranslate", waterPos);
+					//StartCoroutine("waitMenuTranslate", waterPos);
 				}else if(OptionsManager.sizeSelected){
 					lerping = true;
 					goingRight = false;
@@ -173,7 +173,7 @@ public class CursorOptions : MonoBehaviour {
 					target = sizePos;
 					StartCoroutine("waitMenu");
 				}else if(OptionsManager.backSelected){
-					StartCoroutine("waitMenuTranslate", tutorialPos);
+					//StartCoroutine("waitMenuTranslate", tutorialPos);
 				}else if(OptionsManager.resetSelected){
 					lerping = true;
 					goingRight = false;
