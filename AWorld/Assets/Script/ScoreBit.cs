@@ -19,9 +19,15 @@ public class ScoreBit : MonoBehaviour {
 	}
 
 	public void setTeam(TeamInfo T){
+
+
 		team = T;
-		renderer.material.color = team.beaconColor;
-	//	renderer.material.color = new Color32(237, 20, 90, 180);
+		Color32 scoreBitColor = team.beaconColor;
+		scoreBitColor.a = 170;
+
+
+	//	renderer.material.color = scoreBitColor;
+		renderer.material.color = new Color32(237, 20, 90, 180);
 		
 		finalTarget = T.ScoreBar.transform.FindChild ("ScoreBitFinalTarget").gameObject.GetComponent<FinalScoreTarget>();
 		
@@ -30,6 +36,11 @@ public class ScoreBit : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+		transform.Rotate(new Vector3(0,0,5));
+
+	//	transform.RotateAround (transform.position, Vector3.forward, 0.2f * Time.deltaTime);
+
 		if(targets.Count > 0){
 			Vector2 NewPos  =  Vector2.MoveTowards( (Vector2)transform.position, (Vector2)(targets[0].transform.position), speed);
 			Vector3 NewPos3 = new Vector3(NewPos.x, NewPos.y, transform.position.z);
@@ -94,7 +105,7 @@ public class ScoreBit : MonoBehaviour {
 //		Debug.Log (newTrans);
 		transform.eulerAngles = new Vector3(0,0,0);
 
-		//transform.Rotate(new Vector3(0,0,angleTo));
+//		transform.Rotate(new Vector3(0,0,angleTo));
 	}
 
 	public void start(List<AStarholder> tiles){
