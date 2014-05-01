@@ -231,7 +231,6 @@ public class Beacon : MonoBehaviour {
 		audio.Stop ();
 		dirRotatingToward = dir;
 		audio.PlayOneShot(beaconRotating, 0.7f);
-		Debug.Log("shit's rotating yo");
 	}
 	
 	public void setTeam(){

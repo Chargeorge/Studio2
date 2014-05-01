@@ -892,6 +892,10 @@ MonoBehaviour:
   upgradeCircleStartAlpha: 0
   upgradeCircleFinishAlpha: 0
   drainedAltarAlpha: 0
+  scoreBitExplosionStartSize: 0
+  scoreBitExplosionFinishSize: 0
+  scoreBitExplosionStartSpeed: 0
+  scoreBitExplosionFinishSpeed: 0
   playerAccelRate: 0
   playerFriction: 0
   playerMaxSpeed: 0
