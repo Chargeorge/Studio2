@@ -76,9 +76,9 @@ public class Settings : MonoBehaviour {
 	public float upgradeCircleFinishAlpha; 	//The alpha the upgrade circle anim thing is at around 99% complete
 	public float drainedAltarAlpha;
 	public float scoreBitExplosionStartSize;
-	public float scoreBitExplosionStartSizeScale;
+	public float scoreBitExplosionFinishSize;
 	public float scoreBitExplosionStartSpeed;
-	public float scoreBitExplosionStartSpeedScale;	
+	public float scoreBitExplosionFinishSpeed;	
 	
 	//Player movement stuff
 	public float playerAccelRate;
@@ -191,9 +191,9 @@ public class Settings : MonoBehaviour {
 		upgradeCircleFinishAlpha = 0.8f; 	//The alpha the upgrade circle anim thing is at around 99% complete
 		drainedAltarAlpha = 0.5f;
 		scoreBitExplosionStartSize = 0.1f;
-		scoreBitExplosionStartSizeScale = 2.0f;
-		scoreBitExplosionStartSpeed = 1.0f;
-		scoreBitExplosionStartSpeedScale = 1.5f;
+		scoreBitExplosionFinishSize = 0.5f;
+		scoreBitExplosionStartSpeed = 0.5f;
+		scoreBitExplosionFinishSpeed = 1.0f;
 		
 		//Player movement stuff
 		playerAccelRate = 0.38f;

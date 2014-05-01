@@ -68,8 +68,9 @@ public class ScoreBit : MonoBehaviour {
 //			Debug.Log ("Collision detected");
 			float percToWin = team.score / sRef.valPointsToWin;
 			if (percToWin > 1f) percToWin = 1f;
-			finalTarget.GetComponent<ParticleSystem>().startSize = sRef.scoreBitExplosionStartSize * (1+percToWin) * sRef.scoreBitExplosionStartSizeScale;
-			finalTarget.GetComponent<ParticleSystem>().startSpeed = sRef.scoreBitExplosionStartSpeed * (1+percToWin) * sRef.scoreBitExplosionStartSpeedScale;
+			finalTarget.GetComponent<ParticleSystem>().startSize = sRef.scoreBitExplosionStartSize + ((sRef.scoreBitExplosionFinishSize-sRef.scoreBitExplosionStartSize)*percToWin);
+			finalTarget.GetComponent<ParticleSystem>().startSpeed = sRef.scoreBitExplosionStartSpeed + ((sRef.scoreBitExplosionFinishSpeed-sRef.scoreBitExplosionStartSpeed)*percToWin);
+			finalTarget.GetComponent<ParticleSystem>().startColor = team.teamColor;
 			finalTarget.PlayScoreAnimation ();
 			BulletPool.instance.PoolObject(gameObject);
 			team.addScore(scoreAmt);
