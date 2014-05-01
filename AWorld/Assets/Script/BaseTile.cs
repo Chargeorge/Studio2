@@ -372,9 +372,10 @@ public class BaseTile : MonoBehaviour {
 //			transform.Find("OwnedLayer").GetComponent<MeshRenderer>().material.color = owningTeam.getHighLightColor();
 
 			if(_distanceToHomeBase.HasValue && _distanceToHomeBase > 0){
-				int indexVal = ((gm.currentMarquee  - distanceToHomeBase.Value % sRef.marqueeCount) % sRef.marqueeCount);
+				//int indexVal = ((gm.currentMarquee  - distanceToHomeBase.Value % sRef.marqueeCount) % sRef.marqueeCount);
+				int indexVal = gm.currentMarquee - distanceToHomeBase.Value % sRef.marqueeCount;
+				if (indexVal <= 0) indexVal += sRef.marqueeCount;
 				//indexVal = (indexVal< 0) ? indexVal = 0 : indexVal;
-				//Debug.Log (indexVal);
 				if(indexVal  < owningTeam.marqueeColorList.Count && indexVal >=0){
 					qudPulsingOwnedLayer.renderer.material.color = owningTeam.marqueeColorList[indexVal];
 				}
