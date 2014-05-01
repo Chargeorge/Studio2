@@ -6,7 +6,8 @@ public enum PreferencesOptions
 	fogOn,
 	terrainIntensity,
 	terrainSize,
-	gameSpeed
+	gameSpeed, 
+	tutorial
 }
 
 

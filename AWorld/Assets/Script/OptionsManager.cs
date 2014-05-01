@@ -6,6 +6,8 @@ public class OptionsManager : MonoBehaviour {
 	public GUIStyle titleStyle;
 	public GUIStyle subtitleStyle;
 	public GUIStyle highlightStyle;
+	public GUIStyle smallSubtitleStyle;
+	public GUIStyle smallHighlightStyle;
 
 	int height1;
 	int height2;
@@ -17,55 +19,61 @@ public class OptionsManager : MonoBehaviour {
 
 	public GameObject cursor;
 
-	bool backSelected = false;
-	bool startSelected = false;
+	public static bool backSelected = false;
+	public static bool startSelected = false;
+	public static bool resetSelected = false;
 
-	bool playersSelected = false;
+	public static bool playersSelected = false;
 	public GameObject playersDisplay;
 	public Material twoPlayersMat;
 	public Material fourPlayersMat;
 	public static int numberOfPlayers;
 
-	bool fogSelected = false;
+	public static bool fogSelected = false;
 	public GameObject fogDisplay;
 	public Material fogOnMat;
 	public Material fogOffMat;
 	public static int fogDisplayed; //0 is off, 1 is on
 
-	bool terrainSelected = false;
+	public static bool terrainSelected = false;
 	public GameObject terrainDisplay;
 	public Material terrainIntensityNoWater;
 	public Material terrainIntensitySwamp;
 	public Material terrainIntensityFlooded;
 	public static int terrainIntensity;
 
-	bool sizeSelected = false;
+	public static bool sizeSelected = false;
 	public GameObject sizeDisplay;
 	public Material sizeSmallMat;
 	public Material sizeNormalMat;
 	public Material sizeLargeMat;
 	public static int terrainSize;
 
-	bool speedSelected = false;
+	public static bool speedSelected = false;
 	public GameObject speedDisplay;
 	public Material speedNormalMat;
 	public Material speedDoubleMat;
 	public Material speedHalfMat;
 	public static int gameSpeed;
 
-	float xFogPos = 3.025f;
-	float xPlayersPos = 1;
-	float xIntensityPos = 5.1f;
-	float xSpeedPos = 1;
-	float xSizePos = 2;
-	float xBackPos = 0.0f;
-	float xStartPos = 4.8f;
+	public static bool tutorialSelected = false;
+	public GameObject tutorialDisplay;
+	public Material tutorialOnMat;
+	public Material tutorialOffMat;
+	public static int tutorialToggle;
+
+	float firstColumn = 1f;
+	float secondColumn = 3f;
+	float thirdColumn = 5f;
+	float firstColumnBottom = 0.2f;
+	float secondColumnBottom = 3.75f;
+	float thirdColumnBottom = 7.5f;
 
 	// Use this for initialization
 	void Start () {
 		height1 = Screen.height/3 - Screen.height/12;
 		height2 = (Screen.height/3)*2 - Screen.height/12;
-		height3 = (Screen.height/6)*5;
+		height3 = (Screen.height/7)*6;
 
 		//Set up the default values for the game
 		numberOfPlayers = (PlayerPrefs.GetInt(PreferencesOptions.numberOfPlayers.ToString()) == 2) ? 2 : 4;
@@ -74,6 +82,9 @@ public class OptionsManager : MonoBehaviour {
 		fogDisplay.renderer.material = (PlayerPrefs.GetInt(PreferencesOptions.fogOn.ToString()) == 1) ? fogOnMat : fogOffMat;
 		fogDisplay.transform.localScale = (PlayerPrefs.GetInt(PreferencesOptions.fogOn.ToString()) == 1) ? new Vector3 (2f, 1f, 1f) : new Vector3(1.5f, 1.5f, 1f);
 		terrainIntensity = PlayerPrefs.GetInt (PreferencesOptions.terrainIntensity.ToString ());
+		tutorialToggle = (PlayerPrefs.GetInt (PreferencesOptions.tutorial.ToString()) == 1) ? 1 : 0;
+		tutorialDisplay.renderer.material = (PlayerPrefs.GetInt(PreferencesOptions.tutorial.ToString()) == 1) ? tutorialOnMat : tutorialOffMat;
+
 		switch (terrainIntensity) {
 			case 1:
 				terrainDisplay.renderer.material = terrainIntensityNoWater;
@@ -139,6 +150,7 @@ public class OptionsManager : MonoBehaviour {
 		PlayerPrefs.SetInt(PreferencesOptions.terrainIntensity.ToString(), terrainIntensity);
 		PlayerPrefs.SetInt(PreferencesOptions.terrainSize.ToString(), terrainSize);
 		PlayerPrefs.SetInt(PreferencesOptions.gameSpeed.ToString(), gameSpeed);
+		PlayerPrefs.SetInt(PreferencesOptions.tutorial.ToString(), tutorialToggle);
 
 //		Debug.Log("intensity :" + terrainIntensity);
 
@@ -147,8 +159,11 @@ public class OptionsManager : MonoBehaviour {
 
 			sizeSelected = false;
 			speedSelected = false;
+			tutorialSelected = false;
+
 			startSelected = false;
 			backSelected = false;
+			resetSelected = false;
 
 			if(cursor.transform.position.x >= 1.80f && cursor.transform.position.x < 5.85f){
 				playersSelected = true;
@@ -165,36 +180,53 @@ public class OptionsManager : MonoBehaviour {
 				terrainSelected = true;
 			}
 
-		} else if(cursor.transform.position.y == -2.6f){
+		} else if(cursor.transform.position.y == -2.3f){
 
 			playersSelected = false;
 			fogSelected = false;
 			terrainSelected = false;
+
 			startSelected = false;
 			backSelected = false;
+			resetSelected = false;
 
-			if(cursor.transform.position.x >= 4.85f && cursor.transform.position.x < 7.2f){
-				sizeSelected = false;
+			if(cursor.transform.position.x >= 1.80f && cursor.transform.position.x < 5.85f){
 				speedSelected = true;
-			} else if(cursor.transform.position.x > 7.2f && cursor.transform.position.x < 9.7f){
-				sizeSelected = true;
+				sizeSelected = false;
+				tutorialSelected = false;
+				
+			} else if(cursor.transform.position.x > 5.95f && cursor.transform.position.x < 9.0f){
 				speedSelected = false;
+				sizeSelected = true;
+				tutorialSelected = false;
+			} else if(cursor.transform.position.x > 9.2f && cursor.transform.position.x < 12.0f){
+				speedSelected = false;
+				sizeSelected = false;
+				tutorialSelected = true;
 			}
-		} else if(cursor.transform.position.y == -3.42f){
+		} else if(cursor.transform.position.y == -3.5f){
 			
 			playersSelected = false;
 			fogSelected = false;
 			terrainSelected = false;
+
 			sizeSelected = false;
 			speedSelected = false;
+			tutorialSelected = false;
 			
-			if (cursor.transform.position.x >= 12.7f) {
-				startSelected = true;
-				backSelected = false;
-				
-			} else if (cursor.transform.position.x <= 6.0f) {
+			if(cursor.transform.position.x >= 1.0f && cursor.transform.position.x < 5.85f){
 				backSelected = true;
+				resetSelected = false;
 				startSelected = false;
+				
+			} else if(cursor.transform.position.x > 5.95f && cursor.transform.position.x < 9.0f){
+				backSelected = false;
+				resetSelected = true;
+				startSelected = false;
+			} else if(cursor.transform.position.x > 9.2f && cursor.transform.position.x < 15.0f){
+				backSelected = false;
+				resetSelected = false;
+				startSelected = true;
 			}
 		}
 
@@ -265,6 +297,16 @@ public class OptionsManager : MonoBehaviour {
 					terrainSize = 1;
 				}
 			}
+
+			if(tutorialSelected){
+				if(tutorialToggle == 1){
+					tutorialDisplay.renderer.material = tutorialOffMat;
+					tutorialToggle = 0;
+				} else if(tutorialToggle == 0){
+					tutorialDisplay.renderer.material = tutorialOnMat;
+					tutorialToggle = 1;
+				}
+			}
 		}
 
 		if(startSelected && Input.GetButtonDown("BuildPlayer1") && !loadingNewScreen){
@@ -306,22 +348,25 @@ public class OptionsManager : MonoBehaviour {
 	void OnGUI(){
 		GUI.Label (new Rect(Screen.width/3, Screen.height/9, Screen.width/3, 50), "MODIFY", titleStyle);
 
-		if(!playersSelected) GUI.Label (new Rect((Screen.width/8)*xPlayersPos, height1, Screen.width/4, 50), "PLAYERS", subtitleStyle);
-		if(playersSelected) GUI.Label (new Rect((Screen.width/8)*xPlayersPos, height1, Screen.width/4, 50), "PLAYERS", highlightStyle);
-		if(!fogSelected) GUI.Label (new Rect((Screen.width/8)*xFogPos, height1, Screen.width/4, 50), "FOG", subtitleStyle);
-		if(fogSelected) GUI.Label (new Rect((Screen.width/8)*xFogPos, height1, Screen.width/4, 50), "FOG", highlightStyle);
-		if(!terrainSelected) GUI.Label (new Rect((Screen.width/8)*xIntensityPos, height1, Screen.width/4, 50), "WATER", subtitleStyle);
-		if(terrainSelected) GUI.Label (new Rect((Screen.width/8)*xIntensityPos, height1, Screen.width/4, 50), "WATER", highlightStyle);
+		if(!playersSelected) GUI.Label (new Rect((Screen.width/8)*firstColumn, height1, Screen.width/4, 50), "PLAYERS", subtitleStyle);
+		if(playersSelected) GUI.Label (new Rect((Screen.width/8)*firstColumn, height1, Screen.width/4, 50), "PLAYERS", highlightStyle);
+		if(!fogSelected) GUI.Label (new Rect((Screen.width/8)*secondColumn, height1, Screen.width/4, 50), "FOG", subtitleStyle);
+		if(fogSelected) GUI.Label (new Rect((Screen.width/8)*secondColumn, height1, Screen.width/4, 50), "FOG", highlightStyle);
+		if(!terrainSelected) GUI.Label (new Rect((Screen.width/8)*thirdColumn, height1, Screen.width/4, 50), "WATER", subtitleStyle);
+		if(terrainSelected) GUI.Label (new Rect((Screen.width/8)*thirdColumn, height1, Screen.width/4, 50), "WATER", highlightStyle);
 
-		if(!speedSelected) GUI.Label (new Rect((Screen.width/4)*xSpeedPos, height2, Screen.width/5, 50), "SPEED", subtitleStyle);
-		if(speedSelected) GUI.Label (new Rect((Screen.width/4)*xSpeedPos, height2, Screen.width/5, 50), "SPEED", highlightStyle);
-		if(!sizeSelected) GUI.Label (new Rect((Screen.width/4)*xSizePos, height2, Screen.width/5, 50), "SIZE", subtitleStyle);
-		if(sizeSelected) GUI.Label (new Rect((Screen.width/4)*xSizePos, height2, Screen.width/5, 50), "SIZE", highlightStyle);
+		if(!speedSelected) GUI.Label (new Rect((Screen.width/8)*firstColumn, height2, Screen.width/4, 50), "SPEED", subtitleStyle);
+		if(speedSelected) GUI.Label (new Rect((Screen.width/8)*firstColumn, height2, Screen.width/4, 50), "SPEED", highlightStyle);
+		if(!sizeSelected) GUI.Label (new Rect((Screen.width/8)*secondColumn, height2, Screen.width/4, 50), "SIZE", subtitleStyle);
+		if(sizeSelected) GUI.Label (new Rect((Screen.width/8)*secondColumn, height2, Screen.width/4, 50), "SIZE", highlightStyle);
+		if(!tutorialSelected) GUI.Label (new Rect((Screen.width/8)*thirdColumn, height2, Screen.width/4, 50), "TUTORIAL", subtitleStyle);
+		if(tutorialSelected) GUI.Label (new Rect((Screen.width/8)*thirdColumn, height2, Screen.width/4, 50), "TUTORIAL", highlightStyle);
 
-		if(!startSelected) GUI.Label (new Rect((Screen.width/6)*xStartPos, height3, Screen.width/5, 50), "START", subtitleStyle);
-		if(startSelected) GUI.Label (new Rect((Screen.width/6)*xStartPos, height3, Screen.width/5, 50), "START", highlightStyle);
-		
-		if(!backSelected) GUI.Label (new Rect((Screen.width/6)*xBackPos, height3, Screen.width/5, 50), "BACK", subtitleStyle);
-		if(backSelected) GUI.Label (new Rect((Screen.width/6)*xBackPos, height3, Screen.width/5, 50), "BACK", highlightStyle);
+		if(!backSelected) GUI.Label (new Rect((Screen.width/10)*firstColumnBottom, height3, Screen.width/4, 50), "BACK", smallSubtitleStyle);
+		if(backSelected) GUI.Label (new Rect((Screen.width/10)*firstColumnBottom, height3, Screen.width/4, 50), "BACK", smallHighlightStyle);
+		if(!resetSelected) GUI.Label (new Rect((Screen.width/10)*secondColumnBottom, height3, Screen.width/4, 50), "RESET", smallSubtitleStyle);
+		if(resetSelected) GUI.Label (new Rect((Screen.width/10)*secondColumnBottom, height3, Screen.width/4, 50), "RESET", smallHighlightStyle);		
+		if(!startSelected) GUI.Label (new Rect((Screen.width/10)*thirdColumnBottom, height3, Screen.width/4, 50), "START", smallSubtitleStyle);
+		if(startSelected) GUI.Label (new Rect((Screen.width/10)*thirdColumnBottom, height3, Screen.width/4, 50), "START", smallHighlightStyle);
 	}
 }

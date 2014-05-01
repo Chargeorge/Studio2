@@ -9,9 +9,9 @@ public class MainMenu : MonoBehaviour {
 	public GUIStyle highlightStyle;
 	public GUIStyle highlightStyleO;
 	public GUIStyle highlightStyleQ;
-	bool startSelected;
-	bool optionsSelected;
-	bool quitSelected;
+	public static bool startSelected;
+	public static bool optionsSelected;
+	public static bool quitSelected;
 	public float deadZone;
 	public AudioClip select;
 	public AudioClip launch;
