@@ -849,7 +849,7 @@ MonoBehaviour:
   vpsBaseUpgrade: 25
   vpsScorePerAltarPerSecond: 1
   vpsBeaconBaseInfluence: 100
-  vpsScorePerMinePerSecond: 0
+  vpsScorePerBit: 0
   coefMoveNeutral: 1
   coefMoveAllied: 2
   coefMoveEnemy: .330000013
@@ -866,7 +866,7 @@ MonoBehaviour:
   optTilesGiveScore: 1
   valTileConvertScore: 1
   valPointsToWin: 300
-  valScorePerMine: 0
+  valScorePerAltar: 0
   valTimePerScoreShot: 0
   valScoreBaseCapture: 0
   beaconBasicRange: 4

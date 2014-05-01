@@ -23,6 +23,8 @@ public class Bar : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		scoreBitFinal = transform.FindChild("ScoreBitFinalTarget").gameObject;
+		transform.FindChild ("NoBuildLayer").renderer.material.color = team.tileColor;
+		transform.FindChild ("Quad").renderer.material.color = team.tileColor;
 		sRef = Settings.SettingsInstance;
 		gRef = GameManager.GameManagerInstance;
 

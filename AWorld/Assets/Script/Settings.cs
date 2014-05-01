@@ -20,7 +20,7 @@ public class Settings : MonoBehaviour {
 	public float vpsBaseUpgrade;
 	public float vpsScorePerAltarPerSecond;
 	public float vpsBeaconBaseInfluence;
-	public float vpsScorePerMinePerSecond;
+	public float vpsScorePerBit;
 	
 	//Coefficients
 	public float coefMoveNeutral;
@@ -41,7 +41,7 @@ public class Settings : MonoBehaviour {
 	public bool optTilesGiveScore;
 	public float valTileConvertScore;
 	public float valPointsToWin;
-	public float valScorePerMine;
+	public float valScorePerAltar;
 	public float valTimePerScoreShot;
 	public float valScoreBaseCapture;
 	
@@ -75,6 +75,10 @@ public class Settings : MonoBehaviour {
 	public float upgradeCircleStartAlpha; 	//The alpha at which the upgrade circle anim thing starts
 	public float upgradeCircleFinishAlpha; 	//The alpha the upgrade circle anim thing is at around 99% complete
 	public float drainedAltarAlpha;
+	public float scoreBitExplosionStartSize;
+	public float scoreBitExplosionFinishSize;
+	public float scoreBitExplosionStartSpeed;
+	public float scoreBitExplosionFinishSpeed;	
 	
 	//Player movement stuff
 	public float playerAccelRate;
@@ -132,7 +136,7 @@ public class Settings : MonoBehaviour {
 		vpsBaseUpgrade = 50f;
 		vpsScorePerAltarPerSecond = 1f;
 		vpsBeaconBaseInfluence = 100f;
-		vpsScorePerMinePerSecond = 1.5f;
+		vpsScorePerBit = 1.5f;
 		
 		//Coefficients
 		coefMoveNeutral = 1f;
@@ -153,11 +157,10 @@ public class Settings : MonoBehaviour {
 		optTilesGiveScore = true;
 		valTileConvertScore = 1f;
 		valPointsToWin = 250;
-		valScorePerMine = 100f;
+		valScorePerAltar = 100f;
 		valTimePerScoreShot  = 1f;
 		valScoreBaseCapture  = 200f;
-			
-		
+					
 		//Beacon stuff
 		beaconBasicRange = 4;
 		beaconAdvancedRange = 8;
@@ -187,6 +190,10 @@ public class Settings : MonoBehaviour {
 		upgradeCircleStartAlpha = 0.1f; 	//The alpha at which the upgrade circle anim thing starts
 		upgradeCircleFinishAlpha = 0.8f; 	//The alpha the upgrade circle anim thing is at around 99% complete
 		drainedAltarAlpha = 0.5f;
+		scoreBitExplosionStartSize = 0.1f;
+		scoreBitExplosionFinishSize = 0.5f;
+		scoreBitExplosionStartSpeed = 0.5f;
+		scoreBitExplosionFinishSpeed = 1.0f;
 		
 		//Player movement stuff
 		playerAccelRate = 0.38f;
@@ -273,7 +280,7 @@ public class Settings : MonoBehaviour {
 			vpsBaseUpgrade = 25f;
 			vpsScorePerAltarPerSecond = 1f;
 			vpsBeaconBaseInfluence = 50f;
-			vpsScorePerMinePerSecond = 3f;
+			vpsScorePerBit = 2.5f;
 
 			break;
 
@@ -287,7 +294,7 @@ public class Settings : MonoBehaviour {
 			vpsBaseUpgrade = 50f;
 			vpsScorePerAltarPerSecond = 1f;
 			vpsBeaconBaseInfluence = 100f;
-			vpsScorePerMinePerSecond = 3f;
+			vpsScorePerBit = 2.5f;
 
 			break;
 
@@ -300,7 +307,7 @@ public class Settings : MonoBehaviour {
 			vpsBaseUpgrade = 100f;
 			vpsScorePerAltarPerSecond = 1f;
 			vpsBeaconBaseInfluence = 200f;
-			vpsScorePerMinePerSecond = 3f;
+			vpsScorePerBit = 2.5f;
 
 			break;
 		}

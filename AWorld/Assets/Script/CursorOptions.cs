@@ -13,62 +13,175 @@ public class CursorOptions : MonoBehaviour {
 
 	public GameObject options;
 	private OptionsManager optionsScript;
+
+	Vector3 playersPos;
+	Vector3 fogPos;
+	Vector3 waterPos;
+	Vector3 speedPos;
+	Vector3 sizePos;
+	Vector3 tutorialPos;
+
+	Vector3 backPos;
+	Vector3 resetPos;
+	Vector3 startPos;
+
+	Vector3 target;
+
+	bool goingRight;
+	bool goingLeft;
+	bool lerping;
+	float lerpRate;
 	
 	// Use this for initialization
 	void Start () {
+
+		lerping = false;
+		lerpRate = 0.1f;
 		
 		optionsScript = options.GetComponent<OptionsManager>();
 		rotateSpeed = restingRotateSpeed * -1;
 		rotatingLeft = -1;
+
+		float cursorDepth = -8.9f;
+
+		float firstLineHeight = 0.9f;
+		float secondLineHeight = -2.3f;
+		float thirdLineHeight = -3.5f;
+
+		float firstColumn = 2.85f;
+		float secondColumn = 7.4f;
+		float thirdColumn = 11.9f;
+
+		float firstColumnBottom = 1.1f;
+		float secondColumnBottom = 7.4f;
+		float thirdColumnBottom = 14f;
 		
-		//transform.position.x = startPos;
-		
+		playersPos = new Vector3(firstColumn, firstLineHeight, cursorDepth);
+		fogPos = new Vector3(secondColumn, firstLineHeight, cursorDepth);
+		waterPos = new Vector3(thirdColumn, firstLineHeight, cursorDepth);
+
+		speedPos = new Vector3(firstColumn, secondLineHeight, cursorDepth);
+		sizePos = new Vector3(secondColumn, secondLineHeight, cursorDepth);
+		tutorialPos = new Vector3(thirdColumn, secondLineHeight, cursorDepth);
+
+		backPos = new Vector3(firstColumnBottom, thirdLineHeight, cursorDepth);
+		resetPos = new Vector3(secondColumnBottom, thirdLineHeight, cursorDepth);
+		startPos = new Vector3(thirdColumnBottom, thirdLineHeight, cursorDepth);		
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
-		Vector3 pos = transform.position;
+
+		if(lerping){
+			Vector3 newPos = transform.position;
+			newPos.x = Mathf.Lerp(newPos.x, target.x, lerpRate);
+			transform.position = newPos;
+			if(Mathf.Abs(Vector3.Magnitude(newPos-target)) < 0.1f){
+				transform.position = target;
+				lerping = false;
+				goingRight = false;
+				goingLeft = false;
+			}
+		}
+		Debug.Log(lerping);
 		
 		float x = Input.GetAxis("HorizontalPlayer1") * moveSpeed * Time.deltaTime;
 		float y = Input.GetAxis("VerticalPlayer1") * moveSpeed * Time.deltaTime;
 		
-		if (!options.GetComponent<OptionsManager>().loadingNewScreen) pos.x += x;
-		//pos.y += y;
-		
-		if (pos.x < 0.25f && pos.y == -3.42f){ //if the cursor is at the left edge of BACK, make it stay there
-			pos.x = 0.25f;
-		} else if (pos.x > 2.0f && pos.x < 6f && pos.y == -3.42f) { //if the cursor is at the right edge of BACK, make it go to the left edge of the top line
-			pos.x = 1.8f;
-			pos.y = 0.9f;
-		}
-		
-		if(pos.x < 1.8f && pos.y == 0.9f){ //if the cursor is at the left edge of the top line, make it go to BACK
-			pos.x = 2.0f;
-			pos.y = -3.42f;			
-		} else if(pos.x > 12.0f && pos.y == 0.9f){ //if the cursor is at the right edge of the top line, make it go to the left edge of the bottom line
-			pos.x = 4.85f;
-			pos.y = -2.6f;
-		}
+		if (!options.GetComponent<OptionsManager>().loadingNewScreen && !lerping){
+			if(Input.GetAxis("HorizontalPlayer1") > 0.1f){//player wants to go right
+				if(OptionsManager.playersSelected){
+					lerping = true;
+					target = fogPos;
+					goingRight = true;
+					goingLeft = false;
+					StartCoroutine("waitMenu");
+				}else if(OptionsManager.fogSelected){
+					lerping = true;
+					target = waterPos;
+					goingRight = true;
+					goingLeft = false;
+					StartCoroutine("waitMenu");
+				}else if(OptionsManager.terrainSelected){
+					StartCoroutine("waitMenuTranslate", speedPos);
+				}else if(OptionsManager.speedSelected){
+					StartCoroutine("waitMenu");
+					lerping = true;
+					goingRight = true;
+					goingLeft = false;
+					target = sizePos;
+				}else if(OptionsManager.sizeSelected){
+					lerping = true;
+					goingRight = true;
+					goingLeft = false;
+					target = tutorialPos;
+					StartCoroutine("waitMenu");
+				}else if(OptionsManager.tutorialSelected){
+					StartCoroutine("waitMenuTranslate", backPos);
+				}else if(OptionsManager.backSelected){
+					StartCoroutine("waitMenu");
+					lerping = true;
+					goingRight = true;
+					goingLeft = false;
+					target = resetPos;
+				}else if(OptionsManager.resetSelected){
+					lerping = true;
+					goingRight = true;
+					goingLeft = false;
+					target = startPos;
+					StartCoroutine("waitMenu");
+				}else if(OptionsManager.startSelected){
+					//don't do shit cause that's the end of the line, playa.
+				}
+			}else if(Input.GetAxis("HorizontalPlayer1") < -0.1f){//if the player wants to go left	
+				if(OptionsManager.playersSelected){
+					//nope, that's not happening
+				}else if(OptionsManager.fogSelected){
+					lerping = true;
+					goingRight = false;
+					goingLeft = true;
+					target = playersPos;
+					StartCoroutine("waitMenu");
+				}else if(OptionsManager.terrainSelected){
+					lerping = true;
+					goingRight = false;
+					goingLeft = true;
+					target = fogPos;
+					StartCoroutine("waitMenu"); 
+				}else if(OptionsManager.speedSelected){
+					StartCoroutine("waitMenuTranslate", waterPos);
+				}else if(OptionsManager.sizeSelected){
+					lerping = true;
+					goingRight = false;
+					goingLeft = true;
+					target = speedPos;
+					StartCoroutine("waitMenu");
+				}else if(OptionsManager.tutorialSelected){
+					lerping = true;
+					goingRight = false;
+					goingLeft = true;
+					target = sizePos;
+					StartCoroutine("waitMenu");
+				}else if(OptionsManager.backSelected){
+					StartCoroutine("waitMenuTranslate", tutorialPos);
+				}else if(OptionsManager.resetSelected){
+					lerping = true;
+					goingRight = false;
+					goingLeft = true;
+					target = backPos;
+					StartCoroutine("waitMenu");
+				}else if(OptionsManager.startSelected){
+					lerping = true;
+					goingRight = false;
+					goingLeft = true;
+					target = resetPos;
+					StartCoroutine("waitMenu");
+				}
+			}
 
-		if(pos.y == -2.6f && pos.x > 9.7f){ // if the cursor is at the right edge of the bottom line, make it go to START
-			pos.x = 13f;
-			pos.y = -3.42f;
-		} else if(pos.x < 4.4f && pos.y == -2.6f){ //if the cursor is at the left edge of the bottom line, make it go to the right edge of the top line
-			pos.x = 11.75f;
-			pos.y = 0.9f;
-		}
-
-		if(pos.y == -3.42f && pos.x > 14.5f){ // if the cursor is at the right edge of START, make it stay there
-			pos.x = 14.5f;
-		}
-		if(pos.y == -3.42f && pos.x < 12.7f && pos.x > 6f){ //if the cursor is at the left edge of START, make it go to the right edge of the bottom line
-			pos.y = -2.6f;
-			pos.x = 9.7f;
 		}
 		
-		//transform.position = new Vector3(-0.16f, Mathf.Clamp(Time.time, 0.26F, -1.2F), -5.4f);
-		transform.position = pos;			
+			
 		
 		if (!optionsScript.loadingNewScreen) {
 			if (x > 0) {
@@ -96,5 +209,15 @@ public class CursorOptions : MonoBehaviour {
 		else {
 			transform.RotateAround (transform.position, Vector3.forward, rotateSpeed * Time.deltaTime);
 		}
+	}
+
+	IEnumerator waitMenuTranslate(Vector3 _target){
+		yield return new WaitForSeconds(0.3f);
+		transform.position = _target;
+	}
+
+	IEnumerator waitMenu(){
+		yield return new WaitForSeconds(0.3f);
+		//lerping = false;
 	}
 }

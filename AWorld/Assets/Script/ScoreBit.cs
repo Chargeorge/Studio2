@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -66,6 +66,11 @@ public class ScoreBit : MonoBehaviour {
 
 		if (finalTarget != null && closeEnoughToTarget (transform.position, finalTarget.transform.position, sRef.closeEnoughDistanceScoreBit)) {
 //			Debug.Log ("Collision detected");
+			float percToWin = team.score / sRef.valPointsToWin;
+			if (percToWin > 1f) percToWin = 1f;
+			finalTarget.GetComponent<ParticleSystem>().startSize = sRef.scoreBitExplosionStartSize + ((sRef.scoreBitExplosionFinishSize-sRef.scoreBitExplosionStartSize)*percToWin);
+			finalTarget.GetComponent<ParticleSystem>().startSpeed = sRef.scoreBitExplosionStartSpeed + ((sRef.scoreBitExplosionFinishSpeed-sRef.scoreBitExplosionStartSpeed)*percToWin);
+			finalTarget.GetComponent<ParticleSystem>().startColor = team.teamColor;
 			finalTarget.PlayScoreAnimation ();
 			BulletPool.instance.PoolObject(gameObject);
 			team.addScore(scoreAmt);
@@ -121,7 +126,7 @@ public class ScoreBit : MonoBehaviour {
 
 	public void remove(){
 		BulletPool.instance.PoolObject(gameObject);
-		team.addScore(Settings.SettingsInstance.vpsScorePerMinePerSecond);
+		team.addScore(Settings.SettingsInstance.vpsScorePerBit);
 	}
 	
 	public bool closeEnoughToTarget (Vector3 newPos, Vector3 target, float closeEnoughDistance) {

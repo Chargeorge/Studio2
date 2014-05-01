@@ -140,7 +140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sRef: {fileID: 0}
-  speed: .109999999
+  speed: .200000003
   scoreAmt: 0
 --- !u!1001 &100100000
 Prefab:
