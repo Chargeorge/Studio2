@@ -81,7 +81,7 @@ public class Altar : MonoBehaviour {
 		gm = GameManager.GameManagerInstance;
 		transform.FindChild("Quad").renderer.material = loaded;
 		symbol = transform.FindChild("Quad");
-		scoreLeft = sRef.valScorePerMine;
+		scoreLeft = sRef.valScorePerAltar;
 		renderer.material.color = new Color32(237, 20, 90, 255);
 	}
 	
@@ -97,12 +97,12 @@ public class Altar : MonoBehaviour {
 	
 	public void setScoreBarLen(){
 		Vector3 newScale = scoreBar.transform.localScale;
-		newScale.x =  baseScoreScale * scoreLeft  / sRef.valScorePerMine;
+		newScale.x =  baseScoreScale * scoreLeft  / sRef.valScorePerAltar;
 		scoreBar.transform.localScale = newScale;
 
 		Vector3 new2scale = symbol.localScale;
-		new2scale.x = baseScoreScale * scoreLeft  / sRef.valScorePerMine;
-		new2scale.y = baseScoreScale * scoreLeft  / sRef.valScorePerMine;
+		new2scale.x = baseScoreScale * scoreLeft  / sRef.valScorePerAltar;
+		new2scale.y = baseScoreScale * scoreLeft  / sRef.valScorePerAltar;
 		symbol.localScale = new2scale;
 		
 	}
@@ -139,7 +139,7 @@ public class Altar : MonoBehaviour {
 							timeToNextScoreShot -= Time.deltaTime;
 							if(timeToNextScoreShot < 0){
 								audio.PlayOneShot(Praying, 0.9f);
-								float scoreToAdd = sRef.vpsScorePerMinePerSecond * ((a.Contains(AltarType.Khepru)) ? sRef.coefKhepru : 1 );
+								float scoreToAdd = sRef.vpsScorePerBit * ((a.Contains(AltarType.Khepru)) ? sRef.coefKhepru : 1 );
 								if(scoreLeft - scoreToAdd < 0){
 									scoreToAdd = scoreLeft;
 								}

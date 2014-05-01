@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -19,8 +19,14 @@ public class ScoreBit : MonoBehaviour {
 	}
 
 	public void setTeam(TeamInfo T){
+
+
 		team = T;
-	//	renderer.material.color = team.getHighLightColor();
+		Color32 scoreBitColor = team.beaconColor;
+		scoreBitColor.a = 170;
+
+
+	//	renderer.material.color = scoreBitColor;
 		renderer.material.color = new Color32(237, 20, 90, 180);
 		
 		finalTarget = T.ScoreBar.transform.FindChild ("ScoreBitFinalTarget").gameObject.GetComponent<FinalScoreTarget>();
@@ -30,6 +36,11 @@ public class ScoreBit : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+		transform.Rotate(new Vector3(0,0,5));
+
+	//	transform.RotateAround (transform.position, Vector3.forward, 0.2f * Time.deltaTime);
+
 		if(targets.Count > 0){
 			Vector2 NewPos  =  Vector2.MoveTowards( (Vector2)transform.position, (Vector2)(targets[0].transform.position), speed);
 			Vector3 NewPos3 = new Vector3(NewPos.x, NewPos.y, transform.position.z);
@@ -50,8 +61,16 @@ public class ScoreBit : MonoBehaviour {
 			transform.position = NewPos3;
 			
 		}
+
+
+
 		if (finalTarget != null && closeEnoughToTarget (transform.position, finalTarget.transform.position, sRef.closeEnoughDistanceScoreBit)) {
 //			Debug.Log ("Collision detected");
+			float percToWin = team.score / sRef.valPointsToWin;
+			if (percToWin > 1f) percToWin = 1f;
+			finalTarget.GetComponent<ParticleSystem>().startSize = sRef.scoreBitExplosionStartSize + ((sRef.scoreBitExplosionFinishSize-sRef.scoreBitExplosionStartSize)*percToWin);
+			finalTarget.GetComponent<ParticleSystem>().startSpeed = sRef.scoreBitExplosionStartSpeed + ((sRef.scoreBitExplosionFinishSpeed-sRef.scoreBitExplosionStartSpeed)*percToWin);
+			finalTarget.GetComponent<ParticleSystem>().startColor = team.teamColor;
 			finalTarget.PlayScoreAnimation ();
 			BulletPool.instance.PoolObject(gameObject);
 			team.addScore(scoreAmt);
@@ -91,7 +110,7 @@ public class ScoreBit : MonoBehaviour {
 //		Debug.Log (newTrans);
 		transform.eulerAngles = new Vector3(0,0,0);
 
-		//transform.Rotate(new Vector3(0,0,angleTo));
+//		transform.Rotate(new Vector3(0,0,angleTo));
 	}
 
 	public void start(List<AStarholder> tiles){
@@ -107,7 +126,7 @@ public class ScoreBit : MonoBehaviour {
 
 	public void remove(){
 		BulletPool.instance.PoolObject(gameObject);
-		team.addScore(Settings.SettingsInstance.vpsScorePerMinePerSecond);
+		team.addScore(Settings.SettingsInstance.vpsScorePerBit);
 	}
 	
 	public bool closeEnoughToTarget (Vector3 newPos, Vector3 target, float closeEnoughDistance) {

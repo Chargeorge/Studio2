@@ -744,7 +744,7 @@ ParticleAnimator:
     rgba: 12895428
   colorAnimation[1]:
     serializedVersion: 2
-    rgba: 552529646
+    rgba: 550950614
   colorAnimation[2]:
     serializedVersion: 2
     rgba: 346926509
@@ -986,7 +986,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1200000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
       propertyPath: colorAnimation[1].rgba
-      value: 552529646
+      value: 550950614
       objectReference: {fileID: 0}
     - target: {fileID: 1200000, guid: 7795cf6029a65bb44805415a08f2d7ab, type: 2}
       propertyPath: colorAnimation[2].rgba
