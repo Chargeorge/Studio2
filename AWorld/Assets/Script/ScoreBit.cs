@@ -66,6 +66,10 @@ public class ScoreBit : MonoBehaviour {
 
 		if (finalTarget != null && closeEnoughToTarget (transform.position, finalTarget.transform.position, sRef.closeEnoughDistanceScoreBit)) {
 //			Debug.Log ("Collision detected");
+			float percToWin = team.score / sRef.valPointsToWin;
+			if (percToWin > 1f) percToWin = 1f;
+			finalTarget.GetComponent<ParticleSystem>().startSize = sRef.scoreBitExplosionStartSize * (1+percToWin) * sRef.scoreBitExplosionStartSizeScale;
+			finalTarget.GetComponent<ParticleSystem>().startSpeed = sRef.scoreBitExplosionStartSpeed * (1+percToWin) * sRef.scoreBitExplosionStartSpeedScale;
 			finalTarget.PlayScoreAnimation ();
 			BulletPool.instance.PoolObject(gameObject);
 			team.addScore(scoreAmt);
