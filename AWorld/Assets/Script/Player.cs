@@ -12,11 +12,14 @@ public class Player : MonoBehaviour {
 	public GameManager gm;
 
 	public float currentActionProgress;
+	private float previousActionProgress;
+	public float previousFrameProgress;
 	public Settings sRef;
 	public DirectionEnum facing;
 	private GameObject _prfbBeacon;
 	private Beacon beaconInProgress;
 	private int _vision = 3;
+	private bool _invalidAction;
 
 	private float _jiggleRange = 0.1f;			//Max distance from center of grid the player will jiggle
 	private float _lastActionProgress;
@@ -48,9 +51,6 @@ public class Player : MonoBehaviour {
 	public Vector3 teleportTarget;
 	
 	public Vector2 moveVector;
-	
-	float[] actionProgress;		//CHARRR
-	int actionProgressTicker;	//CHARRR
 
 	public PlayerState currentState {
 		get {
@@ -82,9 +82,14 @@ public class Player : MonoBehaviour {
 			return team.teamNumber;
 		}
 	}
+	
+	int actionProgressTicker;
+	float[] actionProgress;
 
 	// Use this for initialization
 	void Start () {
+		actionProgressTicker = 0;
+		actionProgress = new float[3];
 		altars = new List<AltarType>();
 		_currentState = PlayerState.standing;
 		_prfbBeacon = (GameObject)Resources.Load("Prefabs/Beacon");
@@ -114,7 +119,8 @@ public class Player : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update (){ 
-		
+		_invalidAction = false;
+		previousActionProgress = currentActionProgress;	
 		DirectionEnum? x = getStickDirection();
 		//BaseTile currentTile = gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>();	//Not used with free movement
 
@@ -158,7 +164,7 @@ public class Player : MonoBehaviour {
 			break;
 			
 			case PlayerState.standing:
-				int _previousActionVal = 0;	//CHARRR
+			
 				audioLerp (audioSourceMove, 0.0f, sRef.moveVolumeLerpRate);
 				if (audioSourceInfluenceStart.volume > 0.01f) { audioLerp (audioSourceInfluenceStart, 0.0f, sRef.playerInfluenceStartVolumeLerpRate); 
 					} else { audioSourceInfluenceStart.Stop (); }
@@ -313,7 +319,7 @@ public class Player : MonoBehaviour {
 									))
 									
 								{
-									
+									_invalidAction = true;
 									if(!audioSourceInvalid.isPlaying){ 
 										Debug.Log ("playin");
 										audioSourceInvalid.volume = 0.3f;
@@ -679,8 +685,11 @@ public class Player : MonoBehaviour {
 				if (audioSourceInfluenceStart.volume > 0.01f) { audioLerp (audioSourceInfluenceStart, 0.0f, sRef.playerInfluenceStartVolumeLerpRate);
 					} else { audioSourceInfluenceStart.Stop (); }
 				
+				setProgressCircle(beaconInProgress.percBuildComplete/100);
+				/*
 				qudProgessCircle.renderer.enabled = true;
-				qudProgessCircle.renderer.material.SetFloat("_Cutoff", .99f-(beaconInProgress.percBuildComplete/100));
+				qudProgessCircle.renderer.material.SetFloat("_Cutoff", 1-(beaconInProgress.percBuildComplete/100));
+				*/
 				
 				if(buildButtonDown && currentTile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
 				//	Jiggle ();	//Gotta jiggle
@@ -753,8 +762,13 @@ public class Player : MonoBehaviour {
 				
 				
     			qudProgessCircle.renderer.enabled = true;
-    			if (currentTile.controllingTeam != null) { qudProgessCircle.renderer.material.color = currentTile.controllingTeam.teamColor; }	
-				qudProgessCircle.renderer.material.SetFloat("_Cutoff", 1.001f-(currentTile.percControlled /100f) );
+				if (currentTile.controllingTeam != null) {
+					setProgressCircle( currentTile.percControlled/100 , currentTile.controllingTeam.teamColor);
+				}
+				else{
+					setProgressCircle( currentTile.percControlled/100 );
+					
+				}	
 				if(buildButtonDown && currentTile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
 			//		Jiggle ();	//Gotta jiggle
 					Pulsate ();
@@ -768,17 +782,35 @@ public class Player : MonoBehaviour {
 						{                                      
 							//Debug.Log("Adding Influence");
 							float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime);
+							currentActionProgress = currentTile.percControlled;
 							
-								if(test > 0f || (currentTile.owningTeam != null && currentTile.owningTeam == team)){
+							float averageActionProgress = getAverageActionProgress();
+						if(_currentState == PlayerState.influencing){
+							
+							Debug.Log (averageActionProgress*100 +" " +  currentTile.percControlled);
+							if(averageActionProgress*100 > currentTile.percControlled){
+								Debug.Log("In total");
+								_invalidAction = true;		
+							}
+							if(Mathf.Abs(getAverageActionProgressDifference()) < .001 ){  
+								Debug.Log(getAverageActionProgressDifference());
+								Debug.Log("In average");
+								
+								_invalidAction = true;	
+							}
+						}
+						
+						if(test > 0f || (currentTile.owningTeam != null && currentTile.owningTeam == team)){
 								
 								if (currentTile.getLocalAltar () != null || currentTile.tooCloseToBeacon() || currentTile.gameObject.transform.FindChild ("Home(Clone)") != null) {
 						
-									
+									_invalidAction = true;
 									_currentState = PlayerState.standing;
 									if(currentTile.tooCloseToBeacon() && currentTile.beacon == null && !audioSourceInvalid.isPlaying) {
 									//Invoke("playInvalid", 1.0f);
 									audioSourceInvalid.volume = 0.3f;
 									audioSourceInvalid.Play ();
+																									
 									}
 								}
 								
@@ -835,13 +867,29 @@ public class Player : MonoBehaviour {
 						}
 						else{
 							float test = currentTile.subTractInfluence(  sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime, team);
+							currentActionProgress = currentTile.percControlled;
 							if(test > 0f){
 								currentTile.addInfluenceReturnOverflow(test);
 								if (!audioSourceInvalid.isPlaying) {
 									audioSourceInvalid.volume = 0.3f;
 									//audioSourceInvalid.Play ();
 									//Invoke("playInvalid", 1.0f);
-									Debug.Log("waka waka hey hey");
+								}
+							}
+							float averageActionProgress = getAverageActionProgress();
+							
+							if(_currentState == PlayerState.influencing){
+								
+								Debug.Log (averageActionProgress*100 +" " +  currentTile.percControlled);
+							       if(averageActionProgress*100 < currentTile.percControlled){
+										Debug.Log("In total");
+											_invalidAction = true;		
+									}
+							    if(Mathf.Abs(getAverageActionProgressDifference()) < .001 ){  
+								Debug.Log(getAverageActionProgressDifference());
+								          Debug.Log("In average");
+								
+									_invalidAction = true;	
 								}
 							}
 						}
@@ -893,6 +941,8 @@ public class Player : MonoBehaviour {
 					
 					_currentState = PlayerState.standing;
 				}	
+				//Debug.Log (string.Format("Current {0}, previous {1}", Mathf.RoundToInt(currentActionProgress), (Mathf.RoundToInt(previousActionProgress))));
+			    
 			break;
 			
 			case PlayerState.rotating: 
@@ -902,9 +952,9 @@ public class Player : MonoBehaviour {
 					Pulsate ();
 					
 					Beacon beacon = currentTile.beacon.GetComponent<Beacon>();
-					qudProgessCircle.renderer.enabled = true;
-					qudProgessCircle.renderer.material.SetFloat("_Cutoff", 1-(beacon.percRotateComplete/100f));
-				
+					
+					setProgressCircle(beacon.percRotateComplete/100);
+					
 					/** This is to let players change facing mid-rotation 
 					if (x.HasValue) { 
 						setDirection (x.Value);
@@ -962,8 +1012,8 @@ public class Player : MonoBehaviour {
 					beacon.addUpgradeProgress (vpsUpgradeRate);
 					beacon.losingUpgradeProgress = false;
 					
-					qudProgessCircle.renderer.enabled = true;
-					qudProgessCircle.renderer.material.SetFloat("_Cutoff", 1-(beacon.percUpgradeComplete/100));
+					setProgressCircle(beacon.percUpgradeComplete/100);
+					
 				
 					if (beacon.percUpgradeComplete >= 100f) {
 					
@@ -1000,6 +1050,13 @@ public class Player : MonoBehaviour {
 			transform.localScale = new Vector3 (_defaultScale.x, _defaultScale.y, _defaultScale.z) * getScaleBoost ();
 			_expanding = true;
 			pulsateProgress = 0f;
+		}
+		
+		if(_invalidAction){
+			qudActionableGlow.renderer.material.color = Color.red;	
+		}
+		else{
+			qudActionableGlow.renderer.material.color = Color.white;	
 		}
 						
 	}
