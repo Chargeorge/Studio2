@@ -12,11 +12,14 @@ public class Player : MonoBehaviour {
 	public GameManager gm;
 
 	public float currentActionProgress;
+	private float previousActionProgress;
+	public float previousFrameProgress;
 	public Settings sRef;
 	public DirectionEnum facing;
 	private GameObject _prfbBeacon;
 	private Beacon beaconInProgress;
 	private int _vision = 3;
+	private bool _invalidAction;
 
 	private float _jiggleRange = 0.1f;			//Max distance from center of grid the player will jiggle
 	
@@ -79,8 +82,13 @@ public class Player : MonoBehaviour {
 		}
 	}
 
+	private float[] actionProgress;
+	private int actionProgressTicker;
+	
 	// Use this for initialization
 	void Start () {
+		actionProgressTicker = 0;
+		actionProgress = new float[3];
 		altars = new List<AltarType>();
 		_currentState = PlayerState.standing;
 		_prfbBeacon = (GameObject)Resources.Load("Prefabs/Beacon");
@@ -110,7 +118,8 @@ public class Player : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update (){ 
-		
+		_invalidAction = false;
+		previousActionProgress = currentActionProgress;	
 		DirectionEnum? x = getStickDirection();
 		//BaseTile currentTile = gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>();	//Not used with free movement
 
@@ -260,7 +269,7 @@ public class Player : MonoBehaviour {
 						
 						if(currentTile.controllingTeam.teamNumber == team.teamNumber){
 							if(currentTile.percControlled < 100f){
-							Pulsate ();
+								Pulsate ();
 								_currentState = PlayerState.influencing;
 							}
 													
@@ -309,7 +318,7 @@ public class Player : MonoBehaviour {
 									))
 									
 								{
-									
+									_invalidAction = true;
 									if(!audioSourceInvalid.isPlaying){ 
 										Debug.Log ("playin");
 										audioSourceInvalid.volume = 0.3f;
@@ -674,8 +683,12 @@ public class Player : MonoBehaviour {
 			case PlayerState.building:
 				if (audioSourceInfluenceStart.volume > 0.01f) { audioLerp (audioSourceInfluenceStart, 0.0f, sRef.playerInfluenceStartVolumeLerpRate);
 					} else { audioSourceInfluenceStart.Stop (); }
+				
+				setProgressCircle(beaconInProgress.percBuildComplete/100);
+				/*
 				qudProgessCircle.renderer.enabled = true;
 				qudProgessCircle.renderer.material.SetFloat("_Cutoff", 1-(beaconInProgress.percBuildComplete/100));
+				*/
 				
 				if(buildButtonDown && currentTile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
 				//	Jiggle ();	//Gotta jiggle
@@ -737,18 +750,24 @@ public class Player : MonoBehaviour {
 
 			moveTowardCenterOfTile (currentTile);
 
-			if(currentTile.controllingTeam.teamNumber != null && currentTile.controllingTeam.teamNumber != teamNumber){
+			if(currentTile.controllingTeam!= null && currentTile.controllingTeam.teamNumber != teamNumber){
 					audioSourceInfluenceStart.clip = Resources.Load("SFX/Player_DeInfluencing") as AudioClip;
 					//audioSourceInfluenceStart.Play();
-				} else if(currentTile.owningTeam.teamNumber == null || currentTile.controllingTeam.teamNumber == teamNumber){
+				} else if(currentTile.owningTeam == null || currentTile.controllingTeam.teamNumber == teamNumber){
 					audioSourceInfluenceStart.clip = Resources.Load("SFX/Player_Influencing") as AudioClip;
 				}
 				
 				audioLerp (audioSourceMove, 0.0f, sRef.moveVolumeLerpRate);
 				
+				
     			qudProgessCircle.renderer.enabled = true;
-    			if (currentTile.controllingTeam != null) { qudProgessCircle.renderer.material.color = currentTile.controllingTeam.teamColor; }	
-				qudProgessCircle.renderer.material.SetFloat("_Cutoff", 1-(currentTile.percControlled /100f) );
+				if (currentTile.controllingTeam != null) {
+					setProgressCircle( currentTile.percControlled/100 , currentTile.controllingTeam.teamColor);
+				}
+				else{
+					setProgressCircle( currentTile.percControlled/100 );
+					
+				}	
 				if(buildButtonDown && currentTile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
 			//		Jiggle ();	//Gotta jiggle
 					Pulsate ();
@@ -762,17 +781,24 @@ public class Player : MonoBehaviour {
 						{                                      
 							//Debug.Log("Adding Influence");
 							float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime);
+							currentActionProgress = currentTile.percControlled;
 							
-								if(test > 0f || (currentTile.owningTeam != null && currentTile.owningTeam == team)){
+							float averageActionProgress = getAverageActionProgress();
+							if(_currentState == PlayerState.influencing && Mathf.Abs(averageActionProgress - currentTile.percControlled) < 1.5f )  {
+								_invalidAction = true;	
+							}
+							
+							if(test > 0f || (currentTile.owningTeam != null && currentTile.owningTeam == team)){
 								
 								if (currentTile.getLocalAltar () != null || currentTile.tooCloseToBeacon() || currentTile.gameObject.transform.FindChild ("Home(Clone)") != null) {
 						
-									
+									_invalidAction = true;
 									_currentState = PlayerState.standing;
 									if(currentTile.tooCloseToBeacon() && currentTile.beacon == null && !audioSourceInvalid.isPlaying) {
 									//Invoke("playInvalid", 1.0f);
 									audioSourceInvalid.volume = 0.3f;
 									audioSourceInvalid.Play ();
+																									
 									}
 								}
 								
@@ -829,14 +855,18 @@ public class Player : MonoBehaviour {
 						}
 						else{
 							float test = currentTile.subTractInfluence(  sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime, team);
+							currentActionProgress = currentTile.percControlled;
 							if(test > 0f){
 								currentTile.addInfluenceReturnOverflow(test);
 								if (!audioSourceInvalid.isPlaying) {
 									audioSourceInvalid.volume = 0.3f;
 									//audioSourceInvalid.Play ();
 									//Invoke("playInvalid", 1.0f);
-									Debug.Log("waka waka hey hey");
 								}
+							}
+							float averageActionProgress = getAverageActionProgress();
+							if(_currentState == PlayerState.influencing && (averageActionProgress < currentTile.percControlled || (Mathf.Abs(averageActionProgress - currentTile.percControlled) < 1.5f) )){  
+								_invalidAction = true;	
 							}
 						}
 						/*
@@ -887,6 +917,8 @@ public class Player : MonoBehaviour {
 					
 					_currentState = PlayerState.standing;
 				}	
+				//Debug.Log (string.Format("Current {0}, previous {1}", Mathf.RoundToInt(currentActionProgress), (Mathf.RoundToInt(previousActionProgress))));
+			    
 			break;
 			
 			case PlayerState.rotating: 
@@ -896,9 +928,9 @@ public class Player : MonoBehaviour {
 					Pulsate ();
 					
 					Beacon beacon = currentTile.beacon.GetComponent<Beacon>();
-					qudProgessCircle.renderer.enabled = true;
-					qudProgessCircle.renderer.material.SetFloat("_Cutoff", 1-(beacon.percRotateComplete/100f));
-				
+					
+					setProgressCircle(beacon.percRotateComplete/100);
+					
 					/** This is to let players change facing mid-rotation 
 					if (x.HasValue) { 
 						setDirection (x.Value);
@@ -956,8 +988,8 @@ public class Player : MonoBehaviour {
 					beacon.addUpgradeProgress (vpsUpgradeRate);
 					beacon.losingUpgradeProgress = false;
 					
-					qudProgessCircle.renderer.enabled = true;
-					qudProgessCircle.renderer.material.SetFloat("_Cutoff", 1-(beacon.percUpgradeComplete/100));
+					setProgressCircle(beacon.percUpgradeComplete/100);
+					
 				
 					if (beacon.percUpgradeComplete >= 100f) {
 					
@@ -994,6 +1026,13 @@ public class Player : MonoBehaviour {
 			transform.localScale = new Vector3 (_defaultScale.x, _defaultScale.y, _defaultScale.z) * getScaleBoost ();
 			_expanding = true;
 			pulsateProgress = 0f;
+		}
+		
+		if(_invalidAction){
+			qudActionableGlow.renderer.material.color = Color.red;	
+		}
+		else{
+			qudActionableGlow.renderer.material.color = Color.white;	
 		}
 						
 	}
@@ -1383,6 +1422,43 @@ public class Player : MonoBehaviour {
 				break;
 			}
 		}
+	}
+	
+	public void setProgressCircle(float progress){
+		qudProgessCircle.renderer.enabled = true;
+		qudProgessCircle.renderer.material.color = team.beaconColor;
+		qudProgessCircle.renderer.material.SetFloat("_Cutoff", 1.001f-progress);
+		actionProgressTicker = ++actionProgressTicker % actionProgress.Length-1;
+		actionProgress[actionProgressTicker] = progress;
+	}
+	
+	public void setProgressCircle(float progress, Color32 barColor){
+		qudProgessCircle.renderer.enabled = true;
+		qudProgessCircle.renderer.material.color = barColor;
+		qudProgessCircle.renderer.material.SetFloat("_Cutoff", 1.001f-progress);
+		actionProgressTicker = ++actionProgressTicker % actionProgress.Length-1;
+		actionProgress[actionProgressTicker] = progress;
+		
+		
+	}
+	
+	public void clearActionProgress(){
+		for(int i = 0; i <actionProgress.Length; i++){
+			actionProgress[i] = 0f;
+		}
+	}
+	
+	public float getAverageActionProgress(){
+		float total=  0;
+		int count = 0;
+		for(int i = 0; i <actionProgress.Length; i++){
+			if(actionProgress[i] != 0) {
+				total+=actionProgress[i];
+				count++;
+			}
+		}
+		
+		return total/(float)count;
 	}
 	
 	public void audioLerp (AudioSource source, float target, float rate) {
