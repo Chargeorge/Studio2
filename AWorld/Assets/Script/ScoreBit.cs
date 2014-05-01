@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -107,7 +107,7 @@ public class ScoreBit : MonoBehaviour {
 
 	public void remove(){
 		BulletPool.instance.PoolObject(gameObject);
-		team.addScore(Settings.SettingsInstance.vpsScorePerMinePerSecond);
+		team.addScore(Settings.SettingsInstance.vpsScorePerBit);
 	}
 	
 	public bool closeEnoughToTarget (Vector3 newPos, Vector3 target, float closeEnoughDistance) {
