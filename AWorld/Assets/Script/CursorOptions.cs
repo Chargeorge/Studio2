@@ -29,6 +29,7 @@ public class CursorOptions : MonoBehaviour {
 
 	bool goingRight;
 	bool goingLeft;
+	bool waiting;
 	bool lerping;
 	float lerpRate;
 	
@@ -87,7 +88,7 @@ public class CursorOptions : MonoBehaviour {
 		float x = Input.GetAxis("HorizontalPlayer1") * moveSpeed * Time.deltaTime;
 		float y = Input.GetAxis("VerticalPlayer1") * moveSpeed * Time.deltaTime;
 		
-		if (!options.GetComponent<OptionsManager>().loadingNewScreen && !lerping){
+		if (!options.GetComponent<OptionsManager>().loadingNewScreen && !lerping && !waiting){
 			if(Input.GetAxis("HorizontalPlayer1") > 0.1f){//player wants to go right
 				if(OptionsManager.playersSelected){
 					lerping = true;
@@ -101,7 +102,7 @@ public class CursorOptions : MonoBehaviour {
 					goingRight = true;
 					goingLeft = false;
 					StartCoroutine("waitMenu");
-				}else if(OptionsManager.terrainSelected){
+				}else if(OptionsManager.waterSelected){
 					StartCoroutine("waitMenuTranslate", speedPos);
 				}else if(OptionsManager.speedSelected){
 					StartCoroutine("waitMenu");
@@ -141,7 +142,7 @@ public class CursorOptions : MonoBehaviour {
 					goingLeft = true;
 					target = playersPos;
 					StartCoroutine("waitMenu");
-				}else if(OptionsManager.terrainSelected){
+				}else if(OptionsManager.waterSelected){
 					lerping = true;
 					goingRight = false;
 					goingLeft = true;
@@ -176,11 +177,36 @@ public class CursorOptions : MonoBehaviour {
 					target = resetPos;
 					StartCoroutine("waitMenu");
 				}
+			}else if(Input.GetAxis("VerticalPlayer1") > 0.1f){//if the player wants to go up	
+				if(OptionsManager.speedSelected){
+					StartCoroutine("waitMenuTranslate", playersPos);
+				}else if(OptionsManager.sizeSelected){
+					StartCoroutine("waitMenuTranslate", fogPos);
+				}else if(OptionsManager.tutorialSelected){
+					StartCoroutine("waitMenuTranslate", waterPos);
+				}else if(OptionsManager.backSelected){
+					StartCoroutine("waitMenuTranslate", speedPos);
+				}else if(OptionsManager.resetSelected){
+					StartCoroutine("waitMenuTranslate", sizePos);
+				}else if(OptionsManager.startSelected){
+					StartCoroutine("waitMenuTranslate", tutorialPos);
+				}
+			}else if(Input.GetAxis("VerticalPlayer1") < -0.1f){//if the player wants to go down	
+				if(OptionsManager.playersSelected){
+					StartCoroutine("waitMenuTranslate", speedPos);
+				}else if(OptionsManager.fogSelected){
+					StartCoroutine("waitMenuTranslate", sizePos);
+				}else if(OptionsManager.waterSelected){
+					StartCoroutine("waitMenuTranslate", tutorialPos);
+				}else if(OptionsManager.speedSelected){
+					StartCoroutine("waitMenuTranslate", backPos);
+				}else if(OptionsManager.sizeSelected){
+					StartCoroutine("waitMenuTranslate", resetPos);
+				}else if(OptionsManager.tutorialSelected){
+					StartCoroutine("waitMenuTranslate", startPos);
+				}
 			}
-
 		}
-		
-			
 		
 		if (!optionsScript.loadingNewScreen) {
 			if (x > 0) {
@@ -211,7 +237,9 @@ public class CursorOptions : MonoBehaviour {
 	}
 
 	IEnumerator waitMenuTranslate(Vector3 _target){
+		waiting = true;
 		yield return new WaitForSeconds(0.3f);
+		waiting = false;
 		transform.position = _target;
 	}
 

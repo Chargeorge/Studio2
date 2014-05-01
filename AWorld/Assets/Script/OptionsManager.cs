@@ -35,7 +35,7 @@ public class OptionsManager : MonoBehaviour {
 	public Material fogOffMat;
 	public static int fogDisplayed; //0 is off, 1 is on
 
-	public static bool terrainSelected = false;
+	public static bool waterSelected = false;
 	public GameObject terrainDisplay;
 	public Material terrainIntensityNoWater;
 	public Material terrainIntensitySwamp;
@@ -168,23 +168,23 @@ public class OptionsManager : MonoBehaviour {
 			if(cursor.transform.position.x >= 1.80f && cursor.transform.position.x < 5.85f){
 				playersSelected = true;
 				fogSelected = false;
-				terrainSelected = false;
+				waterSelected = false;
 
 			} else if(cursor.transform.position.x > 5.95f && cursor.transform.position.x < 9.0f){
 				playersSelected = false;
 				fogSelected = true;
-				terrainSelected = false;
+				waterSelected = false;
 			} else if(cursor.transform.position.x > 9.2f && cursor.transform.position.x < 12.0f){
 				playersSelected = false;
 				fogSelected = false;
-				terrainSelected = true;
+				waterSelected = true;
 			}
 
 		} else if(cursor.transform.position.y == -2.3f){
 
 			playersSelected = false;
 			fogSelected = false;
-			terrainSelected = false;
+			waterSelected = false;
 
 			startSelected = false;
 			backSelected = false;
@@ -208,7 +208,7 @@ public class OptionsManager : MonoBehaviour {
 			
 			playersSelected = false;
 			fogSelected = false;
-			terrainSelected = false;
+			waterSelected = false;
 
 			sizeSelected = false;
 			speedSelected = false;
@@ -259,7 +259,7 @@ public class OptionsManager : MonoBehaviour {
 					}
 				}
 		
-				if(terrainSelected){
+				if(waterSelected){
 					if(terrainIntensity == 1){ //change from small to medium
 						terrainDisplay.renderer.material = terrainIntensitySwamp;
 						terrainIntensity = 2;
@@ -368,8 +368,8 @@ public class OptionsManager : MonoBehaviour {
 		if(playersSelected) GUI.Label (new Rect((Screen.width/8)*firstColumn, height1, Screen.width/4, 50), "PLAYERS", highlightStyle);
 		if(!fogSelected) GUI.Label (new Rect((Screen.width/8)*secondColumn, height1, Screen.width/4, 50), "FOG", subtitleStyle);
 		if(fogSelected) GUI.Label (new Rect((Screen.width/8)*secondColumn, height1, Screen.width/4, 50), "FOG", highlightStyle);
-		if(!terrainSelected) GUI.Label (new Rect((Screen.width/8)*thirdColumn, height1, Screen.width/4, 50), "WATER", subtitleStyle);
-		if(terrainSelected) GUI.Label (new Rect((Screen.width/8)*thirdColumn, height1, Screen.width/4, 50), "WATER", highlightStyle);
+		if(!waterSelected) GUI.Label (new Rect((Screen.width/8)*thirdColumn, height1, Screen.width/4, 50), "WATER", subtitleStyle);
+		if(waterSelected) GUI.Label (new Rect((Screen.width/8)*thirdColumn, height1, Screen.width/4, 50), "WATER", highlightStyle);
 
 		if(!speedSelected) GUI.Label (new Rect((Screen.width/8)*firstColumn, height2, Screen.width/4, 50), "SPEED", subtitleStyle);
 		if(speedSelected) GUI.Label (new Rect((Screen.width/8)*firstColumn, height2, Screen.width/4, 50), "SPEED", highlightStyle);
