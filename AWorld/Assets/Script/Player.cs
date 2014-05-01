@@ -19,6 +19,7 @@ public class Player : MonoBehaviour {
 	private int _vision = 3;
 
 	private float _jiggleRange = 0.1f;			//Max distance from center of grid the player will jiggle
+	private float _lastActionProgress;
 	
 	private bool _pulsating;	//Set to false every Update function; Pulsate sets it to true; if false at end of update, resets scale and _expanding
 	private bool _expanding;	//Used during pulsating
@@ -52,10 +53,17 @@ public class Player : MonoBehaviour {
 		get {
 			return _currentState;
 		}
+		set{
+			_previousState = _currentState;
+			_currentState = value;
+		}
 	}
 
 	private GameObject qudProgessCircle;
 	private GameObject qudActionableGlow;
+
+	private PlayerState _previousState;
+	private float _previousActionVal;
 
 	/// <summary>
 	/// Gets or sets the grd location.  Sets transform to corresponding center square of tile.  
@@ -154,7 +162,7 @@ public class Player : MonoBehaviour {
 			break;
 			
 			case PlayerState.standing:
-			
+				_previousActionVal = 0;
 				audioLerp (audioSourceMove, 0.0f, sRef.moveVolumeLerpRate);
 				if (audioSourceInfluenceStart.volume > 0.01f) { audioLerp (audioSourceInfluenceStart, 0.0f, sRef.playerInfluenceStartVolumeLerpRate); 
 					} else { audioSourceInfluenceStart.Stop (); }
@@ -674,8 +682,9 @@ public class Player : MonoBehaviour {
 			case PlayerState.building:
 				if (audioSourceInfluenceStart.volume > 0.01f) { audioLerp (audioSourceInfluenceStart, 0.0f, sRef.playerInfluenceStartVolumeLerpRate);
 					} else { audioSourceInfluenceStart.Stop (); }
+				
 				qudProgessCircle.renderer.enabled = true;
-				qudProgessCircle.renderer.material.SetFloat("_Cutoff", 1-(beaconInProgress.percBuildComplete/100));
+				qudProgessCircle.renderer.material.SetFloat("_Cutoff", .99f-(beaconInProgress.percBuildComplete/100));
 				
 				if(buildButtonDown && currentTile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
 				//	Jiggle ();	//Gotta jiggle
@@ -737,10 +746,10 @@ public class Player : MonoBehaviour {
 
 			moveTowardCenterOfTile (currentTile);
 
-			if(currentTile.controllingTeam.teamNumber != null && currentTile.controllingTeam.teamNumber != teamNumber){
+			if(currentTile.controllingTeam!= null && currentTile.controllingTeam.teamNumber != teamNumber){
 					audioSourceInfluenceStart.clip = Resources.Load("SFX/Player_DeInfluencing") as AudioClip;
 					//audioSourceInfluenceStart.Play();
-				} else if(currentTile.owningTeam.teamNumber == null || currentTile.controllingTeam.teamNumber == teamNumber){
+				} else if(currentTile.owningTeam == null || currentTile.controllingTeam.teamNumber == teamNumber){
 					audioSourceInfluenceStart.clip = Resources.Load("SFX/Player_Influencing") as AudioClip;
 				}
 				
@@ -748,7 +757,7 @@ public class Player : MonoBehaviour {
 				
     			qudProgessCircle.renderer.enabled = true;
     			if (currentTile.controllingTeam != null) { qudProgessCircle.renderer.material.color = currentTile.controllingTeam.teamColor; }	
-				qudProgessCircle.renderer.material.SetFloat("_Cutoff", 1-(currentTile.percControlled /100f) );
+				qudProgessCircle.renderer.material.SetFloat("_Cutoff", 1.001f-(currentTile.percControlled /100f) );
 				if(buildButtonDown && currentTile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
 			//		Jiggle ();	//Gotta jiggle
 					Pulsate ();
