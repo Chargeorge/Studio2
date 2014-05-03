@@ -16,6 +16,10 @@ public class OptionsManager : MonoBehaviour {
 	public AudioClip select;
 	public AudioClip launch;
 	public bool loadingNewScreen;
+	AudioSource music;
+
+	public GameObject musicObject;
+	bool turnOffMusic;
 
 	public GameObject cursor;
 
@@ -71,6 +75,12 @@ public class OptionsManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		turnOffMusic = false;
+
+		musicObject = GameObject.Find("MusicOptions");
+
+		music = musicObject.GetComponent<AudioSource>();
+
 		height1 = Screen.height/3 - Screen.height/12;
 		height2 = (Screen.height/3)*2 - Screen.height/12;
 		height3 = (Screen.height/7)*6;
@@ -326,6 +336,7 @@ public class OptionsManager : MonoBehaviour {
 		}
 		
 		if(startSelected && Input.GetButtonDown("BuildPlayer1") && !loadingNewScreen){
+			turnOffMusic = true;
 			audio.PlayOneShot(launch, 0.9f);
 			loadingNewScreen = true;
 			Invoke ("launchGame", 1.5f);
@@ -335,6 +346,10 @@ public class OptionsManager : MonoBehaviour {
 			audio.PlayOneShot(select, 0.8f);
 			loadingNewScreen = true;
 			Invoke ("goToMainMenu", 1.0f);
+		}
+
+		if(turnOffMusic){
+			music.volume -= 0.04f;
 		}
 
 	}
