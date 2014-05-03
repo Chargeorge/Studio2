@@ -20,6 +20,9 @@ public class Bar : MonoBehaviour {
 	public GameObject scoreBitFinal;
 	public float fixIt;
 
+
+
+
 	// Use this for initialization
 	void Start () {
 		scoreBitFinal = transform.FindChild("ScoreBitFinalTarget").gameObject;
@@ -97,5 +100,7 @@ public class Bar : MonoBehaviour {
 	//	teamScale2.y = endScale.y *perScore;
 	}
 	
+
+
 
 }

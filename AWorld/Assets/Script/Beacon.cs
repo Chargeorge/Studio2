@@ -993,6 +993,7 @@ public class Beacon : MonoBehaviour {
 		_currentState = BeaconState.Advanced;
 		transform.FindChild("Base").renderer.material = matUpgraded;
 		transform.FindChild("Arrow").renderer.material = arrowUpgraded;
+		transform.FindChild("Arrow").transform.localScale = new Vector3(17, 17, 0);
 		
 		//hax
 		setTeam ();
