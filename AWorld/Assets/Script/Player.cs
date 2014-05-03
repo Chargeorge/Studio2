@@ -42,6 +42,7 @@ public class Player : MonoBehaviour {
 	//public AudioClip invalid_Input;
 	
 	public AudioSource audioSourceMove;
+	public AudioSource audioSourceMoveEnemyTerrain;
 	public AudioSource audioSourceInvalid;
 	public AudioSource audioSourceInfluenceStart;
 	public AudioSource audioSourceInfluenceDone;
@@ -166,6 +167,7 @@ public class Player : MonoBehaviour {
 			case PlayerState.standing:
 			
 				audioLerp (audioSourceMove, 0.0f, sRef.moveVolumeLerpRate);
+				audioLerp (audioSourceMoveEnemyTerrain, 0.0f, sRef.moveVolumeLerpRate);
 				if (audioSourceInfluenceStart.volume > 0.01f) { audioLerp (audioSourceInfluenceStart, 0.0f, sRef.playerInfluenceStartVolumeLerpRate); 
 					} else { audioSourceInfluenceStart.Stop (); }
 			
@@ -321,11 +323,8 @@ public class Player : MonoBehaviour {
 								{
 									_invalidAction = true;
 									if(!audioSourceInvalid.isPlaying){ 
-										Debug.Log ("playin");
 										audioSourceInvalid.volume = 0.3f;
-										audioSourceInvalid.Play ();
-										//audio.Play();
-										
+										audioSourceInvalid.Play ();										
 									}
 								}
 							}
@@ -354,15 +353,16 @@ public class Player : MonoBehaviour {
 			//if it completes, move to next tile, set state to standing
 			case PlayerState.moving:
 				if(currentTile.owningTeam != null && currentTile.owningTeam.teamNumber != teamNumber){
-					audioSourceMove.clip = Resources.Load("SFX/Moving_EnemyTerrain") as AudioClip;
-					audioLerp (audioSourceMove, sRef.moveVolume, sRef.moveVolumeLerpRate);
-					if(!audioSourceMove.isPlaying){
-						audioSourceMove.Play();
+					audioSourceMoveEnemyTerrain.clip = Resources.Load("SFX/Moving_EnemyTerrain") as AudioClip;
+					audioLerp (audioSourceMoveEnemyTerrain, sRef.moveVolume, sRef.moveVolumeLerpRate);
+					if(!audioSourceMoveEnemyTerrain.isPlaying){
+						audioSourceMoveEnemyTerrain.Play();
 					}
 				} 
 			if(currentTile.owningTeam == null || currentTile.owningTeam.teamNumber == teamNumber) {
 				if(PlayerNumber == 1) audioSourceMove.clip = Resources.Load ("SFX/Player_Moving_Lo") as AudioClip;
 				if(PlayerNumber == 2) audioSourceMove.clip = Resources.Load ("SFX/Player_Moving_Hi") as AudioClip;
+				audioLerp (audioSourceMoveEnemyTerrain, 0.0f, sRef.moveVolumeLerpRate);
 				audioLerp (audioSourceMove, sRef.moveVolume, sRef.moveVolumeLerpRate);
 				if(!audioSourceMove.isPlaying){
 					audioSourceMove.Play();
@@ -371,7 +371,7 @@ public class Player : MonoBehaviour {
 
 				if (audioSourceInfluenceStart.volume > 0.01f) { audioLerp (audioSourceInfluenceStart, 0.0f, sRef.playerInfluenceStartVolumeLerpRate);
 					} else { audioSourceInfluenceStart.Stop (); }
-				audioLerp (audioSourceMove, sRef.moveVolume, sRef.moveVolumeLerpRate);
+				//audioLerp (audioSourceMove, sRef.moveVolume, sRef.moveVolumeLerpRate);
 	
 				qudProgessCircle.renderer.enabled = false;
 				currentTile.Reveal (_vision);
@@ -752,8 +752,11 @@ public class Player : MonoBehaviour {
 			moveTowardCenterOfTile (currentTile);
 
 			if(currentTile.controllingTeam!= null && currentTile.controllingTeam.teamNumber != teamNumber){
-					audioSourceInfluenceStart.clip = Resources.Load("SFX/Player_DeInfluencing") as AudioClip;
-					//audioSourceInfluenceStart.Play();
+					audioSourceInfluenceStart.clip = Resources.Load("SFX/Player_DeInfluencing_2") as AudioClip;
+					if(!audioSourceInfluenceStart.isPlaying){
+						audioSourceInfluenceStart.Play();
+					Debug.Log(audioSourceInfluenceStart.clip);
+					}
 				} else if(currentTile.owningTeam == null || currentTile.controllingTeam.teamNumber == teamNumber){
 					audioSourceInfluenceStart.clip = Resources.Load("SFX/Player_Influencing") as AudioClip;
 				}

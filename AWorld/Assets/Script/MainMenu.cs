@@ -19,9 +19,14 @@ public class MainMenu : MonoBehaviour {
 	public bool loadingNewScreen;
 	public bool quitting;
 
+	public GameObject musicObject;
+	AudioSource music;
+
 	float startHeight = 0.55f;
 	float optionsHeight = 0.67f;
 	float quitHeight = 0.8f;
+
+	bool turnOffMusic;
 
 
 
@@ -34,6 +39,10 @@ public class MainMenu : MonoBehaviour {
 		quitSelected = false;
 		loadingNewScreen = false;
 		quitting = false;
+
+		music = musicObject.GetComponent<AudioSource>();
+
+		turnOffMusic = false;
 	}
 	
 	// Update is called once per frame
@@ -57,6 +66,7 @@ public class MainMenu : MonoBehaviour {
 			quitSelected = false;
 		}
 
+		Debug.Log ("volume :"+music.volume);
 		/*if(joystickActive){
 		if(startSelected){
 			if(Input.GetAxisRaw("VerticalPlayer1") < -deadZone){
@@ -98,6 +108,8 @@ public class MainMenu : MonoBehaviour {
 
 		if(Input.GetButtonDown("BuildPlayer1") && !loadingNewScreen){
 			if(startSelected){
+				//audioLerp(music, 0.0f, 0.2f);
+				turnOffMusic = true;
 				audio.PlayOneShot(launch, 0.9f);
 				loadingNewScreen = true;
 				Invoke("launchGame", 1.5f);
@@ -108,12 +120,18 @@ public class MainMenu : MonoBehaviour {
 				Invoke ("launchOptions", 1.0f);
 			}
 			if(quitSelected){
+				turnOffMusic = true;
+				audioLerp(music, 0.0f, 0.2f);
 				audio.PlayOneShot (select, .9f);
 				if (!Application.isEditor) {
 					quitting = true;
 					Invoke ("quitApp", 1.0f);
 				}
 			}
+		}
+
+		if(turnOffMusic){
+			music.volume -= 0.04f;
 		}
 	}
 
@@ -127,6 +145,15 @@ public class MainMenu : MonoBehaviour {
 	
 	public void quitApp(){
 		Application.Quit();
+	}
+
+	public void audioLerp (AudioSource source, float target, float rate) {
+		if (Mathf.Abs (source.volume - target) <= 0.001f) {
+			source.volume = target;
+		}
+		else {
+			source.volume = Mathf.Lerp (source.volume, target, rate);
+		}
 	}
 
 	void OnGUI(){

@@ -24,8 +24,6 @@ public class CursorMenu : MonoBehaviour {
 	bool goingUpUpAndAway;
 	bool goingLowLowLow;
 
-	float time = 1;
-
 	// Use this for initialization
 	void Start () {
 
