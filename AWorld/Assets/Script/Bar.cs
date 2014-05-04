@@ -19,9 +19,8 @@ public class Bar : MonoBehaviour {
 	public Vector3 startPos;
 	public GameObject scoreBitFinal;
 	public float fixIt;
-
-	public AudioSource audioSourceScoring;
-	public AudioClip scoring;
+	public float displayedScore = 0.0f;
+	public float scoreLerpRate = 0.1f;
 
 	// Use this for initialization
 	void Start () {
@@ -31,11 +30,7 @@ public class Bar : MonoBehaviour {
 		sRef = Settings.SettingsInstance;
 		gRef = GameManager.GameManagerInstance;
 
-		if(team.teamNumber == 1){
-			scoring = Resources.Load("SFX/Altar_Score_Lo") as AudioClip;
-		} else if(team.teamNumber == 2){
-			scoring = Resources.Load("SFX/Altar_Score_Hi") as AudioClip;
-		}
+		//team = gRef.teams[0];
 
 		endScale.x = 0.7f;
 		endScale.y = sRef.scaleY; 
@@ -72,14 +67,17 @@ public class Bar : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
-		audioSourceScoring.clip = scoring;
-
 		float perScore = team.score / sRef.valPointsToWin;
-	
-		if(perScore <= 1){
-			teamScale.y = endScale.y *perScore;
-			teamPos.y = fixIt + endPosY *perScore;
+		if (Mathf.Abs (displayedScore - perScore) < 0.001f) { 
+			displayedScore = perScore;
+		}	
+		else {
+			displayedScore = Mathf.Lerp (displayedScore, perScore, scoreLerpRate);
+		}
+				
+		if(displayedScore <= 1){
+			teamScale.y = endScale.y *displayedScore;
+			teamPos.y = fixIt + endPosY *displayedScore;
 		} else {
 			teamPos.y = fixIt + endPosY;
 			teamScale.y = endScale.y;
