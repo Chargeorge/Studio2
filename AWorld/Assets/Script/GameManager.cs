@@ -269,7 +269,21 @@ public class GameManager : MonoBehaviour {
 				
 				}
 				
-				
+				switch (PlayerPrefs.GetInt (PreferencesOptions.gameSpeed.ToString())) {
+				case 1: 
+					thisAltar.scoreBitInterval = sRef.scoreBitIntervalSlow;
+					break;
+				case 2:
+					thisAltar.scoreBitInterval = sRef.scoreBitIntervalNormal;
+					break;
+				case 3:
+					thisAltar.scoreBitInterval = sRef.scoreBitIntervalFast;
+					break;
+				default:
+					thisAltar.scoreBitInterval = sRef.scoreBitIntervalNormal;
+					Debug.LogWarning ("Game speed was a weird value while setting altar score bit intervals");
+					break;
+				}
 			}
 
 
