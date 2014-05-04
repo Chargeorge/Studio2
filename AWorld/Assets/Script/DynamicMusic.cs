@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class DynamicMusic : MonoBehaviour {
@@ -10,6 +10,9 @@ public class DynamicMusic : MonoBehaviour {
 	public AudioSource layer3MidHi;
 	public AudioSource layer4Hi;
 
+	public GameObject GameManager;
+	public GameManager GameManagerInstance;
+
 	float scorePlayer1;
 	float scorePlayer2;
 
@@ -17,6 +20,9 @@ public class DynamicMusic : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
+		//scorePlayer1 = GameManager.GameManagerInstance.teams[0];
+		//scorePlayer2 = GameManager.GameManagerInstance.teams[1];
 
 
 	}
@@ -29,7 +35,7 @@ public class DynamicMusic : MonoBehaviour {
 		//either play all the time and lerp the volume in and out
 		//or just play/stop it
 
-		Debug.Log("lol");
+
 
 		if(scorePlayer1 > 60 || scorePlayer2 > 60){
 			//play Layer1

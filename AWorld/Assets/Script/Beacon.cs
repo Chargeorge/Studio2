@@ -22,6 +22,19 @@ public class Beacon : MonoBehaviour {
 	public GameObject tileBeingConverted;
 	private InfluencePatternHolder patternConverting;
 	public Settings sRef;
+	private GameObject _lastTileInfluenced;
+
+	public GameObject lastTileInfluenced {
+		get {
+			if(controllingTeam != null){
+				return _lastTileInfluenced;
+			}
+			else{
+				return null;
+			}
+		}
+	}	
+	
 	public BeaconState currentState{
 		get{
 			return _currentState;
@@ -56,7 +69,7 @@ public class Beacon : MonoBehaviour {
 		arrowUpgraded = (Material) Resources.Load ("Sprites/Materials/ArrowUpgraded");
 
 		audioSourceBeacon = this.GetComponent<AudioSource>();
-
+		
 	}
 	
 	// Update is called once per frame
@@ -99,7 +112,7 @@ public class Beacon : MonoBehaviour {
 									return;
 								}
 								if(tile != null && tile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
-								BaseTile Bt =  tile.GetComponent<BaseTile>();
+									BaseTile Bt =  tile.GetComponent<BaseTile>();
 									if(Bt.controllingTeam == null){
 										Bt.startInfluence(influenceThisFrame, controllingTeam);
 										Bt.jigglingFromBeacon = true;
@@ -124,10 +137,14 @@ public class Beacon : MonoBehaviour {
 										Bt.jigglingFromBeacon = false;
 									}
 			//						|| Bt.percControlled < 100f
+									_lastTileInfluenced = Bt.gameObject;
 								}
 								
-							}
-						}
+							}//InfluenceTHis Frame
+						
+						} //waterfound
+					
+					
 					});
 				 }
 
@@ -992,6 +1009,7 @@ public class Beacon : MonoBehaviour {
 		_currentState = BeaconState.Advanced;
 		transform.FindChild("Base").renderer.material = matUpgraded;
 		transform.FindChild("Arrow").renderer.material = arrowUpgraded;
+		transform.FindChild("Arrow").transform.localScale = new Vector3(17, 17, 0);
 		
 		//hax
 		setTeam ();

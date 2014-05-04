@@ -140,8 +140,8 @@ public class Settings : MonoBehaviour {
 		
 		//Coefficients
 		coefMoveNeutral = 1f;
-		coefMoveAllied = 2f;
-		coefMoveEnemy = .33f;
+		coefMoveAllied = 1.5f;
+		coefMoveEnemy = .66f;
 		coefConvert = .5f;
 		coefBuildBeacon = .25f; 
 		coefBaseBeaconInfluence = 0.5f;	//At 1.0f, takes 1 second to convert a neutral tile 1 space away
@@ -244,6 +244,20 @@ public class Settings : MonoBehaviour {
 
 		gameMode = (PlayerPrefs.GetInt(PreferencesOptions.numberOfPlayers.ToString()) == 2) ? Mode.OneVOne : Mode.TwoVTwo;
 		fogOn = (PlayerPrefs.GetInt(PreferencesOptions.fogOn.ToString()) == 1) ? true : false;
+		
+		//Double-check for invalid values
+		if (PlayerPrefs.GetInt(PreferencesOptions.terrainIntensity.ToString()) < 1 || PlayerPrefs.GetInt(PreferencesOptions.terrainIntensity.ToString()) > 3) {
+			PlayerPrefs.SetInt(PreferencesOptions.terrainIntensity.ToString(), 2);
+		}
+
+		if (PlayerPrefs.GetInt(PreferencesOptions.terrainSize.ToString()) < 1 || PlayerPrefs.GetInt(PreferencesOptions.terrainSize.ToString()) > 3) {
+			PlayerPrefs.SetInt(PreferencesOptions.terrainSize.ToString(), 2);
+		}
+		
+		if (PlayerPrefs.GetInt(PreferencesOptions.gameSpeed.ToString()) < 1 || PlayerPrefs.GetInt(PreferencesOptions.gameSpeed.ToString()) > 3) {
+			PlayerPrefs.SetInt(PreferencesOptions.gameSpeed.ToString(), 2);
+		}
+		
 		optPerlinLevel =  (perlinLevels[PlayerPrefs.GetInt(PreferencesOptions.terrainIntensity.ToString())-1]);
 		SizeSetting set = sizes[PlayerPrefs.GetInt(PreferencesOptions.terrainSize.ToString())-1];
 

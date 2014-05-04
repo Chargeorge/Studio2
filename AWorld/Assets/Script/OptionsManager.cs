@@ -149,6 +149,7 @@ public class OptionsManager : MonoBehaviour {
 				break;
 		}
 
+		playersSelected = true;
 		loadingNewScreen = false;
 	}
 	
@@ -165,6 +166,8 @@ public class OptionsManager : MonoBehaviour {
 //		Debug.Log("intensity :" + terrainIntensity);
 
 		//LET'S FIRST DEFINE WHAT IS SELECTED WHEN
+		/**
+		// Handled in cursor now
 		if(cursor.transform.position.y == 0.9f){
 
 			sizeSelected = false;
@@ -239,7 +242,7 @@ public class OptionsManager : MonoBehaviour {
 				startSelected = true;
 			}
 		}
-
+		*/
 
 		//LET'S MAKE SHIT HAPPEN WHEN SOMETHING IS SELECTED AND THE BUTTON IS PRESSED
 		if(Input.GetButtonDown("BuildPlayer1")){

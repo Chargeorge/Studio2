@@ -112,8 +112,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -.720000029}
-  m_LocalScale: {x: 3, y: 3, z: 1}
+  m_LocalPosition: {x: 0, y: .109999999, z: -.0900000036}
+  m_LocalScale: {x: 9, y: 9, z: 1}
   m_Children: []
   m_Father: {fileID: 400004}
 --- !u!4 &400002
@@ -462,6 +462,8 @@ MonoBehaviour:
   beaconUpgraded: {fileID: 8300000, guid: d7cb0a39c63f1b74d89bccd2b85b6719, type: 3}
   beaconRotating: {fileID: 8300000, guid: 718d2f24576090c4c8fbe2a70040862f, type: 3}
   beaconRotated: {fileID: 8300000, guid: e7c355a13a423aa4c8712cc9816c462f, type: 3}
+  lerpRate: .200000003
+  audioSourceBeacon: {fileID: 0}
   neutralColor:
     serializedVersion: 2
     rgba: 0

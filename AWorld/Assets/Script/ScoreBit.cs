@@ -8,6 +8,7 @@ public class ScoreBit : MonoBehaviour {
 	private FinalScoreTarget finalTarget;
 	public Settings sRef;
 	public float speed = .2f;
+	public float rotateSpeed = 5.0f;
 	public float scoreAmt;
 	
 
@@ -36,45 +37,48 @@ public class ScoreBit : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
-		transform.Rotate(new Vector3(0,0,5));
-
-	//	transform.RotateAround (transform.position, Vector3.forward, 0.2f * Time.deltaTime);
-
-		if(targets.Count > 0){
-			Vector2 NewPos  =  Vector2.MoveTowards( (Vector2)transform.position, (Vector2)(targets[0].transform.position), speed);
-			Vector3 NewPos3 = new Vector3(NewPos.x, NewPos.y, transform.position.z);
-			
-			//I'm doing this twice just in case something sneaks inside the collider
-			if(transform.position == NewPos3){
+		
+			transform.Rotate(new Vector3(0,0,rotateSpeed * Time.deltaTime));
+		
+		if (!Pause.paused) {	
+		
+		//	transform.RotateAround (transform.position, Vector3.forward, 0.2f * Time.deltaTime);
+	
+			if(targets.Count > 0){
+				Vector2 NewPos  =  Vector2.MoveTowards( (Vector2)transform.position, (Vector2)(targets[0].transform.position), speed);
+				Vector3 NewPos3 = new Vector3(NewPos.x, NewPos.y, transform.position.z);
 				
-				if(targets.Count > 0){
-					targets.RemoveAt(0);
+				//I'm doing this twice just in case something sneaks inside the collider
+				if(transform.position == NewPos3){
 					
-					setTarget(targets[0]);
-					 NewPos  =  Vector2.MoveTowards( (Vector2)transform.position, (Vector2)(targets[0].transform.position), speed);
-					 NewPos3 = new Vector3(NewPos.x, NewPos.y, transform.position.z);
-					
+					if(targets.Count > 0){
+						targets.RemoveAt(0);
+						
+						setTarget(targets[0]);
+						 NewPos  =  Vector2.MoveTowards( (Vector2)transform.position, (Vector2)(targets[0].transform.position), speed);
+						 NewPos3 = new Vector3(NewPos.x, NewPos.y, transform.position.z);
+						
+						}
 					}
-				}
-			
-			transform.position = NewPos3;
-			
-		}
-
-
-
-		if (finalTarget != null && closeEnoughToTarget (transform.position, finalTarget.transform.position, sRef.closeEnoughDistanceScoreBit)) {
-//			Debug.Log ("Collision detected");
-			float percToWin = team.score / sRef.valPointsToWin;
-			if (percToWin > 1f) percToWin = 1f;
-			finalTarget.GetComponent<ParticleSystem>().startSize = sRef.scoreBitExplosionStartSize + ((sRef.scoreBitExplosionFinishSize-sRef.scoreBitExplosionStartSize)*percToWin);
-			finalTarget.GetComponent<ParticleSystem>().startSpeed = sRef.scoreBitExplosionStartSpeed + ((sRef.scoreBitExplosionFinishSpeed-sRef.scoreBitExplosionStartSpeed)*percToWin);
-			finalTarget.GetComponent<ParticleSystem>().startColor = team.teamColor;
-			finalTarget.PlayScoreAnimation ();
-			BulletPool.instance.PoolObject(gameObject);
-			team.addScore(scoreAmt);
-			//CancelInvoke();
+				
+				transform.position = NewPos3;
+				
+			}
+	
+	
+	
+			if (finalTarget != null && closeEnoughToTarget (transform.position, finalTarget.transform.position, sRef.closeEnoughDistanceScoreBit)) {
+	//			Debug.Log ("Collision detected");
+				float percToWin = team.score / sRef.valPointsToWin;
+				if (percToWin > 1f) percToWin = 1f;
+				finalTarget.GetComponent<ParticleSystem>().startSize = sRef.scoreBitExplosionStartSize + ((sRef.scoreBitExplosionFinishSize-sRef.scoreBitExplosionStartSize)*percToWin);
+				finalTarget.GetComponent<ParticleSystem>().startSpeed = sRef.scoreBitExplosionStartSpeed + ((sRef.scoreBitExplosionFinishSpeed-sRef.scoreBitExplosionStartSpeed)*percToWin);
+				finalTarget.GetComponent<ParticleSystem>().startColor = team.teamColor;
+				finalTarget.PlayScoreAnimation ();
+				BulletPool.instance.PoolObject(gameObject);
+				team.addScore(scoreAmt);
+				//CancelInvoke();
+			}
 		}
 	}
 	
