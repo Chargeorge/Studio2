@@ -1419,15 +1419,16 @@ public class Player : MonoBehaviour {
 	public void moveTowardCenterOfTile (BaseTile tile) {
 		
 		Vector3 newPos;
-		if (closeEnoughToTarget (transform.parent.position, tile.transform.position, sRef.closeEnoughDistanceMoveToCenter)) {
-			newPos = new Vector3 (tile.transform.position.x, tile.transform.position.y, transform.parent.position.z);
-		}
-		else {
-			newPos = Vector2.Lerp(transform.parent.position, tile.transform.position, sRef.moveToCenterRate * Time.deltaTime);
-			newPos.z = transform.parent.position.z;
-		}
-		transform.parent.position = newPos;
-		
+		if (!Pause.paused) {
+			if (closeEnoughToTarget (transform.parent.position, tile.transform.position, sRef.closeEnoughDistanceMoveToCenter)) {
+				newPos = new Vector3 (tile.transform.position.x, tile.transform.position.y, transform.parent.position.z);
+			}
+			else {
+				newPos = Vector2.Lerp(transform.parent.position, tile.transform.position, sRef.moveToCenterRate);
+				newPos.z = transform.parent.position.z;
+			}
+			transform.parent.position = newPos;
+		}	
 	}
 
 	public void doNewTile(BaseTile previousTile, BaseTile newTile){
