@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour {
 	public GameObject home1;
 	public GameObject home2;
 	private GameObject prfbBeacon;
+	private GameObject prfbStartUp;
 	public VictoryCondition vIsForVendetta;	
 	public int currentMarquee;
 
@@ -58,13 +59,16 @@ public class GameManager : MonoBehaviour {
 	private GameObject _prfbBar;
 	public GameObject teamBar1;
 	public GameObject teamBar2;
+	
+	public List<GameObject> ReadyUps;
+	
 
 	// Use this for initializatio
 	void Start () {
 
 		_prfbBar = (GameObject)Resources.Load("Prefabs/ScoreBar");
-
-
+		prfbStartUp = (GameObject)Resources.Load("Prefabs/ReadyBackGround");
+		ReadyUps = new List<GameObject>();
 		sRef = GameObject.Find ("Settings").GetComponent<Settings>();
 
 		beacons = new List<GameObject>();
@@ -94,6 +98,7 @@ public class GameManager : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
+	Debug.Log(currentState);
 	if(Input.GetKeyDown("r")) {
 		Time.timeScale = 1.0f;
 		Pause.paused = false;
@@ -109,7 +114,6 @@ public class GameManager : MonoBehaviour {
 			
 			switch (sRef.gameMode){
 			case Mode.TwoVTwo:{
-				_currentState = GameState.playing;
 				GameObject Player1 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
 				GameObject Player2 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
 				GameObject Player3 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
@@ -150,10 +154,25 @@ public class GameManager : MonoBehaviour {
 				//victoryConditions.Add (new LockMajorityAltars(1) );
 				victoryConditions.Add (new ControlViaTime(1));
 				// victoryConditions.Add (new NetworkEnemyBase(1));
+				
+				
+				GameObject Player1ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(2, sRef.boardSize.y-4, -3), Quaternion.identity);
+				GameObject Player2ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(2	, 2, -3), Quaternion.identity);
+				GameObject Player3ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(sRef.boardSize.x-2,  sRef.boardSize.y-4, -3), Quaternion.identity);
+				GameObject Player4ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(sRef.boardSize.x-2,2, -3), Quaternion.identity);
+				
+				Player1ReadyUp.GetComponent<ReadyUp>().setPlayer(p1);	
+				Player2ReadyUp.GetComponent<ReadyUp>().setPlayer(p2);
+				Player3ReadyUp.GetComponent<ReadyUp>().setPlayer(p3);
+				Player4ReadyUp.GetComponent<ReadyUp>().setPlayer(p4);
+				
+				ReadyUps.Add (Player1ReadyUp);
+				ReadyUps.Add(Player2ReadyUp);
+				ReadyUps.Add (Player3ReadyUp);
+				ReadyUps.Add(Player4ReadyUp);
 				break;
 			}
 			case Mode.OneVOne:{
-				_currentState = GameState.playing;
 				GameObject Player1 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
 				GameObject Player2 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
 				Player p1 = Player1.GetComponentInChildren<Player>();
@@ -174,8 +193,13 @@ public class GameManager : MonoBehaviour {
 				team2Home = setUpTeamHome(p2);
 				
 				//
+				GameObject Player1ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(0	, sRef.boardSize.y/2, -3), Quaternion.identity);
+				GameObject Player2ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(sRef.boardSize.x, sRef.boardSize.y/2, -3), Quaternion.identity);
 				
-				
+				Player1ReadyUp.GetComponent<ReadyUp>().setPlayer(p1);
+				Player2ReadyUp.GetComponent<ReadyUp>().setPlayer(p2);
+				ReadyUps.Add (Player1ReadyUp);
+				ReadyUps.Add(Player2ReadyUp);
 				//victoryConditions.Add (new LockMajorityAltars(1) );
 				victoryConditions.Add (new ControlViaTime(1));
 				//victoryConditions.Add (new NetworkEnemyBase(1));				
@@ -188,6 +212,10 @@ public class GameManager : MonoBehaviour {
 			teamBar2.GetComponent<Bar>().team = teams[1];
 			teams[0].ScoreBar = teamBar1;
 			teams[1].ScoreBar = teamBar2;
+			
+			ReadyUps.ForEach(delegate(GameObject g){
+				g.renderer.enabled = true;
+			});
 			
 			//Check for any homebase islands, if so regenerate
 			//Check for fairness?  
@@ -269,7 +297,21 @@ public class GameManager : MonoBehaviour {
 				
 				}
 				
-				
+				switch (PlayerPrefs.GetInt (PreferencesOptions.gameSpeed.ToString())) {
+				case 1: 
+					thisAltar.scoreBitInterval = sRef.scoreBitIntervalSlow;
+					break;
+				case 2:
+					thisAltar.scoreBitInterval = sRef.scoreBitIntervalNormal;
+					break;
+				case 3:
+					thisAltar.scoreBitInterval = sRef.scoreBitIntervalFast;
+					break;
+				default:
+					thisAltar.scoreBitInterval = sRef.scoreBitIntervalNormal;
+					Debug.LogWarning ("Game speed was a weird value while setting altar score bit intervals");
+					break;
+				}
 			}
 
 
@@ -429,7 +471,14 @@ public class GameManager : MonoBehaviour {
 
 
 			setup = false;
-			
+			if(sRef.useReadyUp){
+				_currentState = GameState.gameNotStarted;
+			}else{
+				_currentState = GameState.playing;
+				ReadyUps.ForEach(delegate (GameObject g) {
+					g.SetActive(false);	
+				});
+			}
 		}
 		GameObject hoveredTile = getHoveredTile();
 		if(hoveredTile!= null){
@@ -456,6 +505,26 @@ public class GameManager : MonoBehaviour {
 				
 				debugMouse.percControlled =100f;
 			}
+		}
+
+		if(_currentState == GameState.gameNotStarted){
+			bool startMatch  = true;
+			ReadyUps.ForEach(delegate(GameObject g){
+				if(!g.GetComponent<ReadyUp>().ready){
+					startMatch = false;
+				}
+			});
+			
+			if(startMatch){
+				
+				ReadyUps.ForEach(delegate(GameObject g){
+					g.SetActive(false);
+				});
+				
+				_currentState = GameState.playing;
+			}
+			
+			
 		}
 
 		if(_currentState == GameState.playing){
