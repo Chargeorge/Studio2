@@ -1074,12 +1074,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59d4fcf77ca56a147ada7da065113fca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  soundtrack: {fileID: 1704563065}
   layer1Lo: {fileID: 1704563070}
   layer2LoMid: {fileID: 1704563069}
   layer3MidHi: {fileID: 1704563068}
   layer4Hi: {fileID: 1704563067}
-  GameManager: {fileID: 842739086}
-  GameManagerInstance: {fileID: 0}
+  layerVolume: .400000006
+  layerVolumeClimax: .800000012
+  lerpRate: .100000001
 --- !u!1 &1843163357
 GameObject:
   m_ObjectHideFlags: 0
