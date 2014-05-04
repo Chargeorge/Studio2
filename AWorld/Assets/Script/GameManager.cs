@@ -98,7 +98,7 @@ public class GameManager : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
-	Debug.Log(currentState);
+//	Debug.Log(currentState);
 	if(Input.GetKeyDown("r")) {
 		Time.timeScale = 1.0f;
 		Pause.paused = false;

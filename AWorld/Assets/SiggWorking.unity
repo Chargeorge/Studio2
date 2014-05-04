@@ -1083,6 +1083,7 @@ MonoBehaviour:
   layerVolume: .400000006
   layerVolumeClimax: .800000012
   lerpRate: .100000001
+  lerpRateFast: 0
 --- !u!1 &1843163357
 GameObject:
   m_ObjectHideFlags: 0
@@ -1138,6 +1139,9 @@ MonoBehaviour:
   valScorePerAltar: 0
   valTimePerScoreShot: 0
   valScoreBaseCapture: 0
+  scoreBitIntervalSlow: 0
+  scoreBitIntervalNormal: 0
+  scoreBitIntervalFast: 0
   beaconBasicRange: 4
   beaconAdvancedRange: 8
   beaconNoBuildRange: 2
@@ -1198,6 +1202,7 @@ MonoBehaviour:
   scaleY: 0
   bbLocalPosY: 0
   sbMoveUp: 0
+  useReadyUp: 0
 --- !u!4 &1843163359
 Transform:
   m_ObjectHideFlags: 0

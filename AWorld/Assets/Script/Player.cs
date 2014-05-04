@@ -788,14 +788,14 @@ public class Player : MonoBehaviour {
 									float averageActionProgress = getAverageActionProgress();
 								if(_currentState == PlayerState.influencing){
 									
-									Debug.Log (averageActionProgress*100 +" " +  currentTile.percControlled);
+//									Debug.Log (averageActionProgress*100 +" " +  currentTile.percControlled);
 									if(averageActionProgress*100 > currentTile.percControlled){
 										Debug.Log("In total");
 										_invalidAction = true;		
 									}
 									if(Mathf.Abs(getAverageActionProgressDifference()) < .001 ){  
-										Debug.Log(getAverageActionProgressDifference());
-										Debug.Log("In average");
+//										Debug.Log(getAverageActionProgressDifference());
+//										Debug.Log("In average");
 										
 										_invalidAction = true;	
 									}
@@ -1508,7 +1508,7 @@ public class Player : MonoBehaviour {
 				count++;
 			}
 		}
-		Debug.Log ("count: " + count);
+//		Debug.Log ("count: " + count);
 		return max-min;
 	}
 	
