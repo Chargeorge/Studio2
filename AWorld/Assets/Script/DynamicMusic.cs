@@ -80,7 +80,7 @@ public class DynamicMusic : MonoBehaviour {
 	}
 
 	public void audioLerp (AudioSource source, float target, float rate) {
-		if (Mathf.Abs (source.volume - target) <= 0.001f) {
+		if (Mathf.Abs (source.volume - target) <= 0.01f) {
 			source.volume = target;
 		}
 		else {
