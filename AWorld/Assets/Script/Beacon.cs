@@ -920,6 +920,7 @@ public class Beacon : MonoBehaviour {
 		ClearJiggle ();
 		UpdateInfluencePatterns();
 		
+		rotatingTargetVol = 0.0f;
 		audioSourceActionCompleted.PlayOneShot (beaconRotated, 1.0f);
 	}
 	
@@ -1045,9 +1046,9 @@ public class Beacon : MonoBehaviour {
 
 		losingUpgradeProgress = false;
 
-		//This block moved from old finishAction() function, now Build() 
 		upgradingTargetVol = 0.0f;
 		audioSourceActionCompleted.PlayOneShot(beaconUpgraded, 1.0f);
+
 		_currentState = BeaconState.Advanced;
 		_patternList = createAdvancedInfluenceList(getAngleForDir(facing));
 		
