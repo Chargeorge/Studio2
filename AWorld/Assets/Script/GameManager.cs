@@ -155,10 +155,11 @@ public class GameManager : MonoBehaviour {
 				victoryConditions.Add (new ControlViaTime(1));
 				// victoryConditions.Add (new NetworkEnemyBase(1));
 				
-				GameObject Player1ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(0, 8, -3), Quaternion.identity);
-				GameObject Player2ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(0	, 2, -3), Quaternion.identity);
-				GameObject Player3ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(13, 8, -3), Quaternion.identity);
-				GameObject Player4ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(13,2, -3), Quaternion.identity);
+				
+				GameObject Player1ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(2, sRef.boardSize.y-4, -3), Quaternion.identity);
+				GameObject Player2ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(2	, 2, -3), Quaternion.identity);
+				GameObject Player3ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(sRef.boardSize.x-2,  sRef.boardSize.y-4, -3), Quaternion.identity);
+				GameObject Player4ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(sRef.boardSize.x-2,2, -3), Quaternion.identity);
 				
 				Player1ReadyUp.GetComponent<ReadyUp>().setPlayer(p1);	
 				Player2ReadyUp.GetComponent<ReadyUp>().setPlayer(p2);
@@ -192,8 +193,8 @@ public class GameManager : MonoBehaviour {
 				team2Home = setUpTeamHome(p2);
 				
 				//
-				GameObject Player1ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(0	, 5, -3), Quaternion.identity);
-				GameObject Player2ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(13, 5, -3), Quaternion.identity);
+				GameObject Player1ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(0	, sRef.boardSize.y/2, -3), Quaternion.identity);
+				GameObject Player2ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(sRef.boardSize.x, sRef.boardSize.y/2, -3), Quaternion.identity);
 				
 				Player1ReadyUp.GetComponent<ReadyUp>().setPlayer(p1);
 				Player2ReadyUp.GetComponent<ReadyUp>().setPlayer(p2);
@@ -470,7 +471,14 @@ public class GameManager : MonoBehaviour {
 
 
 			setup = false;
-			_currentState = GameState.gameNotStarted;
+			if(sRef.useReadyUp){
+				_currentState = GameState.gameNotStarted;
+			}else{
+				_currentState = GameState.playing;
+				ReadyUps.ForEach(delegate (GameObject g) {
+					g.SetActive(false);	
+				});
+			}
 		}
 		GameObject hoveredTile = getHoveredTile();
 		if(hoveredTile!= null){
