@@ -260,7 +260,6 @@ MonoBehaviour:
   beacons: []
   teamBar1: {fileID: 0}
   teamBar2: {fileID: 0}
-  ReadyUps: []
 --- !u!4 &842739088
 Transform:
   m_ObjectHideFlags: 0
@@ -1080,10 +1079,13 @@ MonoBehaviour:
   layer2LoMid: {fileID: 1704563069}
   layer3MidHi: {fileID: 1704563068}
   layer4Hi: {fileID: 1704563067}
-  layerVolume: .400000006
-  layerVolumeClimax: .800000012
+  threshold1: .600000024
+  threshold2: .800000012
+  threshold3: .899999976
+  layerVolume: .5
+  layerVolumeClimax: .899999976
   lerpRate: .100000001
-  lerpRateFast: 0
+  lerpRateFast: .300000012
 --- !u!1 &1843163357
 GameObject:
   m_ObjectHideFlags: 0
@@ -1139,9 +1141,6 @@ MonoBehaviour:
   valScorePerAltar: 0
   valTimePerScoreShot: 0
   valScoreBaseCapture: 0
-  scoreBitIntervalSlow: 0
-  scoreBitIntervalNormal: 0
-  scoreBitIntervalFast: 0
   beaconBasicRange: 4
   beaconAdvancedRange: 8
   beaconNoBuildRange: 2
@@ -1202,7 +1201,6 @@ MonoBehaviour:
   scaleY: 0
   bbLocalPosY: 0
   sbMoveUp: 0
-  useReadyUp: 0
 --- !u!4 &1843163359
 Transform:
   m_ObjectHideFlags: 0
