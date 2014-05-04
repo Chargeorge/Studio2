@@ -323,8 +323,7 @@ public class Player : MonoBehaviour {
 								{
 									_invalidAction = true;
 									if(!audioSourceInvalid.isPlaying){ 
-										audioSourceInvalid.volume = 0.3f;
-										audioSourceInvalid.Play ();										
+										playInvalid (0.3f);										
 									}
 								}
 							}
@@ -721,8 +720,7 @@ public class Player : MonoBehaviour {
 						}
 						else{
 							if (!audioSourceInvalid.isPlaying) {
-								audioSourceInvalid.volume = 1.0f;
-								audioSourceInvalid.Play ();
+								playInvalid (1.0f);
 							}
 						}
 					}
@@ -740,8 +738,7 @@ public class Player : MonoBehaviour {
 					_currentState = PlayerState.standing;
 					//StopSFX ();
 					if (audioSourceInvalid.isPlaying) {
-						audioSourceInvalid.volume = 1.0f;
-						audioSourceInvalid.Play ();
+						playInvalid (1.0f);
 					}
 					//PlaySFX(invalid_Input, 1.0f);
 					}
@@ -810,10 +807,7 @@ public class Player : MonoBehaviour {
 									_invalidAction = true;
 									_currentState = PlayerState.standing;
 									if(currentTile.tooCloseToBeacon() && currentTile.beacon == null && !audioSourceInvalid.isPlaying) {
-									//Invoke("playInvalid", 1.0f);
-									audioSourceInvalid.volume = 0.3f;
-									audioSourceInvalid.Play ();
-																									
+										playInvalid (0.3f);																									
 									}
 								}
 								
@@ -874,7 +868,7 @@ public class Player : MonoBehaviour {
 							if(test > 0f){
 								currentTile.addInfluenceReturnOverflow(test);
 								if (!audioSourceInvalid.isPlaying) {
-									audioSourceInvalid.volume = 0.3f;
+									audioSourceInvalid.volume = 0.3f;	//?
 									//audioSourceInvalid.Play ();
 									//Invoke("playInvalid", 1.0f);
 								}
@@ -1071,9 +1065,11 @@ public class Player : MonoBehaviour {
 		gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>().Reveal (_vision);
 	}
 
-	public void playInvalid(){
-		audioSourceInvalid.volume = 0.3f;
-		audioSourceInvalid.Play ();
+	public void playInvalid(float vol){
+		if (!Pause.paused) {
+			audioSourceInvalid.volume = vol;
+			audioSourceInvalid.Play ();
+		}
 	}
 	
 	/// <summary>;
