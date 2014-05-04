@@ -20,8 +20,8 @@ public class Bar : MonoBehaviour {
 	public GameObject scoreBitFinal;
 	public float fixIt;
 
-
-
+	public AudioSource audioSourceScoring;
+	public AudioClip scoring;
 
 	// Use this for initialization
 	void Start () {
@@ -31,7 +31,11 @@ public class Bar : MonoBehaviour {
 		sRef = Settings.SettingsInstance;
 		gRef = GameManager.GameManagerInstance;
 
-		//team = gRef.teams[0];
+		if(team.teamNumber == 1){
+			scoring = Resources.Load("SFX/Altar_Score_Lo") as AudioClip;
+		} else if(team.teamNumber == 2){
+			scoring = Resources.Load("SFX/Altar_Score_Hi") as AudioClip;
+		}
 
 		endScale.x = 0.7f;
 		endScale.y = sRef.scaleY; 
@@ -69,7 +73,7 @@ public class Bar : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-
+		audioSourceScoring.clip = scoring;
 
 		float perScore = team.score / sRef.valPointsToWin;
 	

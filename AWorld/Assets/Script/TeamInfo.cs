@@ -25,6 +25,8 @@ public class TeamInfo
 	public Texture winTexture;
 	public Vector2 wrldFinalTargetLocation;
 	public GameObject ScoreBar;
+	public AudioClip Scoring;
+
 	
 	public TeamInfo ()
 	{
@@ -94,6 +96,7 @@ public class TeamInfo
 
 	public void addScore(float score){
 		this.score += score;
+		ScoreBar.audio.Play();
 	}
 	
 	
