@@ -439,6 +439,9 @@ public class GameManager : MonoBehaviour {
 			foreach (GameObject o in players) {
 			 o.GetComponentInChildren<Player>().RevealTiles (); 
 			 }
+
+
+
 			setup = false;
 			
 		}
@@ -476,7 +479,7 @@ public class GameManager : MonoBehaviour {
 				//Debug.Log("checstate done");
 
 				if(v.isCompleted && !isPlaying){
-					audio.PlayOneShot(Victory_Gong, 0.5f); //THIS IS THE ACTUAL VICTORY SOUND
+					audio.PlayOneShot(Victory_Gong, 0.9f);
 					isPlaying = true;
 					_currentState = GameState.gameWon;
 					_victoryString += v.getVictorySting();
@@ -635,24 +638,6 @@ public Vector2 generateValidAltarPosition(Altar thisAltar, Vector2 startPos, boo
 			
 			}
 		}
-	}
-
-	public void PlaySFX(AudioClip clip, float volume){
-		audio.PlayOneShot(clip);
-
-		if(audio.volume <= volume){
-			audio.volume += 0.3f;
-		}
-		if(audio.volume >= volume){
-		audio.volume = volume;
-		}		
-	}
-
-	public void StopSFX(){
-		audio.Stop();
-	/*
-		audio.volume -= 0.4f;
-		StartCoroutine(StopSFXCoroutine ());*/
 	}
 
 	public IEnumerator StopSFXCoroutine(){

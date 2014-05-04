@@ -46,7 +46,7 @@ public class TeamInfo
 				returnable.teamNumber = teamNumber;
 				returnable.highlightColor = new Color32 (17, 75, 141, 150);
 				returnable.scoreTexture = (Texture)Resources.Load("Sprites/ScorebgTextureblue");
-				returnable.winTexture = (Texture)Resources.Load("Sprites/victoryScreen-blue");
+			returnable.winTexture = (Texture)Resources.Load("Sprites/victoryNewBlue");
 				break;
 			case 2:
 				returnable.teamColor = new Color32 (247, 180, 40, 255);

@@ -785,7 +785,11 @@ public class Player : MonoBehaviour {
 							float averageActionProgress = getAverageActionProgress();
 						if(_currentState == PlayerState.influencing){
 							
+
 //							Debug.Log (averageActionProgress*100 +" " +  currentTile.percControlled);
+
+							//Debug.Log (averageActionProgress*100 +" " +  currentTile.percControlled);
+
 							if(averageActionProgress*100 > currentTile.percControlled){
 								Debug.Log("In total");
 								_invalidAction = true;		
