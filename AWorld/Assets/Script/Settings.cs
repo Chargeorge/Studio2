@@ -140,8 +140,8 @@ public class Settings : MonoBehaviour {
 		
 		//Coefficients
 		coefMoveNeutral = 1f;
-		coefMoveAllied = 2f;
-		coefMoveEnemy = .33f;
+		coefMoveAllied = 1.5f;
+		coefMoveEnemy = .66f;
 		coefConvert = .5f;
 		coefBuildBeacon = .25f; 
 		coefBaseBeaconInfluence = 0.5f;	//At 1.0f, takes 1 second to convert a neutral tile 1 space away
