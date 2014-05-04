@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour {
 	public GameObject home1;
 	public GameObject home2;
 	private GameObject prfbBeacon;
+	private GameObject prfbStartUp;
 	public VictoryCondition vIsForVendetta;	
 	public int currentMarquee;
 
@@ -58,13 +59,16 @@ public class GameManager : MonoBehaviour {
 	private GameObject _prfbBar;
 	public GameObject teamBar1;
 	public GameObject teamBar2;
+	
+	public List<GameObject> ReadyUps;
+	
 
 	// Use this for initializatio
 	void Start () {
 
 		_prfbBar = (GameObject)Resources.Load("Prefabs/ScoreBar");
-
-
+		prfbStartUp = (GameObject)Resources.Load("Prefabs/ReadyBackGround");
+		ReadyUp = new List<GameObject>();
 		sRef = GameObject.Find ("Settings").GetComponent<Settings>();
 
 		beacons = new List<GameObject>();
@@ -94,9 +98,9 @@ public class GameManager : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
-	if(Input.GetKeyDown("r")) {
-		Application.LoadLevel("PierreOptions");
-	}
+		if(Input.GetKeyDown("r")) {
+			Application.LoadLevel("PierreOptions");
+		}
 	
 		if (setup){
 			GameObject team1Home, team2Home;
@@ -148,6 +152,16 @@ public class GameManager : MonoBehaviour {
 				//victoryConditions.Add (new LockMajorityAltars(1) );
 				victoryConditions.Add (new ControlViaTime(1));
 				// victoryConditions.Add (new NetworkEnemyBase(1));
+				
+				GameObject Player1ReadyUp = Instantiate(prfbStartUp, new Vector3(1, 5, -3), Quaternion.identity);
+				GameObject Player2ReadyUp = Instantiate(prfbStartUp, new Vector3(1, 2, -3), Quaternion.identity);
+				GameObject Player3ReadyUp = Instantiate(prfbStartUp, new Vector3(5, 5, -3), Quaternion.identity);
+				GameObject Player4ReadyUp = Instantiate(prfbStartUp, new Vector3(5, 2, -3), Quaternion.identity);
+				
+				Player1ReadyUp.GetComponent<ReadyUp>().setPlayer(p1);
+				Player2ReadyUp.GetComponent<ReadyUp>().setPlayer(p2);
+				Player3ReadyUp.GetComponent<ReadyUp>().setPlayer(p3);
+				Player4ReadyUp.GetComponent<ReadyUp>().setPlayer(p4);
 				break;
 			}
 			case Mode.OneVOne:{
