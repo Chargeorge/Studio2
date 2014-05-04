@@ -24,6 +24,12 @@ public class Beacon : MonoBehaviour {
 	public Settings sRef;
 	private GameObject _lastTileInfluenced;
 
+	public bool newShot;
+	public float speed = 0.0001f;
+	private float startTime;
+	private float journeyLength;
+	public Vector3 arrowStartPos;
+
 	public GameObject lastTileInfluenced {
 		get {
 			if(controllingTeam != null){
@@ -81,7 +87,12 @@ public class Beacon : MonoBehaviour {
 			
 			setVisualDirection();	//Why is this happening every frame?
 
-			shootArrow();
+			if (lastTileInfluenced != null){
+				if(newShot){
+					shootSetup();
+				}
+				shootArrow();
+			}
 
 			buildButtonDown = getPlayerBuild();
 
@@ -1130,13 +1141,29 @@ public class Beacon : MonoBehaviour {
 		audioLerp(audioSourceBeacon, 0.01f, lerpRate);
 	}
 
+	//code for arrowShooting
+
+
+	public void shootSetup(){
+		arrowStartPos = this.transform.FindChild("Arrow").position;
+		Vector3 tilePos = lastTileInfluenced.transform.position;
+		startTime = Time.time;
+		journeyLength = Vector3.Distance(arrowStartPos, tilePos);
+		newShot = false;
+	}
+	
 	public void shootArrow(){
 		Transform arrow = this.transform.FindChild("Arrow");
-		Vector3 arrowPos = this.transform.FindChild("Arrow").position;
-		if (lastTileInfluenced != null){
 		Vector3 tilePos = lastTileInfluenced.transform.position;
-		Vector3 dir = arrowPos - tilePos;
-		arrow.Translate(dir * Time.deltaTime);
-		}
+	//	Vector3 arrowPos = this.transform.FindChild("Arros").position;
+
+		float distCovered = (Time.time - startTime) * speed;
+		float fracJourney = distCovered / journeyLength;
+		Vector3 arrowPos = Vector3.Lerp(arrowStartPos, tilePos, fracJourney);
+		arrowPos.z = -0.02f;
+		arrow.position = arrowPos;
+		//	Vector3 dir = arrowPos - tilePos;
+		//	arrow.Translate(dir * Time.deltaTime);
+
 	}
 }
