@@ -1120,7 +1120,7 @@ public class Player : MonoBehaviour {
 	/// Gets the Build aixs based on player number
 	/// </summary>
 	/// <returns>The player X axis.</returns>
-	private bool getPlayerBuild(){
+	public bool getPlayerBuild(){
 		return Input.GetButton("BuildPlayer"+PlayerNumber);	
 	}
 
