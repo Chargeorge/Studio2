@@ -1079,9 +1079,13 @@ MonoBehaviour:
   layer2LoMid: {fileID: 1704563069}
   layer3MidHi: {fileID: 1704563068}
   layer4Hi: {fileID: 1704563067}
-  layerVolume: .400000006
-  layerVolumeClimax: .800000012
+  threshold1: .600000024
+  threshold2: .800000012
+  threshold3: .899999976
+  layerVolume: .5
+  layerVolumeClimax: .899999976
   lerpRate: .100000001
+  lerpRateFast: .300000012
 --- !u!1 &1843163357
 GameObject:
   m_ObjectHideFlags: 0

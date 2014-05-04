@@ -138,7 +138,7 @@ public class Altar : MonoBehaviour {
 						if(scoreLeft >0){
 							timeToNextScoreShot -= Time.deltaTime;
 							if(timeToNextScoreShot < 0){
-								audio.PlayOneShot(Praying, 0.9f);
+								//audio.PlayOneShot(Praying, 0.9f); //audio is now playing when the scorebit hits the bar
 								float scoreToAdd = sRef.vpsScorePerBit * ((a.Contains(AltarType.Khepru)) ? sRef.coefKhepru : 1 );
 								if(scoreLeft - scoreToAdd < 0){
 									scoreToAdd = scoreLeft;

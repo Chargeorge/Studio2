@@ -9,8 +9,7 @@ public class ScoreBit : MonoBehaviour {
 	public Settings sRef;
 	public float speed = .2f;
 	public float rotateSpeed = 5.0f;
-	public float scoreAmt;
-	
+	public float scoreAmt;	
 
 	// Use this for initialization
 	void Start () {
@@ -37,9 +36,8 @@ public class ScoreBit : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
 			transform.Rotate(new Vector3(0,0,rotateSpeed * Time.deltaTime));
-		
+
 		if (!Pause.paused) {	
 		
 		//	transform.RotateAround (transform.position, Vector3.forward, 0.2f * Time.deltaTime);
@@ -68,7 +66,6 @@ public class ScoreBit : MonoBehaviour {
 	
 	
 			if (finalTarget != null && closeEnoughToTarget (transform.position, finalTarget.transform.position, sRef.closeEnoughDistanceScoreBit)) {
-	//			Debug.Log ("Collision detected");
 				float percToWin = team.score / sRef.valPointsToWin;
 				if (percToWin > 1f) percToWin = 1f;
 				finalTarget.GetComponent<ParticleSystem>().startSize = sRef.scoreBitExplosionStartSize + ((sRef.scoreBitExplosionFinishSize-sRef.scoreBitExplosionStartSize)*percToWin);
@@ -87,7 +84,6 @@ public class ScoreBit : MonoBehaviour {
 			//int target0Ident = targets[0].gameObject.GetComponent<BaseTile>().Ident;
 			//int collidedTarget = collided.gameObject.GetComponent<BaseTile>().Ident;
 			if(collided.gameObject == targets[0]){
-				Debug.Log ("Collided");
 				if(collided.gameObject.tag == "ScoreBitTarget"){
 					if(targets.Count > 0){
 						targets.RemoveAt(0);

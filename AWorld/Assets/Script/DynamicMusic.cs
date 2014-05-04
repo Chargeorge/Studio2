@@ -18,14 +18,21 @@ public class DynamicMusic : MonoBehaviour {
 	float scorePlayer1;
 	float scorePlayer2;
 
+	public float threshold1;
+	public float threshold2;
+	public float threshold3;
+
 	public float layerVolume;
 	public float layerVolumeClimax;
 	public float lerpRate;
 	public float lerpRateFast;
 
+	bool gamewon;
+
 	// Use this for initialization
 	void Start () {
 		sRef = Settings.SettingsInstance;
+		gamewon = false;
 
 		layerVolume = 0.4f;
 		layerVolumeClimax = 1.0f;
@@ -53,25 +60,24 @@ public class DynamicMusic : MonoBehaviour {
 		scorePlayer1 = _s1 / sRef.valPointsToWin;
 		scorePlayer2 = _s2 / sRef.valPointsToWin;
 
-		Debug.Log("player1 score :"+scorePlayer1);
-
-		if(scorePlayer1 > .66f || scorePlayer2 > .66f){ //first layer is when one player gets closer to score
+		if(scorePlayer1 > threshold1 || scorePlayer2 > threshold1){ //first layer is when one player gets closer to score
 			audioLerp(layer1Lo, layerVolume, lerpRate);
 		}
 
-		if(scorePlayer1 > .8f || scorePlayer2 > .8f){ //when one player is almost there
+		if(scorePlayer1 > threshold2 || scorePlayer2 > threshold2){ //when one player is almost there
 			audioLerp(layer1Lo, 0.0f, lerpRateFast);
 			audioLerp(layer2LoMid, layerVolume, lerpRate);
 		}
 
-		if(scorePlayer1 > .9f || scorePlayer2 > .9f){ //this is when two players are really tied
+		if(scorePlayer1 > threshold3 || scorePlayer2 > threshold3 && !gamewon){ //this is when two players are really tied
 			audioLerp(layer1Lo, 0.0f, lerpRateFast); //turn off the first layer
 			audioLerp(layer2LoMid, 0.0f, lerpRateFast); //turn off the second layer
 			audioLerp(layer3MidHi, layerVolumeClimax, lerpRateFast);
-			audioLerp(soundtrack, layerVolumeClimax, lerpRateFast);
+			audioLerp(soundtrack, layerVolumeClimax, lerpRate);
 		}
 
-		if(scorePlayer1 == 1 || scorePlayer2 == 2){
+		if(scorePlayer1 > 1 || scorePlayer2 > 1){
+			gamewon = true;
 			audioLerp(layer1Lo, 0.0f, lerpRateFast);
 			audioLerp(layer2LoMid, 0.0f, lerpRateFast);
 			audioLerp(layer3MidHi, 0.0f, lerpRateFast);
