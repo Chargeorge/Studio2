@@ -4,7 +4,7 @@ using System.Collections;
 public class Pause : MonoBehaviour {
 
 
-	bool pause = false;
+	public static bool paused = false;
 	// Use this for initialization
 	void Start () {
 	
@@ -13,12 +13,12 @@ public class Pause : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetKeyDown(KeyCode.K)){
-			if (pause == false){
+			if (paused == false){
 				Time.timeScale = 0;
-				pause = true;
+				paused = true;
 			} else {
 				Time.timeScale = 1;
-				pause = false;
+				paused = false;
 			}
 		}
 	}

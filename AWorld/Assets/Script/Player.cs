@@ -173,7 +173,7 @@ public class Player : MonoBehaviour {
 			
 			//If we are standing and we get an input, handle it.
 //			Debug.Log (string.Format("Player number {0}, buld button down: {1}", PlayerNumber, buildButtonDown));
-				qudProgessCircle.renderer.enabled = false;
+				if (!Pause.paused) qudProgessCircle.renderer.enabled = false;
 				if(x.HasValue && !buildButtonDown) {
 					
 					setDirection(x.Value);	//Still need a 4-directional facing for building/rotating beacons
@@ -1049,19 +1049,20 @@ public class Player : MonoBehaviour {
 			 GameManager.wrldPositionFromGrdPosition(grdLocation).y + _positionOffset.y / 2, -1);
 		*/			
 		//If not pulsating, reset scale and _expanding
-		if (!_pulsating) {
+		if (!_pulsating && !Pause.paused) {
 			transform.localScale = new Vector3 (_defaultScale.x, _defaultScale.y, _defaultScale.z) * getScaleBoost ();
 			_expanding = true;
 			pulsateProgress = 0f;
 		}
 		
-		if(_invalidAction){
-			qudActionableGlow.renderer.material.color = Color.red;	
+		if (!Pause.paused) {		
+			if(_invalidAction){
+				qudActionableGlow.renderer.material.color = Color.red;	
+			}
+			else{
+				qudActionableGlow.renderer.material.color = Color.white;	
+			}
 		}
-		else{
-			qudActionableGlow.renderer.material.color = Color.white;	
-		}
-						
 	}
 	
 	//Not used with free movement.
@@ -1423,7 +1424,7 @@ public class Player : MonoBehaviour {
 			newPos = new Vector3 (tile.transform.position.x, tile.transform.position.y, transform.parent.position.z);
 		}
 		else {
-			newPos = Vector2.Lerp(transform.parent.position, tile.transform.position, sRef.moveToCenterRate);
+			newPos = Vector2.Lerp(transform.parent.position, tile.transform.position, sRef.moveToCenterRate * Time.deltaTime);
 			newPos.z = transform.parent.position.z;
 		}
 		transform.parent.position = newPos;
@@ -1452,28 +1453,29 @@ public class Player : MonoBehaviour {
 	}
 	
 	public void setProgressCircle(float progress){
-		qudProgessCircle.renderer.enabled = true;
-		qudProgessCircle.renderer.material.color = team.beaconColor;
-		float val = 1.001f-progress;
-		if (val<= 0) {val =.001f;}
-		qudProgessCircle.renderer.material.SetFloat("_Cutoff",val);
-		actionProgressTicker = (++actionProgressTicker) % actionProgress.Length;
-		actionProgress[actionProgressTicker] = progress;
+		if (!Pause.paused) {
+			qudProgessCircle.renderer.enabled = true;
+			qudProgessCircle.renderer.material.color = team.beaconColor;
+			float val = 1.001f-progress;
+			if (val<= 0) {val =.001f;}
+			qudProgessCircle.renderer.material.SetFloat("_Cutoff",val);
+			actionProgressTicker = (++actionProgressTicker) % actionProgress.Length;
+			actionProgress[actionProgressTicker] = progress;
+		}
 	}
 	
 	public void setProgressCircle(float progress, Color32 barColor){
-		qudProgessCircle.renderer.enabled = true;
-		qudProgessCircle.renderer.material.color = barColor;
-		float val = 1.001f-progress;
-		if (val<= 0) {val =.001f;}
+		if (!Pause.paused) {
+			qudProgessCircle.renderer.enabled = true;
+			qudProgessCircle.renderer.material.color = barColor;
+			float val = 1.001f-progress;
+			if (val<= 0) { val =.001f; }
+			
+			qudProgessCircle.renderer.material.SetFloat("_Cutoff", val);
 		
-		
-		qudProgessCircle.renderer.material.SetFloat("_Cutoff", val);
-	
-		actionProgressTicker = (++actionProgressTicker) % actionProgress.Length;
-		actionProgress[actionProgressTicker] = progress;
-		
-		
+			actionProgressTicker = (++actionProgressTicker) % actionProgress.Length;
+			actionProgress[actionProgressTicker] = progress;
+		}
 	}
 	
 	public void clearActionProgress(){
