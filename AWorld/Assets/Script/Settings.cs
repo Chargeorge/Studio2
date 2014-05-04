@@ -163,7 +163,7 @@ public class Settings : MonoBehaviour {
 		valPointsToWin = 250;
 		valScorePerAltar = 100f;
 		valTimePerScoreShot = 1f;
-		valScoreBaseCapture = 200f;
+		valScoreBaseCapture = 250f;
 		scoreBitIntervalSlow = 2.0f;
 		scoreBitIntervalNormal = 1.0f;
 		scoreBitIntervalFast = 0.75f;	//Feels like halving this is too much - test

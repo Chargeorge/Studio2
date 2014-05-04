@@ -103,7 +103,7 @@ public class ScoreBit : MonoBehaviour {
 			//int target0Ident = targets[0].gameObject.GetComponent<BaseTile>().Ident;
 			//int collidedTarget = collided.gameObject.GetComponent<BaseTile>().Ident;
 			if(collided.gameObject == targets[0]){
-				Debug.Log ("Collided");
+//				Debug.Log ("Collided");
 				if(collided.gameObject.tag == "ScoreBitTarget"){
 					if(targets.Count > 0){
 						targets.RemoveAt(0);
