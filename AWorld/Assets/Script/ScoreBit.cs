@@ -90,7 +90,13 @@ public class ScoreBit : MonoBehaviour {
 				finalTarget.GetComponent<ParticleSystem>().startSize = sRef.scoreBitExplosionStartSize + ((sRef.scoreBitExplosionFinishSize-sRef.scoreBitExplosionStartSize)*percToWin);
 				finalTarget.GetComponent<ParticleSystem>().startSpeed = sRef.scoreBitExplosionStartSpeed + ((sRef.scoreBitExplosionFinishSpeed-sRef.scoreBitExplosionStartSpeed)*percToWin);
 				finalTarget.GetComponent<ParticleSystem>().startColor = team.teamColor;
-				finalTarget.PlayScoreAnimation ();
+				
+				if (team.score >= sRef.valPointsToWin) {
+					finalTarget.PlayScoreAnimation (100);
+				} else {
+					finalTarget.PlayScoreAnimation (10);
+				}
+				
 				BulletPool.instance.PoolObject(gameObject);
 				team.addScore(scoreAmt);
 				//CancelInvoke();
