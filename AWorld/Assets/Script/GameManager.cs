@@ -161,7 +161,7 @@ public class GameManager : MonoBehaviour {
 				GameObject Player3ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(5, 5, -3), Quaternion.identity);
 				GameObject Player4ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(5, 2, -3), Quaternion.identity);
 				
-				Player1ReadyUp.GetComponent<ReadyUp>().setPlayer(p1);
+				Player1ReadyUp.GetComponent<ReadyUp>().setPlayer(p1);	
 				Player2ReadyUp.GetComponent<ReadyUp>().setPlayer(p2);
 				Player3ReadyUp.GetComponent<ReadyUp>().setPlayer(p3);
 				Player4ReadyUp.GetComponent<ReadyUp>().setPlayer(p4);
@@ -449,7 +449,7 @@ public class GameManager : MonoBehaviour {
 			 o.GetComponentInChildren<Player>().RevealTiles (); 
 			 }
 			setup = false;
-			
+			_currentState = GameState.gameNotStarted;
 		}
 		GameObject hoveredTile = getHoveredTile();
 		if(hoveredTile!= null){
@@ -493,6 +493,7 @@ public class GameManager : MonoBehaviour {
 				});
 			}
 			
+			_currentState = GameState.playing;
 			
 		}
 
