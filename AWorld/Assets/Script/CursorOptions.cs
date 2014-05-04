@@ -34,7 +34,7 @@ public class CursorOptions : MonoBehaviour {
 	bool waiting;
 	bool lerping;
 	float lerpRate;
-	
+		
 	// Use this for initialization
 	void Start () {
 
@@ -52,9 +52,9 @@ public class CursorOptions : MonoBehaviour {
 
 		float cursorDepth = -8.9f;
 
-		float firstLineHeight = 0.9f;
-		float secondLineHeight = -2.3f;
-		float thirdLineHeight = -3.5f;
+		float firstLineHeight = 1.0f;
+		float secondLineHeight = -2.2f;
+		float thirdLineHeight = -3.4f;
 
 		float firstColumn = 2.85f;
 		float secondColumn = 7.4f;
@@ -101,12 +101,14 @@ public class CursorOptions : MonoBehaviour {
 					target = fogPos;
 					goingRight = true;
 					goingLeft = false;
+					Invoke ("SwitchOption", 0.02f);
 					StartCoroutine("waitMenu");
 				}else if(OptionsManager.fogSelected){
 					lerping = true;
 					target = waterPos;
 					goingRight = true;
 					goingLeft = false;
+					Invoke ("SwitchOption", 0.02f);
 					StartCoroutine("waitMenu");
 				}else if(OptionsManager.waterSelected){
 					//StartCoroutine("waitMenuTranslate", speedPos);
@@ -115,25 +117,29 @@ public class CursorOptions : MonoBehaviour {
 					lerping = true;
 					goingRight = true;
 					goingLeft = false;
+					Invoke ("SwitchOption", 0.02f);
 					target = sizePos;
 				}else if(OptionsManager.sizeSelected){
 					lerping = true;
 					goingRight = true;
 					goingLeft = false;
 					target = tutorialPos;
+					Invoke ("SwitchOption", 0.02f);
 					StartCoroutine("waitMenu");
 				}else if(OptionsManager.tutorialSelected){
 					//StartCoroutine("waitMenuTranslate", backPos);
 				}else if(OptionsManager.backSelected){
-					StartCoroutine("waitMenu");
 					lerping = true;
 					goingRight = true;
 					goingLeft = false;
 					target = resetPos;
+					Invoke ("SwitchOption", 0.02f);
+					StartCoroutine("waitMenu");
 				}else if(OptionsManager.resetSelected){
 					lerping = true;
 					goingRight = true;
 					goingLeft = false;
+					Invoke ("SwitchOption", 0.02f);
 					target = startPos;
 					StartCoroutine("waitMenu");
 				}else if(OptionsManager.startSelected){
@@ -147,12 +153,14 @@ public class CursorOptions : MonoBehaviour {
 					goingRight = false;
 					goingLeft = true;
 					target = playersPos;
+					Invoke ("SwitchOption", 0.02f);
 					StartCoroutine("waitMenu");
 				}else if(OptionsManager.waterSelected){
 					lerping = true;
 					goingRight = false;
 					goingLeft = true;
 					target = fogPos;
+					Invoke ("SwitchOption", 0.02f);
 					StartCoroutine("waitMenu"); 
 				}else if(OptionsManager.speedSelected){
 					//StartCoroutine("waitMenuTranslate", waterPos);
@@ -161,12 +169,14 @@ public class CursorOptions : MonoBehaviour {
 					goingRight = false;
 					goingLeft = true;
 					target = speedPos;
+					Invoke ("SwitchOption", 0.02f);
 					StartCoroutine("waitMenu");
 				}else if(OptionsManager.tutorialSelected){
 					lerping = true;
 					goingRight = false;
 					goingLeft = true;
 					target = sizePos;
+					Invoke ("SwitchOption", 0.02f);
 					StartCoroutine("waitMenu");
 				}else if(OptionsManager.backSelected){
 					//StartCoroutine("waitMenuTranslate", tutorialPos);
@@ -175,12 +185,14 @@ public class CursorOptions : MonoBehaviour {
 					goingRight = false;
 					goingLeft = true;
 					target = backPos;
+					Invoke ("SwitchOption", 0.02f);
 					StartCoroutine("waitMenu");
 				}else if(OptionsManager.startSelected){
 					lerping = true;
 					goingRight = false;
 					goingLeft = true;
 					target = resetPos;
+					Invoke ("SwitchOption", 0.02f);
 					StartCoroutine("waitMenu");
 				}
 			}else if(Input.GetAxis("VerticalPlayer1") > 0.1f){//if the player wants to go up	
@@ -189,36 +201,42 @@ public class CursorOptions : MonoBehaviour {
 					goingDown = false;
 					goingUp = true;
 					target = playersPos;
+					Invoke ("SwitchOption", 0.02f);
 					StartCoroutine("waitMenu");
 				}else if(OptionsManager.sizeSelected){
 					lerping = true;
 					goingDown = false;
 					goingUp = true;
 					target = fogPos;
+					Invoke ("SwitchOption", 0.02f);
 					StartCoroutine("waitMenu");
 				}else if(OptionsManager.tutorialSelected){
 					lerping = true;
 					goingDown = false;
 					goingUp = true;
 					target = waterPos;
+					Invoke ("SwitchOption", 0.02f);
 					StartCoroutine("waitMenu");
 				}else if(OptionsManager.backSelected){
 					lerping = true;
 					goingDown = false;
 					goingUp = true;
 					target = speedPos;
+					Invoke ("SwitchOption", 0.02f);
 					StartCoroutine("waitMenu");
 				}else if(OptionsManager.resetSelected){
 					lerping = true;
 					goingDown = false;
 					goingUp = true;
 					target = sizePos;
+					Invoke ("SwitchOption", 0.02f);
 					StartCoroutine("waitMenu");
 				}else if(OptionsManager.startSelected){
 					lerping = true;
 					goingDown = false;
 					goingUp = true;
 					target = tutorialPos;
+					Invoke ("SwitchOption", 0.02f);
 					StartCoroutine("waitMenu");
 				}
 			}else if(Input.GetAxis("VerticalPlayer1") < -0.1f){//if the player wants to go down	
@@ -227,36 +245,42 @@ public class CursorOptions : MonoBehaviour {
 					goingDown = true;
 					goingUp = false;
 					target = speedPos;
+					Invoke ("SwitchOption", 0.02f);
 					StartCoroutine("waitMenu");
 				}else if(OptionsManager.fogSelected){
 					lerping = true;
 					goingDown = true;
 					goingUp = false;
 					target = sizePos;
+					Invoke ("SwitchOption", 0.02f);
 					StartCoroutine("waitMenu");
 				}else if(OptionsManager.waterSelected){
 					lerping = true;
 					goingDown = true;
 					goingUp = false;
 					target = tutorialPos;
+					Invoke ("SwitchOption", 0.02f);
 					StartCoroutine("waitMenu");
 				}else if(OptionsManager.speedSelected){
 					lerping = true;
 					goingDown = true;
 					goingUp = false;
 					target = backPos;
+					Invoke ("SwitchOption", 0.02f);
 					StartCoroutine("waitMenu");
 				}else if(OptionsManager.sizeSelected){
 					lerping = true;
 					goingDown = true;
 					goingUp = false;
 					target = resetPos;
+					Invoke ("SwitchOption", 0.02f);
 					StartCoroutine("waitMenu");
 				}else if(OptionsManager.tutorialSelected){
 					lerping = true;
 					goingDown = true;
 					goingUp = false;
 					target = startPos;
+					Invoke ("SwitchOption", 0.02f);
 					StartCoroutine("waitMenu");
 				}
 			}
@@ -308,6 +332,28 @@ public class CursorOptions : MonoBehaviour {
 		
 		yield return new WaitForSeconds(0.3f);
 		//lerping = false;
+	}
+	
+	void SwitchOption(){
+		OptionsManager.playersSelected = false;
+		OptionsManager.fogSelected = false;
+		OptionsManager.waterSelected = false;
+		OptionsManager.speedSelected = false;
+		OptionsManager.sizeSelected = false;
+		OptionsManager.tutorialSelected = false;
+		OptionsManager.backSelected = false;
+		OptionsManager.resetSelected = false;
+		OptionsManager.startSelected = false;
+		
+		if (target == playersPos) 	 	OptionsManager.playersSelected = true;
+		else if (target == fogPos) 	 	OptionsManager.fogSelected = true;
+		else if (target == waterPos) 	OptionsManager.waterSelected = true;
+		else if(target == speedPos)		OptionsManager.speedSelected = true;
+		else if(target == sizePos)   	OptionsManager.sizeSelected = true;
+		else if(target == tutorialPos)	OptionsManager.tutorialSelected = true;
+		else if(target == backPos)		OptionsManager.backSelected = true;
+		else if(target == resetPos)		OptionsManager.resetSelected = true;
+		else if(target == startPos)		OptionsManager.startSelected = true;
 	}
 	
 	//Sets movement check bools to false - ensures that the thing is selected before you start moving again
