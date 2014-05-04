@@ -296,7 +296,21 @@ public class GameManager : MonoBehaviour {
 				
 				}
 				
-				
+				switch (PlayerPrefs.GetInt (PreferencesOptions.gameSpeed.ToString())) {
+				case 1: 
+					thisAltar.scoreBitInterval = sRef.scoreBitIntervalSlow;
+					break;
+				case 2:
+					thisAltar.scoreBitInterval = sRef.scoreBitIntervalNormal;
+					break;
+				case 3:
+					thisAltar.scoreBitInterval = sRef.scoreBitIntervalFast;
+					break;
+				default:
+					thisAltar.scoreBitInterval = sRef.scoreBitIntervalNormal;
+					Debug.LogWarning ("Game speed was a weird value while setting altar score bit intervals");
+					break;
+				}
 			}
 
 
@@ -452,6 +466,9 @@ public class GameManager : MonoBehaviour {
 			foreach (GameObject o in players) {
 			 o.GetComponentInChildren<Player>().RevealTiles (); 
 			 }
+
+
+
 			setup = false;
 			_currentState = GameState.gameNotStarted;
 		}
@@ -509,7 +526,7 @@ public class GameManager : MonoBehaviour {
 				//Debug.Log("checstate done");
 
 				if(v.isCompleted && !isPlaying){
-					audio.PlayOneShot(Victory_Gong, 0.5f); //THIS IS THE ACTUAL VICTORY SOUND
+					audio.PlayOneShot(Victory_Gong, 0.9f);
 					isPlaying = true;
 					_currentState = GameState.gameWon;
 					_victoryString += v.getVictorySting();
@@ -668,24 +685,6 @@ public Vector2 generateValidAltarPosition(Altar thisAltar, Vector2 startPos, boo
 			
 			}
 		}
-	}
-
-	public void PlaySFX(AudioClip clip, float volume){
-		audio.PlayOneShot(clip);
-
-		if(audio.volume <= volume){
-			audio.volume += 0.3f;
-		}
-		if(audio.volume >= volume){
-		audio.volume = volume;
-		}		
-	}
-
-	public void StopSFX(){
-		audio.Stop();
-	/*
-		audio.volume -= 0.4f;
-		StartCoroutine(StopSFXCoroutine ());*/
 	}
 
 	public IEnumerator StopSFXCoroutine(){

@@ -44,6 +44,10 @@ public class Settings : MonoBehaviour {
 	public float valScorePerAltar;
 	public float valTimePerScoreShot;
 	public float valScoreBaseCapture;
+	public float scoreBitIntervalSlow;
+	public float scoreBitIntervalNormal;
+	public float scoreBitIntervalFast;
+	
 	
 	//Beacon stuff
 	public int beaconBasicRange;
@@ -158,9 +162,12 @@ public class Settings : MonoBehaviour {
 		valTileConvertScore = 1f;
 		valPointsToWin = 250;
 		valScorePerAltar = 100f;
-		valTimePerScoreShot  = 1f;
-		valScoreBaseCapture  = 200f;
-					
+		valTimePerScoreShot = 1f;
+		valScoreBaseCapture = 250f;
+		scoreBitIntervalSlow = 2.0f;
+		scoreBitIntervalNormal = 1.0f;
+		scoreBitIntervalFast = 0.75f;	//Feels like halving this is too much - test
+		
 		//Beacon stuff
 		beaconBasicRange = 4;
 		beaconAdvancedRange = 8;
@@ -228,6 +235,7 @@ public class Settings : MonoBehaviour {
 		cameraSize = 7.08f;
 		fogOn = true;
 		gameMode = Mode.TwoVTwo;
+		
 		//Settings
 		perlinLevels = new int[]{3000, 1800, 1400};
 		sizes = new SizeSetting[]{
