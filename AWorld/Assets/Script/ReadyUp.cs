@@ -48,6 +48,8 @@ public class ReadyUp : MonoBehaviour {
 	public void setPlayer(Player p){
 		player  = p;
 		readyCircle.renderer.material.color = player.renderer.material.color;
-		
+		readyText.GetComponent<TextMesh>().text  = string.Format(readyText.GetComponent<TextMesh>().text, player.PlayerNumber);
+		readiedText.GetComponent<TextMesh>().text  = string.Format(readiedText.GetComponent<TextMesh>().text, player.PlayerNumber);
 	}
+	
 }

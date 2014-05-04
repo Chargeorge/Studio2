@@ -98,7 +98,7 @@ public class GameManager : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
-
+	Debug.Log(currentState);
 	if(Input.GetKeyDown("r")) {
 		Time.timeScale = 1.0f;
 		Pause.paused = false;
@@ -114,7 +114,6 @@ public class GameManager : MonoBehaviour {
 			
 			switch (sRef.gameMode){
 			case Mode.TwoVTwo:{
-				_currentState = GameState.playing;
 				GameObject Player1 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
 				GameObject Player2 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
 				GameObject Player3 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
@@ -156,19 +155,23 @@ public class GameManager : MonoBehaviour {
 				victoryConditions.Add (new ControlViaTime(1));
 				// victoryConditions.Add (new NetworkEnemyBase(1));
 				
-				GameObject Player1ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(1, 5, -3), Quaternion.identity);
-				GameObject Player2ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(1, 2, -3), Quaternion.identity);
-				GameObject Player3ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(5, 5, -3), Quaternion.identity);
-				GameObject Player4ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(5, 2, -3), Quaternion.identity);
+				GameObject Player1ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(0, 8, -3), Quaternion.identity);
+				GameObject Player2ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(0	, 2, -3), Quaternion.identity);
+				GameObject Player3ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(13, 8, -3), Quaternion.identity);
+				GameObject Player4ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(13,2, -3), Quaternion.identity);
 				
 				Player1ReadyUp.GetComponent<ReadyUp>().setPlayer(p1);	
 				Player2ReadyUp.GetComponent<ReadyUp>().setPlayer(p2);
 				Player3ReadyUp.GetComponent<ReadyUp>().setPlayer(p3);
 				Player4ReadyUp.GetComponent<ReadyUp>().setPlayer(p4);
+				
+				ReadyUps.Add (Player1ReadyUp);
+				ReadyUps.Add(Player2ReadyUp);
+				ReadyUps.Add (Player3ReadyUp);
+				ReadyUps.Add(Player4ReadyUp);
 				break;
 			}
 			case Mode.OneVOne:{
-				_currentState = GameState.playing;
 				GameObject Player1 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
 				GameObject Player2 = (GameObject)Instantiate(prfbPlayer, new Vector3(0,0,0), Quaternion.identity);
 				Player p1 = Player1.GetComponentInChildren<Player>();
@@ -189,12 +192,13 @@ public class GameManager : MonoBehaviour {
 				team2Home = setUpTeamHome(p2);
 				
 				//
-				GameObject Player1ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(1, 5, -3), Quaternion.identity);
-				GameObject Player2ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(1, 2, -3), Quaternion.identity);
+				GameObject Player1ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(0	, 5, -3), Quaternion.identity);
+				GameObject Player2ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(13, 5, -3), Quaternion.identity);
 				
 				Player1ReadyUp.GetComponent<ReadyUp>().setPlayer(p1);
 				Player2ReadyUp.GetComponent<ReadyUp>().setPlayer(p2);
-				
+				ReadyUps.Add (Player1ReadyUp);
+				ReadyUps.Add(Player2ReadyUp);
 				//victoryConditions.Add (new LockMajorityAltars(1) );
 				victoryConditions.Add (new ControlViaTime(1));
 				//victoryConditions.Add (new NetworkEnemyBase(1));				
@@ -489,11 +493,12 @@ public class GameManager : MonoBehaviour {
 			if(startMatch){
 				
 				ReadyUps.ForEach(delegate(GameObject g){
-					renderer.enabled = false;
+					g.SetActive(false);
 				});
+				
+				_currentState = GameState.playing;
 			}
 			
-			_currentState = GameState.playing;
 			
 		}
 

@@ -260,6 +260,7 @@ MonoBehaviour:
   beacons: []
   teamBar1: {fileID: 0}
   teamBar2: {fileID: 0}
+  ReadyUps: []
 --- !u!4 &842739088
 Transform:
   m_ObjectHideFlags: 0
