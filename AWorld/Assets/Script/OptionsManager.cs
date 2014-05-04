@@ -23,44 +23,44 @@ public class OptionsManager : MonoBehaviour {
 
 	public GameObject cursor;
 
-	public static bool backSelected = false;
-	public static bool startSelected = false;
-	public static bool resetSelected = false;
+	public static bool backSelected;
+	public static bool startSelected;
+	public static bool resetSelected;
 
-	public static bool playersSelected = false;
+	public static bool playersSelected;
 	public GameObject playersDisplay;
 	public Material twoPlayersMat;
 	public Material fourPlayersMat;
 	public static int numberOfPlayers;
 
-	public static bool fogSelected = false;
+	public static bool fogSelected;
 	public GameObject fogDisplay;
 	public Material fogOnMat;
 	public Material fogOffMat;
 	public static int fogDisplayed; //0 is off, 1 is on
 
-	public static bool waterSelected = false;
+	public static bool waterSelected;
 	public GameObject terrainDisplay;
 	public Material terrainIntensityNoWater;
 	public Material terrainIntensitySwamp;
 	public Material terrainIntensityFlooded;
 	public static int terrainIntensity;
 
-	public static bool sizeSelected = false;
+	public static bool sizeSelected;
 	public GameObject sizeDisplay;
 	public Material sizeSmallMat;
 	public Material sizeNormalMat;
 	public Material sizeLargeMat;
 	public static int terrainSize;
 
-	public static bool speedSelected = false;
+	public static bool speedSelected;
 	public GameObject speedDisplay;
 	public Material speedNormalMat;
 	public Material speedDoubleMat;
 	public Material speedHalfMat;
 	public static int gameSpeed;
 
-	public static bool tutorialSelected = false;
+	public static bool tutorialSelected;
 	public GameObject tutorialDisplay;
 	public Material tutorialOnMat;
 	public Material tutorialOffMat;
@@ -150,6 +150,14 @@ public class OptionsManager : MonoBehaviour {
 		}
 
 		playersSelected = true;
+		fogSelected = false;
+		waterSelected = false;
+		speedSelected = false;
+		sizeSelected = false;
+		tutorialSelected = false;
+		backSelected = false;
+		resetSelected = false;
+		startSelected = false;
 		loadingNewScreen = false;
 	}
 	
