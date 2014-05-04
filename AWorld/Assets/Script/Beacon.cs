@@ -245,7 +245,11 @@ public class Beacon : MonoBehaviour {
 		//Debug.Log(this.transform.FindChild("Base").localPosition);
 		
 		buildingTargetVol = 0.5f;
-		audioSourceBuilding.Play ();		
+		
+		if (!audioSourceBuilding.isPlaying) {
+			audioSourceBuilding.volume = 0.0f;
+			audioSourceBuilding.Play ();	//Not working for some stupid reason
+		}
 	}
 	
 
@@ -267,14 +271,24 @@ public class Beacon : MonoBehaviour {
 
 	public void startUpgrading(){
 		this._currentState = BeaconState.BuildingAdvanced;
+		
 		upgradingTargetVol = 0.8f;
-		audioSourceUpgrading.Play ();
+		
+		if (!audioSourceUpgrading.isPlaying) {
+			audioSourceUpgrading.volume = 0.0f;
+			audioSourceUpgrading.Play ();	//Not working for some stupid reason
+		}
 	}
 	
 	public void startRotating (DirectionEnum? dir) {
 		dirRotatingToward = dir;
+		
 		rotatingTargetVol = 0.7f;
-		audioSourceRotating.Play ();
+		
+		if (!audioSourceRotating.isPlaying) {
+			audioSourceRotating.volume = 0.0f;
+			audioSourceRotating.Play ();	//Not working for some stupid reason
+		}
 	}
 	
 	public void setTeam(){
@@ -331,6 +345,7 @@ public class Beacon : MonoBehaviour {
 	/// <param name="rate">Rate.</param>
 	public void addBuildingProgress(float rate){
 		if (!audioSourceBuilding.isPlaying) {
+			audioSourceBuilding.volume = 0.0f;
 			audioSourceBuilding.Play (); 	//Dunno why the fuck this is necessary but whatever
 		}
 		buildingTargetVol = 0.5f;
@@ -393,10 +408,22 @@ public class Beacon : MonoBehaviour {
 	}
 		
 	public void addRotateProgress (float rate) {
+		if (!audioSourceRotating.isPlaying) {
+			audioSourceRotating.volume = 0.0f;
+			audioSourceRotating.Play ();
+		}
+		rotatingTargetVol = 0.7f;
+		
 		percRotateComplete += rate*Time.deltaTime;
 	}
 	
 	public void addUpgradeProgress (float rate) {
+		if (!audioSourceUpgrading.isPlaying) {
+			audioSourceUpgrading.volume = 0.0f;
+			audioSourceUpgrading.Play (); 	//Dunno why the fuck this is necessary but whatever
+		}
+		upgradingTargetVol = 0.8f;
+		
 		percUpgradeComplete += rate*Time.deltaTime;
 		updateUpgradeAnim ();
 		
@@ -892,7 +919,7 @@ public class Beacon : MonoBehaviour {
 		setVisualDirection ();
 		ClearJiggle ();
 		UpdateInfluencePatterns();
-
+		
 		audioSourceActionCompleted.PlayOneShot (beaconRotated, 1.0f);
 	}
 	
