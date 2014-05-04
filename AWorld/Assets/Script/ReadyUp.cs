@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 
@@ -48,5 +48,6 @@ public class ReadyUp : MonoBehaviour {
 	public void setPlayer(Player p){
 		player  = p;
 		readyCircle.renderer.material.color = player.renderer.material.color;
+		
 	}
 }

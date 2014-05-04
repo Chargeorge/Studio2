@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour {
 
 		_prfbBar = (GameObject)Resources.Load("Prefabs/ScoreBar");
 		prfbStartUp = (GameObject)Resources.Load("Prefabs/ReadyBackGround");
-		ReadyUp = new List<GameObject>();
+		ReadyUps = new List<GameObject>();
 		sRef = GameObject.Find ("Settings").GetComponent<Settings>();
 
 		beacons = new List<GameObject>();
@@ -153,10 +153,10 @@ public class GameManager : MonoBehaviour {
 				victoryConditions.Add (new ControlViaTime(1));
 				// victoryConditions.Add (new NetworkEnemyBase(1));
 				
-				GameObject Player1ReadyUp = Instantiate(prfbStartUp, new Vector3(1, 5, -3), Quaternion.identity);
-				GameObject Player2ReadyUp = Instantiate(prfbStartUp, new Vector3(1, 2, -3), Quaternion.identity);
-				GameObject Player3ReadyUp = Instantiate(prfbStartUp, new Vector3(5, 5, -3), Quaternion.identity);
-				GameObject Player4ReadyUp = Instantiate(prfbStartUp, new Vector3(5, 2, -3), Quaternion.identity);
+				GameObject Player1ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(1, 5, -3), Quaternion.identity);
+				GameObject Player2ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(1, 2, -3), Quaternion.identity);
+				GameObject Player3ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(5, 5, -3), Quaternion.identity);
+				GameObject Player4ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(5, 2, -3), Quaternion.identity);
 				
 				Player1ReadyUp.GetComponent<ReadyUp>().setPlayer(p1);
 				Player2ReadyUp.GetComponent<ReadyUp>().setPlayer(p2);
@@ -186,7 +186,11 @@ public class GameManager : MonoBehaviour {
 				team2Home = setUpTeamHome(p2);
 				
 				//
+				GameObject Player1ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(1, 5, -3), Quaternion.identity);
+				GameObject Player2ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(1, 2, -3), Quaternion.identity);
 				
+				Player1ReadyUp.GetComponent<ReadyUp>().setPlayer(p1);
+				Player2ReadyUp.GetComponent<ReadyUp>().setPlayer(p2);
 				
 				//victoryConditions.Add (new LockMajorityAltars(1) );
 				victoryConditions.Add (new ControlViaTime(1));
@@ -200,6 +204,10 @@ public class GameManager : MonoBehaviour {
 			teamBar2.GetComponent<Bar>().team = teams[1];
 			teams[0].ScoreBar = teamBar1;
 			teams[1].ScoreBar = teamBar2;
+			
+			ReadyUps.ForEach(delegate(GameObject g){
+				g.renderer.enabled = true;
+			});
 			
 			//Check for any homebase islands, if so regenerate
 			//Check for fairness?  
@@ -465,6 +473,24 @@ public class GameManager : MonoBehaviour {
 				
 				debugMouse.percControlled =100f;
 			}
+		}
+
+		if(_currentState == GameState.gameNotStarted){
+			bool startMatch  = true;
+			ReadyUps.ForEach(delegate(GameObject g){
+				if(!g.GetComponent<ReadyUp>().ready){
+					startMatch = false;
+				}
+			});
+			
+			if(startMatch){
+				
+				ReadyUps.ForEach(delegate(GameObject g){
+					renderer.enabled = false;
+				});
+			}
+			
+			
 		}
 
 		if(_currentState == GameState.playing){
