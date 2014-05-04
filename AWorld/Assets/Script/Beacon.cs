@@ -81,12 +81,15 @@ public class Beacon : MonoBehaviour {
 			
 			setVisualDirection();	//Why is this happening every frame?
 
+			shootArrow();
+
 			buildButtonDown = getPlayerBuild();
 
 			if(!buildButtonDown){
 				audioLerp(audioSourceBeacon, 0.01f, lerpRate);
 			}
 			if((_currentState == BeaconState.Basic || _currentState == BeaconState.BuildingAdvanced || _currentState == BeaconState.Advanced) && controllingTeam != null){
+
 
 				//find nearest convertable block
 				//FIND The first convertable tile, list is ordered by distance
@@ -1009,7 +1012,7 @@ public class Beacon : MonoBehaviour {
 		_currentState = BeaconState.Advanced;
 		transform.FindChild("Base").renderer.material = matUpgraded;
 		transform.FindChild("Arrow").renderer.material = arrowUpgraded;
-		transform.FindChild("Arrow").transform.localScale = new Vector3(17, 17, 0);
+		//transform.FindChild("Arrow").transform.localScale = new Vector3(17, 17, 0);
 		
 		//hax
 		setTeam ();
@@ -1125,5 +1128,15 @@ public class Beacon : MonoBehaviour {
 
 	public void stopAudio(){
 		audioLerp(audioSourceBeacon, 0.01f, lerpRate);
+	}
+
+	public void shootArrow(){
+		Transform arrow = this.transform.FindChild("Arrow");
+		Vector3 arrowPos = this.transform.FindChild("Arrow").position;
+		if (lastTileInfluenced != null){
+		Vector3 tilePos = lastTileInfluenced.transform.position;
+		Vector3 dir = arrowPos - tilePos;
+		arrow.Translate(dir * Time.deltaTime);
+		}
 	}
 }
