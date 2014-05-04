@@ -105,9 +105,10 @@ public class Settings : MonoBehaviour {
 	public float playerInfluenceStartVolume;
 	public float playerInfluenceStartVolumeLerpRate;
 	public float playerInfluenceDoneVolume;
+	
 	public AudioClip InfluenceDoneHi;
 	public AudioClip InfluenceDoneLo;
-
+	
 	//Overridden by options - ignore
 	public Vector2 team1Start;
 	public Vector2 team2Start;
@@ -223,7 +224,7 @@ public class Settings : MonoBehaviour {
 		playerInfluenceStartVolume = 1.0f;
 		playerInfluenceStartVolumeLerpRate = 0.1f;
 		playerInfluenceDoneVolume = 0.2f;
-
+		
 		InfluenceDoneHi = Resources.Load("SFX/Influence_Done_Hi") as AudioClip;
 		InfluenceDoneLo = Resources.Load("SFX/Influence_Done_Lo") as AudioClip;
 

@@ -53,7 +53,7 @@ public class DynamicMusic : MonoBehaviour {
 		scorePlayer1 = _s1 / sRef.valPointsToWin;
 		scorePlayer2 = _s2 / sRef.valPointsToWin;
 
-		Debug.Log("player1 score :"+scorePlayer1);
+//		Debug.Log("player1 score :"+scorePlayer1);
 
 		if(scorePlayer1 > .66f || scorePlayer2 > .66f){ //first layer is when one player gets closer to score
 			audioLerp(layer1Lo, layerVolume, lerpRate);
@@ -80,7 +80,7 @@ public class DynamicMusic : MonoBehaviour {
 	}
 
 	public void audioLerp (AudioSource source, float target, float rate) {
-		if (Mathf.Abs (source.volume - target) <= 0.001f) {
+		if (Mathf.Abs (source.volume - target) <= 0.01f) {
 			source.volume = target;
 		}
 		else {
