@@ -81,30 +81,38 @@ public class CursorMenu : MonoBehaviour {
 					target = optionsPos;
 					goingUpUpAndAway = false;
 					goingLowLowLow = true;
+					MainMenu.startSelected = false;
+					MainMenu.optionsSelected = true;
 					StartCoroutine("waitMenu");
 				}
 			}
-			if(MainMenu.optionsSelected){
-			if(Input.GetAxis("VerticalPlayer1") > 0.1f){
-					lerping = true;
-					target = startPos;
-					goingUpUpAndAway = true;
-					goingLowLowLow = false;
-					StartCoroutine("waitMenu");
-			}else if(Input.GetAxis("VerticalPlayer1") < -0.1f){
-					lerping = true;
-					target = quitPos;
-					goingUpUpAndAway = false;
-					goingLowLowLow = true;
-					StartCoroutine("waitMenu");
+			else if(MainMenu.optionsSelected){
+				if(Input.GetAxis("VerticalPlayer1") > 0.1f){
+						lerping = true;
+						target = startPos;
+						goingUpUpAndAway = true;
+						goingLowLowLow = false;
+						MainMenu.optionsSelected = false;
+						MainMenu.startSelected = true;
+						StartCoroutine("waitMenu");
+				}else if(Input.GetAxis("VerticalPlayer1") < -0.1f){
+						lerping = true;
+						target = quitPos;
+						goingUpUpAndAway = false;
+						goingLowLowLow = true;
+						MainMenu.optionsSelected = false;
+						MainMenu.quitSelected = true;
+						StartCoroutine("waitMenu");
+				}
 			}
-		}
-			if(MainMenu.quitSelected){
+			else if(MainMenu.quitSelected){
 				if(Input.GetAxis("VerticalPlayer1") > 0.1f){
 					lerping = true;
 					target = optionsPos;
 					goingUpUpAndAway = true;
 					goingLowLowLow = false;
+					MainMenu.quitSelected = false;
+					MainMenu.optionsSelected = true;
 					StartCoroutine("waitMenu");
 				}
 			}

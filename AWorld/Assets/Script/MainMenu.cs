@@ -34,7 +34,7 @@ public class MainMenu : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		startSelected = false;
+		startSelected = true;
 		optionsSelected = false;
 		quitSelected = false;
 		loadingNewScreen = false;
@@ -47,7 +47,8 @@ public class MainMenu : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+		/**
+		// Handled in cursor now
 		if(cursor.transform.position.y < -0.4 && cursor.transform.position.y > -1.4){
 			startSelected = true;
 			optionsSelected = false;
@@ -65,6 +66,7 @@ public class MainMenu : MonoBehaviour {
 			optionsSelected = false;
 			quitSelected = false;
 		}
+		*/
 
 		Debug.Log ("volume :"+music.volume);
 		/*if(joystickActive){
