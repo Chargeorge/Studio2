@@ -53,8 +53,9 @@ public class Settings : MonoBehaviour {
 	public int beaconBasicRange;
 	public int beaconAdvancedRange;
 	public int beaconNoBuildRange;
-	public float selfDestructDelay;	 		//How long you wait after player stops building before destroying a beacon
-	public float loseUpgradeProgressDelay;	//How long you wait after player stops upgrading before clearing upgrade progress
+	public float selfDestructDelay;	 		//How long you wait after player stops building before starting to destroy a beacon
+	public float loseUpgradeProgressDelay;	//How long you wait after player stops upgrading before starting to undo upgrade progress
+	public float loseRotateProgressDelay;	//How long you wait after player stops rotating before starting to undo rotate progress
 	
 	//Board setup stuff
 	public int neutralBeaconCount;
@@ -173,8 +174,9 @@ public class Settings : MonoBehaviour {
 		beaconBasicRange = 4;
 		beaconAdvancedRange = 8;
 		beaconNoBuildRange = 1;
-		selfDestructDelay = 0.5f;  			//How long you wait after player stops building before destroying a beacon
-		loseUpgradeProgressDelay = 0.5f;  	//How long you wait after player stops upgrading before clearing upgrade progress
+		selfDestructDelay = 0.5f;			//How long you wait after player stops building before starting to destroy a beacon
+		loseUpgradeProgressDelay = 0.5f;	//How long you wait after player stops upgrading before starting to undo upgrade progress
+		loseRotateProgressDelay = 0.5f;		//How long you wait after player stops rotating before starting to undo rotate progress
 		
 		//Board setup stuff
 		neutralBeaconCount = 12;

@@ -991,7 +991,7 @@ public class Player : MonoBehaviour {
 						else {
 						
 							currentActionProgress = 0;
-							currentTile.beacon.GetComponent<Beacon>().percRotateComplete = 0f;
+							currentTile.beacon.GetComponent<Beacon>().AbortRotate ();
 							_currentState = PlayerState.standing;		
 		
 						}
@@ -1011,7 +1011,6 @@ public class Player : MonoBehaviour {
 							
 							setProgressCircle(beacon.percUpgradeComplete/100);
 							
-						
 							if (beacon.percUpgradeComplete >= 100f) {
 							
 								currentActionProgress = 0;

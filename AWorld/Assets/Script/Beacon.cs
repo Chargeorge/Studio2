@@ -14,10 +14,14 @@ public class Beacon : MonoBehaviour {
 	public float percRotateComplete = 0;
 	public float percUpgradeComplete = 0;
 	public float percSmaller = 100;
+
 	public float timeStoppedBuilding;
 	public bool selfDestructing = false;
 	public float timeStoppedUpgrading;
 	public bool losingUpgradeProgress = false;
+	public float timeStoppedRotating;
+	public bool losingRotateProgress = false;
+
 	public GameManager gm;
 	public GameObject tileBeingConverted;
 	private InfluencePatternHolder patternConverting;
@@ -415,6 +419,7 @@ public class Beacon : MonoBehaviour {
 		rotatingTargetVol = 0.7f;
 		
 		percRotateComplete += rate*Time.deltaTime;
+		losingRotateProgress = false;
 	}
 	
 	public void addUpgradeProgress (float rate) {
@@ -909,8 +914,6 @@ public class Beacon : MonoBehaviour {
 			else{
 				Debug.LogWarning ("Something's wrong in Beacon.setVisualDirection");
 			}
-
-				
 		}
 	}
 	
@@ -1093,6 +1096,38 @@ public class Beacon : MonoBehaviour {
 		while (losingUpgradeProgress) {
 			subtractUpgradeProgress (sRef.vpsBaseUpgrade);
 			yield return new WaitForEndOfFrame ();
+		}
+	}
+	
+	public void AbortRotate () {
+		losingRotateProgress = true;
+		timeStoppedRotating = Time.time;
+		Invoke ("CheckLoseRotateProgress", sRef.loseRotateProgressDelay);		
+	}
+	
+	public void CheckLoseRotateProgress () {
+		if (timeToLoseRotateProgress ()) {
+			StartCoroutine(loseRotateProgress());
+		}
+	}
+	
+	private bool timeToLoseRotateProgress () {
+		return losingRotateProgress && timeStoppedRotating <= Time.time - sRef.loseRotateProgressDelay;
+	}
+	
+	private IEnumerator loseRotateProgress () {
+		while (losingRotateProgress) {
+			subtractRotateProgress (sRef.vpsBaseRotate);
+			yield return new WaitForEndOfFrame ();
+		}
+	}
+	
+	public void subtractRotateProgress (float rate) {
+		percRotateComplete -= rate*Time.deltaTime;
+
+		if (percRotateComplete <= 0f) {
+			losingRotateProgress = false;
+			percRotateComplete = 0f;
 		}
 	}
 	
