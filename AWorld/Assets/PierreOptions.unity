@@ -590,6 +590,14 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: dfcb33793aef3d0478bfb3b750255a82, type: 2}
+      propertyPath: m_Name
+      value: MusicOptions2
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: dfcb33793aef3d0478bfb3b750255a82, type: 2}
+      propertyPath: m_TagString
+      value: Finish
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: dfcb33793aef3d0478bfb3b750255a82, type: 2}
   m_RootGameObject: {fileID: 642400152}
@@ -869,8 +877,8 @@ GameObject:
   - 82: {fileID: 642400154}
   - 114: {fileID: 642400153}
   m_Layer: 0
-  m_Name: MusicOptions
-  m_TagString: Untagged
+  m_Name: MusicOptions2
+  m_TagString: Finish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

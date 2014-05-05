@@ -69,13 +69,21 @@ public class Bar : MonoBehaviour {
 		audioSources = gameObject.GetComponents<AudioSource>();
 		for(int i = 0; i < audioSources.Length; i++){
 			audioSources[i].volume = 0.5f;
+		}
 		if (team.teamNumber == 1) {
-			audioSources[i].clip = Resources.Load("SFX/Altar_Score_PentaScale_Lo_"+i+1) as AudioClip;
+			audioSources[0].clip = Resources.Load("SFX/Altar_Score_PentaScale_Lo_1") as AudioClip;
+			audioSources[1].clip = Resources.Load("SFX/Altar_Score_PentaScale_Lo_2") as AudioClip;
+			audioSources[2].clip = Resources.Load("SFX/Altar_Score_PentaScale_Lo_3") as AudioClip;
+			audioSources[3].clip = Resources.Load("SFX/Altar_Score_PentaScale_Lo_4") as AudioClip;
+			audioSources[4].clip = Resources.Load("SFX/Altar_Score_PentaScale_Lo_5") as AudioClip;
 		} else if(team.teamNumber == 2){
-			audioSources[i].clip = Resources.Load("SFX/Altar_PentaScale_Score_Hi_"+i+1) as AudioClip;
+			audioSources[0].clip = Resources.Load("SFX/Altar_Score_PentaScale_Hi_1") as AudioClip;
+			audioSources[1].clip = Resources.Load("SFX/Altar_Score_PentaScale_Hi_2") as AudioClip;
+			audioSources[2].clip = Resources.Load("SFX/Altar_Score_PentaScale_Hi_3") as AudioClip;
+			audioSources[3].clip = Resources.Load("SFX/Altar_Score_PentaScale_Hi_4") as AudioClip;
+			audioSources[4].clip = Resources.Load("SFX/Altar_Score_PentaScale_Hi_5") as AudioClip;
 		} else {
 			Debug.LogWarning ("Didn't load score sounds in Bar");
-		}
 		}
 		
 		/*audioSources[0].pitch = 1f;
