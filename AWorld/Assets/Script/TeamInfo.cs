@@ -25,8 +25,9 @@ public class TeamInfo
 	public Texture winTexture;
 	public Vector2 wrldFinalTargetLocation;
 	public GameObject ScoreBar;
+	public GameObject finalTarget;
 	public AudioClip Scoring;
-
+	public Settings sRef;
 	
 	public TeamInfo ()
 	{
@@ -97,6 +98,15 @@ public class TeamInfo
 	public void addScore(float score){
 		this.score += score;
 		ScoreBar.GetComponent<Bar>().PlayScoreSound ();
+	}
+	
+	public void ScoreFromTile (float score) {
+		this.score += score;
+		float percToWin = score / sRef.valPointsToWin;
+		finalTarget.GetComponent<ParticleSystem>().startSize = sRef.scoreBitExplosionStartSize + ((sRef.scoreBitExplosionFinishSize-sRef.scoreBitExplosionStartSize)*percToWin);
+		finalTarget.GetComponent<ParticleSystem>().startSpeed = sRef.scoreBitExplosionStartSpeed + ((sRef.scoreBitExplosionFinishSpeed-sRef.scoreBitExplosionStartSpeed)*percToWin);
+		finalTarget.GetComponent<ParticleSystem>().startColor = teamColor;
+		finalTarget.GetComponent<FinalScoreTarget>().PlayScoreAnimation (5);
 	}
 	
 	
