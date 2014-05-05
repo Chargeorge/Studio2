@@ -71,7 +71,7 @@ public class DynamicMusic : MonoBehaviour {
 			audioLerp(soundtrack, layerVolumeClimax, lerpRateFast);
 		}
 
-		if(scorePlayer1 == 1 || scorePlayer2 == 2){
+		if(scorePlayer1 > 1 || scorePlayer2 > 1){
 			audioLerp(layer1Lo, 0.0f, lerpRateFast);
 			audioLerp(layer2LoMid, 0.0f, lerpRateFast);
 			audioLerp(layer3MidHi, 0.0f, lerpRateFast);
