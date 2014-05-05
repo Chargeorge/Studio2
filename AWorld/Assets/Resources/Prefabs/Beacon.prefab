@@ -701,6 +701,8 @@ MonoBehaviour:
   selfDestructing: 0
   timeStoppedUpgrading: 0
   losingUpgradeProgress: 0
+  timeStoppedRotating: 0
+  losingRotateProgress: 0
   gm: {fileID: 0}
   tileBeingConverted: {fileID: 0}
   sRef: {fileID: 0}

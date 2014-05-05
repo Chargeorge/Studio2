@@ -96,7 +96,7 @@ public class TeamInfo
 
 	public void addScore(float score){
 		this.score += score;
-		ScoreBar.audio.Play();
+		ScoreBar.GetComponent<Bar>().PlayScoreSound ();
 	}
 	
 	

@@ -467,9 +467,7 @@ public class GameManager : MonoBehaviour {
 			foreach (GameObject o in players) {
 			 o.GetComponentInChildren<Player>().RevealTiles (); 
 			 }
-
-
-
+						
 			setup = false;
 			if(sRef.useReadyUp){
 				_currentState = GameState.gameNotStarted;
