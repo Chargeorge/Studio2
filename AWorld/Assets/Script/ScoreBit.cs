@@ -7,7 +7,7 @@ public class ScoreBit : MonoBehaviour {
 	private TeamInfo team;
 	private FinalScoreTarget finalTarget;
 	public Settings sRef;
-	public float speed = .2f;
+	public float speed;
 	public float rotateSpeed = 5.0f;
 	public float scoreAmt;
 	
@@ -16,6 +16,22 @@ public class ScoreBit : MonoBehaviour {
 	void Start () {
 		if(targets == null){
 			targets = new List<GameObject>();
+		}
+		
+		switch (PlayerPrefs.GetInt (PreferencesOptions.gameSpeed.ToString())) {
+		case 1: 
+			speed = 0.1f;
+			break;
+		case 2:
+			speed = 0.2f;
+			break;
+		case 3:
+			speed = 0.3f;
+			break;
+		default:
+			speed = 0.2f;
+			Debug.LogWarning ("Game speed was a weird value while setting score bit speed");
+			break;
 		}
 	}
 
@@ -74,7 +90,13 @@ public class ScoreBit : MonoBehaviour {
 				finalTarget.GetComponent<ParticleSystem>().startSize = sRef.scoreBitExplosionStartSize + ((sRef.scoreBitExplosionFinishSize-sRef.scoreBitExplosionStartSize)*percToWin);
 				finalTarget.GetComponent<ParticleSystem>().startSpeed = sRef.scoreBitExplosionStartSpeed + ((sRef.scoreBitExplosionFinishSpeed-sRef.scoreBitExplosionStartSpeed)*percToWin);
 				finalTarget.GetComponent<ParticleSystem>().startColor = team.teamColor;
-				finalTarget.PlayScoreAnimation ();
+				
+				if (team.score >= sRef.valPointsToWin) {
+					finalTarget.PlayScoreAnimation (100);
+				} else {
+					finalTarget.PlayScoreAnimation (10);
+				}
+				
 				BulletPool.instance.PoolObject(gameObject);
 				team.addScore(scoreAmt);
 				//CancelInvoke();
@@ -87,7 +109,7 @@ public class ScoreBit : MonoBehaviour {
 			//int target0Ident = targets[0].gameObject.GetComponent<BaseTile>().Ident;
 			//int collidedTarget = collided.gameObject.GetComponent<BaseTile>().Ident;
 			if(collided.gameObject == targets[0]){
-				Debug.Log ("Collided");
+//				Debug.Log ("Collided");
 				if(collided.gameObject.tag == "ScoreBitTarget"){
 					if(targets.Count > 0){
 						targets.RemoveAt(0);

@@ -17,29 +17,25 @@ public class Altar : MonoBehaviour {
 	private GameObject _lockedLayer;
 	private GameObject _scoreBar;
 	public float baseScoreScale = .74f;
-	public float scoreShotInterval = 1f;
+	public float scoreLeft;
+	public float scoreBitInterval = 1f;	//Temp value - will be set in GameManager according to game speed
 	private float timeToNextScoreShot;
 	public GameObject prfbScoreBit;
 	public Transform symbol;
-
+	
+	public AudioClip Praying;
+	
 	public GameObject scoreBar {
 		get {
 			if(_scoreBar == null){
 				_scoreBar = gameObject.transform.FindChild("ScoreThingy").gameObject;
-			
 			}
 			return _scoreBar;
 		}
 	}	
-	
-	
+		
 	private bool _isLocked;
 	
-	public float scoreLeft;
-	
-
-	public AudioClip Praying;
-
 	public bool isLocked {
 		get {
 			return _isLocked;
@@ -138,7 +134,7 @@ public class Altar : MonoBehaviour {
 						if(scoreLeft >0){
 							timeToNextScoreShot -= Time.deltaTime;
 							if(timeToNextScoreShot < 0){
-								audio.PlayOneShot(Praying, 0.9f);
+								//audio.PlayOneShot(Praying, 0.9f); //audio is now playing when the scorebit hits the bar
 								float scoreToAdd = sRef.vpsScorePerBit * ((a.Contains(AltarType.Khepru)) ? sRef.coefKhepru : 1 );
 								if(scoreLeft - scoreToAdd < 0){
 									scoreToAdd = scoreLeft;
@@ -155,7 +151,7 @@ public class Altar : MonoBehaviour {
 								scoreBit.GetComponent<ScoreBit>().sRef = sRef;
 								scoreBit.GetComponent<ScoreBit>().scoreAmt =scoreToAdd;
 								
-								timeToNextScoreShot = scoreShotInterval;
+								timeToNextScoreShot = scoreBitInterval;
 								//_currentControllingTeam.score += scoreToAdd;
 								
 								if (scoreLeft <= 0) {

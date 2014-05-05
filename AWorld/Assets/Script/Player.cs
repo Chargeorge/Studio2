@@ -120,941 +120,942 @@ public class Player : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update (){ 
-		_invalidAction = false;
-		previousActionProgress = currentActionProgress;	
-		DirectionEnum? x = getStickDirection();
-		//BaseTile currentTile = gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>();	//Not used with free movement
-
-		BaseTile currentTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
-
-		bool buildButtonDown = getPlayerBuild();
-		//if(x.HasValue) Debug.Log(x.Value);
-		_pulsating = false;	//Pulsate () sets this to true; if false at the end of this method, reset scale and _expanding
-
-		//_positionOffset = new Vector2 (0,0);	//This can't possibly be the right way to do this - Josh
-				
-		switch(currentState){
-			
-			case PlayerState.teleporting:
-/**				if (transform.parent.position == teleportTarget) {
-					_currentState = PlayerState.standing;
-				}
-				else {
-					transform.parent.position = Vector2.Lerp(transform.parent.position, teleportTarget, sRef.teleportRate);
-				}
-*/				
-				Vector3 newPos = Vector2.Lerp(transform.parent.position, teleportTarget, sRef.teleportRate);
-				newPos.z = transform.parent.position.z;
-				transform.parent.position = newPos;
-				
-				BaseTile newTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
-				if (newTile != currentTile) {
-					Debug.Log ("Getting New Tile");
-					//currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
-					doNewTile(currentTile, newTile);
-				}
-//				if(currentTile == team.goGetHomeTile().GetComponent<BaseTile>()){
-				if(closeEnoughToTarget(newPos, teleportTarget, sRef.closeEnoughDistanceTeleport)){
-			
-//					Vector3 homePos = currentTile.transform.parent.position;
-//					homePos.z = transform.parent.position.z;
-//					transform.parent.position = homePos;
-					_currentState = PlayerState.standing;
-				}
-				
-			break;
-			
-			case PlayerState.standing:
-			
-				audioLerp (audioSourceMove, 0.0f, sRef.moveVolumeLerpRate);
-				audioLerp (audioSourceMoveEnemyTerrain, 0.0f, sRef.moveVolumeLerpRate);
-				if (audioSourceInfluenceStart.volume > 0.01f) { audioLerp (audioSourceInfluenceStart, 0.0f, sRef.playerInfluenceStartVolumeLerpRate); 
-					} else { audioSourceInfluenceStart.Stop (); }
-			
-			//If we are standing and we get an input, handle it.
-//			Debug.Log (string.Format("Player number {0}, buld button down: {1}", PlayerNumber, buildButtonDown));
-				if (!Pause.paused) qudProgessCircle.renderer.enabled = false;
-				if(x.HasValue && !buildButtonDown) {
+		if(gm.currentState == GameState.playing){
+			_invalidAction = false;
+			previousActionProgress = currentActionProgress;	
+			DirectionEnum? x = getStickDirection();
+			//BaseTile currentTile = gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>();	//Not used with free movement
+	
+			BaseTile currentTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
+	
+			bool buildButtonDown = getPlayerBuild();
+			//if(x.HasValue) Debug.Log(x.Value);
+			_pulsating = false;	//Pulsate () sets this to true; if false at the end of this method, reset scale and _expanding
+	
+			//_positionOffset = new Vector2 (0,0);	//This can't possibly be the right way to do this - Josh
+			if(gm.currentState == GameState.playing){
+				switch(currentState){
 					
-					setDirection(x.Value);	//Still need a 4-directional facing for building/rotating beacons
-					moveVector = new Vector2 (getPlayerXAxis(), getPlayerYAxis());
-					_currentState = PlayerState.moving;
+					case PlayerState.teleporting:
+		/**				if (transform.parent.position == teleportTarget) {
+							_currentState = PlayerState.standing;
+						}
+						else {
+							transform.parent.position = Vector2.Lerp(transform.parent.position, teleportTarget, sRef.teleportRate);
+						}
+		*/				
+						Vector3 newPos = Vector2.Lerp(transform.parent.position, teleportTarget, sRef.teleportRate);
+						newPos.z = transform.parent.position.z;
+						transform.parent.position = newPos;
+						
+						BaseTile newTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
+						if (newTile != currentTile) {
+							Debug.Log ("Getting New Tile");
+							//currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
+							doNewTile(currentTile, newTile);
+						}
+		//				if(currentTile == team.goGetHomeTile().GetComponent<BaseTile>()){
+						if(closeEnoughToTarget(newPos, teleportTarget, sRef.closeEnoughDistanceTeleport)){
 					
-					/**if(currentTile.GetDirection(x.Value) != null){
-						BaseTile MovingInto = currentTile.GetDirection(x.Value);
-						//Debug.Log(string.Format("x:{0}, y: {1}", MovingInto.brdXPos, MovingInto.brdYPos));
-						float vpsRate = MovingInto.GetRate(this) * sRef.vpsBaseMove;
-						addProgressToAction(vpsRate);
-						setDirection(x.Value);
-						_currentState = PlayerState.moving;
+		//					Vector3 homePos = currentTile.transform.parent.position;
+		//					homePos.z = transform.parent.position.z;
+		//					transform.parent.position = homePos;
+							_currentState = PlayerState.standing;
+						}
+						
+					break;
+					
+					case PlayerState.standing:
+					
+						audioLerp (audioSourceMove, 0.0f, sRef.moveVolumeLerpRate);
+						audioLerp (audioSourceMoveEnemyTerrain, 0.0f, sRef.moveVolumeLerpRate);
+						if (audioSourceInfluenceStart.volume > 0.01f) { audioLerp (audioSourceInfluenceStart, 0.0f, sRef.playerInfluenceStartVolumeLerpRate); 
+							} else { audioSourceInfluenceStart.Stop (); }
+					
+					//If we are standing and we get an input, handle it.
+		//			Debug.Log (string.Format("Player number {0}, buld button down: {1}", PlayerNumber, buildButtonDown));
+						if (!Pause.paused) qudProgessCircle.renderer.enabled = false;
+						if(x.HasValue && !buildButtonDown) {
 							
-					}
-					else{
-						setDirection(x.Value);
-					}
-					*/						
-				}
-				
-				if (x.HasValue) {
-					setDirection (x.Value);
-				}
-				
-				//Rotating
-				if (buildButtonDown && 
-			    	currentTile.owningTeam == team &&
-			    	currentTile.beacon != null && 
-					facing != currentTile.beacon.GetComponent<Beacon>().facing && 
-				    (currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Basic || 			//Making sure the beacon is at least complete at basic level
-				     currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingAdvanced || 	//Is there a better way of doing this?
-		 			 currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Advanced)) 
-		 		{
-					if (audioSourceInfluenceStart.volume > 0.01f) { audioLerp (audioSourceInfluenceStart, 0.0f, sRef.playerInfluenceStartVolumeLerpRate);
-						} else { audioSourceInfluenceStart.Stop (); }
-				
-		 			/**
-		 			//Tikumose: Instant rotation
-		 			if (gm.getCapturedAltars(team).Contains (AltarType.Tikumose) && currentTile.beacon.GetComponent<Beacon>().controllingTeam == team) {
-						currentActionProgress = 0;
-						currentTile.beacon.GetComponent<Beacon>().Rotate (facing);
-						currentTile.beacon.GetComponent<Beacon>().percRotateComplete = 0f;
-					}
-					else {
-					*/
-						float vpsRate = sRef.vpsBaseRotate;
-						addProgressToAction (vpsRate);
-						
-//						setDirection(x.Value);
-						
-
-						currentTile.beacon.GetComponent<Beacon>().startRotating (facing);
-						_currentState = PlayerState.rotating;
-						
-//					}
-				}
-				
-				//Upgrading
-				if (buildButtonDown && 
-			    	currentTile.owningTeam == team &&
-			    	currentTile.beacon != null &&
-					facing == currentTile.beacon.GetComponent<Beacon>().facing &&
-					(currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Basic ||
-					 currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingAdvanced)) 
-				{
-					if (audioSourceInfluenceStart.volume > 0.01f) { audioLerp (audioSourceInfluenceStart, 0.0f, sRef.playerInfluenceStartVolumeLerpRate);
-						} else { audioSourceInfluenceStart.Stop (); }
-						
-					float vpsRate = sRef.vpsBaseUpgrade;
-					addProgressToAction (vpsRate);
-					_currentState = PlayerState.upgrading;
-					currentTile.beacon.GetComponent<Beacon>().startUpgrading();
-					currentTile.beacon.GetComponent<Beacon>().losingUpgradeProgress = false;
-				} else {
-				}
-				
-				//If beacon
-					//if stick
-						//begin rotate build
-					//else
-						//if level 1
-							// begin upgade
-				//else 
-					//if no control
-						//Start  adding control
-					//if other team
-						//start removing 
-					// if us 
-						//start building beacon				
-				if (buildButtonDown){
-					moveTowardCenterOfTile (currentTile);
-					//NO BEACON HERE, GOTTA DO STUFF.
-					//Check influence first
-					if(currentTile.controllingTeam !=null){
-						
-						if(currentTile.controllingTeam.teamNumber == team.teamNumber){
-							if(currentTile.percControlled < 100f){
-							Pulsate ();
-								_currentState = PlayerState.influencing;
-							}
-													
-							//DO Tile Control 
-							else if(currentTile.getLocalAltar()!=null ){
+							setDirection(x.Value);	//Still need a 4-directional facing for building/rotating beacons
+							moveVector = new Vector2 (getPlayerXAxis(), getPlayerYAxis());
+							_currentState = PlayerState.moving;
+							
+							/**if(currentTile.GetDirection(x.Value) != null){
+								BaseTile MovingInto = currentTile.GetDirection(x.Value);
+								//Debug.Log(string.Format("x:{0}, y: {1}", MovingInto.brdXPos, MovingInto.brdYPos));
+								float vpsRate = MovingInto.GetRate(this) * sRef.vpsBaseMove;
+								addProgressToAction(vpsRate);
+								setDirection(x.Value);
+								_currentState = PlayerState.moving;
 									
-								currentTile.getLocalAltar().doCapture(team);
-								
-							}
-
-							//Building
-							else if((currentTile.beacon == null || 
-									//currentTile.beacon.GetComponent<Beacon>().percBuildComplete < 100f &&
-									currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingBasic) && 
-									currentTile.buildable ())
-							{
-								Pulsate ();
-								audioSourceInfluenceDone.volume = sRef.playerInfluenceDoneVolume;
-								//audioSourceInfluenceDone.Play ();
-								_currentState = PlayerState.building;
-								
-								float vpsBuildRate = sRef.vpsBaseBuild * getAltarBuildBoost ();
-								addProgressToAction(vpsBuildRate);
-
-								GameObject beaconBeingBuilt;
-								
-								if (currentTile.beacon == null) { 
-									beaconBeingBuilt = (GameObject)GameObject.Instantiate(_prfbBeacon, new Vector3(0,0,0), Quaternion.identity);
-									beaconBeingBuilt.name = "Beacon for" + team.teamNumber;
-									
-								}
-								else {
-									beaconBeingBuilt = currentTile.beacon;
-								}
-								
-								beaconInProgress = beaconBeingBuilt.GetComponent<Beacon>();
-								beaconInProgress.startBuilding(currentTile.gameObject, this.gameObject, vpsBuildRate);
-								beaconInProgress.setDirection(facing);
-								beaconInProgress.selfDestructing = false;
 							}
 							else{
-								if ((!currentTile.buildable() && currentTile.beacon == null) || 
-									(currentTile.beacon != null && //If there's a beacon...
-										(currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Advanced && 
-										currentTile.beacon.GetComponent<Beacon>().facing == facing)	//...and it's advanced and you're not gonna rotate it...
-									))
-									
-								{
-									_invalidAction = true;
-									if(!audioSourceInvalid.isPlaying){ 
-										playInvalid (0.3f);										
-									}
-								}
+								setDirection(x.Value);
 							}
-						} else{
-							_currentState = PlayerState.influencing;
+							*/						
 						}
-					}
-					else {
-						Pulsate ();
-						float vpsInfluenceRate = sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost();
-						addProgressToAction(vpsInfluenceRate);
-						_currentState = PlayerState.influencing;
-						currentTile.startInfluence(currentActionProgress, team);
-					}
-				}
-				
-				//We chillin
-				else {
-					moveTowardCenterOfTile (currentTile);
-				}
-				
-			break;
-			
-			//IF stick holds the same direction keep doing move
-			//IF it changes, remove all progress (PLACEHOLDER, feel free to nuke)
-			//if it completes, move to next tile, set state to standing
-			case PlayerState.moving:
-				if(currentTile.owningTeam != null && currentTile.owningTeam.teamNumber != teamNumber){
-					audioSourceMoveEnemyTerrain.clip = Resources.Load("SFX/Moving_EnemyTerrain") as AudioClip;
-					audioLerp (audioSourceMoveEnemyTerrain, sRef.moveVolume, sRef.moveVolumeLerpRate);
-					if(!audioSourceMoveEnemyTerrain.isPlaying){
-						audioSourceMoveEnemyTerrain.Play();
-					}
-				} 
-			if(currentTile.owningTeam == null || currentTile.owningTeam.teamNumber == teamNumber) {
-				if(PlayerNumber == 1) audioSourceMove.clip = Resources.Load ("SFX/Player_Moving_Lo") as AudioClip;
-				if(PlayerNumber == 2) audioSourceMove.clip = Resources.Load ("SFX/Player_Moving_Hi") as AudioClip;
-				audioLerp (audioSourceMoveEnemyTerrain, 0.0f, sRef.moveVolumeLerpRate);
-				audioLerp (audioSourceMove, sRef.moveVolume, sRef.moveVolumeLerpRate);
-				if(!audioSourceMove.isPlaying){
-					audioSourceMove.Play();
-				}
-			}
-
-				if (audioSourceInfluenceStart.volume > 0.01f) { audioLerp (audioSourceInfluenceStart, 0.0f, sRef.playerInfluenceStartVolumeLerpRate);
-					} else { audioSourceInfluenceStart.Stop (); }
-				//audioLerp (audioSourceMove, sRef.moveVolume, sRef.moveVolumeLerpRate);
-	
-				qudProgessCircle.renderer.enabled = false;
-				currentTile.Reveal (_vision);
-			
-				//This lets you hit build button while moving to start doing stuff
-				//It also freezes you if you can't do anything (ex. are on genesis or upgraded beacon)
-				if (buildButtonDown) {
-					if (x.HasValue) {
-						setDirection (x.Value);
-					}
-					_currentState = PlayerState.standing;
-				}
-				
-				else { 
-					if (x.HasValue) {
-						setDirection(x.Value);	//Still need a 4-directional facing for building/rotating beacons
 						
-					#region movement
-						
-						//Add acceleration
-						Vector2 vectorToAdd = new Vector2 (getPlayerXAxis(), getPlayerYAxis()) * sRef.playerAccelRate;
-						moveVector += vectorToAdd;
-						
-						//Apply friction
-						moveVector *= (1-sRef.playerFriction);
-												
-						//Make sure we're not going too fast
-						if (Mathf.Abs (moveVector.x) > sRef.playerMaxSpeed) moveVector.x = sRef.playerMaxSpeed * Mathf.Sign (moveVector.x);
-						if (Mathf.Abs (moveVector.y) > sRef.playerMaxSpeed) moveVector.y = sRef.playerMaxSpeed * Mathf.Sign (moveVector.y);
-						
-						//Go to new position				
-						Vector3 posToCheck = new Vector3 (
-						transform.parent.position.x + moveVector.x * sRef.vpsBaseFreeMoveSpeed * getTileSpeedBoost(currentTile) * getAltarSpeedBoost() * Time.deltaTime,
-						transform.parent.position.y + moveVector.y * sRef.vpsBaseFreeMoveSpeed * getTileSpeedBoost(currentTile) * getAltarSpeedBoost() * Time.deltaTime, 
-						transform.parent.position.z);
-						
-						/*
-						Vector3 posToCheck = new Vector3 (
-						transform.parent.position.x + getPlayerXAxis() * sRef.vpsBaseFreeMoveSpeed * getTileSpeedBoost(currentTile) * getAltarSpeedBoost() * Time.deltaTime, 
-						transform.parent.position.y + getPlayerYAxis() * sRef.vpsBaseFreeMoveSpeed * getTileSpeedBoost(currentTile) * getAltarSpeedBoost() * Time.deltaTime, 
-						transform.parent.position.z);
-						*/
-						
-						//posToCheck is illegal, so instead, see how far you can move horizontally and vertically
-						//Welcome to my nightmare
-						if (outOfBounds (posToCheck) || 
-							(onWater (posToCheck) && !gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) && currentTile.currentType != TileTypeEnum.water)) 
-						{					
-							//First, figure out where the posToCheck's tile is in relation to our own
-							int xRel = (int) Mathf.Floor (transform.parent.position.x + 0.5f) - (int) Mathf.Floor (posToCheck.x + 0.5f);
-							int yRel = (int) Mathf.Floor (transform.parent.position.y + 0.5f) - (int) Mathf.Floor (posToCheck.y + 0.5f);
-							string dir = "";
-							if (yRel == 1) 			dir += "south";
-							else if (yRel == -1) 	dir += "north";
-							if (xRel == 1) 			dir += "west";
-							else if (xRel == -1)	dir += "east"; 
-							//If posToCheck's tile is north, south, east, or west, just put us on the border and move horizontally/vertically as appropriate
-							Vector2 safePos = new Vector2 (transform.parent.position.x, transform.parent.position.y);
-							switch (dir) {
-								case "north":
-									safePos = new Vector2 (posToCheck.x, currentTile.transform.position.y + 0.499f);
-									break;
-								case "south":
-									safePos = new Vector2 (posToCheck.x, currentTile.transform.position.y - 0.499f);
-									break;
-								case "east":
-									safePos = new Vector2 (currentTile.transform.position.x + 0.499f, posToCheck.y);
-									break;
-								case "west":
-									safePos = new Vector2 (currentTile.transform.position.x - 0.499f, posToCheck.y);
-									break;
-								case "northeast":
-									if (Mathf.Abs (transform.position.x - currentTile.transform.position.x) > 
-										Mathf.Abs (transform.position.y - currentTile.transform.position.y)) {
-										
-										//Try to move east, then north if that fails, then put in corner if both fail
-										Vector2 newPosToCheck = new Vector2 (posToCheck.x, transform.position.y);
-										if (!outOfBounds(newPosToCheck) && 
-								            (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
-								         		safePos = newPosToCheck;
-								    	}
-								    	else {
-								    		newPosToCheck = new Vector2 (transform.position.x, posToCheck.y);
-											if (!outOfBounds(newPosToCheck) && 
-												(!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
-											safePos = newPosToCheck;
-											}
-											else {
-												safePos = new Vector2 (currentTile.transform.position.x + 0.499f, currentTile.transform.position.y + 0.499f);
-											}
-								    	}
-								    }
-									else {
-										//Try to move north, then east if that fails, then put in corner if both fail
-										Vector2 newPosToCheck = new Vector2 (transform.position.x, posToCheck.y);
-										if (!outOfBounds(newPosToCheck) && 
-										    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
-											safePos = newPosToCheck;
-										}
-										else {
-											newPosToCheck = new Vector2 (posToCheck.x, transform.position.y);
-											if (!outOfBounds(newPosToCheck) && 
-											    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
-												safePos = newPosToCheck;
-											}
-											else {
-												safePos = new Vector2 (currentTile.transform.position.x + 0.499f, currentTile.transform.position.y + 0.499f);
-											}
-										}						  
-									}
-									break;
-								case "northwest":
-									if (Mathf.Abs (transform.position.x - currentTile.transform.position.x) > 
-									    Mathf.Abs (transform.position.y - currentTile.transform.position.y)) {
-										
-										//Try to move west, then north if that fails, then put in corner if both fail
-										Vector2 newPosToCheck = new Vector2 (posToCheck.x, transform.position.y);
-										if (!outOfBounds(newPosToCheck) && 
-										    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
-											safePos = newPosToCheck;
-										}
-										else {
-											newPosToCheck = new Vector2 (transform.position.x, posToCheck.y);
-											if (!outOfBounds(newPosToCheck) && 
-											    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
-												safePos = newPosToCheck;
-											}
-											else {
-												safePos = new Vector2 (currentTile.transform.position.x - 0.499f, currentTile.transform.position.y + 0.499f);
-											}
-										}
-									}
-									else {
-										//Try to move north, then west if that fails, then put in corner if both fail
-										Vector2 newPosToCheck = new Vector2 (transform.position.x, posToCheck.y);
-										if (!outOfBounds(newPosToCheck) && 
-										    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
-											safePos = newPosToCheck;
-										}
-										else {
-											newPosToCheck = new Vector2 (posToCheck.x, transform.position.y);
-											if (!outOfBounds(newPosToCheck) && 
-											    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
-												safePos = newPosToCheck;
-											}
-											else {
-												safePos = new Vector2 (currentTile.transform.position.x - 0.499f, currentTile.transform.position.y + 0.499f);
-											}
-										}						  
-									}
-									break;
-								case "southeast":
-									if (Mathf.Abs (transform.position.x - currentTile.transform.position.x) > 
-									    Mathf.Abs (transform.position.y - currentTile.transform.position.y)) {
-										
-										//Try to move east, then south if that fails, then put in corner if both fail
-										Vector2 newPosToCheck = new Vector2 (posToCheck.x, transform.position.y);
-										if (!outOfBounds(newPosToCheck) && 
-										    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
-											safePos = newPosToCheck;
-										}
-										else {
-											newPosToCheck = new Vector2 (transform.position.x, posToCheck.y);
-											if (!outOfBounds(newPosToCheck) && 
-											    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
-												safePos = newPosToCheck;
-											}
-											else {
-												safePos = new Vector2 (currentTile.transform.position.x + 0.499f, currentTile.transform.position.y - 0.499f);
-											}
-										}
-									}
-									else {
-										//Try to move south, then east if that fails, then put in corner if both fail
-										Vector2 newPosToCheck = new Vector2 (transform.position.x, posToCheck.y);
-										if (!outOfBounds(newPosToCheck) && 
-										    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
-											safePos = newPosToCheck;
-										}
-										else {
-											newPosToCheck = new Vector2 (posToCheck.x, transform.position.y);
-											if (!outOfBounds(newPosToCheck) && 
-											    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
-												safePos = newPosToCheck;
-											}
-											else {
-												safePos = new Vector2 (currentTile.transform.position.x + 0.499f, currentTile.transform.position.y - 0.499f);
-											}
-										}						  
-									}
-									break;
-								case "southwest":
-									if (Mathf.Abs (transform.position.x - currentTile.transform.position.x) > 
-									    Mathf.Abs (transform.position.y - currentTile.transform.position.y)) {
-										
-										//Try to move west, then south if that fails, then put in corner if both fail
-										Vector2 newPosToCheck = new Vector2 (posToCheck.x, transform.position.y);
-										if (!outOfBounds(newPosToCheck) && 
-										    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
-											safePos = newPosToCheck;
-										}
-										else {
-											newPosToCheck = new Vector2 (transform.position.x, posToCheck.y);
-											if (!outOfBounds(newPosToCheck) && 
-											    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
-												safePos = newPosToCheck;
-											}
-											else {
-												safePos = new Vector2 (currentTile.transform.position.x - 0.499f, currentTile.transform.position.y - 0.499f);
-											}
-										}
-									}
-									else {
-										//Try to move south, then west if that fails, then put in corner if both fail
-										Vector2 newPosToCheck = new Vector2 (transform.position.x, posToCheck.y);
-										if (!outOfBounds(newPosToCheck) && 
-										    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
-											safePos = newPosToCheck;
-										}
-										else {
-											newPosToCheck = new Vector2 (posToCheck.x, transform.position.y);
-											if (!outOfBounds(newPosToCheck) && 
-											    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
-												safePos = newPosToCheck;
-											}
-											else {
-												safePos = new Vector2 (currentTile.transform.position.x - 0.499f, currentTile.transform.position.y - 0.499f);
-											}
-										}						  
-									}
-									break; 
-							}
-							
-							//PlaySFX(playerMove, 0.2f);
-							transform.parent.position = new Vector3 (safePos.x, safePos.y, transform.parent.position.z);
-							BaseTile thisTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
-							if (thisTile != currentTile) {
-								//currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
-								doNewTile(currentTile, thisTile);
-							}
-						} 
-						
-						if (!outOfBounds(posToCheck) && 
-							//!tooCloseToOpponent(posToCheck) &&
-							(!onWater(posToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) 
-						{	//Valid move
-
-							//PlaySFX(playerMove, 0.2f);
-							transform.parent.position = posToCheck;
-							BaseTile thisTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
-							if (thisTile != currentTile) {
-							//	Debug.Log ("Getting New Tile moving");
-								//currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
-								doNewTile(currentTile, thisTile);
-							}
+						if (x.HasValue) {
+							setDirection (x.Value);
 						}
-					}
-					
-					#endregion
-					
-					/**
-					if(x.HasValue && x.Value == facing){
-						gm.PlaySFX(playerMove, 0.8f);
-						BaseTile MovingInto = currentTile.GetComponent<BaseTile>().GetDirection(x.Value);
-						float vpsRate = MovingInto.GetRate(this) * sRef.vpsBaseMove *getAltarSpeedBoost();
-						addProgressToAction(vpsRate);
 						
-						if(currentActionProgress > 100f){
-							DoMove(MovingInto);
-							currentActionProgress = 0f;
-							_currentState = PlayerState.standing;	
-						}
-	
-						else{ 
+						//Rotating
+						if (buildButtonDown && 
+					    	currentTile.owningTeam == team &&
+					    	currentTile.beacon != null && 
+							facing != currentTile.beacon.GetComponent<Beacon>().facing && 
+						    (currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Basic || 			//Making sure the beacon is at least complete at basic level
+						     currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingAdvanced || 	//Is there a better way of doing this?
+				 			 currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Advanced)) 
+				 		{
+							if (audioSourceInfluenceStart.volume > 0.01f) { audioLerp (audioSourceInfluenceStart, 0.0f, sRef.playerInfluenceStartVolumeLerpRate);
+								} else { audioSourceInfluenceStart.Stop (); }
 						
-						//Move avatar according to how far along the action is
-	
-						float offset = currentActionProgress / 100f;
-						offset = Mathf.Pow (10, offset);
-						offset = Mathf.Log10 (offset);
-						
-							switch (facing) {
+				 			/**
+				 			//Tikumose: Instant rotation
+				 			if (gm.getCapturedAltars(team).Contains (AltarType.Tikumose) && currentTile.beacon.GetComponent<Beacon>().controllingTeam == team) {
+								currentActionProgress = 0;
+								currentTile.beacon.GetComponent<Beacon>().Rotate (facing);
+								currentTile.beacon.GetComponent<Beacon>().percRotateComplete = 0f;
+							}
+							else {
+							*/
+								float vpsRate = sRef.vpsBaseRotate;
+								addProgressToAction (vpsRate);
 								
-								case DirectionEnum.East: 
-									_positionOffset = new Vector2 (offset, 0);
-									break;
+		//						setDirection(x.Value);
 								
-								case DirectionEnum.West:
-									_positionOffset = new Vector2 (-1 * offset, 0);
-									break;
-	
-								case DirectionEnum.North:
-									_positionOffset = new Vector2 (0, offset);
-									break;
-											
-								case DirectionEnum.South:
-									_positionOffset = new Vector2 (0, -1 * offset);
-									break;		
-							}	
-						}						
-					}*/
-					else{
-						audioLerp (audioSourceMove, 0.0f, sRef.moveVolumeLerpRate);
-						_currentState= PlayerState.standing; 
-						currentActionProgress = 0f;
-					}
-				}
-			break;	
-			
-			case PlayerState.building:
-				if (audioSourceInfluenceStart.volume > 0.01f) { audioLerp (audioSourceInfluenceStart, 0.0f, sRef.playerInfluenceStartVolumeLerpRate);
-					} else { audioSourceInfluenceStart.Stop (); }
-				
-				setProgressCircle(beaconInProgress.percBuildComplete/100);
-				/*
-				qudProgessCircle.renderer.enabled = true;
-				qudProgessCircle.renderer.material.SetFloat("_Cutoff", 1-(beaconInProgress.percBuildComplete/100));
-				*/
-				
-				if(buildButtonDown && currentTile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
-				//	Jiggle ();	//Gotta jiggle
-					Pulsate ();
-					
-					
-				//Debug.Log ("In Build");
-					if(currentTile.controllingTeam != null){
-//						Debug.Log ("current Team");
-						if(currentTile.controllingTeam.teamNumber == team.teamNumber){
+		
+								currentTile.beacon.GetComponent<Beacon>().startRotating (facing);
+								_currentState = PlayerState.rotating;
+								
+		//					}
+						}
+						
+						//Upgrading
+						if (buildButtonDown && 
+					    	currentTile.owningTeam == team &&
+					    	currentTile.beacon != null &&
+							facing == currentTile.beacon.GetComponent<Beacon>().facing &&
+							(currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Basic ||
+							 currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingAdvanced)) 
+						{
+							if (audioSourceInfluenceStart.volume > 0.01f) { audioLerp (audioSourceInfluenceStart, 0.0f, sRef.playerInfluenceStartVolumeLerpRate);
+								} else { audioSourceInfluenceStart.Stop (); }
+								
+							float vpsRate = sRef.vpsBaseUpgrade;
+							addProgressToAction (vpsRate);
+							_currentState = PlayerState.upgrading;
+							currentTile.beacon.GetComponent<Beacon>().startUpgrading();
+							currentTile.beacon.GetComponent<Beacon>().losingUpgradeProgress = false;
+						} else {
+						}
+						
+						//If beacon
+							//if stick
+								//begin rotate build
+							//else
+								//if level 1
+									// begin upgade
+						//else 
+							//if no control
+								//Start  adding control
+							//if other team
+								//start removing 
+							// if us 
+								//start building beacon				
+						if (buildButtonDown){
 							moveTowardCenterOfTile (currentTile);
-						//Check for a beacon in progress and start building!
-							if(beaconInProgress != null){
-								float vpsBuildRate = sRef.vpsBaseBuild * getAltarBuildBoost ();
-								beaconInProgress.addBuildingProgress(vpsBuildRate);
-								beaconInProgress.selfDestructing = false;
-
-								if(x.HasValue){
-									setDirection(x.Value);
-									beaconInProgress.setDirection(x.Value);
-								}
-								if(beaconInProgress.percBuildComplete > 100f){
-
-									beaconInProgress.Build();
-									_currentState = PlayerState.standing;
-									currentActionProgress = 0f;
-								}
-							}
-						}
-						else{
-							if (!audioSourceInvalid.isPlaying) {
-								playInvalid (1.0f);
-							}
-						}
-					}
-					else
-					{
-						float vpsInfluenceRate = sRef.vpsBasePlayerInfluence;
-						addProgressToAction(vpsInfluenceRate);
-						_currentState = PlayerState.influencing;
-					}
-					
-				}
-				else{
-					currentActionProgress = 0;
-					currentTile.beacon.GetComponent<Beacon>().AbortBuild();
-					_currentState = PlayerState.standing;
-					//StopSFX ();
-					if (audioSourceInvalid.isPlaying) {
-						playInvalid (1.0f);
-					}
-					//PlaySFX(invalid_Input, 1.0f);
-					}
-			break;
-			
-			case PlayerState.influencing:
-
-			moveTowardCenterOfTile (currentTile);
-
-			if(currentTile.controllingTeam!= null && currentTile.controllingTeam.teamNumber != teamNumber){
-					audioSourceInfluenceStart.clip = Resources.Load("SFX/Player_DeInfluencing_2") as AudioClip;
-					if(!audioSourceInfluenceStart.isPlaying){
-						audioSourceInfluenceStart.Play();
-					Debug.Log(audioSourceInfluenceStart.clip);
-					}
-				} else if(currentTile.owningTeam == null || currentTile.controllingTeam.teamNumber == teamNumber){
-					audioSourceInfluenceStart.clip = Resources.Load("SFX/Player_Influencing") as AudioClip;
-				}
-				
-				audioLerp (audioSourceMove, 0.0f, sRef.moveVolumeLerpRate);
-				
-				
-    			qudProgessCircle.renderer.enabled = true;
-				if (currentTile.controllingTeam != null) {
-					setProgressCircle( currentTile.percControlled/100 , currentTile.controllingTeam.teamColor);
-				}
-				else{
-					setProgressCircle( currentTile.percControlled/100 );
-					
-				}	
-				if(buildButtonDown && currentTile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
-			//		Jiggle ();	//Gotta jiggle
-					Pulsate ();
-					if (!audioSourceInfluenceStart.isPlaying) {
-						audioSourceInfluenceStart.Play ();
-					}
-					audioLerp (audioSourceInfluenceStart, sRef.playerInfluenceStartVolume, sRef.playerInfluenceStartVolumeLerpRate);
-					
-					if(currentTile.controllingTeam != null){
-						if(currentTile.controllingTeam.teamNumber == teamNumber)
-						{                                      
-							//Debug.Log("Adding Influence");
-							float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime);
-							currentActionProgress = currentTile.percControlled;
-							
-							float averageActionProgress = getAverageActionProgress();
-						if(_currentState == PlayerState.influencing){
-							
-							//Debug.Log (averageActionProgress*100 +" " +  currentTile.percControlled);
-							if(averageActionProgress*100 > currentTile.percControlled){
-								Debug.Log("In total");
-								_invalidAction = true;		
-							}
-							if(Mathf.Abs(getAverageActionProgressDifference()) < .001 ){  
-								Debug.Log(getAverageActionProgressDifference());
-								Debug.Log("In average");
+							//NO BEACON HERE, GOTTA DO STUFF.
+							//Check influence first
+							if(currentTile.controllingTeam !=null){
 								
-								_invalidAction = true;	
-							}
-						}
-						
-						if(test > 0f || (currentTile.owningTeam != null && currentTile.owningTeam == team)){
-								
-								if (currentTile.getLocalAltar () != null || currentTile.tooCloseToBeacon() || currentTile.gameObject.transform.FindChild ("Home(Clone)") != null) {
-						
-									_invalidAction = true;
-									_currentState = PlayerState.standing;
-									if(currentTile.tooCloseToBeacon() && currentTile.beacon == null && !audioSourceInvalid.isPlaying) {
-										playInvalid (0.3f);																									
+								if(currentTile.controllingTeam.teamNumber == team.teamNumber){
+									if(currentTile.percControlled < 100f){
+									Pulsate ();
+										_currentState = PlayerState.influencing;
 									}
-								}
-								
-								else {
-								
-									GameObject beaconBeingBuilt;
-
-									if (currentTile.beacon == null) { 
-										beaconBeingBuilt = (GameObject)GameObject.Instantiate(_prfbBeacon, new Vector3(0,0,0), Quaternion.identity);
-										beaconBeingBuilt.name = "Beacon:  " + team.teamNumber;
-										beaconBeingBuilt.GetComponent<Beacon>().PlayerNumber = PlayerNumber;
-									}
-									else {
-										beaconBeingBuilt = currentTile.beacon;
-									}
-									
-									beaconInProgress = beaconBeingBuilt.GetComponent<Beacon>();					
-								
-									if (currentTile.buildable () && 
-										(beaconInProgress.currentState == null || beaconInProgress.currentState == BeaconState.BuildingBasic)) 
-									{
+															
+									//DO Tile Control 
+									else if(currentTile.getLocalAltar()!=null ){
+											
+										currentTile.getLocalAltar().doCapture(team);
 										
+									}
+		
+									//Building
+									else if((currentTile.beacon == null || 
+											//currentTile.beacon.GetComponent<Beacon>().percBuildComplete < 100f &&
+											currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingBasic) && 
+											currentTile.buildable ())
+									{
+										Pulsate ();
 										audioSourceInfluenceDone.volume = sRef.playerInfluenceDoneVolume;
-										audioSourceInfluenceDone.Play ();
+										//audioSourceInfluenceDone.Play ();
 										_currentState = PlayerState.building;
-										float vpsBuildRate = sRef.vpsBaseBuild * getAltarBuildBoost ();	
+										
+										float vpsBuildRate = sRef.vpsBaseBuild * getAltarBuildBoost ();
 										addProgressToAction(vpsBuildRate);
+		
+										GameObject beaconBeingBuilt;
+										
+										if (currentTile.beacon == null) { 
+											beaconBeingBuilt = (GameObject)GameObject.Instantiate(_prfbBeacon, new Vector3(0,0,0), Quaternion.identity);
+											beaconBeingBuilt.name = "Beacon for" + team.teamNumber;
+											
+										}
+										else {
+											beaconBeingBuilt = currentTile.beacon;
+										}
+										
+										beaconInProgress = beaconBeingBuilt.GetComponent<Beacon>();
 										beaconInProgress.startBuilding(currentTile.gameObject, this.gameObject, vpsBuildRate);
 										beaconInProgress.setDirection(facing);
 										beaconInProgress.selfDestructing = false;
 									}
-								
-									else if (beaconInProgress.facing != facing) {
-										
-										_currentState = PlayerState.rotating;
-										beaconInProgress.startRotating (facing);
-									}
-									
-									//Don't need to rotate, so either upgrade or return to standing
-									else {
-																	
-										if (beaconInProgress.currentState == BeaconState.Basic || beaconInProgress.currentState == BeaconState.BuildingAdvanced) {
+									else{
+										if ((!currentTile.buildable() && currentTile.beacon == null) || 
+											(currentTile.beacon != null && //If there's a beacon...
+												(currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Advanced && 
+												currentTile.beacon.GetComponent<Beacon>().facing == facing)	//...and it's advanced and you're not gonna rotate it...
+											))
 											
-											_currentState = PlayerState.upgrading;
-											beaconInProgress.startUpgrading ();
-										}
-									
-										else if (beaconInProgress.currentState == BeaconState.Advanced) {
-											_currentState = PlayerState.standing;
+										{
+											_invalidAction = true;
+											if(!audioSourceInvalid.isPlaying){ 
+												playInvalid (0.3f);										
+											}
 										}
 									}
+								} else{
+									_currentState = PlayerState.influencing;
 								}
 							}
-						}
-						else{
-							float test = currentTile.subTractInfluence(  sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime, team);
-							currentActionProgress = currentTile.percControlled;
-							if(test > 0f){
-								currentTile.addInfluenceReturnOverflow(test);
-								if (!audioSourceInvalid.isPlaying) {
-									audioSourceInvalid.volume = 0.3f;	//?
-									//audioSourceInvalid.Play ();
-									//Invoke("playInvalid", 1.0f);
-								}
+							else {
+								Pulsate ();
+								float vpsInfluenceRate = sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost();
+								addProgressToAction(vpsInfluenceRate);
+								_currentState = PlayerState.influencing;
+								currentTile.startInfluence(currentActionProgress, team);
 							}
-							float averageActionProgress = getAverageActionProgress();
-							
-							if(_currentState == PlayerState.influencing){
-								
-								Debug.Log (averageActionProgress*100 +" " +  currentTile.percControlled);
-							       if(averageActionProgress*100 < currentTile.percControlled){
-										Debug.Log("In total");
-											_invalidAction = true;		
-									}
-							    if(Mathf.Abs(getAverageActionProgressDifference()) < .001 ){  
-								Debug.Log(getAverageActionProgressDifference());
-								          Debug.Log("In average");
-								
-									_invalidAction = true;	
-								}
-							}
-						}
-						/*
-						float modifier = (currentTile.controllingTeam.teamNumber  == teamNumber) ? 1 : -1;
-						float vpsInfluenceRate = sRef.vpsBaseInfluence * modifier * getAltarInfluenceBoost();
-						addProgressToAction(vpsInfluenceRate);
-						currentTile.addProgressToInfluence(vpsInfluenceRate);
-						if(currentTile.percControlled >= 100f){
-							///Shoudl this be here or in the BaseTileObject?
-							currentTile.finishInfluence();
-							_currentState = PlayerState.standing;
-							currentActionProgress = 0;
 						}
 						
-						if(currentTile.percControlled <= 0f){
-							currentTile.clearInfluence();
-							currentActionProgress = 0;
-						}*/
-
-						if(currentTile.percControlled == 100f) {
-//						Debug.Log ("INLFUENCE DONE");
-							currentTile.jigglingFromPlayer = false;
-							audioSourceInfluenceDone.volume = sRef.playerInfluenceDoneVolume;
-							audioSourceInfluenceDone.Play ();
+						//We chillin
+						else {
+							moveTowardCenterOfTile (currentTile);
+						}
+						
+					break;
+					
+					//IF stick holds the same direction keep doing move
+					//IF it changes, remove all progress (PLACEHOLDER, feel free to nuke)
+					//if it completes, move to next tile, set state to standing
+					case PlayerState.moving:
+						if(currentTile.owningTeam != null && currentTile.owningTeam.teamNumber != teamNumber){
+							audioSourceMoveEnemyTerrain.clip = Resources.Load("SFX/Moving_EnemyTerrain") as AudioClip;
+							audioLerp (audioSourceMoveEnemyTerrain, sRef.moveVolume, sRef.moveVolumeLerpRate);
+							if(!audioSourceMoveEnemyTerrain.isPlaying){
+								audioSourceMoveEnemyTerrain.Play();
+							}
+						} 
+					if(currentTile.owningTeam == null || currentTile.owningTeam.teamNumber == teamNumber) {
+						if(PlayerNumber == 1) audioSourceMove.clip = Resources.Load ("SFX/Player_Moving_Lo") as AudioClip;
+						if(PlayerNumber == 2) audioSourceMove.clip = Resources.Load ("SFX/Player_Moving_Hi") as AudioClip;
+						audioLerp (audioSourceMoveEnemyTerrain, 0.0f, sRef.moveVolumeLerpRate);
+						audioLerp (audioSourceMove, sRef.moveVolume, sRef.moveVolumeLerpRate);
+						if(!audioSourceMove.isPlaying){
+							audioSourceMove.Play();
+						}
+					}
+		
+						if (audioSourceInfluenceStart.volume > 0.01f) { audioLerp (audioSourceInfluenceStart, 0.0f, sRef.playerInfluenceStartVolumeLerpRate);
+							} else { audioSourceInfluenceStart.Stop (); }
+						//audioLerp (audioSourceMove, sRef.moveVolume, sRef.moveVolumeLerpRate);
+			
+						qudProgessCircle.renderer.enabled = false;
+						currentTile.Reveal (_vision);
+					
+						//This lets you hit build button while moving to start doing stuff
+						//It also freezes you if you can't do anything (ex. are on genesis or upgraded beacon)
+						if (buildButtonDown) {
+							if (x.HasValue) {
+								setDirection (x.Value);
+							}
+							_currentState = PlayerState.standing;
 						}
 						
 						else { 
-							currentTile.jigglingFromPlayer = true;
-						}
-						
-						if (x.HasValue) { 
-							setDirection (x.Value);
-						}
-					
-						
-					} else{
-					///TODO catch fully influenced Tile!
-
-					audioSourceInfluenceDone.volume = sRef.playerInfluenceDoneVolume;
-					audioSourceInfluenceDone.Play ();
-					}
-				}
-				else{
-				///TODO: add reset to tile in case of change
-					//need to reset currenttile to previousState
-					//StopSFX();
-					currentTile.jigglingFromPlayer = false;
-					
-					_currentState = PlayerState.standing;
-				}	
-				//Debug.Log (string.Format("Current {0}, previous {1}", Mathf.RoundToInt(currentActionProgress), (Mathf.RoundToInt(previousActionProgress))));
-			    
-			break;
+							if (x.HasValue) {
+								setDirection(x.Value);	//Still need a 4-directional facing for building/rotating beacons
+								
+							#region movement
+								
+								//Add acceleration
+								Vector2 vectorToAdd = new Vector2 (getPlayerXAxis(), getPlayerYAxis()) * sRef.playerAccelRate;
+								moveVector += vectorToAdd;
+								
+								//Apply friction
+								moveVector *= (1-sRef.playerFriction);
+														
+								//Make sure we're not going too fast
+								if (Mathf.Abs (moveVector.x) > sRef.playerMaxSpeed) moveVector.x = sRef.playerMaxSpeed * Mathf.Sign (moveVector.x);
+								if (Mathf.Abs (moveVector.y) > sRef.playerMaxSpeed) moveVector.y = sRef.playerMaxSpeed * Mathf.Sign (moveVector.y);
+								
+								//Go to new position				
+								Vector3 posToCheck = new Vector3 (
+								transform.parent.position.x + moveVector.x * sRef.vpsBaseFreeMoveSpeed * getTileSpeedBoost(currentTile) * getAltarSpeedBoost() * Time.deltaTime,
+								transform.parent.position.y + moveVector.y * sRef.vpsBaseFreeMoveSpeed * getTileSpeedBoost(currentTile) * getAltarSpeedBoost() * Time.deltaTime, 
+								transform.parent.position.z);
+								
+								/*
+								Vector3 posToCheck = new Vector3 (
+								transform.parent.position.x + getPlayerXAxis() * sRef.vpsBaseFreeMoveSpeed * getTileSpeedBoost(currentTile) * getAltarSpeedBoost() * Time.deltaTime, 
+								transform.parent.position.y + getPlayerYAxis() * sRef.vpsBaseFreeMoveSpeed * getTileSpeedBoost(currentTile) * getAltarSpeedBoost() * Time.deltaTime, 
+								transform.parent.position.z);
+								*/
+								
+								//posToCheck is illegal, so instead, see how far you can move horizontally and vertically
+								//Welcome to my nightmare
+								if (outOfBounds (posToCheck) || 
+									(onWater (posToCheck) && !gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) && currentTile.currentType != TileTypeEnum.water)) 
+								{					
+									//First, figure out where the posToCheck's tile is in relation to our own
+									int xRel = (int) Mathf.Floor (transform.parent.position.x + 0.5f) - (int) Mathf.Floor (posToCheck.x + 0.5f);
+									int yRel = (int) Mathf.Floor (transform.parent.position.y + 0.5f) - (int) Mathf.Floor (posToCheck.y + 0.5f);
+									string dir = "";
+									if (yRel == 1) 			dir += "south";
+									else if (yRel == -1) 	dir += "north";
+									if (xRel == 1) 			dir += "west";
+									else if (xRel == -1)	dir += "east"; 
+									//If posToCheck's tile is north, south, east, or west, just put us on the border and move horizontally/vertically as appropriate
+									Vector2 safePos = new Vector2 (transform.parent.position.x, transform.parent.position.y);
+									switch (dir) {
+										case "north":
+											safePos = new Vector2 (posToCheck.x, currentTile.transform.position.y + 0.499f);
+											break;
+										case "south":
+											safePos = new Vector2 (posToCheck.x, currentTile.transform.position.y - 0.499f);
+											break;
+										case "east":
+											safePos = new Vector2 (currentTile.transform.position.x + 0.499f, posToCheck.y);
+											break;
+										case "west":
+											safePos = new Vector2 (currentTile.transform.position.x - 0.499f, posToCheck.y);
+											break;
+										case "northeast":
+											if (Mathf.Abs (transform.position.x - currentTile.transform.position.x) > 
+												Mathf.Abs (transform.position.y - currentTile.transform.position.y)) {
+												
+												//Try to move east, then north if that fails, then put in corner if both fail
+												Vector2 newPosToCheck = new Vector2 (posToCheck.x, transform.position.y);
+												if (!outOfBounds(newPosToCheck) && 
+										            (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
+										         		safePos = newPosToCheck;
+										    	}
+										    	else {
+										    		newPosToCheck = new Vector2 (transform.position.x, posToCheck.y);
+													if (!outOfBounds(newPosToCheck) && 
+														(!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
+													safePos = newPosToCheck;
+													}
+													else {
+														safePos = new Vector2 (currentTile.transform.position.x + 0.499f, currentTile.transform.position.y + 0.499f);
+													}
+										    	}
+										    }
+											else {
+												//Try to move north, then east if that fails, then put in corner if both fail
+												Vector2 newPosToCheck = new Vector2 (transform.position.x, posToCheck.y);
+												if (!outOfBounds(newPosToCheck) && 
+												    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
+													safePos = newPosToCheck;
+												}
+												else {
+													newPosToCheck = new Vector2 (posToCheck.x, transform.position.y);
+													if (!outOfBounds(newPosToCheck) && 
+													    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
+														safePos = newPosToCheck;
+													}
+													else {
+														safePos = new Vector2 (currentTile.transform.position.x + 0.499f, currentTile.transform.position.y + 0.499f);
+													}
+												}						  
+											}
+											break;
+										case "northwest":
+											if (Mathf.Abs (transform.position.x - currentTile.transform.position.x) > 
+											    Mathf.Abs (transform.position.y - currentTile.transform.position.y)) {
+												
+												//Try to move west, then north if that fails, then put in corner if both fail
+												Vector2 newPosToCheck = new Vector2 (posToCheck.x, transform.position.y);
+												if (!outOfBounds(newPosToCheck) && 
+												    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
+													safePos = newPosToCheck;
+												}
+												else {
+													newPosToCheck = new Vector2 (transform.position.x, posToCheck.y);
+													if (!outOfBounds(newPosToCheck) && 
+													    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
+														safePos = newPosToCheck;
+													}
+													else {
+														safePos = new Vector2 (currentTile.transform.position.x - 0.499f, currentTile.transform.position.y + 0.499f);
+													}
+												}
+											}
+											else {
+												//Try to move north, then west if that fails, then put in corner if both fail
+												Vector2 newPosToCheck = new Vector2 (transform.position.x, posToCheck.y);
+												if (!outOfBounds(newPosToCheck) && 
+												    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
+													safePos = newPosToCheck;
+												}
+												else {
+													newPosToCheck = new Vector2 (posToCheck.x, transform.position.y);
+													if (!outOfBounds(newPosToCheck) && 
+													    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
+														safePos = newPosToCheck;
+													}
+													else {
+														safePos = new Vector2 (currentTile.transform.position.x - 0.499f, currentTile.transform.position.y + 0.499f);
+													}
+												}						  
+											}
+											break;
+										case "southeast":
+											if (Mathf.Abs (transform.position.x - currentTile.transform.position.x) > 
+											    Mathf.Abs (transform.position.y - currentTile.transform.position.y)) {
+												
+												//Try to move east, then south if that fails, then put in corner if both fail
+												Vector2 newPosToCheck = new Vector2 (posToCheck.x, transform.position.y);
+												if (!outOfBounds(newPosToCheck) && 
+												    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
+													safePos = newPosToCheck;
+												}
+												else {
+													newPosToCheck = new Vector2 (transform.position.x, posToCheck.y);
+													if (!outOfBounds(newPosToCheck) && 
+													    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
+														safePos = newPosToCheck;
+													}
+													else {
+														safePos = new Vector2 (currentTile.transform.position.x + 0.499f, currentTile.transform.position.y - 0.499f);
+													}
+												}
+											}
+											else {
+												//Try to move south, then east if that fails, then put in corner if both fail
+												Vector2 newPosToCheck = new Vector2 (transform.position.x, posToCheck.y);
+												if (!outOfBounds(newPosToCheck) && 
+												    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
+													safePos = newPosToCheck;
+												}
+												else {
+													newPosToCheck = new Vector2 (posToCheck.x, transform.position.y);
+													if (!outOfBounds(newPosToCheck) && 
+													    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
+														safePos = newPosToCheck;
+													}
+													else {
+														safePos = new Vector2 (currentTile.transform.position.x + 0.499f, currentTile.transform.position.y - 0.499f);
+													}
+												}						  
+											}
+											break;
+										case "southwest":
+											if (Mathf.Abs (transform.position.x - currentTile.transform.position.x) > 
+											    Mathf.Abs (transform.position.y - currentTile.transform.position.y)) {
+												
+												//Try to move west, then south if that fails, then put in corner if both fail
+												Vector2 newPosToCheck = new Vector2 (posToCheck.x, transform.position.y);
+												if (!outOfBounds(newPosToCheck) && 
+												    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
+													safePos = newPosToCheck;
+												}
+												else {
+													newPosToCheck = new Vector2 (transform.position.x, posToCheck.y);
+													if (!outOfBounds(newPosToCheck) && 
+													    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
+														safePos = newPosToCheck;
+													}
+													else {
+														safePos = new Vector2 (currentTile.transform.position.x - 0.499f, currentTile.transform.position.y - 0.499f);
+													}
+												}
+											}
+											else {
+												//Try to move south, then west if that fails, then put in corner if both fail
+												Vector2 newPosToCheck = new Vector2 (transform.position.x, posToCheck.y);
+												if (!outOfBounds(newPosToCheck) && 
+												    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
+													safePos = newPosToCheck;
+												}
+												else {
+													newPosToCheck = new Vector2 (posToCheck.x, transform.position.y);
+													if (!outOfBounds(newPosToCheck) && 
+													    (!onWater(newPosToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) {
+														safePos = newPosToCheck;
+													}
+													else {
+														safePos = new Vector2 (currentTile.transform.position.x - 0.499f, currentTile.transform.position.y - 0.499f);
+													}
+												}						  
+											}
+											break; 
+									}
+									
+									//PlaySFX(playerMove, 0.2f);
+									transform.parent.position = new Vector3 (safePos.x, safePos.y, transform.parent.position.z);
+									BaseTile thisTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
+									if (thisTile != currentTile) {
+										//currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
+										doNewTile(currentTile, thisTile);
+									}
+								} 
+								
+								if (!outOfBounds(posToCheck) && 
+									//!tooCloseToOpponent(posToCheck) &&
+									(!onWater(posToCheck) || gm.getCapturedAltars(team).Contains (AltarType.Thotzeti) || currentTile.currentType == TileTypeEnum.water)) 
+								{	//Valid move
+		
+									//PlaySFX(playerMove, 0.2f);
+									transform.parent.position = posToCheck;
+									BaseTile thisTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
+									if (thisTile != currentTile) {
+									//	Debug.Log ("Getting New Tile moving");
+										//currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
+										doNewTile(currentTile, thisTile);
+									}
+								}
+							}
+							
+							#endregion
+							
+							/**
+							if(x.HasValue && x.Value == facing){
+								gm.PlaySFX(playerMove, 0.8f);
+								BaseTile MovingInto = currentTile.GetComponent<BaseTile>().GetDirection(x.Value);
+								float vpsRate = MovingInto.GetRate(this) * sRef.vpsBaseMove *getAltarSpeedBoost();
+								addProgressToAction(vpsRate);
+								
+								if(currentActionProgress > 100f){
+									DoMove(MovingInto);
+									currentActionProgress = 0f;
+									_currentState = PlayerState.standing;	
+								}
 			
-			case PlayerState.rotating: 
-
-				if (buildButtonDown) {
-				
-					Pulsate ();
-					
-					Beacon beacon = currentTile.beacon.GetComponent<Beacon>();
-					
-					setProgressCircle(beacon.percRotateComplete/100);
-					
-					/** This is to let players change facing mid-rotation 
-					if (x.HasValue) { 
-						setDirection (x.Value);
-					}
-					*/
+								else{ 
+								
+								//Move avatar according to how far along the action is
+			
+								float offset = currentActionProgress / 100f;
+								offset = Mathf.Pow (10, offset);
+								offset = Mathf.Log10 (offset);
+								
+									switch (facing) {
 										
-					//This will only be called if players change facing mid-rotation - doesn't hurt anything so leaving it in for now
-					if (beacon.dirRotatingToward != facing) {
-						//StopSFX ();
-						currentActionProgress = 0;
-						beacon.Rotate (beacon.facing);
-						beacon.percRotateComplete = 0f;
-						_currentState = PlayerState.rotating;
-						beacon.startRotating (facing);
-					}
-					
-					else {
-						
-						float vpsRotateRate = sRef.vpsBaseRotate * getAltarRotateBoost ();
-						addProgressToAction (vpsRotateRate);
-						beacon.addRotateProgress (vpsRotateRate);
-						beacon.dirRotatingToward = facing;
-						
-						if (beacon.percRotateComplete >= 100f) {
-		
-							currentActionProgress = 0;
-							beacon.Rotate (facing);
-							beacon.percRotateComplete = 0f;
-							_currentState = PlayerState.standing;
-							//StopSFX ();					
+										case DirectionEnum.East: 
+											_positionOffset = new Vector2 (offset, 0);
+											break;
+										
+										case DirectionEnum.West:
+											_positionOffset = new Vector2 (-1 * offset, 0);
+											break;
+			
+										case DirectionEnum.North:
+											_positionOffset = new Vector2 (0, offset);
+											break;
+													
+										case DirectionEnum.South:
+											_positionOffset = new Vector2 (0, -1 * offset);
+											break;		
+									}	
+								}						
+							}*/
+							else{
+								audioLerp (audioSourceMove, 0.0f, sRef.moveVolumeLerpRate);
+								_currentState= PlayerState.standing; 
+								currentActionProgress = 0f;
+							}
 						}
-					}
-					moveTowardCenterOfTile (currentTile);
-				}
+					break;	
 					
-				else {
-				
-					currentActionProgress = 0;
-					currentTile.beacon.GetComponent<Beacon>().percRotateComplete = 0f;
-					_currentState = PlayerState.standing;
-					currentTile.beacon.audio.Stop();				
-
-				}
-			
-			break;
-			
-			case PlayerState.upgrading:
-
-				if (buildButtonDown) {
-					
-					Pulsate ();;
-					float vpsUpgradeRate = sRef.vpsBaseUpgrade * getAltarUpgradeBoost ();
-					addProgressToAction (vpsUpgradeRate);
-					Beacon beacon = currentTile.beacon.GetComponent<Beacon>();
-					beacon.addUpgradeProgress (vpsUpgradeRate);
-					beacon.losingUpgradeProgress = false;
-					
-					setProgressCircle(beacon.percUpgradeComplete/100);
-					
-				
-					if (beacon.percUpgradeComplete >= 100f) {
-					
-						currentActionProgress = 0;
-						beacon.Upgrade ();
-						beacon.percUpgradeComplete = 0f;
-						_currentState = PlayerState.standing;
+					case PlayerState.building:
+						if (audioSourceInfluenceStart.volume > 0.01f) { audioLerp (audioSourceInfluenceStart, 0.0f, sRef.playerInfluenceStartVolumeLerpRate);
+							} else { audioSourceInfluenceStart.Stop (); }
 						
-					}
+						setProgressCircle(beaconInProgress.percBuildComplete/100);
+						/*
+						qudProgessCircle.renderer.enabled = true;
+						qudProgessCircle.renderer.material.SetFloat("_Cutoff", 1-(beaconInProgress.percBuildComplete/100));
+						*/
+						
+						if(buildButtonDown && currentTile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
+						//	Jiggle ();	//Gotta jiggle
+							Pulsate ();
+							
+							
+						//Debug.Log ("In Build");
+							if(currentTile.controllingTeam != null){
+		//						Debug.Log ("current Team");
+								if(currentTile.controllingTeam.teamNumber == team.teamNumber){
+									moveTowardCenterOfTile (currentTile);
+								//Check for a beacon in progress and start building!
+									if(beaconInProgress != null){
+										float vpsBuildRate = sRef.vpsBaseBuild * getAltarBuildBoost ();
+										beaconInProgress.addBuildingProgress(vpsBuildRate);
+										beaconInProgress.selfDestructing = false;
+		
+										if(x.HasValue){
+											setDirection(x.Value);
+											beaconInProgress.setDirection(x.Value);
+										}
+										if(beaconInProgress.percBuildComplete > 100f){
+		
+											beaconInProgress.Build();
+											_currentState = PlayerState.standing;
+											currentActionProgress = 0f;
+										}
+									}
+								}
+								else{
+									if (!audioSourceInvalid.isPlaying) {
+										playInvalid (1.0f);
+									}
+								}
+							}
+							else
+							{
+								float vpsInfluenceRate = sRef.vpsBasePlayerInfluence;
+								addProgressToAction(vpsInfluenceRate);
+								_currentState = PlayerState.influencing;
+							}
+							
+						}
+						else{
+							currentActionProgress = 0;
+							currentTile.beacon.GetComponent<Beacon>().AbortBuild();
+							_currentState = PlayerState.standing;
+							//StopSFX ();
+							if (audioSourceInvalid.isPlaying) {
+								playInvalid (1.0f);
+							}
+							//PlaySFX(invalid_Input, 1.0f);
+							}
+					break;
+					
+					case PlayerState.influencing:
+		
 					moveTowardCenterOfTile (currentTile);
+		
+					if(currentTile.controllingTeam!= null && currentTile.controllingTeam.teamNumber != teamNumber){
+							audioSourceInfluenceStart.clip = Resources.Load("SFX/Player_DeInfluencing_2") as AudioClip;
+							if(!audioSourceInfluenceStart.isPlaying){
+								audioSourceInfluenceStart.Play();
+							Debug.Log(audioSourceInfluenceStart.clip);
+							}
+						} else if(currentTile.owningTeam == null || currentTile.controllingTeam.teamNumber == teamNumber){
+							audioSourceInfluenceStart.clip = Resources.Load("SFX/Player_Influencing") as AudioClip;
+						}
+						
+						audioLerp (audioSourceMove, 0.0f, sRef.moveVolumeLerpRate);
+						
+						
+		    			qudProgessCircle.renderer.enabled = true;
+						if (currentTile.controllingTeam != null) {
+							setProgressCircle( currentTile.percControlled/100 , currentTile.controllingTeam.teamColor);
+						}
+						else{
+							setProgressCircle( currentTile.percControlled/100 );
+							
+						}	
+						if(buildButtonDown && currentTile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
+					//		Jiggle ();	//Gotta jiggle
+							Pulsate ();
+							if (!audioSourceInfluenceStart.isPlaying) {
+								audioSourceInfluenceStart.Play ();
+							}
+							audioLerp (audioSourceInfluenceStart, sRef.playerInfluenceStartVolume, sRef.playerInfluenceStartVolumeLerpRate);
+							
+							if(currentTile.controllingTeam != null){
+								if(currentTile.controllingTeam.teamNumber == teamNumber)
+								{                                      
+									//Debug.Log("Adding Influence");
+									float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime);
+									currentActionProgress = currentTile.percControlled;
+									
+									float averageActionProgress = getAverageActionProgress();
+								if(_currentState == PlayerState.influencing){
+									
+//									Debug.Log (averageActionProgress*100 +" " +  currentTile.percControlled);
+									if(averageActionProgress*100 > currentTile.percControlled){
+										Debug.Log("In total");
+										_invalidAction = true;		
+									}
+									if(Mathf.Abs(getAverageActionProgressDifference()) < .001 ){  
+//										Debug.Log(getAverageActionProgressDifference());
+//										Debug.Log("In average");
+										
+										_invalidAction = true;	
+									}
+								}
+								
+								if(test > 0f || (currentTile.owningTeam != null && currentTile.owningTeam == team)){
+										
+										if (currentTile.getLocalAltar () != null || currentTile.tooCloseToBeacon() || currentTile.gameObject.transform.FindChild ("Home(Clone)") != null) {
+								
+											_invalidAction = true;
+											_currentState = PlayerState.standing;
+											if(currentTile.tooCloseToBeacon() && currentTile.beacon == null && !audioSourceInvalid.isPlaying) {
+												playInvalid (0.3f);																									
+											}
+										}
+										
+										else {
+										
+											GameObject beaconBeingBuilt;
+		
+											if (currentTile.beacon == null) { 
+												beaconBeingBuilt = (GameObject)GameObject.Instantiate(_prfbBeacon, new Vector3(0,0,0), Quaternion.identity);
+												beaconBeingBuilt.name = "Beacon:  " + team.teamNumber;
+												beaconBeingBuilt.GetComponent<Beacon>().PlayerNumber = PlayerNumber;
+											}
+											else {
+												beaconBeingBuilt = currentTile.beacon;
+											}
+											
+											beaconInProgress = beaconBeingBuilt.GetComponent<Beacon>();					
+										
+											if (currentTile.buildable () && 
+												(beaconInProgress.currentState == null || beaconInProgress.currentState == BeaconState.BuildingBasic)) 
+											{
+												
+												audioSourceInfluenceDone.volume = sRef.playerInfluenceDoneVolume;
+												audioSourceInfluenceDone.Play ();
+												_currentState = PlayerState.building;
+												float vpsBuildRate = sRef.vpsBaseBuild * getAltarBuildBoost ();	
+												addProgressToAction(vpsBuildRate);
+												beaconInProgress.startBuilding(currentTile.gameObject, this.gameObject, vpsBuildRate);
+												beaconInProgress.setDirection(facing);
+												beaconInProgress.selfDestructing = false;
+											}
+										
+											else if (beaconInProgress.facing != facing) {
+												
+												_currentState = PlayerState.rotating;
+												beaconInProgress.startRotating (facing);
+											}
+											
+											//Don't need to rotate, so either upgrade or return to standing
+											else {
+																			
+												if (beaconInProgress.currentState == BeaconState.Basic || beaconInProgress.currentState == BeaconState.BuildingAdvanced) {
+													
+													_currentState = PlayerState.upgrading;
+													beaconInProgress.startUpgrading ();
+												}
+											
+												else if (beaconInProgress.currentState == BeaconState.Advanced) {
+													_currentState = PlayerState.standing;
+												}
+											}
+										}
+									}
+								}
+								else{
+									float test = currentTile.subTractInfluence(  sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime, team);
+									currentActionProgress = currentTile.percControlled;
+									if(test > 0f){
+										currentTile.addInfluenceReturnOverflow(test);
+										if (!audioSourceInvalid.isPlaying) {
+											audioSourceInvalid.volume = 0.3f;	//?
+											//audioSourceInvalid.Play ();
+											//Invoke("playInvalid", 1.0f);
+										}
+									}
+									float averageActionProgress = getAverageActionProgress();
+									
+									if(_currentState == PlayerState.influencing){
+										
+										Debug.Log (averageActionProgress*100 +" " +  currentTile.percControlled);
+									       if(averageActionProgress*100 < currentTile.percControlled){
+												Debug.Log("In total");
+													_invalidAction = true;		
+											}
+									    if(Mathf.Abs(getAverageActionProgressDifference()) < .001 ){  
+										Debug.Log(getAverageActionProgressDifference());
+										          Debug.Log("In average");
+										
+											_invalidAction = true;	
+										}
+									}
+								}
+								/*
+								float modifier = (currentTile.controllingTeam.teamNumber  == teamNumber) ? 1 : -1;
+								float vpsInfluenceRate = sRef.vpsBaseInfluence * modifier * getAltarInfluenceBoost();
+								addProgressToAction(vpsInfluenceRate);
+								currentTile.addProgressToInfluence(vpsInfluenceRate);
+								if(currentTile.percControlled >= 100f){
+									///Shoudl this be here or in the BaseTileObject?
+									currentTile.finishInfluence();
+									_currentState = PlayerState.standing;
+									currentActionProgress = 0;
+								}
+								
+								if(currentTile.percControlled <= 0f){
+									currentTile.clearInfluence();
+									currentActionProgress = 0;
+								}*/
+		
+								if(currentTile.percControlled == 100f) {
+		//						Debug.Log ("INLFUENCE DONE");
+									currentTile.jigglingFromPlayer = false;
+									audioSourceInfluenceDone.volume = sRef.playerInfluenceDoneVolume;
+									audioSourceInfluenceDone.Play ();
+								}
+								
+								else { 
+									currentTile.jigglingFromPlayer = true;
+								}
+								
+								if (x.HasValue) { 
+									setDirection (x.Value);
+								}
+							
+								
+							} else{
+							///TODO catch fully influenced Tile!
+		
+							audioSourceInfluenceDone.volume = sRef.playerInfluenceDoneVolume;
+							audioSourceInfluenceDone.Play ();
+							}
+						}
+						else{
+						///TODO: add reset to tile in case of change
+							//need to reset currenttile to previousState
+							//StopSFX();
+							currentTile.jigglingFromPlayer = false;
+							
+							_currentState = PlayerState.standing;
+						}	
+						//Debug.Log (string.Format("Current {0}, previous {1}", Mathf.RoundToInt(currentActionProgress), (Mathf.RoundToInt(previousActionProgress))));
+					    
+					break;
+					
+					case PlayerState.rotating: 
+		
+						if (buildButtonDown) {
+						
+							Pulsate ();
+							
+							Beacon beacon = currentTile.beacon.GetComponent<Beacon>();
+							
+							setProgressCircle(beacon.percRotateComplete/100);
+							
+							/** This is to let players change facing mid-rotation 
+							if (x.HasValue) { 
+								setDirection (x.Value);
+							}
+							*/
+												
+							//This will only be called if players change facing mid-rotation - doesn't hurt anything so leaving it in for now
+							if (beacon.dirRotatingToward != facing) {
+								//StopSFX ();
+								currentActionProgress = 0;
+								beacon.Rotate (beacon.facing);
+								beacon.percRotateComplete = 0f;
+								_currentState = PlayerState.rotating;
+								beacon.startRotating (facing);
+							}
+							
+							else {
+								
+								float vpsRotateRate = sRef.vpsBaseRotate * getAltarRotateBoost ();
+								addProgressToAction (vpsRotateRate);
+								beacon.addRotateProgress (vpsRotateRate);
+								beacon.dirRotatingToward = facing;
+								
+								if (beacon.percRotateComplete >= 100f) {
+				
+									currentActionProgress = 0;
+									beacon.Rotate (facing);
+									beacon.percRotateComplete = 0f;
+									_currentState = PlayerState.standing;
+									//StopSFX ();					
+								}
+							}
+							moveTowardCenterOfTile (currentTile);
+						}
+							
+						else {
+						
+							currentActionProgress = 0;
+							currentTile.beacon.GetComponent<Beacon>().AbortRotate ();
+							_currentState = PlayerState.standing;		
+		
+						}
+					
+					break;
+					
+					case PlayerState.upgrading:
+		
+						if (buildButtonDown) {
+							
+							Pulsate ();;
+							float vpsUpgradeRate = sRef.vpsBaseUpgrade * getAltarUpgradeBoost ();
+							addProgressToAction (vpsUpgradeRate);
+							Beacon beacon = currentTile.beacon.GetComponent<Beacon>();
+							beacon.addUpgradeProgress (vpsUpgradeRate);
+							beacon.losingUpgradeProgress = false;
+							
+							setProgressCircle(beacon.percUpgradeComplete/100);
+							
+							if (beacon.percUpgradeComplete >= 100f) {
+							
+								currentActionProgress = 0;
+								beacon.Upgrade ();
+								beacon.percUpgradeComplete = 0f;
+								_currentState = PlayerState.standing;
+								
+							}
+							moveTowardCenterOfTile (currentTile);
+						}
+						
+						else {
+						
+							currentActionProgress = 0;
+							currentTile.beacon.GetComponent<Beacon>().AbortUpgrade();
+							_currentState = PlayerState.standing;
+							//StopSFX ();
+						
+						}
+					
+					break;
 				}
 				
-				else {
 				
-					currentActionProgress = 0;
-					currentTile.beacon.GetComponent<Beacon>().AbortUpgrade();
-					_currentState = PlayerState.standing;
-					//StopSFX ();
-				
+				//Set position based on offset
+				/* Not with free movement!
+				transform.parent.position = new Vector3 
+					(GameManager.wrldPositionFromGrdPosition(grdLocation).x + _positionOffset.x / 2,
+					 GameManager.wrldPositionFromGrdPosition(grdLocation).y + _positionOffset.y / 2, -1);
+				*/			
+				//If not pulsating, reset scale and _expanding
+				if (!_pulsating && !Pause.paused) {
+					transform.localScale = new Vector3 (_defaultScale.x, _defaultScale.y, _defaultScale.z) * getScaleBoost ();
+					_expanding = true;
+					pulsateProgress = 0f;
 				}
-			
-			break;
-		}
-		
-		
-		//Set position based on offset
-		/* Not with free movement!
-		transform.parent.position = new Vector3 
-			(GameManager.wrldPositionFromGrdPosition(grdLocation).x + _positionOffset.x / 2,
-			 GameManager.wrldPositionFromGrdPosition(grdLocation).y + _positionOffset.y / 2, -1);
-		*/			
-		//If not pulsating, reset scale and _expanding
-		if (!_pulsating && !Pause.paused) {
-			transform.localScale = new Vector3 (_defaultScale.x, _defaultScale.y, _defaultScale.z) * getScaleBoost ();
-			_expanding = true;
-			pulsateProgress = 0f;
-		}
-		
-		if (!Pause.paused) {		
-			if(_invalidAction){
-				qudActionableGlow.renderer.material.color = Color.red;	
-			}
-			else{
-				qudActionableGlow.renderer.material.color = Color.white;	
+				
+				if (!Pause.paused) {		
+					if(_invalidAction){
+						qudActionableGlow.renderer.material.color = Color.red;	
+					}
+					else{
+						qudActionableGlow.renderer.material.color = Color.white;	
+					}
+				}
 			}
 		}
 	}
@@ -1117,7 +1118,7 @@ public class Player : MonoBehaviour {
 	/// Gets the Build aixs based on player number
 	/// </summary>
 	/// <returns>The player X axis.</returns>
-	private bool getPlayerBuild(){
+	public bool getPlayerBuild(){
 		return Input.GetButton("BuildPlayer"+PlayerNumber);	
 	}
 
@@ -1416,15 +1417,16 @@ public class Player : MonoBehaviour {
 	public void moveTowardCenterOfTile (BaseTile tile) {
 		
 		Vector3 newPos;
-		if (closeEnoughToTarget (transform.parent.position, tile.transform.position, sRef.closeEnoughDistanceMoveToCenter)) {
-			newPos = new Vector3 (tile.transform.position.x, tile.transform.position.y, transform.parent.position.z);
-		}
-		else {
-			newPos = Vector2.Lerp(transform.parent.position, tile.transform.position, sRef.moveToCenterRate * Time.deltaTime);
-			newPos.z = transform.parent.position.z;
-		}
-		transform.parent.position = newPos;
-		
+		if (!Pause.paused) {
+			if (closeEnoughToTarget (transform.parent.position, tile.transform.position, sRef.closeEnoughDistanceMoveToCenter)) {
+				newPos = new Vector3 (tile.transform.position.x, tile.transform.position.y, transform.parent.position.z);
+			}
+			else {
+				newPos = Vector2.Lerp(transform.parent.position, tile.transform.position, sRef.moveToCenterRate);
+				newPos.z = transform.parent.position.z;
+			}
+			transform.parent.position = newPos;
+		}	
 	}
 
 	public void doNewTile(BaseTile previousTile, BaseTile newTile){
@@ -1511,7 +1513,7 @@ public class Player : MonoBehaviour {
 	
 	
 	public void audioLerp (AudioSource source, float target, float rate) {
-		if (Mathf.Abs (source.volume - target) <= 0.001f) {
+		if (Mathf.Abs (source.volume - target) <= 0.01f) {
 			source.volume = target;
 		}
 		else {

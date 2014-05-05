@@ -44,13 +44,18 @@ public class Settings : MonoBehaviour {
 	public float valScorePerAltar;
 	public float valTimePerScoreShot;
 	public float valScoreBaseCapture;
+	public float scoreBitIntervalSlow;
+	public float scoreBitIntervalNormal;
+	public float scoreBitIntervalFast;
+	
 	
 	//Beacon stuff
 	public int beaconBasicRange;
 	public int beaconAdvancedRange;
 	public int beaconNoBuildRange;
-	public float selfDestructDelay;	 		//How long you wait after player stops building before destroying a beacon
-	public float loseUpgradeProgressDelay;	//How long you wait after player stops upgrading before clearing upgrade progress
+	public float selfDestructDelay;	 		//How long you wait after player stops building before starting to destroy a beacon
+	public float loseUpgradeProgressDelay;	//How long you wait after player stops upgrading before starting to undo upgrade progress
+	public float loseRotateProgressDelay;	//How long you wait after player stops rotating before starting to undo rotate progress
 	
 	//Board setup stuff
 	public int neutralBeaconCount;
@@ -101,9 +106,10 @@ public class Settings : MonoBehaviour {
 	public float playerInfluenceStartVolume;
 	public float playerInfluenceStartVolumeLerpRate;
 	public float playerInfluenceDoneVolume;
+	
 	public AudioClip InfluenceDoneHi;
 	public AudioClip InfluenceDoneLo;
-
+	
 	//Overridden by options - ignore
 	public Vector2 team1Start;
 	public Vector2 team2Start;
@@ -122,7 +128,7 @@ public class Settings : MonoBehaviour {
 	public float scaleY;
 	public float bbLocalPosY;
 	public float sbMoveUp;
-
+	public bool useReadyUp;
 	// Use this for initialization
 	void Start () {
 
@@ -158,15 +164,19 @@ public class Settings : MonoBehaviour {
 		valTileConvertScore = 1f;
 		valPointsToWin = 250;
 		valScorePerAltar = 100f;
-		valTimePerScoreShot  = 1f;
-		valScoreBaseCapture  = 200f;
-					
+		valTimePerScoreShot = 1f;
+		valScoreBaseCapture = 250f;
+		scoreBitIntervalSlow = 2.0f;
+		scoreBitIntervalNormal = 1.0f;
+		scoreBitIntervalFast = 0.75f;	//Feels like halving this is too much - test
+		
 		//Beacon stuff
 		beaconBasicRange = 4;
 		beaconAdvancedRange = 8;
 		beaconNoBuildRange = 1;
-		selfDestructDelay = 0.5f;  			//How long you wait after player stops building before destroying a beacon
-		loseUpgradeProgressDelay = 0.5f;  	//How long you wait after player stops upgrading before clearing upgrade progress
+		selfDestructDelay = 0.5f;			//How long you wait after player stops building before starting to destroy a beacon
+		loseUpgradeProgressDelay = 0.5f;	//How long you wait after player stops upgrading before starting to undo upgrade progress
+		loseRotateProgressDelay = 0.5f;		//How long you wait after player stops rotating before starting to undo rotate progress
 		
 		//Board setup stuff
 		neutralBeaconCount = 12;
@@ -216,7 +226,7 @@ public class Settings : MonoBehaviour {
 		playerInfluenceStartVolume = 1.0f;
 		playerInfluenceStartVolumeLerpRate = 0.1f;
 		playerInfluenceDoneVolume = 0.2f;
-
+		
 		InfluenceDoneHi = Resources.Load("SFX/Influence_Done_Hi") as AudioClip;
 		InfluenceDoneLo = Resources.Load("SFX/Influence_Done_Lo") as AudioClip;
 
@@ -228,6 +238,7 @@ public class Settings : MonoBehaviour {
 		cameraSize = 7.08f;
 		fogOn = true;
 		gameMode = Mode.TwoVTwo;
+		
 		//Settings
 		perlinLevels = new int[]{3000, 1800, 1400};
 		sizes = new SizeSetting[]{
@@ -236,7 +247,7 @@ public class Settings : MonoBehaviour {
 			new SizeSetting(new Vector2(28,20),new Vector2(2,10), new Vector2(26,10),10.6f,new Vector2(13.4f, 9.5f), new Vector2(-3.085168f,0), new Vector2 (29.88822f,0), 19.14f, 10f, 9.2f)};
 		
 		setPrefs();
-
+		useReadyUp = false;
 
 	}
 
