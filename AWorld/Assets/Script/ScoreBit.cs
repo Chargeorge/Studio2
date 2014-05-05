@@ -8,9 +8,10 @@ public class ScoreBit : MonoBehaviour {
 	private FinalScoreTarget finalTarget;
 	public Settings sRef;
 	public float speed;
-	public float rotateSpeed = 5.0f;
+	public float rotateSpeed;
 	public float scoreAmt;
 	
+	public bool bigBit;
 
 	// Use this for initialization
 	void Start () {
@@ -33,6 +34,14 @@ public class ScoreBit : MonoBehaviour {
 			Debug.LogWarning ("Game speed was a weird value while setting score bit speed");
 			break;
 		}
+		if (bigBit) { 
+			speed = 0.05f;
+			rotateSpeed = 100.0f;
+		}
+		else {
+			rotateSpeed = 250.0f;
+		}
+			
 	}
 
 	public void setTeam(TeamInfo T){
@@ -54,11 +63,11 @@ public class ScoreBit : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
-			transform.Rotate(new Vector3(0,0,rotateSpeed * Time.deltaTime));
-		
 		if (!Pause.paused) {	
 		
-		//	transform.RotateAround (transform.position, Vector3.forward, 0.2f * Time.deltaTime);
+			transform.RotateAround (transform.position, Vector3.forward, rotateSpeed * Time.deltaTime);
+			
+			//	transform.RotateAround (transform.position, Vector3.forward, 0.2f * Time.deltaTime);
 	
 			if(targets.Count > 0){
 				Vector2 NewPos  =  Vector2.MoveTowards( (Vector2)transform.position, (Vector2)(targets[0].transform.position), speed);
@@ -131,10 +140,10 @@ public class ScoreBit : MonoBehaviour {
 	void setTarget(GameObject target){
 		Vector2 newTrans =  target.transform.position - transform.position;
 
-		float angleTo =   Vector2.Angle(transform.up , newTrans.normalized);
+//		float angleTo =   Vector2.Angle(transform.up , newTrans.normalized);
 //		Debug.Log(angleTo);
 //		Debug.Log (newTrans);
-		transform.eulerAngles = new Vector3(0,0,0);
+		//transform.eulerAngles = new Vector3(0,0,0);
 
 //		transform.Rotate(new Vector3(0,0,angleTo));
 	}

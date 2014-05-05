@@ -40,12 +40,11 @@ public class Home : MonoBehaviour {
 				GameObject BigScoreBit = BulletPool.instance.GetObjectForType("ScoreBit", false);
 				BigScoreBit.transform.localScale = new Vector3(2f,2f,1f);
 				BigScoreBit.transform.position = scoreBitStartPos;
-				BigScoreBit.GetComponent<ScoreBit>().speed = .1f;
+				BigScoreBit.GetComponent<ScoreBit>().bigBit = true;
 				BigScoreBit.GetComponent<ScoreBit>().setTeam(HomeTile.owningTeam);
 				BigScoreBit.GetComponent<ScoreBit>().start(checkNetwork());
 				BigScoreBit.GetComponent<ScoreBit>().sRef = Settings.SettingsInstance;
 				BigScoreBit.GetComponent<ScoreBit>().scoreAmt= Settings.SettingsInstance.valScoreBaseCapture;
-				
 				finalChitLaunched  = true;
 			}
 		}
