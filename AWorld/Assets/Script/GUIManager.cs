@@ -88,12 +88,12 @@ public class GUIManager : MonoBehaviour {
 				menu = false;
 			}
 			if(Input.GetButton("BuildPlayer1") && restart){
-				audio.Play();
-				Invoke("replay", 1.5f);
+			//	audio.Play();
+			//	Invoke("replay", 1.5f);
 			}
 			if(Input.GetButton("BuildPlayer1") && menu){
-				audio.Play();
-				Invoke("mainMenu", 1.5f);
+			//	audio.Play();
+			//	Invoke("mainMenu", 1.5f);
 			}
 			winningTeam =gRef.vIsForVendetta.completingTeam;
 			/*GUI.BeginGroup(new Rect(Screen.width/2 - boxWidth/2, Screen.height/2 - boxHeight/2, boxWidth, boxHeight));*/
