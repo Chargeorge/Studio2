@@ -21,6 +21,8 @@ public class Bar : MonoBehaviour {
 	public float fixIt;
 	public float displayedScore = 0.0f;
 	public float scoreLerpRate = 0.1f;
+	
+	public AudioSource[] audioSources;
 
 	// Use this for initialization
 	void Start () {
@@ -63,6 +65,16 @@ public class Bar : MonoBehaviour {
 //s		barAlpha = team.teamColor;
 //		barAlpha.a = 100;
 //		bar.renderer.material.color = barAlpha;
+
+		audioSources = gameObject.GetComponents<AudioSource>();
+		if (team.teamNumber == 1) {
+			SetScoreSound (Resources.Load("SFX/Altar_Score_Lo") as AudioClip);
+		} else if(team.teamNumber == 2){
+			SetScoreSound (Resources.Load("SFX/Altar_Score_Hi") as AudioClip);
+		} else {
+			Debug.LogWarning ("Didn't load score sounds in Bar");
+		}
+		
 	}
 	
 	// Update is called once per frame
@@ -97,12 +109,32 @@ public class Bar : MonoBehaviour {
 		backBar.renderer.material.color = backBarColor;
 
 	//	team = gRef.teams[1];
-		
 	//	perScore = team.score / sRef.valPointsToWin;
 	//	teamScale2.y = endScale.y *perScore;
 	}
 	
-
-
-
+	public void SetScoreSound (AudioClip clip) {
+		Debug.Log (audioSources.Length);
+		foreach (AudioSource a in audioSources) {
+			a.clip = clip;
+		}
+	}
+	
+	public void PlayScoreSound () {
+	
+		bool foundEmptySource = false;
+		for (int i = 0; i < audioSources.Length && !foundEmptySource; i++) {
+			if (!audioSources[i].isPlaying) {
+				Debug.Log (i);
+				audioSources[i].pitch = 1f + (Random.Range (-0.3f, 0.3f));
+				audioSources[i].Play ();
+				foundEmptySource = true;
+			}	
+		}
+	
+	/**	if (!audioSources[0].isPlaying) {
+			audioSources[0].Play ();
+		}
+	*/
+	}
 }

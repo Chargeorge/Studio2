@@ -28,6 +28,24 @@ public class Beacon : MonoBehaviour {
 	public Settings sRef;
 	private GameObject _lastTileInfluenced;
 
+	public bool newShot = false;
+
+
+
+	private float startTime;
+	private float journeyLength;
+	public Vector3 arrowStartPos;
+	public Vector3 arrowPos;
+	Vector3 tilePos;
+	Vector2 destPos;
+	public bool shotDone = false;
+	public float arrowTimer;
+	public bool timerOn = false;
+	public float arrowSpeed;
+	public float slowerArrowSpeed;
+	public float arrowInterval;
+
+
 	public GameObject lastTileInfluenced {
 		get {
 			if(controllingTeam != null){
@@ -83,16 +101,48 @@ public class Beacon : MonoBehaviour {
 		audioSourceBuilding.clip = beaconBuilding;
 		audioSourceUpgrading.clip = beaconUpgrading;
 		audioSourceRotating.clip = beaconRotating;
+
+		arrowSpeed = sRef.arrowSpeed;
+		arrowInterval = sRef.arrowInterval;
+		slowerArrowSpeed = arrowSpeed * 0.66f;
+//		arrowSpeed = 7f;
+//		arrowInterval = 3f;
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
+	//	Debug.Log("startTime" + startTime);
 		int brdX; int brdY;
 		if (transform.parent != null) { //Hax
 			brdX = transform.parent.gameObject.GetComponent<BaseTile>().brdXPos;
 		 	brdY = transform.parent.gameObject.GetComponent<BaseTile>().brdYPos;
 			
 			setVisualDirection();	//Why is this happening every frame?
+
+			Debug.Log(shotDone + " shotDone");
+
+			//this is for arrowShooting
+			if (shotDone){
+				arrowTimer = Time.time;
+				transform.FindChild("ArrowShot").renderer.enabled=false;
+				shotDone = false;
+			}
+			if(timerOn){
+				if(Time.time >= arrowTimer + arrowInterval){
+					newShot = true;
+					transform.FindChild("ArrowShot").renderer.enabled=true;
+					timerOn = false;
+				}
+			}
+
+
+			if (lastTileInfluenced != null){
+				if(newShot){
+					shootSetup();
+				}
+				shootArrow();
+			}
 
 			buildButtonDown = getPlayerBuild();
 
@@ -122,6 +172,7 @@ public class Beacon : MonoBehaviour {
 			
 			
 			if((_currentState == BeaconState.Basic || _currentState == BeaconState.BuildingAdvanced || _currentState == BeaconState.Advanced) && controllingTeam != null){
+
 
 				//find nearest convertable block
 				//FIND The first convertable tile, list is ordered by distance
@@ -296,6 +347,8 @@ public class Beacon : MonoBehaviour {
 	}
 	
 	public void setTeam(){
+		newShot = true;
+
 		Color32 controllingTeamColor = controllingTeam.beaconColor;	
 		Color32 platformColor = controllingTeam.tileColor;
 		//TODO: custom sprites and colors per team
@@ -311,6 +364,7 @@ public class Beacon : MonoBehaviour {
 		}
 
 		transform.FindChild("Arrow").renderer.material.color = controllingTeamColor;
+		transform.FindChild("ArrowShot").renderer.material.color = controllingTeamColor;
 		transform.FindChild("Base").renderer.material.color = controllingTeamColor;
 		transform.FindChild("Anim").renderer.material.color = controllingTeamColor;
 		transform.FindChild("Platform").renderer.material.color = platformColor;
@@ -324,10 +378,12 @@ public class Beacon : MonoBehaviour {
 			Color32 platformColor = controllingTeam.tileColor;
 		//TODO: custom sprites and colors per team
 		controllingTeamColor.a = (byte)(transform.FindChild("Arrow").renderer.material.color.a * 255);
+		controllingTeamColor.a = (byte)(transform.FindChild("ArrowShot").renderer.material.color.a * 190);
 		controllingTeamColor.a = (byte)(transform.FindChild("Base").renderer.material.color.a * 255);
 			platformColor.a = (byte)(transform.FindChild("Platform").renderer.material.color.a * 255);
 
 			transform.FindChild("Arrow").renderer.material.color = controllingTeamColor;	
+			transform.FindChild("ArrowShot").renderer.material.color = controllingTeamColor;
 			transform.FindChild("Base").renderer.material.color = controllingTeamColor;
 			transform.FindChild("Anim").renderer.material.color = controllingTeamColor;
 			transform.FindChild("Platform").renderer.material.color = platformColor;
@@ -339,6 +395,7 @@ public class Beacon : MonoBehaviour {
 
 			controllingTeam = null;
 			transform.FindChild("Arrow").renderer.material.color = neutralColor;
+			transform.FindChild("ArrowShot").renderer.material.color = neutralColor;
 			transform.FindChild("Base").renderer.material.color = neutralColor;
 			transform.FindChild("Platform").renderer.material.color = neutralColorB;
 		}	}
@@ -378,7 +435,9 @@ public class Beacon : MonoBehaviour {
 
 //		platform.Translate(Vector3.up * platformPos);
 
-		transform.FindChild("Arrow").renderer.material.color = beaconColor;		
+		transform.FindChild("Arrow").renderer.material.color = beaconColor;	
+		
+		transform.FindChild("ArrowShot").renderer.material.color = beaconColor;		
 		transform.FindChild("Platform").renderer.material.color = platformColor;
 		
 		Color32 baseColor = transform.FindChild ("Arrow").renderer.material.color;
@@ -403,6 +462,8 @@ public class Beacon : MonoBehaviour {
 			newColor = (newColor >= 255) ? 254 : newColor;		
 			beaconColor.a = (byte)newColor;
 			transform.FindChild("Arrow").renderer.material.color = beaconColor; 
+			
+			transform.FindChild("ArrowShot").renderer.material.color = beaconColor; 
 			transform.FindChild("Platform").renderer.material.color = platformColor;
 
 			Color32 baseColor = transform.FindChild ("Arrow").renderer.material.color;
@@ -869,12 +930,18 @@ public class Beacon : MonoBehaviour {
 		dirRotatingToward = N;
 		transform.FindChild ("Arrow").RotateAround(transform.position, new Vector3(0,0,1), currentRotAngle);
 		transform.FindChild ("Arrow").RotateAround(transform.position, new Vector3(0,0,-1), rotAngle);
+		transform.FindChild ("ArrowShot").RotateAround(transform.position, new Vector3(0,0,1), currentRotAngle);
+		transform.FindChild ("ArrowShot").RotateAround(transform.position, new Vector3(0,0,-1), rotAngle);
 	}
 	
 	public void setVisualDirection(){
 		Transform arrow = transform.FindChild ("Arrow");
+		Transform arrowShot = transform.FindChild ("ArrowShot");
+
 		arrow.localEulerAngles = new Vector3(0,0,-1*getAngleForDir(facing));
-		
+		arrowShot.localEulerAngles = new Vector3(0,0,-1*getAngleForDir(facing));
+
+
 		if (dirRotatingToward != facing && percRotateComplete > 0f && percRotateComplete < 100f) { //Rotating
 			
 			Vector3 angleRotatingToward = Vector3.zero;	//The angle we're roughly rotating toward
@@ -888,6 +955,7 @@ public class Beacon : MonoBehaviour {
 					
 				percRotatingToward = 90f;
 				arrow.localEulerAngles += angleRotatingToward * percRotatingToward/100f * percRotateComplete/100f;
+			//	arrowShot.localEulerAngles += angleRotatingToward * percRotatingToward/100f * percRotateComplete/100f;
 			}
 			
 			//I know there's a mathy way to do this but holy motherfucking shit fuck I cannot figure it out so fuck it
@@ -899,6 +967,7 @@ public class Beacon : MonoBehaviour {
 				angleRotatingToward = new Vector3 (0,0,90f);
 				percRotatingToward = 75f;
 				arrow.localEulerAngles += angleRotatingToward * percRotatingToward/100f * percRotateComplete/100f;
+			//	arrowShot.localEulerAngles += angleRotatingToward * percRotatingToward/100f * percRotateComplete/100f;
 			}
 			
 			else if ((facing == DirectionEnum.North && dirRotatingToward == DirectionEnum.East) ||
@@ -909,6 +978,7 @@ public class Beacon : MonoBehaviour {
 				angleRotatingToward = new Vector3 (0,0,-90f);
 				percRotatingToward = 75f;
 				arrow.localEulerAngles += angleRotatingToward * percRotatingToward/100f * percRotateComplete/100f;
+			//	arrowShot.localEulerAngles += angleRotatingToward * percRotatingToward/100f * percRotateComplete/100f;
 			}
 			
 			else{
@@ -922,9 +992,18 @@ public class Beacon : MonoBehaviour {
 		setVisualDirection ();
 		ClearJiggle ();
 		UpdateInfluencePatterns();
+
+
 		
 		rotatingTargetVol = 0.0f;
 		audioSourceActionCompleted.PlayOneShot (beaconRotated, 1.0f);
+
+		if(percRotateComplete >= 100f){
+			//audioLerp(audioSourceBeacon, 0.01f, lerpRate);
+			//audio.PlayOneShot(beaconRotated, 1.0f);	
+			transform.FindChild("ArrowShot").renderer.enabled = false;
+		}
+
 	}
 	
 	//Stops a-jiggling what ought not be a-jiggling - use before UpdateInfluencePatterns
@@ -1006,6 +1085,7 @@ public class Beacon : MonoBehaviour {
 		}
 
 		transform.FindChild ("Arrow").GetComponent<MeshRenderer>().enabled = true;
+		transform.FindChild ("ArrowShot").GetComponent<MeshRenderer>().enabled = true;
 		
 		Color32 baseColor = transform.FindChild ("Arrow").renderer.material.color;
 		baseColor.a = 255;
@@ -1047,6 +1127,7 @@ public class Beacon : MonoBehaviour {
 	
 	public void Upgrade () {
 
+
 		losingUpgradeProgress = false;
 
 		upgradingTargetVol = 0.0f;
@@ -1058,7 +1139,8 @@ public class Beacon : MonoBehaviour {
 		_currentState = BeaconState.Advanced;
 		transform.FindChild("Base").renderer.material = matUpgraded;
 		transform.FindChild("Arrow").renderer.material = arrowUpgraded;
-		transform.FindChild("Arrow").transform.localScale = new Vector3(17, 17, 0);
+		transform.FindChild("ArrowShot").renderer.material = arrowUpgraded;
+		//transform.FindChild("Arrow").transform.localScale = new Vector3(17, 17, 0);
 		
 		//hax
 		setTeam ();
@@ -1069,6 +1151,7 @@ public class Beacon : MonoBehaviour {
 		beaconColor.a = 255;
 		animColor.a = 0;
 		transform.FindChild("Arrow").renderer.material.color = beaconColor;
+		transform.FindChild("ArrowShot").renderer.material.color = beaconColor;
 		transform.FindChild("Base").renderer.material.color = platformColor;
 		transform.FindChild("Anim").renderer.material.color = animColor;
 	}
@@ -1202,4 +1285,60 @@ public class Beacon : MonoBehaviour {
 			source.volume = Mathf.Lerp (source.volume, target, rate);
 		}
 	}
+
+
+	//code for arrowShooting
+
+
+	public void shootSetup(){
+
+		Transform arrow = this.transform.FindChild("ArrowShot");
+		arrowStartPos = this.transform.FindChild("Base").position;
+		transform.FindChild("ArrowShot").renderer.enabled = true;
+		arrow.position = arrowStartPos;
+		tilePos = lastTileInfluenced.transform.position;
+		startTime = Time.time;
+		journeyLength = Vector3.Distance(arrowStartPos, tilePos);
+		newShot = false;
+		//Debug.Log ("I happen");
+	//	arrowSpeed = sRef.arrowSpeed;
+	//	destPos = Vector2(tilePos.x, tilePos.y);
+		
+//		GameObject oldLastTile = lastTileInfluenced;
+	}
+	
+	public void shootArrow(){
+		Transform arrow = this.transform.FindChild("ArrowShot");
+//		Vector3 tilePos = lastTileInfluenced.transform.position;
+	//	Vector3 arrowPos = this.transform.FindChild("Arros").position;
+
+		float distCovered = (Time.time - startTime) * arrowSpeed;
+		float fracJourney = distCovered / journeyLength;
+		//Debug.Log(fracJourney);
+		arrowPos = Vector3.Lerp(arrowStartPos, tilePos, fracJourney);
+		arrowPos.z = -1f;
+		arrow.position = arrowPos;
+
+//		if(fracJourney > 0.7f && fracJourney < 1f){
+//			arrowSpeed = slowerArrowSpeed;
+//		}
+
+		if(fracJourney > 0.85f && fracJourney < 1f){
+			arrow.renderer.enabled = false;
+		}
+
+		if (fracJourney > 1f && fracJourney < 1.2f){
+				shotDone = true;
+				timerOn = true;
+		}
+	}
+
+//		if(oldLastTile != lastTileInfluenced){
+//			newShot = true;
+//		}
+
+		//	Vector3 dir = arrowPos - tilePos;
+		//	arrow.Translate(dir * Time.deltaTime);
+
 }
+

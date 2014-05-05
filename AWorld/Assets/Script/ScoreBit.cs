@@ -158,7 +158,8 @@ public class ScoreBit : MonoBehaviour {
 	public bool closeEnoughToTarget (Vector3 newPos, Vector3 target, float closeEnoughDistance) {
 		//Hoo boy
 		return Mathf.Abs (newPos.x - target.x) + Mathf.Abs (newPos.y - target.y) <= closeEnoughDistance; 
-	}
 	
 	
+	
+}
 }
