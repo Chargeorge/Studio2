@@ -564,10 +564,18 @@ public class GameManager : MonoBehaviour {
 		}
 		if(_currentState == GameState.tutorial){
 			Debug.Log ("Getting Here");
-			if(Input.GetButtonDown("BuildAllPlayers") ){
+			qudTutorial1.transform.FindChild("TutorialClock").renderer.material.SetFloat("_Cutoff",1.01f-(tutorialPerc /100f));
+			qudTutorial2.transform.FindChild("TutorialClock").renderer.material.SetFloat("_Cutoff",1.01f-(tutorialPerc /100f));
+			
+			if(Input.GetButton("BuildAllPlayers") ){
+				tutorialPerc+= sRef.vpsBasePlayerInfluence * Time.deltaTime;	
+				Debug.Log ("Here");
+			}
+			else{
+				tutorialPerc = 0f;
+			}
 				
-				
-				Debug.Log ("Button hit");
+			if(tutorialPerc > 100){
 				if(!swapTutorial()){
 					//qudTutorial1.SetActive(false);
 					//qudTutorial2.SetActive(false);
@@ -580,19 +588,9 @@ public class GameManager : MonoBehaviour {
 					else{
 						_currentState = GameState.playing;
 					}
+					
 				}
-//				if(tutorialIndex>= tutorials.Length){
-//					qudTutorial.SetActive(false);
-//					
-//					if(sRef.useReadyUp){_currentState = GameState.gameNotStarted;
-//						ReadyUps.ForEach(delegate (GameObject g) {
-//							g.SetActive(true);	
-//						});
-//					}
-//					else{
-//						_currentState = GameState.playing;
-//					}
-//				}
+				tutorialPerc = 0f;
 			}
 			
 		}
@@ -625,6 +623,10 @@ public class GameManager : MonoBehaviour {
 		}
 
 
+	}
+
+	public void resetTutorialClocks(){
+		tutorialPerc = 0;
 	}
 
 	public bool swapTutorial(){
