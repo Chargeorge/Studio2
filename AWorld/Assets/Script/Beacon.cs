@@ -1270,7 +1270,9 @@ public class Beacon : MonoBehaviour {
 		newShot = false;
 		Debug.Log ("I happen");
 	//	destPos = Vector2(tilePos.x, tilePos.y);
-		
+
+		arrow.renderer.material.color = controllingTeam.beaconColor;
+
 //		GameObject oldLastTile = lastTileInfluenced;
 	}
 	
@@ -1287,6 +1289,14 @@ public class Beacon : MonoBehaviour {
 		arrow.position = arrowPos;
 		
 		float distance = Vector2.Distance (new Vector2 (arrow.position.x, arrow.position.y), new Vector2 (tilePos.x, tilePos.y));
+
+		if (distance < 1f && distance > 0.5f) { 
+			float alpha = distance * 255;
+			Color32 arrowAlpha = controllingTeam.beaconColor;
+			arrowAlpha.a = (byte)alpha;
+			arrow.renderer.material.color = arrowAlpha;
+		}
+
 		if (distance < 0.5f) { 
 			arrow.renderer.enabled = false;
 		}
