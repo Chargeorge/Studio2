@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour {
 
 	public Texture[] tutorials;
 	public int tutorialIndex = 0;
-	private GameObject qudTutorial;
+	private GameObject qudTutorial1, qudTutorial2;
 
 	private float tutorialPerc = 0;
 
@@ -92,7 +92,9 @@ public class GameManager : MonoBehaviour {
 		Camera.main.transform.position = sRef.cameraPosition;
 
 		audio.PlayOneShot(Game_Launch, 0.9f);
-		qudTutorial = GameObject.Find("Tutorial");
+		qudTutorial1 = (GameObject)GameObject.Instantiate(prfbTutorial, new Vector3(100f,100f,10f), Quaternion.identity);
+		
+		qudTutorial2 = (GameObject)GameObject.Instantiate(prfbTutorial, new Vector3(101f,101f,10f), Quaternion.identity);
 		
 	}
 	/// <summary>
@@ -483,10 +485,15 @@ public class GameManager : MonoBehaviour {
 			setup = false;
 			
 			if(sRef.tutorial){
-				qudTutorial.renderer.enabled = true;
-				qudTutorial.transform.position = new Vector3((sRef.boardSize.x/2)-.5f, (sRef.boardSize.y/2)-.5f, -3);
-				qudTutorial.transform.localScale = new Vector3(sRef.boardSize.x, sRef.boardSize.y, 1);
-				qudTutorial.renderer.material.mainTexture = tutorials[tutorialIndex];
+				qudTutorial1.renderer.enabled = true;
+				qudTutorial1.transform.position = new Vector3((sRef.boardSize.x/2)-.5f, (sRef.boardSize.y/2)-.5f, -3);
+				qudTutorial1.transform.localScale = new Vector3(sRef.boardSize.x, sRef.boardSize.y, 1);
+				qudTutorial1.renderer.material.mainTexture = tutorials[tutorialIndex];
+				
+				qudTutorial2.renderer.enabled = true;
+				qudTutorial2.transform.position = new Vector3((sRef.boardSize.x/2)-.5f, -20, -3);
+				qudTutorial2.transform.localScale = new Vector3(sRef.boardSize.x, sRef.boardSize.y, 1);
+				qudTutorial2.renderer.material.mainTexture = tutorials[tutorialIndex];
 				_currentState = GameState.tutorial;
 				ReadyUps.ForEach(delegate (GameObject g) {
 					g.SetActive(false);	
@@ -555,16 +562,15 @@ public class GameManager : MonoBehaviour {
 			
 			
 		}
-		Debug.Log(_currentState);
 		if(_currentState == GameState.tutorial){
 			Debug.Log ("Getting Here");
 			if(Input.GetButtonDown("BuildAllPlayers") ){
 				
 				
-				tutorialIndex++;
 				Debug.Log ("Button hit");
-				if(tutorialIndex>= tutorials.Length){
-					qudTutorial.SetActive(false);
+				if(!swapTutorial()){
+					//qudTutorial1.SetActive(false);
+					//qudTutorial2.SetActive(false);
 					
 					if(sRef.useReadyUp){_currentState = GameState.gameNotStarted;
 						ReadyUps.ForEach(delegate (GameObject g) {
@@ -575,6 +581,18 @@ public class GameManager : MonoBehaviour {
 						_currentState = GameState.playing;
 					}
 				}
+//				if(tutorialIndex>= tutorials.Length){
+//					qudTutorial.SetActive(false);
+//					
+//					if(sRef.useReadyUp){_currentState = GameState.gameNotStarted;
+//						ReadyUps.ForEach(delegate (GameObject g) {
+//							g.SetActive(true);	
+//						});
+//					}
+//					else{
+//						_currentState = GameState.playing;
+//					}
+//				}
 			}
 			
 		}
@@ -609,6 +627,53 @@ public class GameManager : MonoBehaviour {
 
 	}
 
+	public bool swapTutorial(){
+		Hashtable qud1HT = new Hashtable();
+		
+		Debug.Log("Tutorial Index" + tutorialIndex);
+		Hashtable qud2HT = new Hashtable();
+		
+		if(tutorials.Length > tutorialIndex+1){
+			qudTutorial2.renderer.material.mainTexture = tutorials[tutorialIndex+1];
+		}
+		else{
+			
+			qud1HT.Add("y", 25);
+			qud1HT.Add("time", 3f);
+			qud1HT.Add("easetype", iTween.EaseType.easeOutElastic);
+			iTween.MoveTo(qudTutorial1, qud1HT);
+			
+			qud2HT.Add("y", 100 -.5f);
+			qud2HT.Add("time", .5f);
+			qud2HT.Add("easetype", iTween.EaseType.easeOutElastic);
+			iTween.MoveTo(qudTutorial2, qud2HT);
+			
+			
+			return false;
+			
+		}
+		
+		GameObject swapHolder;
+		qudTutorial2.transform.position = new Vector3((sRef.boardSize.x/2)-.5f, -20, -3);
+		
+		qud1HT.Add("y", 40);
+		qud1HT.Add("time", 3f);
+		qud1HT.Add("easetype", iTween.EaseType.easeOutElastic);
+		iTween.MoveTo(qudTutorial1, qud1HT);
+		
+		qud2HT.Add("y", (sRef.boardSize.y/2) -.5f);
+		qud2HT.Add("time", .5f);
+		qud2HT.Add("easetype", iTween.EaseType.easeInElastic);
+		iTween.MoveTo(qudTutorial2, qud2HT);
+		
+		/*swapHolder = qudTutorial1;
+		qudTutorial1 = qudTutorial2;
+		qudTutorial2 = swapHolder;*/
+		tutorialIndex++;
+		return true;
+		
+	}
+
 	public void setRestartable(){
 		_currentState = GameState.gameRestartable;
 	}
@@ -628,7 +693,6 @@ public Vector2 generateValidAltarPosition(Altar thisAltar, Vector2 startPos, boo
 			x = (int)teams[0].startingLocation.x - x;
 			y = (int)teams[0].startingLocation.y -y;
 		}
-		Debug.Log ("Distance" + getDistanceToNearestAltar(new Vector2(x,y)));
 		
 		int origX = x;
 		int baseX = x;
