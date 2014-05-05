@@ -28,7 +28,7 @@ public class Beacon : MonoBehaviour {
 	public Settings sRef;
 	private GameObject _lastTileInfluenced;
 
-	public bool newShot = false;
+	public bool newShot;
 	public float speed = 1f;
 	private float startTime;
 	private float journeyLength;
@@ -93,6 +93,8 @@ public class Beacon : MonoBehaviour {
 		audioSourceBuilding.clip = beaconBuilding;
 		audioSourceUpgrading.clip = beaconUpgrading;
 		audioSourceRotating.clip = beaconRotating;
+		
+		newShot = false;
 	}
 	
 	// Update is called once per frame
@@ -315,7 +317,6 @@ public class Beacon : MonoBehaviour {
 	}
 	
 	public void setTeam(){
-		newShot = true;
 		Color32 controllingTeamColor = controllingTeam.beaconColor;	
 		Color32 platformColor = controllingTeam.tileColor;
 		//TODO: custom sprites and colors per team
@@ -335,6 +336,9 @@ public class Beacon : MonoBehaviour {
 		transform.FindChild("Base").renderer.material.color = controllingTeamColor;
 		transform.FindChild("Anim").renderer.material.color = controllingTeamColor;
 		transform.FindChild("Platform").renderer.material.color = platformColor;
+		
+		shootSetup ();
+//		Invoke ("StartShooting", 0.1f);
 	}
 
 	public void setTeam(TeamInfo teamIn){
@@ -1280,6 +1284,10 @@ public class Beacon : MonoBehaviour {
 	}
 	
 	public void shootArrow(){
+	
+		//Weird hack, I dunno. Fixes neutral beacons shooting first arrow to 0,0
+		if (tilePos.x == 0 && tilePos.y == 0) tilePos = lastTileInfluenced.transform.position;	
+
 		Transform arrow = this.transform.FindChild("ArrowShot");
 //		Vector3 tilePos = lastTileInfluenced.transform.position;
 	//	Vector3 arrowPos = this.transform.FindChild("Arros").position;
@@ -1319,6 +1327,10 @@ public class Beacon : MonoBehaviour {
 
 		//	Vector3 dir = arrowPos - tilePos;
 		//	arrow.Translate(dir * Time.deltaTime);
+		
+	public void StartShooting () {
+		newShot = true;
+	}
 
 }
 
