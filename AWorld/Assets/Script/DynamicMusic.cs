@@ -27,8 +27,8 @@ public class DynamicMusic : MonoBehaviour {
 	void Start () {
 		sRef = Settings.SettingsInstance;
 
-		layerVolume = 0.4f;
-		layerVolumeClimax = 1.0f;
+		layerVolume = sRef.layersVolume;
+		layerVolumeClimax = sRef.musicClimaxVolume;
 		lerpRate = 0.1f;
 		lerpRateFast = 0.3f;
 

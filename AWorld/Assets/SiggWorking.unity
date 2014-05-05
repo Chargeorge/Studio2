@@ -1424,11 +1424,27 @@ MonoBehaviour:
   closeEnoughDistanceScoreBit: 0
   influenceRevealRange: 0
   secTillRestartable: 0
-  moveVolume: 0
-  moveVolumeLerpRate: 0
-  playerInfluenceStartVolume: 0
-  playerInfluenceStartVolumeLerpRate: 0
-  playerInfluenceDoneVolume: 0
+  moveVolume: .600000024
+  moveEnemyVolume: .600000024
+  moveVolumeLerpRate: .200000003
+  playerInfluenceStartVolume: 1
+  playerInfluenceStartVolumeLerpRate: .100000001
+  playerInfluenceDoneVolume: .200000003
+  playerDeinfluencingVolume: .800000012
+  invalidInputVolume: .300000012
+  beaconBuildingVolume: .5
+  beaconBuiltVolume: .699999988
+  beaconUpgradingVolume: .800000012
+  beaconUpgradedVolume: .699999988
+  beaconRotatingVolume: .699999988
+  beaconRotatedVolume: 1
+  altarScoreVolume: .400000006
+  soundtrackVolume: .400000006
+  layersVolume: .400000006
+  musicClimaxVolume: 1
+  startGameVolume: .899999976
+  victoryVolume: .899999976
+  restartVolume: .5
   InfluenceDoneHi: {fileID: 0}
   InfluenceDoneLo: {fileID: 0}
   team1Start: {x: 5, y: 5}

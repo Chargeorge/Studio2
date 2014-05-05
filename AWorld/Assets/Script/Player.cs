@@ -324,7 +324,7 @@ public class Player : MonoBehaviour {
 										{
 											_invalidAction = true;
 											if(!audioSourceInvalid.isPlaying){ 
-												playInvalid (0.3f);										
+												playInvalid (sRef.invalidInputVolume);										
 											}
 										}
 									}
@@ -869,7 +869,7 @@ public class Player : MonoBehaviour {
 									if(test > 0f){
 										currentTile.addInfluenceReturnOverflow(test);
 										if (!audioSourceInvalid.isPlaying) {
-											audioSourceInvalid.volume = 0.3f;	//?
+											audioSourceInvalid.volume = sRef.invalidInputVolume;	//?
 											//audioSourceInvalid.Play ();
 											//Invoke("playInvalid", 1.0f);
 										}
