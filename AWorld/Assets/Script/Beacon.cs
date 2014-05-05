@@ -961,9 +961,11 @@ public class Beacon : MonoBehaviour {
 		ClearJiggle ();
 		UpdateInfluencePatterns();
 
+
 		
 		rotatingTargetVol = 0.0f;
 		audioSourceActionCompleted.PlayOneShot (beaconRotated, 1.0f);
+
 		if(percRotateComplete >= 100f){
 			//audioLerp(audioSourceBeacon, 0.01f, lerpRate);
 			//audio.PlayOneShot(beaconRotated, 1.0f);	
@@ -1252,6 +1254,7 @@ public class Beacon : MonoBehaviour {
 		}
 	}
 
+
 	//code for arrowShooting
 
 
@@ -1294,4 +1297,6 @@ public class Beacon : MonoBehaviour {
 
 		//	Vector3 dir = arrowPos - tilePos;
 		//	arrow.Translate(dir * Time.deltaTime);
+
 }
+
