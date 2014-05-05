@@ -169,12 +169,12 @@ public class Beacon : MonoBehaviour {
 									BaseTile Bt =  tile.GetComponent<BaseTile>();
 									if(Bt.controllingTeam == null){
 										Bt.startInfluence(influenceThisFrame, controllingTeam);
-										Bt.jigglingFromBeacon = true;
+										Bt.tiltingFromBeacon = true;
 										influenceThisFrame = 0;  //Assume a null controlled Tile will eat all influence.
 										//Debug.Log("influencing Null tile");
 									}
 									else if(Bt.controllingTeam.teamNumber != controllingTeam.teamNumber){
-										Bt.jigglingFromBeacon = true;
+										Bt.tiltingFromBeacon = true;
 										influenceThisFrame = Bt.subTractInfluence(influenceThisFrame * p.coefInfluenceFraction, controllingTeam);
 										//Debug.Log("Removing other influence");
 										if(influenceThisFrame > 0){
@@ -183,12 +183,12 @@ public class Beacon : MonoBehaviour {
 										}
 									}
 									else if(Bt.controllingTeam.teamNumber == controllingTeam.teamNumber && Bt.percControlled < 100f){
-										Bt.jigglingFromBeacon = true;
+										Bt.tiltingFromBeacon = true;
 										influenceThisFrame = Bt.addInfluenceReturnOverflow(influenceThisFrame * p.coefInfluenceFraction);
 										//Debug.Log ("Adding my influence");
 									}
 									else if (Bt.controllingTeam.teamNumber == controllingTeam.teamNumber && Bt.percControlled >= 100f) {
-										Bt.jigglingFromBeacon = false;
+										Bt.tiltingFromBeacon = false;
 									}
 			//						|| Bt.percControlled < 100f
 									_lastTileInfluenced = Bt.gameObject;
@@ -1005,7 +1005,7 @@ public class Beacon : MonoBehaviour {
 								}
 								if(tile != null && tile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
 									BaseTile Bt =  tile.GetComponent<BaseTile>();
-									Bt.jigglingFromBeacon = false;
+									Bt.tiltingFromBeacon = false;
 								}								
 							}
 						}
@@ -1268,7 +1268,7 @@ public class Beacon : MonoBehaviour {
 		startTime = Time.time;
 		journeyLength = Vector3.Distance(arrowStartPos, tilePos);
 		newShot = false;
-		Debug.Log ("I happen");
+//		Debug.Log ("I happen");
 	//	destPos = Vector2(tilePos.x, tilePos.y);
 
 		arrow.renderer.material.color = controllingTeam.beaconColor;

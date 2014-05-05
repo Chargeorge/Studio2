@@ -71,8 +71,8 @@ public class BaseTile : MonoBehaviour {
 	private BaseTile _East;
 	private BaseTile _West;
 	
-	public bool jigglingFromPlayer;
-	public bool jigglingFromBeacon;
+	public bool tiltingFromPlayer;
+	public bool tiltingFromBeacon;
 	private float _jiggleRange = 0.05f;  //Max distance from center of position the tile will jiggle
 	
 	private float _maxTiltAngle = 10f;
@@ -387,7 +387,7 @@ public class BaseTile : MonoBehaviour {
 		
 		if (!Pause.paused) {
 			float tiltZ = 0;
-			if (jigglingFromPlayer || jigglingFromBeacon) {
+			if (tiltingFromPlayer || tiltingFromBeacon) {
 		//			Vector3 positionOffset = new Vector3 (UnityEngine.Random.Range (-1 * _jiggleRange, _jiggleRange), UnityEngine.Random.Range (-1 * _jiggleRange, _jiggleRange), 0);
 		//			jigglePos = transform.position + positionOffset;
 				tiltTimer += Time.deltaTime;

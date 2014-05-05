@@ -3,8 +3,14 @@ using System.Collections.Generic;
 using System.Collections;
 
 public class Home : MonoBehaviour {
+
 	private TeamInfo _team;
 	private bool finalChitLaunched = false;
+	private bool _jiggling;
+	private float _jiggleRange;			//Max distance from center of grid the player will jiggle
+	private float endJiggleTime;
+	private Vector3 _homePosition;
+	
 	public TeamInfo team{
 		get{
 			return _team;
@@ -24,7 +30,7 @@ public class Home : MonoBehaviour {
 	}
 	// Use this for initialization
 	void Start () {
-		
+		_homePosition = transform.position;
 	}
 	
 	// Update is called once per frame
@@ -49,6 +55,16 @@ public class Home : MonoBehaviour {
 			}
 		}
 		
+		if (!Pause.paused) {
+			if (Time.time < endJiggleTime) {
+				Vector3 _positionOffset = new Vector3 (Random.Range (-1 * _jiggleRange, _jiggleRange), Random.Range (-1 * _jiggleRange, _jiggleRange), 0);
+				Vector3 jigglePos = _homePosition + _positionOffset;
+				transform.position = new Vector3 (jigglePos.x, jigglePos.y, transform.position.z);
+			}
+			else {
+				transform.position = _homePosition;
+			}
+		}
 	}
 	
 	public List<AStarholder> checkNetwork(){
@@ -56,6 +72,12 @@ public class Home : MonoBehaviour {
 		List<AStarholder> As = 	BaseTile.aStarSearch(HomeTile.GetComponent<BaseTile>(),HomeTile.owningTeam.goGetHomeTile().GetComponent<BaseTile>(),int.MaxValue, BaseTile.getLocalSameTeamTiles, HomeTile.owningTeam);
 		As.RemoveAt(0);
 		return As;
-	
+
 	}
+	
+	public void Jiggle (float duration, float range) {
+		_jiggling = true;
+		_jiggleRange = range;
+		endJiggleTime = Time.time + duration;
+	}	
 }

@@ -85,12 +85,16 @@ public class ScoreBit : MonoBehaviour {
 						
 						}
 					}
-				
+					if (targets.Count == 1) {
+						//Moving to final target
+						transform.renderer.material.color = team.teamColor;
+						if (team.teamNumber == 1) GameObject.Find ("GameManager").GetComponent<GameManager>().home1.GetComponent<Home>().Jiggle (0.1f, 0.05f);
+						else GameObject.Find ("GameManager").GetComponent<GameManager>().home2.GetComponent<Home>().Jiggle (0.1f, 0.05f);
+					}
+	
 				transform.position = NewPos3;
 				
-			}
-	
-	
+			}	
 	
 			if (finalTarget != null && closeEnoughToTarget (transform.position, finalTarget.transform.position, sRef.closeEnoughDistanceScoreBit)) {
 	//			Debug.Log ("Collision detected");
