@@ -65,6 +65,11 @@ public class ScoreBit : MonoBehaviour {
 		
 		if (!Pause.paused) {	
 		
+			if (bigBit) { //It's not loading in Start correctly sometimes, so just setting it every update... not optimized but should be okay
+				speed = 0.05f;
+				rotateSpeed = 100.0f;
+			}
+		
 			transform.RotateAround (transform.position, Vector3.forward, rotateSpeed * Time.deltaTime);
 			
 			//	transform.RotateAround (transform.position, Vector3.forward, 0.2f * Time.deltaTime);
