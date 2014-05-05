@@ -54,27 +54,31 @@ public class DynamicMusic : MonoBehaviour {
 		scorePlayer2 = _s2 / sRef.valPointsToWin;
 
 //		Debug.Log("player1 score :"+scorePlayer1);
+		if(scorePlayer1 < 1.0f || scorePlayer2 < 1.0f){
+			if(scorePlayer1 > .66f || scorePlayer2 > .66f){ //first layer is when one player gets closer to score
+				audioLerp(layer1Lo, layerVolume, lerpRate);
+			}
 
-		if(scorePlayer1 > .66f || scorePlayer2 > .66f){ //first layer is when one player gets closer to score
-			audioLerp(layer1Lo, layerVolume, lerpRate);
+			if(scorePlayer1 > .8f || scorePlayer2 > .8f){ //when one player is almost there
+				audioLerp(layer1Lo, 0.0f, lerpRateFast);
+				audioLerp(layer2LoMid, layerVolume, lerpRate);
+			}
+
+			if(scorePlayer1 > .9f || scorePlayer2 > .9f){ //this is when two players are really tied
+				audioLerp(layer1Lo, 0.0f, lerpRateFast); //turn off the first layer
+				audioLerp(layer2LoMid, 0.0f, lerpRateFast); //turn off the second layer
+				audioLerp(layer3MidHi, layerVolumeClimax, lerpRateFast);
+				audioLerp(soundtrack, layerVolumeClimax, lerpRateFast);
+			}
 		}
 
-		if(scorePlayer1 > .8f || scorePlayer2 > .8f){ //when one player is almost there
-			audioLerp(layer1Lo, 0.0f, lerpRateFast);
-			audioLerp(layer2LoMid, layerVolume, lerpRate);
-		}
-
-		if(scorePlayer1 > .9f || scorePlayer2 > .9f){ //this is when two players are really tied
-			audioLerp(layer1Lo, 0.0f, lerpRateFast); //turn off the first layer
-			audioLerp(layer2LoMid, 0.0f, lerpRateFast); //turn off the second layer
-			audioLerp(layer3MidHi, layerVolumeClimax, lerpRateFast);
-			audioLerp(soundtrack, layerVolumeClimax, lerpRateFast);
-		}
-
-		if(scorePlayer1 == 1 || scorePlayer2 == 2){
+		if(scorePlayer1 > 1 || scorePlayer2 > 1){
 			audioLerp(layer1Lo, 0.0f, lerpRateFast);
 			audioLerp(layer2LoMid, 0.0f, lerpRateFast);
 			audioLerp(layer3MidHi, 0.0f, lerpRateFast);
+			layer1Lo.Stop();
+			layer2LoMid.Stop();
+			layer3MidHi.Stop();
 		}
 	
 	}

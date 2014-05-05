@@ -1279,16 +1279,24 @@ public class Beacon : MonoBehaviour {
 //		Vector3 tilePos = lastTileInfluenced.transform.position;
 	//	Vector3 arrowPos = this.transform.FindChild("Arros").position;
 
-		float distCovered = (Time.time - startTime) * speed;
-		float fracJourney = distCovered / journeyLength;
+	//	float distCovered = (Time.time - startTime) * speed;
+	//	float fracJourney = distCovered / journeyLength;
 		//Debug.Log(fracJourney);
-		arrowPos = Vector3.Lerp(arrowStartPos, tilePos, fracJourney);
+		arrowPos = Vector3.Lerp(arrow.position, tilePos, 0.05f);
 		arrowPos.z = -1f;
 		arrow.position = arrowPos;
-
-		if (fracJourney > 1f){
-				newShot = true;
+		
+		float distance = Vector2.Distance (new Vector2 (arrow.position.x, arrow.position.y), new Vector2 (tilePos.x, tilePos.y));
+		if (distance < 0.5f) { 
+			arrow.renderer.enabled = false;
 		}
+		
+		if (distance < 0.01f) {
+			newShot = true;
+		}
+	//	if (fracJourney > 1f){
+	//			newShot = true;
+	//	}
 	}
 
 //		if(oldLastTile != lastTileInfluenced){

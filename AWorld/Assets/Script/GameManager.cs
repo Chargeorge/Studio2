@@ -61,11 +61,13 @@ public class GameManager : MonoBehaviour {
 	public GameObject teamBar2;
 	
 	public List<GameObject> ReadyUps;
+
 	public Texture[] tutorials;
 	public int tutorialIndex = 0;
 	private GameObject qudTutorial;
 
 	private float tutorialPerc = 0;
+
 
 	// Use this for initializatio
 	void Start () {
@@ -475,9 +477,7 @@ public class GameManager : MonoBehaviour {
 			foreach (GameObject o in players) {
 			 o.GetComponentInChildren<Player>().RevealTiles (); 
 			 }
-
-
-
+						
 			setup = false;
 			
 			if(sRef.tutorial){

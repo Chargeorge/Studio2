@@ -83,7 +83,9 @@ public class Settings : MonoBehaviour {
 	public float scoreBitExplosionStartSize;
 	public float scoreBitExplosionFinishSize;
 	public float scoreBitExplosionStartSpeed;
-	public float scoreBitExplosionFinishSpeed;	
+	public float scoreBitExplosionFinishSpeed;
+	public float arrowSpeed;
+	public float arrowInterval;
 	
 	//Player movement stuff
 	public float playerAccelRate;
@@ -99,6 +101,7 @@ public class Settings : MonoBehaviour {
 	public float closeEnoughDistanceScoreBit;
 	public int influenceRevealRange; 	 //Radius of fog reveal when tile is influenced
 	public float secTillRestartable;
+
 	
 	//Audio stuff
 	public float moveVolume;
@@ -205,6 +208,8 @@ public class Settings : MonoBehaviour {
 		scoreBitExplosionFinishSize = 0.5f;
 		scoreBitExplosionStartSpeed = 0.5f;
 		scoreBitExplosionFinishSpeed = 1.0f;
+		arrowSpeed = 5f;					//how fast beacon arrows shoot
+		arrowInterval = 2f;					//how often beacon arrows shoot
 		
 		//Player movement stuff
 		playerAccelRate = 0.38f;
