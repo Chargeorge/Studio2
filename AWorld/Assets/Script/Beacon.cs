@@ -1290,8 +1290,9 @@ public class Beacon : MonoBehaviour {
 		
 		float distance = Vector2.Distance (new Vector2 (arrow.position.x, arrow.position.y), new Vector2 (tilePos.x, tilePos.y));
 
-		if (distance < 1f && distance > 0.5f) { 
-			float alpha = distance * 255;
+		if (distance < 1f && distance > 0.5f) {
+			float percAlpha = (distance - 0.5f) / 0.5f; 
+			float alpha = percAlpha * 255;
 			Color32 arrowAlpha = controllingTeam.beaconColor;
 			arrowAlpha.a = (byte)alpha;
 			arrow.renderer.material.color = arrowAlpha;
