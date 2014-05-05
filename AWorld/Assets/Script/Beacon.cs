@@ -29,13 +29,20 @@ public class Beacon : MonoBehaviour {
 	private GameObject _lastTileInfluenced;
 
 	public bool newShot = false;
-	public float speed = 1f;
+
+
+
 	private float startTime;
 	private float journeyLength;
 	public Vector3 arrowStartPos;
 	public Vector3 arrowPos;
 	Vector3 tilePos;
 	Vector2 destPos;
+	public bool shotDone = false;
+	public float arrowTimer;
+	public bool timerOn = false;
+	public float arrowSpeed;
+	public float arrowInterval;
 
 
 	public GameObject lastTileInfluenced {
@@ -93,6 +100,12 @@ public class Beacon : MonoBehaviour {
 		audioSourceBuilding.clip = beaconBuilding;
 		audioSourceUpgrading.clip = beaconUpgrading;
 		audioSourceRotating.clip = beaconRotating;
+
+		arrowSpeed = sRef.arrowSpeed;
+		arrowInterval = sRef.arrowInterval;
+//		arrowSpeed = 7f;
+//		arrowInterval = 3f;
+
 	}
 	
 	// Update is called once per frame
@@ -104,6 +117,23 @@ public class Beacon : MonoBehaviour {
 		 	brdY = transform.parent.gameObject.GetComponent<BaseTile>().brdYPos;
 			
 			setVisualDirection();	//Why is this happening every frame?
+
+			Debug.Log(shotDone + " shotDone");
+
+			//this is for arrowShooting
+			if (shotDone){
+				arrowTimer = Time.time;
+				transform.FindChild("ArrowShot").renderer.enabled=false;
+				shotDone = false;
+			}
+			if(timerOn){
+				if(Time.time >= arrowTimer + arrowInterval){
+					newShot = true;
+					transform.FindChild("ArrowShot").renderer.enabled=true;
+					timerOn = false;
+				}
+			}
+
 
 			if (lastTileInfluenced != null){
 				if(newShot){
@@ -1279,15 +1309,16 @@ public class Beacon : MonoBehaviour {
 //		Vector3 tilePos = lastTileInfluenced.transform.position;
 	//	Vector3 arrowPos = this.transform.FindChild("Arros").position;
 
-		float distCovered = (Time.time - startTime) * speed;
+		float distCovered = (Time.time - startTime) * arrowSpeed;
 		float fracJourney = distCovered / journeyLength;
 		//Debug.Log(fracJourney);
 		arrowPos = Vector3.Lerp(arrowStartPos, tilePos, fracJourney);
 		arrowPos.z = -1f;
 		arrow.position = arrowPos;
 
-		if (fracJourney > 1f){
-				newShot = true;
+		if (fracJourney > 1f && fracJourney < 1.2f){
+				shotDone = true;
+				timerOn = true;
 		}
 	}
 
