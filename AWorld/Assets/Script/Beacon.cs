@@ -28,7 +28,7 @@ public class Beacon : MonoBehaviour {
 	public Settings sRef;
 	private GameObject _lastTileInfluenced;
 
-	public bool newShot = false;
+	public bool newShot;
 	public float speed = 1f;
 	private float startTime;
 	private float journeyLength;
@@ -93,6 +93,8 @@ public class Beacon : MonoBehaviour {
 		audioSourceBuilding.clip = beaconBuilding;
 		audioSourceUpgrading.clip = beaconUpgrading;
 		audioSourceRotating.clip = beaconRotating;
+		
+		newShot = false;
 	}
 	
 	// Update is called once per frame
@@ -169,12 +171,12 @@ public class Beacon : MonoBehaviour {
 									BaseTile Bt =  tile.GetComponent<BaseTile>();
 									if(Bt.controllingTeam == null){
 										Bt.startInfluence(influenceThisFrame, controllingTeam);
-										Bt.jigglingFromBeacon = true;
+										Bt.tiltingFromBeacon = true;
 										influenceThisFrame = 0;  //Assume a null controlled Tile will eat all influence.
 										//Debug.Log("influencing Null tile");
 									}
 									else if(Bt.controllingTeam.teamNumber != controllingTeam.teamNumber){
-										Bt.jigglingFromBeacon = true;
+										Bt.tiltingFromBeacon = true;
 										influenceThisFrame = Bt.subTractInfluence(influenceThisFrame * p.coefInfluenceFraction, controllingTeam);
 										//Debug.Log("Removing other influence");
 										if(influenceThisFrame > 0){
@@ -183,12 +185,12 @@ public class Beacon : MonoBehaviour {
 										}
 									}
 									else if(Bt.controllingTeam.teamNumber == controllingTeam.teamNumber && Bt.percControlled < 100f){
-										Bt.jigglingFromBeacon = true;
+										Bt.tiltingFromBeacon = true;
 										influenceThisFrame = Bt.addInfluenceReturnOverflow(influenceThisFrame * p.coefInfluenceFraction);
 										//Debug.Log ("Adding my influence");
 									}
 									else if (Bt.controllingTeam.teamNumber == controllingTeam.teamNumber && Bt.percControlled >= 100f) {
-										Bt.jigglingFromBeacon = false;
+										Bt.tiltingFromBeacon = false;
 									}
 			//						|| Bt.percControlled < 100f
 									_lastTileInfluenced = Bt.gameObject;
@@ -315,13 +317,11 @@ public class Beacon : MonoBehaviour {
 	}
 	
 	public void setTeam(){
-		newShot = true;
-
 		Color32 controllingTeamColor = controllingTeam.beaconColor;	
 		Color32 platformColor = controllingTeam.tileColor;
 		//TODO: custom sprites and colors per team
 		controllingTeamColor.a = 0;
-
+		
 		if(controllingTeam.teamNumber == 1){
 			beaconBuilt = Resources.Load("SFX/Beacon_Built_Lo") as AudioClip;
 			beaconUpgraded = Resources.Load("SFX/Beacon_Upgraded_Lo_2") as AudioClip;
@@ -336,6 +336,9 @@ public class Beacon : MonoBehaviour {
 		transform.FindChild("Base").renderer.material.color = controllingTeamColor;
 		transform.FindChild("Anim").renderer.material.color = controllingTeamColor;
 		transform.FindChild("Platform").renderer.material.color = platformColor;
+		
+		shootSetup ();
+//		Invoke ("StartShooting", 0.1f);
 	}
 
 	public void setTeam(TeamInfo teamIn){
@@ -961,10 +964,10 @@ public class Beacon : MonoBehaviour {
 		ClearJiggle ();
 		UpdateInfluencePatterns();
 
-
-		
 		rotatingTargetVol = 0.0f;
-		audioSourceActionCompleted.PlayOneShot (beaconRotated, 1.0f);
+		audioSourceActionCompleted.clip = beaconRotated;
+		audioSourceActionCompleted.volume = 1.0f;
+		audioSourceActionCompleted.Play ();
 
 		if(percRotateComplete >= 100f){
 			//audioLerp(audioSourceBeacon, 0.01f, lerpRate);
@@ -1005,7 +1008,7 @@ public class Beacon : MonoBehaviour {
 								}
 								if(tile != null && tile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
 									BaseTile Bt =  tile.GetComponent<BaseTile>();
-									Bt.jigglingFromBeacon = false;
+									Bt.tiltingFromBeacon = false;
 								}								
 							}
 						}
@@ -1038,7 +1041,9 @@ public class Beacon : MonoBehaviour {
 		if(percBuildComplete >= 100f){
 			percBuildComplete = 100f;
 			buildingTargetVol = 0.0f;
-			audioSourceActionCompleted.PlayOneShot(beaconBuilt, 0.8f);
+			audioSourceActionCompleted.clip = beaconBuilt;
+			audioSourceActionCompleted.volume = 0.8f;
+			audioSourceActionCompleted.Play ();
 			
 			_currentState = BeaconState.Basic;
 			_patternList = createBasicInfluenceList(getAngleForDir(facing));
@@ -1099,7 +1104,9 @@ public class Beacon : MonoBehaviour {
 		losingUpgradeProgress = false;
 
 		upgradingTargetVol = 0.0f;
-		audioSourceActionCompleted.PlayOneShot(beaconUpgraded, 1.0f);
+		audioSourceActionCompleted.clip = beaconUpgraded;
+		audioSourceActionCompleted.volume = 1.0f;
+		audioSourceActionCompleted.Play ();
 
 		_currentState = BeaconState.Advanced;
 		_patternList = createAdvancedInfluenceList(getAngleForDir(facing));
@@ -1264,11 +1271,13 @@ public class Beacon : MonoBehaviour {
 		arrowStartPos = this.transform.FindChild("Base").position;
 		transform.FindChild("ArrowShot").renderer.enabled = true;
 		arrow.position = arrowStartPos;
-		tilePos = lastTileInfluenced.transform.position;
+		if(lastTileInfluenced != null){
+			tilePos = lastTileInfluenced.transform.position;
+		}
 		startTime = Time.time;
 		journeyLength = Vector3.Distance(arrowStartPos, tilePos);
 		newShot = false;
-		Debug.Log ("I happen");
+//		Debug.Log ("I happen");
 	//	destPos = Vector2(tilePos.x, tilePos.y);
 
 		arrow.renderer.material.color = controllingTeam.beaconColor;
@@ -1277,6 +1286,10 @@ public class Beacon : MonoBehaviour {
 	}
 	
 	public void shootArrow(){
+	
+		//Weird hack, I dunno. Fixes neutral beacons shooting first arrow to 0,0
+		if (tilePos.x == 0 && tilePos.y == 0) tilePos = lastTileInfluenced.transform.position;	
+
 		Transform arrow = this.transform.FindChild("ArrowShot");
 //		Vector3 tilePos = lastTileInfluenced.transform.position;
 	//	Vector3 arrowPos = this.transform.FindChild("Arros").position;
@@ -1290,8 +1303,9 @@ public class Beacon : MonoBehaviour {
 		
 		float distance = Vector2.Distance (new Vector2 (arrow.position.x, arrow.position.y), new Vector2 (tilePos.x, tilePos.y));
 
-		if (distance < 1f && distance > 0.5f) { 
-			float alpha = distance * 255;
+		if (distance < 1f && distance > 0.5f) {
+			float percAlpha = (distance - 0.5f) / 0.5f; 
+			float alpha = percAlpha * 255;
 			Color32 arrowAlpha = controllingTeam.beaconColor;
 			arrowAlpha.a = (byte)alpha;
 			arrow.renderer.material.color = arrowAlpha;
@@ -1315,6 +1329,10 @@ public class Beacon : MonoBehaviour {
 
 		//	Vector3 dir = arrowPos - tilePos;
 		//	arrow.Translate(dir * Time.deltaTime);
+		
+	public void StartShooting () {
+		newShot = true;
+	}
 
 }
 

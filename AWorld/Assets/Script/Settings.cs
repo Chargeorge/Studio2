@@ -132,6 +132,7 @@ public class Settings : MonoBehaviour {
 	public float bbLocalPosY;
 	public float sbMoveUp;
 	public bool useReadyUp;
+	public bool tutorial;
 	// Use this for initialization
 	void Start () {
 
@@ -252,7 +253,7 @@ public class Settings : MonoBehaviour {
 			new SizeSetting(new Vector2(28,20),new Vector2(2,10), new Vector2(26,10),10.6f,new Vector2(13.4f, 9.5f), new Vector2(-3.085168f,0), new Vector2 (29.88822f,0), 19.14f, 10f, 9.2f)};
 		
 		setPrefs();
-		useReadyUp = false;
+		useReadyUp = true;
 
 	}
 
@@ -341,6 +342,8 @@ public class Settings : MonoBehaviour {
 
 			break;
 		}
+		
+		tutorial = (PlayerPrefs.GetInt(PreferencesOptions.tutorial.ToString()) == 1) ? true : false;
 
 	}
 

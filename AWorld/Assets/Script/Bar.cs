@@ -123,7 +123,6 @@ public class Bar : MonoBehaviour {
 	}
 	
 	public void SetScoreSound (AudioClip clip) {
-		Debug.Log (audioSources.Length);
 		foreach (AudioSource a in audioSources) {
 			a.clip = clip;
 		}
@@ -134,7 +133,6 @@ public class Bar : MonoBehaviour {
 		bool foundEmptySource = false;
 		for (int i = 0; i < audioSources.Length && !foundEmptySource; i++) {
 			if (!audioSources[i].isPlaying) {
-				Debug.Log (i);
 				//audioSources[i].pitch = 1f + (Random.Range (-0.3f, 0.3f));
 				audioSources[i].Play ();
 				foundEmptySource = true;

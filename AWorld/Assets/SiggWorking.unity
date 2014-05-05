@@ -498,6 +498,10 @@ MonoBehaviour:
   teamBar1: {fileID: 0}
   teamBar2: {fileID: 0}
   ReadyUps: []
+  tutorials:
+  - {fileID: 2800000, guid: 805118802d46f406a81b86453e8126dc, type: 3}
+  - {fileID: 2800000, guid: 805118802d46f406a81b86453e8126dc, type: 3}
+  tutorialIndex: 0
 --- !u!4 &842739088
 Transform:
   m_ObjectHideFlags: 0
@@ -1443,6 +1447,7 @@ MonoBehaviour:
   bbLocalPosY: 0
   sbMoveUp: 0
   useReadyUp: 0
+  tutorial: 0
 --- !u!4 &1843163359
 Transform:
   m_ObjectHideFlags: 0
