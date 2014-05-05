@@ -75,6 +75,16 @@ public class Bar : MonoBehaviour {
 			Debug.LogWarning ("Didn't load score sounds in Bar");
 		}
 		
+		for (int i = 0; i < audioSources.Length; i++) {
+			audioSources[i].volume = 0.5f;
+		}
+		
+		audioSources[1].pitch = 1f;
+		audioSources[2].pitch = 0.8f;
+		audioSources[3].pitch = 1.2f;
+		audioSources[4].pitch = 0.6f;
+		audioSources[5].pitch = 1.4f;
+		
 	}
 	
 	// Update is called once per frame
@@ -126,7 +136,7 @@ public class Bar : MonoBehaviour {
 		for (int i = 0; i < audioSources.Length && !foundEmptySource; i++) {
 			if (!audioSources[i].isPlaying) {
 				Debug.Log (i);
-				audioSources[i].pitch = 1f + (Random.Range (-0.3f, 0.3f));
+				//audioSources[i].pitch = 1f + (Random.Range (-0.3f, 0.3f));
 				audioSources[i].Play ();
 				foundEmptySource = true;
 			}	
