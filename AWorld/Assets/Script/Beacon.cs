@@ -1271,7 +1271,9 @@ public class Beacon : MonoBehaviour {
 		arrowStartPos = this.transform.FindChild("Base").position;
 		transform.FindChild("ArrowShot").renderer.enabled = true;
 		arrow.position = arrowStartPos;
-		tilePos = lastTileInfluenced.transform.position;
+		if(lastTileInfluenced != null){
+			tilePos = lastTileInfluenced.transform.position;
+		}
 		startTime = Time.time;
 		journeyLength = Vector3.Distance(arrowStartPos, tilePos);
 		newShot = false;
