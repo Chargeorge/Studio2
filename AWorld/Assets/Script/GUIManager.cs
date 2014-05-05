@@ -87,8 +87,14 @@ public class GUIManager : MonoBehaviour {
 				restart = true;
 				menu = false;
 			}
-			if(Input.GetButton("BuildPlayer1") && restart) Application.LoadLevel("SiggWorking");
-			if(Input.GetButton("BuildPlayer1") && menu) Application.LoadLevel("PierreMenu");
+			if(Input.GetButton("BuildPlayer1") && restart){
+				audio.Play();
+				Invoke("replay", 1.5f);
+			}
+			if(Input.GetButton("BuildPlayer1") && menu){
+				audio.Play();
+				Invoke("mainMenu", 1.5f);
+			}
 			winningTeam =gRef.vIsForVendetta.completingTeam;
 			/*GUI.BeginGroup(new Rect(Screen.width/2 - boxWidth/2, Screen.height/2 - boxHeight/2, boxWidth, boxHeight));*/
 			GUI.DrawTexture(new Rect(0,0,boxWidth,boxHeight), winningTeam.winTexture, ScaleMode.StretchToFill, true, 1.0f);
@@ -113,8 +119,14 @@ public class GUIManager : MonoBehaviour {
 				restart = true;
 				menu = false;
 			}
-			if(Input.GetButton("BuildPlayer1") && restart) Application.LoadLevel("SiggWorking");
-			if(Input.GetButton("BuildPlayer1") && menu) Application.LoadLevel("PierreMenu");
+			if(Input.GetButton("BuildPlayer1") && restart){
+				audio.Play();
+				Invoke("replay", 1.5f);
+			}
+			if(Input.GetButton("BuildPlayer1") && menu){
+				audio.Play();
+				Invoke("mainMenu", 1.5f);
+			}
 
 			winningTeam =gRef.vIsForVendetta.completingTeam;
 			/*GUI.BeginGroup(new Rect(Screen.width/2 - boxWidth/2, Screen.height/2 - boxHeight/2, boxWidth, boxHeight));*/
@@ -135,5 +147,14 @@ public class GUIManager : MonoBehaviour {
 			break;
 		}
 
+	}
+
+	public void replay(){
+		Debug.Log("Cool");
+		Application.LoadLevel("SiggWorking");
+	}
+
+	public void mainMenu(){
+		Application.LoadLevel("PierreMenu");
 	}
 }
