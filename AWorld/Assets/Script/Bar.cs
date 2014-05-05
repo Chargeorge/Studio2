@@ -67,23 +67,22 @@ public class Bar : MonoBehaviour {
 //		bar.renderer.material.color = barAlpha;
 
 		audioSources = gameObject.GetComponents<AudioSource>();
+		for(int i = 0; i < audioSources.Length; i++){
+			audioSources[i].volume = 0.5f;
 		if (team.teamNumber == 1) {
-			SetScoreSound (Resources.Load("SFX/Altar_Score_Lo") as AudioClip);
+			audioSources[i].clip = Resources.Load("SFX/Altar_Score_PentaScale_Lo_"+i+1) as AudioClip;
 		} else if(team.teamNumber == 2){
-			SetScoreSound (Resources.Load("SFX/Altar_Score_Hi") as AudioClip);
+			audioSources[i].clip = Resources.Load("SFX/Altar_PentaScale_Score_Hi_"+i+1) as AudioClip;
 		} else {
 			Debug.LogWarning ("Didn't load score sounds in Bar");
 		}
-		
-		for (int i = 0; i < audioSources.Length; i++) {
-			audioSources[i].volume = 0.5f;
 		}
 		
-		audioSources[0].pitch = 1f;
+		/*audioSources[0].pitch = 1f;
 		audioSources[1].pitch = 0.8f;
 		audioSources[2].pitch = 1.2f;
 		audioSources[3].pitch = 0.6f;
-		audioSources[4].pitch = 1.4f;
+		audioSources[4].pitch = 1.4f;*/
 		
 	}
 	
