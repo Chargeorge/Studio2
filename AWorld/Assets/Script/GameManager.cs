@@ -61,7 +61,6 @@ public class GameManager : MonoBehaviour {
 	public GameObject teamBar2;
 	
 	public List<GameObject> ReadyUps;
-	
 
 	// Use this for initializatio
 	void Start () {

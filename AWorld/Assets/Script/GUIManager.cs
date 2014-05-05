@@ -8,7 +8,18 @@ public class GUIManager : MonoBehaviour {
 	public float scoreBarW = 75;
 	Rect TeamRect1, ScoreRect1;
 
-	
+	public GUIStyle victoryStyle;
+	public GUIStyle subStyle;
+	public GUIStyle subStyleHighlight;
+	public string victoryString;
+
+	float subStyleX;
+	float subStyleY;
+	float subStyleWidth;
+	float subStyleHeight;
+
+	bool restart;
+	bool menu;
 	
 	Rect TeamRect2, ScoreRect2;
 	// Use this for initialization
@@ -16,11 +27,18 @@ public class GUIManager : MonoBehaviour {
 		sRef = Settings.SettingsInstance;
 		gRef = GameManager.GameManagerInstance;
 
+		restart = true;
+		menu = false;
 
 		TeamRect1 = new Rect((Screen.width - scoreBarW)*(0)+ 2, 0, scoreBarW, Screen.height);
 		ScoreRect1  = new Rect((Screen.width - scoreBarW)*(0)+ 2, Screen.height, scoreBarW,0);
 		TeamRect2 = new Rect((Screen.width - scoreBarW)*(1)+ 2, 0, scoreBarW, Screen.height);
 		ScoreRect2  = new Rect((Screen.width - scoreBarW)*(1)+ 2, Screen.height, scoreBarW,0);
+
+		subStyleX = (Screen.width/9);
+		subStyleY = (Screen.height/7)*6;
+		subStyleHeight = Screen.height/7;
+		subStyleWidth = Screen.width/9;
 
 	}
 	
@@ -60,18 +78,56 @@ public class GUIManager : MonoBehaviour {
 		TeamInfo winningTeam;
 		switch (gRef.currentState){
 		case GameState.gameWon:
+
+			if(Input.GetAxis("HorizontalPlayer1") > 0f&& restart){
+				menu = true;
+				restart = false;
+			}
+			if(Input.GetAxis("HorizontalPlayer1") < 0f && menu){
+				restart = true;
+				menu = false;
+			}
+			if(Input.GetButton("BuildPlayer1") && restart) Application.LoadLevel("SiggWorking");
+			if(Input.GetButton("BuildPlayer1") && menu) Application.LoadLevel("PierreMenu");
 			winningTeam =gRef.vIsForVendetta.completingTeam;
-			GUI.BeginGroup(new Rect(Screen.width/2 - boxWidth/2, Screen.height/2 - boxHeight/2, boxWidth, boxHeight));
+			/*GUI.BeginGroup(new Rect(Screen.width/2 - boxWidth/2, Screen.height/2 - boxHeight/2, boxWidth, boxHeight));*/
 			GUI.DrawTexture(new Rect(0,0,boxWidth,boxHeight), winningTeam.winTexture, ScaleMode.StretchToFill, true, 1.0f);
-			GUI.EndGroup();
+			/*GUI.EndGroup();*/
+			victoryStyle.normal.textColor = winningTeam.teamColor;
+			GUI.Label (new Rect(Screen.width/3, Screen.height/15, Screen.width/3, Screen.height/15), victoryString, victoryStyle);
+			
+			if(restart) GUI.Label (new Rect(subStyleX*2, subStyleY, subStyleWidth, subStyleHeight), "Restart", subStyleHighlight);
+			if(!restart) GUI.Label(new Rect(subStyleX*2, subStyleY, subStyleWidth, subStyleHeight), "Restart", subStyle);
+			if(menu) GUI.Label (new Rect(subStyleX*6.3f, subStyleY, subStyleWidth, subStyleHeight), "Menu", subStyleHighlight);
+			if(!menu) GUI.Label(new Rect(subStyleX*6.3f, subStyleY, subStyleWidth, subStyleHeight), "Menu", subStyle);
 
 			break;
 		
 		case GameState.gameRestartable:
+
+			if(Input.GetAxis("HorizontalPlayer1") > 0f && restart){
+				menu = true;
+				restart = false;
+			}
+			if(Input.GetAxis("HorizontalPlayer1") < 0f && menu){
+				restart = true;
+				menu = false;
+			}
+			if(Input.GetButton("BuildPlayer1") && restart) Application.LoadLevel("SiggWorking");
+			if(Input.GetButton("BuildPlayer1") && menu) Application.LoadLevel("PierreMenu");
+
 			winningTeam =gRef.vIsForVendetta.completingTeam;
-			GUI.BeginGroup(new Rect(Screen.width/2 - boxWidth/2, Screen.height/2 - boxHeight/2, boxWidth, boxHeight));
+			/*GUI.BeginGroup(new Rect(Screen.width/2 - boxWidth/2, Screen.height/2 - boxHeight/2, boxWidth, boxHeight));*/
 			GUI.DrawTexture(new Rect(0,0,boxWidth,boxHeight), winningTeam.winTexture, ScaleMode.StretchToFill, true, 1.0f);
-			GUI.EndGroup();
+			/*GUI.EndGroup();*/
+			victoryStyle.normal.textColor = winningTeam.teamColor;
+			GUI.Label (new Rect(Screen.width/3, Screen.height/15, Screen.width/3, Screen.height/15), victoryString, victoryStyle);
+			
+			if(restart) GUI.Label (new Rect(subStyleX*2, subStyleY, subStyleWidth, subStyleHeight), "Restart", subStyleHighlight);
+			if(!restart) GUI.Label(new Rect(subStyleX*2, subStyleY, subStyleWidth, subStyleHeight), "Restart", subStyle);
+			if(menu) GUI.Label (new Rect(subStyleX*6.3f, subStyleY, subStyleWidth, subStyleHeight), "Menu", subStyleHighlight);
+			if(!menu) GUI.Label(new Rect(subStyleX*6.3f, subStyleY, subStyleWidth, subStyleHeight), "Menu", subStyle);
+
 			
 			break;
 
