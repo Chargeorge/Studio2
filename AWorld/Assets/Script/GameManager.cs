@@ -63,7 +63,9 @@ public class GameManager : MonoBehaviour {
 	public List<GameObject> ReadyUps;
 	public Texture[] tutorials;
 	public int tutorialIndex = 0;
-	
+	private GameObject qudTutorial;
+
+	private float tutorialPerc = 0;
 
 	// Use this for initializatio
 	void Start () {
@@ -86,6 +88,7 @@ public class GameManager : MonoBehaviour {
 		Camera.main.transform.position = sRef.cameraPosition;
 
 		audio.PlayOneShot(Game_Launch, 0.9f);
+		qudTutorial = GameObject.Find("Tutorial");
 		
 	}
 	/// <summary>
@@ -204,7 +207,8 @@ public class GameManager : MonoBehaviour {
 				ReadyUps.Add(Player2ReadyUp);
 				//victoryConditions.Add (new LockMajorityAltars(1) );
 				victoryConditions.Add (new ControlViaTime(1));
-				//victoryConditions.Add (new NetworkEnemyBase(1));				
+				//victoryConditions.Add (new NetworkEnemyBase(1));
+								
 				break;
 			}
 			}
@@ -218,6 +222,8 @@ public class GameManager : MonoBehaviour {
 			ReadyUps.ForEach(delegate(GameObject g){
 				g.renderer.enabled = true;
 			});
+			
+			
 			
 			//Check for any homebase islands, if so regenerate
 			//Check for fairness?  
@@ -473,14 +479,33 @@ public class GameManager : MonoBehaviour {
 
 
 			setup = false;
-			if(sRef.useReadyUp){
+			
+			if(sRef.tutorial){
+				qudTutorial.renderer.enabled = true;
+				qudTutorial.transform.position = new Vector3((sRef.boardSize.x/2)-.5f, (sRef.boardSize.y/2)-.5f, -3);
+				qudTutorial.transform.localScale = new Vector3(sRef.boardSize.x, sRef.boardSize.y, 1);
+				qudTutorial.renderer.material.mainTexture = tutorials[tutorialIndex];
+				_currentState = GameState.tutorial;
+				ReadyUps.ForEach(delegate (GameObject g) {
+					g.SetActive(false);	
+				});
+				Debug.Log ("In tutorial");
+				
+			}
+			
+			
+			else if(sRef.useReadyUp){
 				_currentState = GameState.gameNotStarted;
+				ReadyUps.ForEach(delegate (GameObject g) {
+					g.SetActive(true);	
+				});
 			}else{
 				_currentState = GameState.playing;
 				ReadyUps.ForEach(delegate (GameObject g) {
 					g.SetActive(false);	
 				});
 			}
+			
 		}
 		GameObject hoveredTile = getHoveredTile();
 		if(hoveredTile!= null){
@@ -528,7 +553,30 @@ public class GameManager : MonoBehaviour {
 			
 			
 		}
-
+		Debug.Log(_currentState);
+		if(_currentState == GameState.tutorial){
+			Debug.Log ("Getting Here");
+			if(Input.GetButtonDown("BuildAllPlayers") ){
+				
+				
+				tutorialIndex++;
+				Debug.Log ("Button hit");
+				if(tutorialIndex>= tutorials.Length){
+					qudTutorial.SetActive(false);
+					
+					if(sRef.useReadyUp){_currentState = GameState.gameNotStarted;
+						ReadyUps.ForEach(delegate (GameObject g) {
+							g.SetActive(true);	
+						});
+					}
+					else{
+						_currentState = GameState.playing;
+					}
+				}
+			}
+			
+		}
+		
 		if(_currentState == GameState.playing){
 			_victoryString = "";
 			foreach (VictoryCondition v in victoryConditions){

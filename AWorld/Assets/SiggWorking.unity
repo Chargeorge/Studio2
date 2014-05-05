@@ -74,6 +74,77 @@ NavMeshSettings:
     widthInaccuracy: 16.666666
     heightInaccuracy: 10
   m_NavMesh: {fileID: 0}
+--- !u!1 &21573740
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 21573744}
+  - 33: {fileID: 21573743}
+  - 64: {fileID: 21573742}
+  - 23: {fileID: 21573741}
+  m_Layer: 0
+  m_Name: Tutorial
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!23 &21573741
+Renderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 21573740}
+  m_Enabled: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
+--- !u!64 &21573742
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 21573740}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_SmoothSphereCollisions: 0
+  m_Convex: 0
+  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!33 &21573743
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 21573740}
+  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &21573744
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 21573740}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 16.939415, y: 4.65578651, z: 7.57425213}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 439934894}
+  m_Father: {fileID: 0}
 --- !u!1 &157903927
 GameObject:
   m_ObjectHideFlags: 0
@@ -128,6 +199,76 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scoreBarH: 30
   scoreBarW: 75
+--- !u!1 &439934890
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 439934894}
+  - 33: {fileID: 439934893}
+  - 64: {fileID: 439934892}
+  - 23: {fileID: 439934891}
+  m_Layer: 0
+  m_Name: TutorialClock
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!23 &439934891
+Renderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 439934890}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 2100000, guid: e3e48e7e027d7684693693937c7637b1, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
+--- !u!64 &439934892
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 439934890}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_SmoothSphereCollisions: 0
+  m_Convex: 0
+  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!33 &439934893
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 439934890}
+  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &439934894
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 439934890}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 21573744}
 --- !u!1 &478547186
 GameObject:
   m_ObjectHideFlags: 0
@@ -260,6 +401,10 @@ MonoBehaviour:
   beacons: []
   teamBar1: {fileID: 0}
   teamBar2: {fileID: 0}
+  ReadyUps: []
+  tutorials:
+  - {fileID: 2800000, guid: 805118802d46f406a81b86453e8126dc, type: 3}
+  tutorialIndex: 0
 --- !u!4 &842739088
 Transform:
   m_ObjectHideFlags: 0
@@ -1079,9 +1224,6 @@ MonoBehaviour:
   layer2LoMid: {fileID: 1704563069}
   layer3MidHi: {fileID: 1704563068}
   layer4Hi: {fileID: 1704563067}
-  threshold1: .600000024
-  threshold2: .800000012
-  threshold3: .899999976
   layerVolume: .5
   layerVolumeClimax: .899999976
   lerpRate: .100000001
@@ -1141,11 +1283,15 @@ MonoBehaviour:
   valScorePerAltar: 0
   valTimePerScoreShot: 0
   valScoreBaseCapture: 0
+  scoreBitIntervalSlow: 0
+  scoreBitIntervalNormal: 0
+  scoreBitIntervalFast: 0
   beaconBasicRange: 4
   beaconAdvancedRange: 8
   beaconNoBuildRange: 2
   selfDestructDelay: 0
   loseUpgradeProgressDelay: 0
+  loseRotateProgressDelay: 0
   neutralBeaconCount: 12
   numAltars: 0
   numScoringAltars: 0
@@ -1201,6 +1347,8 @@ MonoBehaviour:
   scaleY: 0
   bbLocalPosY: 0
   sbMoveUp: 0
+  useReadyUp: 0
+  tutorial: 0
 --- !u!4 &1843163359
 Transform:
   m_ObjectHideFlags: 0

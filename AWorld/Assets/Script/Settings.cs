@@ -129,6 +129,7 @@ public class Settings : MonoBehaviour {
 	public float bbLocalPosY;
 	public float sbMoveUp;
 	public bool useReadyUp;
+	public bool tutorial;
 	// Use this for initialization
 	void Start () {
 
@@ -336,6 +337,8 @@ public class Settings : MonoBehaviour {
 
 			break;
 		}
+		
+		tutorial = (PlayerPrefs.GetInt(PreferencesOptions.tutorial.ToString()) == 1) ? true : false;
 
 	}
 
