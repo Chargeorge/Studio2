@@ -42,6 +42,7 @@ public class Beacon : MonoBehaviour {
 	public float arrowTimer;
 	public bool timerOn = false;
 	public float arrowSpeed;
+	public float slowerArrowSpeed;
 	public float arrowInterval;
 
 
@@ -103,6 +104,7 @@ public class Beacon : MonoBehaviour {
 
 		arrowSpeed = sRef.arrowSpeed;
 		arrowInterval = sRef.arrowInterval;
+		slowerArrowSpeed = arrowSpeed * 0.66f;
 //		arrowSpeed = 7f;
 //		arrowInterval = 3f;
 
@@ -376,7 +378,7 @@ public class Beacon : MonoBehaviour {
 			Color32 platformColor = controllingTeam.tileColor;
 		//TODO: custom sprites and colors per team
 		controllingTeamColor.a = (byte)(transform.FindChild("Arrow").renderer.material.color.a * 255);
-		controllingTeamColor.a = (byte)(transform.FindChild("ArrowShot").renderer.material.color.a * 255);
+		controllingTeamColor.a = (byte)(transform.FindChild("ArrowShot").renderer.material.color.a * 190);
 		controllingTeamColor.a = (byte)(transform.FindChild("Base").renderer.material.color.a * 255);
 			platformColor.a = (byte)(transform.FindChild("Platform").renderer.material.color.a * 255);
 
@@ -1298,7 +1300,8 @@ public class Beacon : MonoBehaviour {
 		startTime = Time.time;
 		journeyLength = Vector3.Distance(arrowStartPos, tilePos);
 		newShot = false;
-		Debug.Log ("I happen");
+		//Debug.Log ("I happen");
+	//	arrowSpeed = sRef.arrowSpeed;
 	//	destPos = Vector2(tilePos.x, tilePos.y);
 		
 //		GameObject oldLastTile = lastTileInfluenced;
@@ -1315,6 +1318,14 @@ public class Beacon : MonoBehaviour {
 		arrowPos = Vector3.Lerp(arrowStartPos, tilePos, fracJourney);
 		arrowPos.z = -1f;
 		arrow.position = arrowPos;
+
+//		if(fracJourney > 0.7f && fracJourney < 1f){
+//			arrowSpeed = slowerArrowSpeed;
+//		}
+
+		if(fracJourney > 0.85f && fracJourney < 1f){
+			arrow.renderer.enabled = false;
+		}
 
 		if (fracJourney > 1f && fracJourney < 1.2f){
 				shotDone = true;
