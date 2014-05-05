@@ -29,21 +29,13 @@ public class Beacon : MonoBehaviour {
 	private GameObject _lastTileInfluenced;
 
 	public bool newShot = false;
-
-
-
+	public float speed = 1f;
 	private float startTime;
 	private float journeyLength;
 	public Vector3 arrowStartPos;
 	public Vector3 arrowPos;
 	Vector3 tilePos;
 	Vector2 destPos;
-	public bool shotDone = false;
-	public float arrowTimer;
-	public bool timerOn = false;
-	public float arrowSpeed;
-	public float slowerArrowSpeed;
-	public float arrowInterval;
 
 
 	public GameObject lastTileInfluenced {
@@ -101,13 +93,6 @@ public class Beacon : MonoBehaviour {
 		audioSourceBuilding.clip = beaconBuilding;
 		audioSourceUpgrading.clip = beaconUpgrading;
 		audioSourceRotating.clip = beaconRotating;
-
-		arrowSpeed = sRef.arrowSpeed;
-		arrowInterval = sRef.arrowInterval;
-		slowerArrowSpeed = arrowSpeed * 0.66f;
-//		arrowSpeed = 7f;
-//		arrowInterval = 3f;
-
 	}
 	
 	// Update is called once per frame
@@ -119,23 +104,6 @@ public class Beacon : MonoBehaviour {
 		 	brdY = transform.parent.gameObject.GetComponent<BaseTile>().brdYPos;
 			
 			setVisualDirection();	//Why is this happening every frame?
-
-			Debug.Log(shotDone + " shotDone");
-
-			//this is for arrowShooting
-			if (shotDone){
-				arrowTimer = Time.time;
-				transform.FindChild("ArrowShot").renderer.enabled=false;
-				shotDone = false;
-			}
-			if(timerOn){
-				if(Time.time >= arrowTimer + arrowInterval){
-					newShot = true;
-					transform.FindChild("ArrowShot").renderer.enabled=true;
-					timerOn = false;
-				}
-			}
-
 
 			if (lastTileInfluenced != null){
 				if(newShot){
@@ -378,7 +346,7 @@ public class Beacon : MonoBehaviour {
 			Color32 platformColor = controllingTeam.tileColor;
 		//TODO: custom sprites and colors per team
 		controllingTeamColor.a = (byte)(transform.FindChild("Arrow").renderer.material.color.a * 255);
-		controllingTeamColor.a = (byte)(transform.FindChild("ArrowShot").renderer.material.color.a * 190);
+		controllingTeamColor.a = (byte)(transform.FindChild("ArrowShot").renderer.material.color.a * 255);
 		controllingTeamColor.a = (byte)(transform.FindChild("Base").renderer.material.color.a * 255);
 			platformColor.a = (byte)(transform.FindChild("Platform").renderer.material.color.a * 255);
 
@@ -1300,8 +1268,7 @@ public class Beacon : MonoBehaviour {
 		startTime = Time.time;
 		journeyLength = Vector3.Distance(arrowStartPos, tilePos);
 		newShot = false;
-		//Debug.Log ("I happen");
-	//	arrowSpeed = sRef.arrowSpeed;
+		Debug.Log ("I happen");
 	//	destPos = Vector2(tilePos.x, tilePos.y);
 		
 //		GameObject oldLastTile = lastTileInfluenced;
@@ -1312,25 +1279,24 @@ public class Beacon : MonoBehaviour {
 //		Vector3 tilePos = lastTileInfluenced.transform.position;
 	//	Vector3 arrowPos = this.transform.FindChild("Arros").position;
 
-		float distCovered = (Time.time - startTime) * arrowSpeed;
-		float fracJourney = distCovered / journeyLength;
+	//	float distCovered = (Time.time - startTime) * speed;
+	//	float fracJourney = distCovered / journeyLength;
 		//Debug.Log(fracJourney);
-		arrowPos = Vector3.Lerp(arrowStartPos, tilePos, fracJourney);
+		arrowPos = Vector3.Lerp(arrow.position, tilePos, 0.05f);
 		arrowPos.z = -1f;
 		arrow.position = arrowPos;
-
-//		if(fracJourney > 0.7f && fracJourney < 1f){
-//			arrowSpeed = slowerArrowSpeed;
-//		}
-
-		if(fracJourney > 0.85f && fracJourney < 1f){
+		
+		float distance = Vector2.Distance (new Vector2 (arrow.position.x, arrow.position.y), new Vector2 (tilePos.x, tilePos.y));
+		if (distance < 0.5f) { 
 			arrow.renderer.enabled = false;
 		}
-
-		if (fracJourney > 1f && fracJourney < 1.2f){
-				shotDone = true;
-				timerOn = true;
+		
+		if (distance < 0.01f) {
+			newShot = true;
 		}
+	//	if (fracJourney > 1f){
+	//			newShot = true;
+	//	}
 	}
 
 //		if(oldLastTile != lastTileInfluenced){
