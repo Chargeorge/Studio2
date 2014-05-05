@@ -499,7 +499,7 @@ MonoBehaviour:
   teamBar2: {fileID: 0}
   ReadyUps: []
   tutorials:
-  - {fileID: 2800000, guid: 805118802d46f406a81b86453e8126dc, type: 3}
+  - {fileID: 2800000, guid: 078b2c5479956524baca14a59d712c7c, type: 3}
   - {fileID: 2800000, guid: 805118802d46f406a81b86453e8126dc, type: 3}
   tutorialIndex: 0
 --- !u!4 &842739088
