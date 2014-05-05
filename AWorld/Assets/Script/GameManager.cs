@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour {
 	public GameObject home2;
 	private GameObject prfbBeacon;
 	private GameObject prfbStartUp;
+	private GameObject prfbTutorial;
 	public VictoryCondition vIsForVendetta;	
 	public int currentMarquee;
 
@@ -77,6 +78,7 @@ public class GameManager : MonoBehaviour {
 		ReadyUps = new List<GameObject>();
 		sRef = GameObject.Find ("Settings").GetComponent<Settings>();
 
+		prfbTutorial = (GameObject)Resources.Load("Prefabs/Tutorial");
 		beacons = new List<GameObject>();
 		prfbPlayer = (GameObject)Resources.Load("Prefabs/Player");
 		prfbAltar = (GameObject)Resources.Load("Prefabs/Altar");
