@@ -79,11 +79,11 @@ public class Bar : MonoBehaviour {
 			audioSources[i].volume = 0.5f;
 		}
 		
-		audioSources[1].pitch = 1f;
-		audioSources[2].pitch = 0.8f;
-		audioSources[3].pitch = 1.2f;
-		audioSources[4].pitch = 0.6f;
-		audioSources[5].pitch = 1.4f;
+		audioSources[0].pitch = 1f;
+		audioSources[1].pitch = 0.8f;
+		audioSources[2].pitch = 1.2f;
+		audioSources[3].pitch = 0.6f;
+		audioSources[4].pitch = 1.4f;
 		
 	}
 	

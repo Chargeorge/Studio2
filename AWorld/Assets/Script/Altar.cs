@@ -114,11 +114,6 @@ public class Altar : MonoBehaviour {
 			
 			if(_currentControllingTeam != null){
 				//check to see if I'm networked
-				if(currentControllingTeam.teamNumber == 1){
-					Praying = Resources.Load("SFX/Altar_Score_Lo") as AudioClip;
-				} else if(currentControllingTeam.teamNumber == 2){
-					Praying = Resources.Load("SFX/Altar_Score_Hi") as AudioClip;
-				}
 				networked= checkNetwork();
 				if(networked){
 					if(altarType !=  AltarType.MagicalMysteryScore){
