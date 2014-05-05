@@ -316,12 +316,11 @@ public class Beacon : MonoBehaviour {
 	
 	public void setTeam(){
 		newShot = true;
-
 		Color32 controllingTeamColor = controllingTeam.beaconColor;	
 		Color32 platformColor = controllingTeam.tileColor;
 		//TODO: custom sprites and colors per team
 		controllingTeamColor.a = 0;
-
+		
 		if(controllingTeam.teamNumber == 1){
 			beaconBuilt = Resources.Load("SFX/Beacon_Built_Lo") as AudioClip;
 			beaconUpgraded = Resources.Load("SFX/Beacon_Upgraded_Lo_2") as AudioClip;
@@ -961,10 +960,10 @@ public class Beacon : MonoBehaviour {
 		ClearJiggle ();
 		UpdateInfluencePatterns();
 
-
-		
 		rotatingTargetVol = 0.0f;
-		audioSourceActionCompleted.PlayOneShot (beaconRotated, 1.0f);
+		audioSourceActionCompleted.clip = beaconRotated;
+		audioSourceActionCompleted.volume = 1.0f;
+		audioSourceActionCompleted.Play ();
 
 		if(percRotateComplete >= 100f){
 			//audioLerp(audioSourceBeacon, 0.01f, lerpRate);
@@ -1038,7 +1037,9 @@ public class Beacon : MonoBehaviour {
 		if(percBuildComplete >= 100f){
 			percBuildComplete = 100f;
 			buildingTargetVol = 0.0f;
-			audioSourceActionCompleted.PlayOneShot(beaconBuilt, 0.8f);
+			audioSourceActionCompleted.clip = beaconBuilt;
+			audioSourceActionCompleted.volume = 0.8f;
+			audioSourceActionCompleted.Play ();
 			
 			_currentState = BeaconState.Basic;
 			_patternList = createBasicInfluenceList(getAngleForDir(facing));
@@ -1099,7 +1100,9 @@ public class Beacon : MonoBehaviour {
 		losingUpgradeProgress = false;
 
 		upgradingTargetVol = 0.0f;
-		audioSourceActionCompleted.PlayOneShot(beaconUpgraded, 1.0f);
+		audioSourceActionCompleted.clip = beaconUpgraded;
+		audioSourceActionCompleted.volume = 1.0f;
+		audioSourceActionCompleted.Play ();
 
 		_currentState = BeaconState.Advanced;
 		_patternList = createAdvancedInfluenceList(getAngleForDir(facing));
