@@ -68,22 +68,23 @@ public class Bar : MonoBehaviour {
 
 		audioSources = gameObject.GetComponents<AudioSource>();
 		for(int i = 0; i < audioSources.Length; i++){
-			audioSources[i].volume = 0.5f;
-		}
+			audioSources[i].volume = 0.4f;
 		if (team.teamNumber == 1) {
-			audioSources[0].clip = Resources.Load("SFX/Altar_Score_PentaScale_Lo_1") as AudioClip;
-			audioSources[1].clip = Resources.Load("SFX/Altar_Score_PentaScale_Lo_2") as AudioClip;
+			audioSources[i].clip = Resources.Load("SFX/Altar_Score_Perc_Lo") as AudioClip;
+			/*audioSources[1].clip = Resources.Load("SFX/Altar_Score_PentaScale_Lo_2") as AudioClip;
 			audioSources[2].clip = Resources.Load("SFX/Altar_Score_PentaScale_Lo_3") as AudioClip;
 			audioSources[3].clip = Resources.Load("SFX/Altar_Score_PentaScale_Lo_4") as AudioClip;
-			audioSources[4].clip = Resources.Load("SFX/Altar_Score_PentaScale_Lo_5") as AudioClip;
+			audioSources[4].clip = Resources.Load("SFX/Altar_Score_PentaScale_Lo_5") as AudioClip;*/
 		} else if(team.teamNumber == 2){
-			audioSources[0].clip = Resources.Load("SFX/Altar_Score_PentaScale_Hi_1") as AudioClip;
-			audioSources[1].clip = Resources.Load("SFX/Altar_Score_PentaScale_Hi_2") as AudioClip;
+			audioSources[i].clip = Resources.Load("SFX/Altar_Score_Perc_Hi") as AudioClip;
+			/*audioSources[1].clip = Resources.Load("SFX/Altar_Score_PentaScale_Hi_2") as AudioClip;
 			audioSources[2].clip = Resources.Load("SFX/Altar_Score_PentaScale_Hi_3") as AudioClip;
 			audioSources[3].clip = Resources.Load("SFX/Altar_Score_PentaScale_Hi_4") as AudioClip;
-			audioSources[4].clip = Resources.Load("SFX/Altar_Score_PentaScale_Hi_5") as AudioClip;
+			audioSources[4].clip = Resources.Load("SFX/Altar_Score_PentaScale_Hi_5") as AudioClip;*/
 		} else {
 			Debug.LogWarning ("Didn't load score sounds in Bar");
+		}
+
 		}
 		
 		/*audioSources[0].pitch = 1f;
@@ -141,7 +142,7 @@ public class Bar : MonoBehaviour {
 		bool foundEmptySource = false;
 		for (int i = 0; i < audioSources.Length && !foundEmptySource; i++) {
 			if (!audioSources[i].isPlaying) {
-				//audioSources[i].pitch = 1f + (Random.Range (-0.3f, 0.3f));
+				audioSources[i].pitch = 1f + (Random.Range (-0.3f, 0.3f));
 				audioSources[i].Play ();
 				foundEmptySource = true;
 			}	
