@@ -753,7 +753,7 @@ public class Player : MonoBehaviour {
 							audioSourceInfluenceStart.clip = Resources.Load("SFX/Player_DeInfluencing_2") as AudioClip;
 							if(!audioSourceInfluenceStart.isPlaying){
 								audioSourceInfluenceStart.Play();
-							Debug.Log(audioSourceInfluenceStart.clip);
+//							Debug.Log(audioSourceInfluenceStart.clip);
 							}
 						} else if(currentTile.owningTeam == null || currentTile.controllingTeam.teamNumber == teamNumber){
 							audioSourceInfluenceStart.clip = Resources.Load("SFX/Player_Influencing") as AudioClip;
@@ -790,7 +790,7 @@ public class Player : MonoBehaviour {
 									
 //									Debug.Log (averageActionProgress*100 +" " +  currentTile.percControlled);
 									if(averageActionProgress*100 > currentTile.percControlled){
-										Debug.Log("In total");
+//										Debug.Log("In total");
 										_invalidAction = true;		
 									}
 									if(Mathf.Abs(getAverageActionProgressDifference()) < .001 ){  
@@ -878,13 +878,13 @@ public class Player : MonoBehaviour {
 									
 									if(_currentState == PlayerState.influencing){
 										
-										Debug.Log (averageActionProgress*100 +" " +  currentTile.percControlled);
+//										Debug.Log (averageActionProgress*100 +" " +  currentTile.percControlled);
 									       if(averageActionProgress*100 < currentTile.percControlled){
 												Debug.Log("In total");
 													_invalidAction = true;		
 											}
 									    if(Mathf.Abs(getAverageActionProgressDifference()) < .001 ){  
-										Debug.Log(getAverageActionProgressDifference());
+//										Debug.Log(getAverageActionProgressDifference());
 										          Debug.Log("In average");
 										
 											_invalidAction = true;	
@@ -910,13 +910,13 @@ public class Player : MonoBehaviour {
 		
 								if(currentTile.percControlled == 100f) {
 		//						Debug.Log ("INLFUENCE DONE");
-									currentTile.jigglingFromPlayer = false;
+									currentTile.tiltingFromPlayer = false;
 									audioSourceInfluenceDone.volume = sRef.playerInfluenceDoneVolume;
 									audioSourceInfluenceDone.Play ();
 								}
 								
 								else { 
-									currentTile.jigglingFromPlayer = true;
+									currentTile.tiltingFromPlayer = true;
 								}
 								
 								if (x.HasValue) { 
@@ -935,7 +935,7 @@ public class Player : MonoBehaviour {
 						///TODO: add reset to tile in case of change
 							//need to reset currenttile to previousState
 							//StopSFX();
-							currentTile.jigglingFromPlayer = false;
+							currentTile.tiltingFromPlayer = false;
 							
 							_currentState = PlayerState.standing;
 						}	
