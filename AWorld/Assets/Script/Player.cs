@@ -131,7 +131,17 @@ public class Player : MonoBehaviour {
 			bool buildButtonDown = getPlayerBuild();
 			//if(x.HasValue) Debug.Log(x.Value);
 			_pulsating = false;	//Pulsate () sets this to true; if false at the end of this method, reset scale and _expanding
-	
+			
+			if (OpponentsOnTile (currentTile).Count == 0) {
+				currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = true;
+				currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().material.color = team.highlightColor;
+			}
+			
+			else {
+				currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = true;
+				currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().material.color = sRef.sharedTileColor;
+			}
+			
 			//_positionOffset = new Vector2 (0,0);	//This can't possibly be the right way to do this - Josh
 			if(gm.currentState == GameState.playing){
 				switch(currentState){
@@ -267,7 +277,7 @@ public class Player : MonoBehaviour {
 								//start building beacon				
 						if (buildButtonDown){
 							
-							List<Player> opponentsOnSameTile = OpponentsOnSameTile();
+							List<Player> opponentsOnSameTile = OpponentsOnTile (currentTile);
 							if (opponentsOnSameTile.Count != 0) {
 								foreach (Player p in opponentsOnSameTile) { 
 									if (p.IsActing ()) {
@@ -1449,10 +1459,18 @@ public class Player : MonoBehaviour {
 	}
 
 	public void doNewTile(BaseTile previousTile, BaseTile newTile){
-		previousTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
-
-		newTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = true;
-		newTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().material.color = team.highlightColor;
+		if (OpponentsOnTile (previousTile).Count == 0) {
+			previousTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
+		}
+		
+		if (OpponentsOnTile (newTile).Count == 0) {		
+			newTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = true;
+			newTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().material.color = team.highlightColor;
+		}
+		else {
+			newTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = true;
+			newTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().material.color = sRef.sharedTileColor;
+		}
 
 		//Debug.Log("In New Tile");
 	//	qudActionableGlow.renderer.material.color = (newTile.getActionable(team, this.getPlayerBuild())) ?  Color.green : Color.red;
@@ -1540,8 +1558,8 @@ public class Player : MonoBehaviour {
 		}
 	}
 	
-	public List<Player> OpponentsOnSameTile () {
-		BaseTile currentTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
+	public List<Player> OpponentsOnTile (BaseTile currentTile) {
+//		BaseTile currentTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
 		List<Player> opponentsOnSameTile = new List<Player>();
 		foreach (GameObject o in gm.players) {
 			Player p = o.transform.FindChild ("PlayerInner").GetComponent<Player>();
