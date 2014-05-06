@@ -266,6 +266,17 @@ public class Player : MonoBehaviour {
 							// if us 
 								//start building beacon				
 						if (buildButtonDown){
+							List<Player> opponentsOnSameTile = OpponentsOnSameTile();
+							if (opponentsOnSameTile != null) {
+								foreach (Player p in opponentsOnSameTile) { 
+									if (p.IsActing ()) {
+										Debug.Log ("sup");
+									}
+									else {
+										Debug.Log ("sup yo yo");
+									}
+								}
+							}
 							moveTowardCenterOfTile (currentTile);
 							//NO BEACON HERE, GOTTA DO STUFF.
 							//Check influence first
@@ -880,12 +891,12 @@ public class Player : MonoBehaviour {
 										
 //										Debug.Log (averageActionProgress*100 +" " +  currentTile.percControlled);
 									       if(averageActionProgress*100 < currentTile.percControlled){
-												Debug.Log("In total");
+//												Debug.Log("In total");
 													_invalidAction = true;		
 											}
 									    if(Mathf.Abs(getAverageActionProgressDifference()) < .001 ){  
 //										Debug.Log(getAverageActionProgressDifference());
-										          Debug.Log("In average");
+//										          Debug.Log("In average");
 										
 											_invalidAction = true;	
 										}
@@ -1520,4 +1531,23 @@ public class Player : MonoBehaviour {
 			source.volume = Mathf.Lerp (source.volume, target, rate);
 		}
 	}
+	
+	public List<Player> OpponentsOnSameTile () {
+		BaseTile currentTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
+		List<Player> opponentsOnSameTile = new List<Player>();
+		foreach (GameObject o in gm.players) {
+			Player p = o.transform.FindChild ("PlayerInner").GetComponent<Player>();
+			if (p.team.teamNumber != team.teamNumber && 
+				gm.tiles[(int) Mathf.Floor (p.transform.position.x + 0.5f), (int) Mathf.Floor (p.transform.position.y + 0.5f)].GetComponent<BaseTile>() == currentTile)
+			{ 
+				opponentsOnSameTile.Add (p);
+			}
+		}
+		return opponentsOnSameTile;
+	}
+	
+	public bool IsActing () {
+		return (currentState == PlayerState.building || currentState == PlayerState.influencing || currentState == PlayerState.rotating || 
+				currentState == PlayerState.upgrading);
+		}
 }
