@@ -49,8 +49,8 @@ public class TeamInfo
 				returnable.teamNumber = teamNumber;
 				returnable.highlightColor = new Color32 (17, 75, 141, 150);
 				returnable.scoreTexture = (Texture)Resources.Load("Sprites/ScorebgTextureblue");
-			//returnable.winTexture = (Texture)Resources.Load("Sprites/victoryBackground3");
-			returnable.winTexture = (Texture)Resources.Load("Sprites/vicBackBlue");
+			returnable.winTexture = (Texture)Resources.Load("Sprites/victoryBackground3");
+			//returnable.winTexture = (Texture)Resources.Load("Sprites/vicBackBlue");
 				break;
 			case 2:
 				returnable.teamColor = new Color32 (247, 180, 40, 255);
@@ -63,8 +63,8 @@ public class TeamInfo
 				returnable.teamNumber = teamNumber;
 				returnable.highlightColor = new Color32 (247, 180, 40, 150);
 			returnable.scoreTexture = (Texture)Resources.Load("Sprites/ScorebgTexturebyel");
-			//returnable.winTexture = (Texture)Resources.Load("Sprites/victoryBackground3");
-			returnable.winTexture = (Texture)Resources.Load("Sprites/vicBackYel");
+			returnable.winTexture = (Texture)Resources.Load("Sprites/victoryBackground3");
+			//returnable.winTexture = (Texture)Resources.Load("Sprites/vicBackYel");
 				break;
 		}
 
