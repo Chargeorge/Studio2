@@ -167,10 +167,10 @@ public class GameManager : MonoBehaviour {
 				// victoryConditions.Add (new NetworkEnemyBase(1));
 				
 				
-				GameObject Player1ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(sRef.boardSize.x/8f, sRef.boardSize.y*6/8, -3f), Quaternion.identity);
-				GameObject Player2ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(sRef.boardSize.x/8f, sRef.boardSize.y*2/8, -3f), Quaternion.identity);
-				GameObject Player3ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(sRef.boardSize.x*7f/8f,  sRef.boardSize.y*6/8, -3f), Quaternion.identity);
-				GameObject Player4ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(sRef.boardSize.x*7f/8f,sRef.boardSize.y*2/8, -3), Quaternion.identity);
+				GameObject Player1ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3((sRef.boardSize.x/8f) -.5f, sRef.boardSize.y*6/8, -3f), Quaternion.identity);
+				GameObject Player2ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3((sRef.boardSize.x/8f) -.5f, sRef.boardSize.y*2/8, -3f), Quaternion.identity);
+				GameObject Player3ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3((sRef.boardSize.x*7f/8f) -.5f,  sRef.boardSize.y*6/8, -3f), Quaternion.identity);
+				GameObject Player4ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3((sRef.boardSize.x*7f/8f) -.5f,sRef.boardSize.y*2/8, -3), Quaternion.identity);
 				
 				Player1ReadyUp.GetComponent<ReadyUp>().setPlayer(p1);	
 				Player2ReadyUp.GetComponent<ReadyUp>().setPlayer(p2);
@@ -216,8 +216,8 @@ public class GameManager : MonoBehaviour {
 				team2Home = setUpTeamHome(p2);
 				
 				//
-				GameObject Player1ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(sRef.boardSize.x/8f	, sRef.boardSize.y/2, -3), Quaternion.identity);
-				GameObject Player2ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(sRef.boardSize.x*7f/8f, sRef.boardSize.y/2, -3), Quaternion.identity);
+				GameObject Player1ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3((sRef.boardSize.x/8f) -.5f	, sRef.boardSize.y/2, -3), Quaternion.identity);
+				GameObject Player2ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3((sRef.boardSize.x*7f/8f) -.5f, sRef.boardSize.y/2, -3), Quaternion.identity);
 				
 				Camera cam = Camera.main;
 				float height = 2f * cam.orthographicSize;
