@@ -491,12 +491,12 @@ public class GameManager : MonoBehaviour {
 			if(sRef.tutorial){
 				qudTutorial1.renderer.enabled = true;
 				qudTutorial1.transform.position = new Vector3((sRef.boardSize.x/2)-.5f, (sRef.boardSize.y/2)-.5f, -3);
-				qudTutorial1.transform.localScale = new Vector3(sRef.boardSize.x, sRef.boardSize.y, 1);
+				qudTutorial1.transform.localScale = new Vector3(sRef.boardSize.x, sRef.boardSize.x*(3f/4f), 1);
 				qudTutorial1.renderer.material.mainTexture = tutorials[tutorialIndex];
 				
 				qudTutorial2.renderer.enabled = true;
 				qudTutorial2.transform.position = new Vector3((sRef.boardSize.x/2)-.5f, -20, -3);
-				qudTutorial2.transform.localScale = new Vector3(sRef.boardSize.x, sRef.boardSize.y, 1);
+				qudTutorial2.transform.localScale = new Vector3(sRef.boardSize.x, sRef.boardSize.x*(3f/4f), 1);
 				qudTutorial2.renderer.material.mainTexture = tutorials[tutorialIndex];
 				_currentState = GameState.tutorial;
 				ReadyUps.ForEach(delegate (GameObject g) {
