@@ -20,7 +20,7 @@ public class Player : MonoBehaviour {
 	private Beacon beaconInProgress;
 	private int _vision = 3;
 	private bool _invalidAction;
-
+	private int _invalidActionFrames = 0;
 	private float _jiggleRange = 0.1f;			//Max distance from center of grid the player will jiggle
 	private float _lastActionProgress;
 	
@@ -125,6 +125,12 @@ public class Player : MonoBehaviour {
 	// Update is called once per frame
 	void Update (){ 
 		if(gm.currentState == GameState.playing){
+			if(_invalidAction) {
+				_invalidActionFrames++;
+			}
+			else{
+				_invalidActionFrames = 0;
+			}
 			_invalidAction = false;
 			previousActionProgress = currentActionProgress;	
 			DirectionEnum? x = getStickDirection();
@@ -826,11 +832,11 @@ public class Player : MonoBehaviour {
 									float averageActionProgress = getAverageActionProgress();
 									
 //									Debug.Log (averageActionProgress*100 +" " +  currentTile.percControlled);
-									if(averageActionProgress*100 > currentTile.percControlled  && isInfluenceNotFrameOne()){
+									if(averageActionProgress*100 > currentTile.percControlled  ){
 										
 										_invalidAction = true;		
 									}
-									if(Mathf.Abs(getAverageActionProgressDifference()) < .001 && isInfluenceNotFrameOne() ){  
+									if(Mathf.Abs(getAverageActionProgressDifference()) < .001 ){  
 										
 										
 										_invalidAction = true;	
@@ -914,12 +920,12 @@ public class Player : MonoBehaviour {
 									if(_currentState == PlayerState.influencing){
 										
 //										Debug.Log (averageActionProgress*100 +" " +  currentTile.percControlled);
-									if(averageActionProgress*100 < currentTile.percControlled  && isInfluenceNotFrameOne()){
+									if(averageActionProgress*100 < currentTile.percControlled ){ //&& isInfluenceNotFrameOne()){
 										Debug.Log("In total");
 													_invalidAction = true;	
 														
 											}
-									    if(Mathf.Abs(getAverageActionProgressDifference()) < .001 && isInfluenceNotFrameOne()){  
+									    if(Mathf.Abs(getAverageActionProgressDifference()) < .001){// && isInfluenceNotFrameOne()){  
 											Debug.Log(getAverageActionProgressDifference());
 										        Debug.Log("In average");
 										
@@ -1085,7 +1091,7 @@ public class Player : MonoBehaviour {
 				}
 				
 				if (!Pause.paused) {		
-					if(_invalidAction){
+					if(_invalidAction && _invalidActionFrames >= 2){
 						qudActionableGlow.renderer.material.color = Color.red;	
 						Jiggle();
 						iTween.ShakeScale(qudActionableGlow,jiggleHash);
