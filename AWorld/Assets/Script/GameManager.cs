@@ -513,7 +513,7 @@ public class GameManager : MonoBehaviour {
 			 }
 						
 			setup = false;
-			Debug.Log (GameManager.overrideTutorial);
+			//Debug.Log (GameManager.overrideTutorial);
 			if(sRef.tutorial){
 				qudTutorial1.renderer.enabled = true;
 				qudTutorial1.transform.position = new Vector3((sRef.boardSize.x/2)-.5f, (sRef.boardSize.y/2)-.5f, -3);
