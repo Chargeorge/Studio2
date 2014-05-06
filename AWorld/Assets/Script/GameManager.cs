@@ -181,12 +181,12 @@ public class GameManager : MonoBehaviour {
 				float height = 2f * cam.orthographicSize;
 				float width = height * cam.aspect;
 				
-				Vector3 size = new Vector3(width*.3f, height * .3f,1f);
-				
-				Player1ReadyUp.transform.localScale = size;
-				Player2ReadyUp.transform.localScale = size;
-				Player3ReadyUp.transform.localScale = size;
-				Player4ReadyUp.transform.localScale = size;
+//				Vector3 size = new Vector3(width*.3f, height * .3f,1f);
+//				
+//				Player1ReadyUp.transform.localScale = size;
+//				Player2ReadyUp.transform.localScale = size;
+//				Player3ReadyUp.transform.localScale = size;
+//				Player4ReadyUp.transform.localScale = size;
 				
 				
 				ReadyUps.Add (Player1ReadyUp);
@@ -223,13 +223,13 @@ public class GameManager : MonoBehaviour {
 				float height = 2f * cam.orthographicSize;
 				float width = height * cam.aspect;
 				
-				Vector3 size = new Vector3(width*.4f, height * .45f,1f);
+				//Vector3 size = new Vector3(width*.4f, height * .45f,1f);
 				
 				
 				
-				Player1ReadyUp.transform.localScale = size;
+				//Player1ReadyUp.transform.localScale = size;
 				
-				Player2ReadyUp.transform.localScale = size;
+				//Player2ReadyUp.transform.localScale = size;
 				
 				Player1ReadyUp.GetComponent<ReadyUp>().setPlayer(p1);
 				Player2ReadyUp.GetComponent<ReadyUp>().setPlayer(p2);

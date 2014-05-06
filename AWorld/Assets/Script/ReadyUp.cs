@@ -14,6 +14,10 @@ public class ReadyUp : MonoBehaviour {
 	public GameObject readiedText;
 	// Use this for initialization
 	void Start () {
+		Color32 readyColor = player.team.tileColor;
+	//	readyColor.a = 130;
+		transform.FindChild("Back").renderer.material.color = readyColor;
+		this.renderer.enabled = false;
 		readyText.renderer.enabled = true;
 		readiedText.renderer.enabled = false;
 	}

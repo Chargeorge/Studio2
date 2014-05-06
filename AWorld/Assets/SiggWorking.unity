@@ -1413,6 +1413,9 @@ MonoBehaviour:
   scoreBitExplosionFinishSpeed: 0
   arrowSpeed: 0
   arrowInterval: 0
+  sharedTileColor:
+    serializedVersion: 2
+    rgba: 0
   playerAccelRate: 0
   playerFriction: 0
   playerMaxSpeed: 0

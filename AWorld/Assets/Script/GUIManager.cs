@@ -35,10 +35,10 @@ public class GUIManager : MonoBehaviour {
 		TeamRect2 = new Rect((Screen.width - scoreBarW)*(1)+ 2, 0, scoreBarW, Screen.height);
 		ScoreRect2  = new Rect((Screen.width - scoreBarW)*(1)+ 2, Screen.height, scoreBarW,0);
 
-		subStyleX = (Screen.width/9);
-		subStyleY = (Screen.height/7)*6;
-		subStyleHeight = Screen.height/7;
-		subStyleWidth = Screen.width/9;
+		subStyleX = (Screen.width/10);
+		subStyleY = (Screen.height/8)*6;
+		subStyleHeight = Screen.height/4;
+		subStyleWidth = Screen.width/6;
 
 	}
 	
