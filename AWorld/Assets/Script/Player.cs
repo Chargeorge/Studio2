@@ -219,6 +219,7 @@ public class Player : MonoBehaviour {
 						     currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingAdvanced || 	//Is there a better way of doing this?
 				 			 currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Advanced)) 
 				 		{
+				 			Debug.Log("in rotate");
 							if (audioSourceInfluenceStart.volume > 0.01f) { audioLerp (audioSourceInfluenceStart, 0.0f, sRef.playerInfluenceStartVolumeLerpRate);
 								} else { audioSourceInfluenceStart.Stop (); }
 						
@@ -244,13 +245,14 @@ public class Player : MonoBehaviour {
 						}
 						
 						//Upgrading
-						if (buildButtonDown && 
+						else if (buildButtonDown && 
 					    	currentTile.owningTeam == team &&
 					    	currentTile.beacon != null &&
 							facing == currentTile.beacon.GetComponent<Beacon>().facing &&
 							(currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Basic ||
 							 currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingAdvanced)) 
 						{
+							Debug.Log("in upgrade");
 							if (audioSourceInfluenceStart.volume > 0.01f) { audioLerp (audioSourceInfluenceStart, 0.0f, sRef.playerInfluenceStartVolumeLerpRate);
 								} else { audioSourceInfluenceStart.Stop (); }
 								
@@ -260,7 +262,7 @@ public class Player : MonoBehaviour {
 							currentTile.beacon.GetComponent<Beacon>().startUpgrading();
 							currentTile.beacon.GetComponent<Beacon>().losingUpgradeProgress = false;
 						} else {
-						}
+						
 						
 						//If beacon
 							//if stick
@@ -275,107 +277,107 @@ public class Player : MonoBehaviour {
 								//start removing 
 							// if us 
 								//start building beacon				
-						if (buildButtonDown){
-							
-							List<Player> opponentsOnSameTile = OpponentsOnTile (currentTile);
-							if (opponentsOnSameTile.Count != 0) {
-								foreach (Player p in opponentsOnSameTile) { 
-									if (p.IsActing ()) {
-										teleportTarget = team.startingLocation;
-										teleportTarget = Vector2.Lerp(new Vector2 (transform.parent.position.x, transform.position.y), team.startingLocation, 0.25f);
-										//teleportTarget = (transform.parent.position + team.goGetHomeTile().transform.parent.position) / 4.0f;
-										_currentState = PlayerState.teleporting;
+							if (buildButtonDown){
+								
+								List<Player> opponentsOnSameTile = OpponentsOnTile (currentTile);
+								if (opponentsOnSameTile.Count != 0) {
+									foreach (Player p in opponentsOnSameTile) { 
+										if (p.IsActing ()) {
+											teleportTarget = team.startingLocation;
+											teleportTarget = Vector2.Lerp(new Vector2 (transform.parent.position.x, transform.position.y), team.startingLocation, 0.25f);
+											//teleportTarget = (transform.parent.position + team.goGetHomeTile().transform.parent.position) / 4.0f;
+											_currentState = PlayerState.teleporting;
+										}
 									}
 								}
-							}
-							
-							if (_currentState != PlayerState.teleporting) {
-							
-								moveTowardCenterOfTile (currentTile);
-								//NO BEACON HERE, GOTTA DO STUFF.
-								//Check influence first
-								if(currentTile.controllingTeam !=null){
-									
-									if(currentTile.controllingTeam.teamNumber == team.teamNumber){
-										if(currentTile.percControlled < 100f){
-										Pulsate ();
+								
+								if (_currentState != PlayerState.teleporting) {
+								
+									moveTowardCenterOfTile (currentTile);
+									//NO BEACON HERE, GOTTA DO STUFF.
+									//Check influence first
+									if(currentTile.controllingTeam !=null){
+										Debug.Log ("IN weird place");
+										if(currentTile.controllingTeam.teamNumber == team.teamNumber){
+											if(currentTile.percControlled < 100f){
+											Pulsate ();
+												_currentState = PlayerState.influencing;
+												Debug.Log("Set Influencing");
+											}
+																	
+											//DO Tile Control 
+											else if(currentTile.getLocalAltar()!=null ){
+												
+												currentTile.getLocalAltar().doCapture(team);
+												
+											}
+				
+											//Building
+											else if((currentTile.beacon == null || 
+													//currentTile.beacon.GetComponent<Beacon>().percBuildComplete < 100f &&
+													currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingBasic) && 
+													currentTile.buildable ())
+											{
+												Pulsate ();
+												audioSourceInfluenceDone.volume = sRef.playerInfluenceDoneVolume;
+												//audioSourceInfluenceDone.Play ();
+												_currentState = PlayerState.building;
+												
+												float vpsBuildRate = sRef.vpsBaseBuild * getAltarBuildBoost ();
+												addProgressToAction(vpsBuildRate);
+				
+												GameObject beaconBeingBuilt;
+												
+												if (currentTile.beacon == null) { 
+													beaconBeingBuilt = (GameObject)GameObject.Instantiate(_prfbBeacon, new Vector3(0,0,0), Quaternion.identity);
+													beaconBeingBuilt.name = "Beacon for" + team.teamNumber;
+													
+												}
+												else {
+													beaconBeingBuilt = currentTile.beacon;
+												}
+												
+												beaconInProgress = beaconBeingBuilt.GetComponent<Beacon>();
+												beaconInProgress.startBuilding(currentTile.gameObject, this.gameObject, vpsBuildRate);
+												beaconInProgress.setDirection(facing);
+												beaconInProgress.selfDestructing = false;
+												_invalidAction = true;
+												
+											}
+											else{
+												if ((!currentTile.buildable() && currentTile.beacon == null) || 
+													(currentTile.beacon != null && //If there's a beacon...
+														(currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Advanced && 
+														currentTile.beacon.GetComponent<Beacon>().facing == facing)	//...and it's advanced and you're not gonna rotate it...
+													))
+													
+												{
+													_invalidAction = true;
+												//												if(!audioSourceInvalid.isPlaying){ 
+	//													playInvalid (0.3f);										
+	//												}
+												}
+											}
+										} else{
 											_currentState = PlayerState.influencing;
 										}
-																
-										//DO Tile Control 
-										else if(currentTile.getLocalAltar()!=null ){
-												
-											currentTile.getLocalAltar().doCapture(team);
-											
-										}
-			
-										//Building
-										else if((currentTile.beacon == null || 
-												//currentTile.beacon.GetComponent<Beacon>().percBuildComplete < 100f &&
-												currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingBasic) && 
-												currentTile.buildable ())
-										{
-											Pulsate ();
-											audioSourceInfluenceDone.volume = sRef.playerInfluenceDoneVolume;
-											//audioSourceInfluenceDone.Play ();
-											_currentState = PlayerState.building;
-											
-											float vpsBuildRate = sRef.vpsBaseBuild * getAltarBuildBoost ();
-											addProgressToAction(vpsBuildRate);
-			
-											GameObject beaconBeingBuilt;
-											
-											if (currentTile.beacon == null) { 
-												beaconBeingBuilt = (GameObject)GameObject.Instantiate(_prfbBeacon, new Vector3(0,0,0), Quaternion.identity);
-												beaconBeingBuilt.name = "Beacon for" + team.teamNumber;
-												
-											}
-											else {
-												beaconBeingBuilt = currentTile.beacon;
-											}
-											
-											beaconInProgress = beaconBeingBuilt.GetComponent<Beacon>();
-											beaconInProgress.startBuilding(currentTile.gameObject, this.gameObject, vpsBuildRate);
-											beaconInProgress.setDirection(facing);
-											beaconInProgress.selfDestructing = false;
-											_invalidAction = true;
-											Debug.Log ("332");
-										}
-										else{
-											if ((!currentTile.buildable() && currentTile.beacon == null) || 
-												(currentTile.beacon != null && //If there's a beacon...
-													(currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Advanced && 
-													currentTile.beacon.GetComponent<Beacon>().facing == facing)	//...and it's advanced and you're not gonna rotate it...
-												))
-												
-											{
-												_invalidAction = true;
-												Debug.Log ("343");
-											//												if(!audioSourceInvalid.isPlaying){ 
-//													playInvalid (0.3f);										
-//												}
-											}
-										}
-									} else{
+									}
+									else {
+										Pulsate ();
+										currentActionProgress = 0f;
+										float vpsInfluenceRate = sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost();
+										addProgressToAction(vpsInfluenceRate);
 										_currentState = PlayerState.influencing;
+										currentTile.startInfluence(currentActionProgress, team);
 									}
 								}
-								else {
-									Pulsate ();
-									currentActionProgress = 0f;
-									float vpsInfluenceRate = sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost();
-									addProgressToAction(vpsInfluenceRate);
-									_currentState = PlayerState.influencing;
-									currentTile.startInfluence(currentActionProgress, team);
-								}
+							}
+							
+							//We chillin
+							else {
+								moveTowardCenterOfTile (currentTile);
 							}
 						}
-						
-						//We chillin
-						else {
-							moveTowardCenterOfTile (currentTile);
-						}
-						
 					break;
 					
 					//IF stick holds the same direction keep doing move
@@ -769,13 +771,12 @@ public class Player : MonoBehaviour {
 							_currentState = PlayerState.standing;
 							//StopSFX ();
 							_invalidAction = true;
-							Debug.Log ("761");
 						//PlaySFX(invalid_Input, 1.0f);
 							}
 					break;
 					
 					case PlayerState.influencing:
-		
+			
 					moveTowardCenterOfTile (currentTile);
 		
 					if(currentTile.controllingTeam!= null && currentTile.controllingTeam.teamNumber != teamNumber){
@@ -815,15 +816,14 @@ public class Player : MonoBehaviour {
 									Debug.Log (sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime);
 									Debug.Log (currentTile.brdXPos);
 									Debug.Log(currentTile.percControlled);
-								           float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime);
+								     float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime);
 									currentActionProgress = currentTile.percControlled;
 									
 									float averageActionProgress = getAverageActionProgress();
-								if(_currentState == PlayerState.influencing){
 									
 //									Debug.Log (averageActionProgress*100 +" " +  currentTile.percControlled);
 									if(averageActionProgress*100 > currentTile.percControlled  && isInfluenceNotFrameOne()){
-										Debug.Log("In total");
+										
 										_invalidAction = true;		
 									}
 									if(Mathf.Abs(getAverageActionProgressDifference()) < .001 && isInfluenceNotFrameOne() ){  
@@ -831,18 +831,16 @@ public class Player : MonoBehaviour {
 										
 										_invalidAction = true;	
 									}
-								}
+								
 								
 								if(test > 0f || (currentTile.owningTeam != null && currentTile.owningTeam == team)){
 										
 										if (currentTile.getLocalAltar () != null || currentTile.tooCloseToBeacon() || currentTile.gameObject.transform.FindChild ("Home(Clone)") != null) {
 								
 											_invalidAction = true;
-										Debug.Log ("827");
-										_currentState = PlayerState.standing;
-											if(currentTile.tooCloseToBeacon() && currentTile.beacon == null && !audioSourceInvalid.isPlaying) {
-												playInvalid (0.3f);																									
-											}
+										
+											//_currentState = PlayerState.standing;
+											
 										}
 										
 										else {
