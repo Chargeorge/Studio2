@@ -14,7 +14,7 @@ public class Pause : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetButtonDown("Pause")){
+		if (Input.GetButtonDown("Pause") || Input.GetKeyDown("p")){
 			if (paused == false){
 			//	Time.timeScale = 0;
 				paused = true;
