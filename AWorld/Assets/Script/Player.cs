@@ -352,6 +352,7 @@ public class Player : MonoBehaviour {
 								}
 								else {
 									Pulsate ();
+									currentActionProgress = 0f;
 									float vpsInfluenceRate = sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost();
 									addProgressToAction(vpsInfluenceRate);
 									_currentState = PlayerState.influencing;
@@ -799,8 +800,12 @@ public class Player : MonoBehaviour {
 							if(currentTile.controllingTeam != null){
 								if(currentTile.controllingTeam.teamNumber == teamNumber)
 								{                                      
-									//Debug.Log("Adding Influence");
-									float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime);
+									Debug.Log("Adding Influence");
+									
+									Debug.Log (sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime);
+									Debug.Log (currentTile.brdXPos);
+									Debug.Log(currentTile.percControlled);
+								           float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime);
 									currentActionProgress = currentTile.percControlled;
 									
 									float averageActionProgress = getAverageActionProgress();
