@@ -164,7 +164,7 @@ public class GUIManager : MonoBehaviour {
 	}
 
 	public void replay(){
-		Debug.Log("Cool");
+		//Debug.Log("Cool");
 		Application.LoadLevel("SiggWorking");
 	}
 

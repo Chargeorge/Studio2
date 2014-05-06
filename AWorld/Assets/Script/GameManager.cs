@@ -514,7 +514,7 @@ public class GameManager : MonoBehaviour {
 						
 			setup = false;
 			Debug.Log (GameManager.overrideTutorial);
-			if(sRef.tutorial && !GameManager.overrideTutorial){
+			if(sRef.tutorial){
 				qudTutorial1.renderer.enabled = true;
 				qudTutorial1.transform.position = new Vector3((sRef.boardSize.x/2)-.5f, (sRef.boardSize.y/2)-.5f, -3);
 				qudTutorial1.transform.localScale = new Vector3(sRef.boardSize.x, sRef.boardSize.x*(3f/4f), 1);
@@ -606,7 +606,7 @@ public class GameManager : MonoBehaviour {
 				if(!swapTutorial()){
 					//qudTutorial1.SetActive(false);
 					//qudTutorial2.SetActive(false);
-					GameManager.overrideTutorial = true;
+					PlayerPrefs.SetInt(PreferencesOptions.tutorial.ToString(), 0);
 					if(sRef.useReadyUp){_currentState = GameState.gameNotStarted;
 						ReadyUps.ForEach(delegate (GameObject g) {
 							g.SetActive(true);	
