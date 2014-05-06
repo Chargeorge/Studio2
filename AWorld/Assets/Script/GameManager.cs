@@ -572,7 +572,7 @@ public class GameManager : MonoBehaviour {
 			qudTutorial2.transform.FindChild("TutorialClock").renderer.material.SetFloat("_Cutoff",1.01f-(tutorialPerc /100f));
 			
 			if(Input.GetButton("BuildAllPlayers") ){
-				tutorialPerc+= sRef.vpsBasePlayerInfluence * Time.deltaTime;	
+				tutorialPerc+= sRef.vpsBasePlayerInfluence*2f * Time.deltaTime;	
 				Debug.Log ("Here");
 			}
 			else{
