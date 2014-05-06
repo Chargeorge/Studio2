@@ -1088,7 +1088,7 @@ public class Player : MonoBehaviour {
 					if(_invalidAction){
 						qudActionableGlow.renderer.material.color = Color.red;	
 						Jiggle();
-						
+						iTween.ShakeScale(qudActionableGlow,jiggleHash);
 						
 						if(!audioSourceInvalid.isPlaying){
 							playInvalid(sRef.invalidInputVolume);
