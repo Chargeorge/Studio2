@@ -82,7 +82,7 @@ public class Bar : MonoBehaviour {
 			audioSources[3].clip = Resources.Load("SFX/Altar_Score_PentaScale_Hi_4") as AudioClip;
 			audioSources[4].clip = Resources.Load("SFX/Altar_Score_PentaScale_Hi_5") as AudioClip;*/
 		} else {
-			Debug.LogWarning ("Didn't load score sounds in Bar");
+			//Debug.LogWarning ("Didn't load score sounds in Bar");
 		}
 
 		}

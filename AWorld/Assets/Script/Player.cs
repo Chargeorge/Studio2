@@ -232,7 +232,7 @@ public class Player : MonoBehaviour {
 						     currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingAdvanced || 	//Is there a better way of doing this?
 				 			 currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Advanced)) 
 				 		{
-				 			Debug.Log("in rotate");
+				 			//Debug.Log("in rotate");
 							if (audioSourceInfluenceStart.volume > 0.01f) { audioLerp (audioSourceInfluenceStart, 0.0f, sRef.playerInfluenceStartVolumeLerpRate);
 								} else { audioSourceInfluenceStart.Stop (); }
 						
@@ -265,7 +265,7 @@ public class Player : MonoBehaviour {
 							(currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Basic ||
 							 currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingAdvanced)) 
 						{
-							Debug.Log("in upgrade");
+							//Debug.Log("in upgrade");
 							if (audioSourceInfluenceStart.volume > 0.01f) { audioLerp (audioSourceInfluenceStart, 0.0f, sRef.playerInfluenceStartVolumeLerpRate);
 								} else { audioSourceInfluenceStart.Stop (); }
 								
@@ -310,12 +310,12 @@ public class Player : MonoBehaviour {
 									//NO BEACON HERE, GOTTA DO STUFF.
 									//Check influence first
 									if(currentTile.controllingTeam !=null){
-										Debug.Log ("IN weird place");
+										//Debug.Log ("IN weird place");
 										if(currentTile.controllingTeam.teamNumber == team.teamNumber){
 											if(currentTile.percControlled < 100f){
 											Pulsate ();
 												_currentState = PlayerState.influencing;
-												Debug.Log("Set Influencing");
+												//Debug.Log("Set Influencing");
 											}
 																	
 											//DO Tile Control 
@@ -766,7 +766,7 @@ public class Player : MonoBehaviour {
 								}
 								else{
 									_invalidAction = true;
-									Debug.Log ("743");
+									//Debug.Log ("743");
 								
 								}
 							}
@@ -824,11 +824,11 @@ public class Player : MonoBehaviour {
 							if(currentTile.controllingTeam != null){
 								if(currentTile.controllingTeam.teamNumber == teamNumber)
 								{                                      
-									Debug.Log("Adding Influence");
-									
-									Debug.Log (sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime);
-									Debug.Log (currentTile.brdXPos);
-									Debug.Log(currentTile.percControlled);
+//									Debug.Log("Adding Influence");
+//									
+//									Debug.Log (sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime);
+//									Debug.Log (currentTile.brdXPos);
+//									Debug.Log(currentTile.percControlled);
 								    float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime);
 									currentActionProgress = currentTile.percControlled;
 									
@@ -847,7 +847,7 @@ public class Player : MonoBehaviour {
 								
 								
 								if(test > 0f || (currentTile.owningTeam != null && currentTile.owningTeam == team)){
-									Debug.Log ("here");
+									//Debug.Log ("here");
 										if (currentTile.getLocalAltar () != null || currentTile.tooCloseToBeacon() || currentTile.gameObject.transform.FindChild ("Home(Clone)") != null) {
 								
 											//_invalidAction = true;
@@ -924,13 +924,13 @@ public class Player : MonoBehaviour {
 										
 //										Debug.Log (averageActionProgress*100 +" " +  currentTile.percControlled);
 									if(averageActionProgress*100 < currentTile.percControlled ){ //&& isInfluenceNotFrameOne()){
-										Debug.Log("In total");
+										//Debug.Log("In total");
 													_invalidAction = true;	
 														
 											}
 									    if(Mathf.Abs(getAverageActionProgressDifference()) < .001){// && isInfluenceNotFrameOne()){  
-											Debug.Log(getAverageActionProgressDifference());
-										        Debug.Log("In average");
+											//Debug.Log(getAverageActionProgressDifference());
+										       // Debug.Log("In average");
 										
 											_invalidAction = true;	
 										}

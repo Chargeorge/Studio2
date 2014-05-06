@@ -16,7 +16,7 @@ public class ReadyUp : MonoBehaviour {
 	void Start () {
 		Color32 readyColor = player.team.beaconColor;
 	//	readyColor.a = 130;
-		transform.FindChild("Back").renderer.material.color = readyColor;
+	//	transform.FindChild("Back").renderer.material.color = readyColor;
 		this.renderer.enabled = false;
 		readyText.renderer.enabled = true;
 		readiedText.renderer.enabled = false;

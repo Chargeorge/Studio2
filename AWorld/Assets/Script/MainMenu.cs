@@ -49,7 +49,7 @@ public class MainMenu : MonoBehaviour {
 	void Update () {
 
 		GameObject _musicObject  = GameObject.FindGameObjectWithTag("Music");
-		Debug.Log(_musicObject);
+		//Debug.Log(_musicObject);
 		if(_musicObject == null){
 			Instantiate(musicObject);
 			musicObject.audio.Play();
