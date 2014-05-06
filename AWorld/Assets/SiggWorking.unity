@@ -176,7 +176,7 @@ MonoBehaviour:
       m_Top: 0
       m_Bottom: 0
     m_Font: {fileID: 12800000, guid: e06d67d0593cd754485ffab3d09ed832, type: 3}
-    m_FontSize: 112
+    m_FontSize: 152
     m_FontStyle: 0
     m_Alignment: 4
     m_WordWrap: 0
@@ -191,7 +191,7 @@ MonoBehaviour:
   subStyle:
     m_Name: 
     m_Normal:
-      m_Background: {fileID: 2800000, guid: e8d3d5ec658f034489f44ab6ebefb4d3, type: 3}
+      m_Background: {fileID: 0}
       m_TextColor: {r: 0, g: 0, b: 0, a: 1}
     m_Hover:
       m_Background: {fileID: 0}
@@ -234,7 +234,7 @@ MonoBehaviour:
       m_Right: 0
       m_Top: 0
       m_Bottom: 0
-    m_Font: {fileID: 12800000, guid: a4b912081f065d2438a03b99878d12e8, type: 3}
+    m_Font: {fileID: 12800000, guid: e06d67d0593cd754485ffab3d09ed832, type: 3}
     m_FontSize: 64
     m_FontStyle: 0
     m_Alignment: 4
@@ -1433,7 +1433,7 @@ MonoBehaviour:
   playerInfluenceStartVolume: 1
   playerInfluenceStartVolumeLerpRate: .100000001
   playerInfluenceDoneVolume: .100000001
-  playerDeinfluencingVolume: .100000001
+  playerDeinfluencingVolume: .0500000007
   invalidInputVolume: .300000012
   beaconBuildingVolume: .5
   beaconBuiltVolume: .800000012
