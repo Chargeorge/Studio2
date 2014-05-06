@@ -25,8 +25,9 @@ public class TeamInfo
 	public Texture winTexture;
 	public Vector2 wrldFinalTargetLocation;
 	public GameObject ScoreBar;
+	public GameObject finalTarget;
 	public AudioClip Scoring;
-
+	public Settings sRef;
 	
 	public TeamInfo ()
 	{
@@ -48,7 +49,8 @@ public class TeamInfo
 				returnable.teamNumber = teamNumber;
 				returnable.highlightColor = new Color32 (17, 75, 141, 150);
 				returnable.scoreTexture = (Texture)Resources.Load("Sprites/ScorebgTextureblue");
-			returnable.winTexture = (Texture)Resources.Load("Sprites/victoryBackground3");
+			//returnable.winTexture = (Texture)Resources.Load("Sprites/victoryBackground3");
+			returnable.winTexture = (Texture)Resources.Load("Sprites/vicBackBlue");
 				break;
 			case 2:
 				returnable.teamColor = new Color32 (247, 180, 40, 255);
@@ -61,7 +63,8 @@ public class TeamInfo
 				returnable.teamNumber = teamNumber;
 				returnable.highlightColor = new Color32 (247, 180, 40, 150);
 			returnable.scoreTexture = (Texture)Resources.Load("Sprites/ScorebgTexturebyel");
-			returnable.winTexture = (Texture)Resources.Load("Sprites/victoryBackground3");
+			//returnable.winTexture = (Texture)Resources.Load("Sprites/victoryBackground3");
+			returnable.winTexture = (Texture)Resources.Load("Sprites/vicBackYel");
 				break;
 		}
 
@@ -97,6 +100,15 @@ public class TeamInfo
 	public void addScore(float score){
 		this.score += score;
 		ScoreBar.GetComponent<Bar>().PlayScoreSound ();
+	}
+	
+	public void ScoreFromTile (float score) {
+		this.score += score;
+		float percToWin = score / sRef.valPointsToWin;
+		finalTarget.GetComponent<ParticleSystem>().startSize = sRef.scoreBitExplosionStartSize + ((sRef.scoreBitExplosionFinishSize-sRef.scoreBitExplosionStartSize)*percToWin);
+		finalTarget.GetComponent<ParticleSystem>().startSpeed = sRef.scoreBitExplosionStartSpeed + ((sRef.scoreBitExplosionFinishSpeed-sRef.scoreBitExplosionStartSpeed)*percToWin);
+		finalTarget.GetComponent<ParticleSystem>().startColor = teamColor;
+		finalTarget.GetComponent<FinalScoreTarget>().PlayScoreAnimation (5);
 	}
 	
 	

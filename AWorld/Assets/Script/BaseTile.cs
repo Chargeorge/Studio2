@@ -922,7 +922,7 @@ public class BaseTile : MonoBehaviour {
 			owningTeam = controllingTeam;
 			Beacon localBeacon = GetComponentInChildren<Beacon>();
 			Altar localAltar = GetComponentInChildren<Altar>();
-			owningTeam.score += getTileScore();
+			owningTeam.ScoreFromTile (getTileScore ());
 			
 			if(localAltar !=null){
 				localAltar.setControl(owningTeam);

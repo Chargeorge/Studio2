@@ -224,6 +224,10 @@ public class GameManager : MonoBehaviour {
 			teamBar2.GetComponent<Bar>().team = teams[1];
 			teams[0].ScoreBar = teamBar1;
 			teams[1].ScoreBar = teamBar2;
+			teams[0].finalTarget = teamBar1.transform.FindChild ("ScoreBitFinalTarget").gameObject;
+			teams[1].finalTarget = teamBar2.transform.FindChild ("ScoreBitFinalTarget").gameObject;
+			teams[0].sRef = sRef;
+			teams[1].sRef = sRef;
 			
 			ReadyUps.ForEach(delegate(GameObject g){
 				g.renderer.enabled = true;
