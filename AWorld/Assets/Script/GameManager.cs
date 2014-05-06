@@ -513,7 +513,7 @@ public class GameManager : MonoBehaviour {
 			 }
 						
 			setup = false;
-			Debug.Log (GameManager.overrideTutorial);
+			//Debug.Log (GameManager.overrideTutorial);
 			if(sRef.tutorial){
 				qudTutorial1.renderer.enabled = true;
 				qudTutorial1.transform.position = new Vector3((sRef.boardSize.x/2)-.5f, (sRef.boardSize.y/2)-.5f, -3);
@@ -528,7 +528,7 @@ public class GameManager : MonoBehaviour {
 				ReadyUps.ForEach(delegate (GameObject g) {
 					g.SetActive(false);	
 				});
-				Debug.Log ("In tutorial");
+				//Debug.Log ("In tutorial");
 				
 			} else if(sRef.useReadyUp){
 				_currentState = GameState.gameNotStarted;
@@ -590,13 +590,13 @@ public class GameManager : MonoBehaviour {
 			
 		}
 		if(_currentState == GameState.tutorial){
-			Debug.Log ("Getting Here");
+			//Debug.Log ("Getting Here");
 			qudTutorial1.transform.FindChild("TutorialClock").renderer.material.SetFloat("_Cutoff",1.01f-(tutorialPerc /100f));
 			qudTutorial2.transform.FindChild("TutorialClock").renderer.material.SetFloat("_Cutoff",1.01f-(tutorialPerc /100f));
 			
 			if(Input.GetButton("BuildAllPlayers") ){
 				tutorialPerc+= sRef.vpsBasePlayerInfluence*2f * Time.deltaTime;	
-				Debug.Log ("Here");
+				//Debug.Log ("Here");
 			}
 			else{
 				tutorialPerc = 0f;
@@ -673,7 +673,7 @@ public class GameManager : MonoBehaviour {
 	public bool swapTutorial(){
 		Hashtable qud1HT = new Hashtable();
 		
-		Debug.Log("Tutorial Index" + tutorialIndex);
+		//Debug.Log("Tutorial Index" + tutorialIndex);
 		Hashtable qud2HT = new Hashtable();
 		
 		if(tutorials.Length > tutorialIndex+1){

@@ -17,11 +17,11 @@ public class MusicOptions : MonoBehaviour {
 
 		if(music == null){
 			DontDestroyOnLoad(this);
-			Debug.Log ("I got nothing");
+			//Debug.Log ("I got nothing");
 		}
 		if(music != null){
 			Destroy(music);
-			Debug.Log("I got sumthing");
+			//Debug.Log("I got sumthing");
 		}
 
 		if(Application.loadedLevelName == "SiggWorking"){
