@@ -323,9 +323,6 @@ public class Player : MonoBehaviour {
 											
 										{
 											_invalidAction = true;
-											if(!audioSourceInvalid.isPlaying){ 
-												playInvalid (0.3f);										
-											}
 										}
 									}
 								} else{
@@ -720,9 +717,8 @@ public class Player : MonoBehaviour {
 									}
 								}
 								else{
-									if (!audioSourceInvalid.isPlaying) {
-										playInvalid (1.0f);
-									}
+									_invalidAction = true;
+									
 								}
 							}
 							else
@@ -738,9 +734,8 @@ public class Player : MonoBehaviour {
 							currentTile.beacon.GetComponent<Beacon>().AbortBuild();
 							_currentState = PlayerState.standing;
 							//StopSFX ();
-							if (audioSourceInvalid.isPlaying) {
-								playInvalid (1.0f);
-							}
+							_invalidAction = true;
+							
 							//PlaySFX(invalid_Input, 1.0f);
 							}
 					break;
@@ -1051,6 +1046,9 @@ public class Player : MonoBehaviour {
 				if (!Pause.paused) {		
 					if(_invalidAction){
 						qudActionableGlow.renderer.material.color = Color.red;	
+						if(!audioSourceInvalid.isPlaying){
+							playInvalid(1f);
+						}
 					}
 					else{
 						qudActionableGlow.renderer.material.color = Color.white;	
@@ -1068,7 +1066,8 @@ public class Player : MonoBehaviour {
 
 	public void playInvalid(float vol){
 		if (!Pause.paused) {
-			audioSourceInvalid.volume = vol;
+			//audioSourceInvalid.volume = vol;
+			audioSourceInvalid.volume = 1f;
 			audioSourceInvalid.Play ();
 		}
 	}
