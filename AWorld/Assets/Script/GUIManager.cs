@@ -101,6 +101,7 @@ public class GUIManager : MonoBehaviour {
 
 			GUI.DrawTexture(new Rect(0,0,boxWidth,boxHeight), winningTeam.winTexture, ScaleMode.StretchToFill, true, 1.0f);
 			/*GUI.EndGroup();*/
+
 			victoryStyle.normal.textColor = winningTeam.teamColor;
 			//Color32 blackText = new Color32(0,0,0, 255);
 			//victoryStyle.normal.textColor = blackText;
