@@ -8,8 +8,8 @@ public class CursorMenu : MonoBehaviour {
 	public float movingRotateSpeed;
 	public float restingRotateSpeed;
 	public float loadingRotateSpeed;
-	private float rotateSpeed;
-	private float rotatingLeft;	//-1 if rotating right, 1 if rotating left
+	public float rotateSpeed;
+	public float rotatingLeft;	//-1 if rotating right, 1 if rotating left
 
 	public GameObject menu;
 	private MainMenu menuScript;
@@ -119,9 +119,9 @@ public class CursorMenu : MonoBehaviour {
 
 		}
 		
-		if (!menuScript.quitting && !menuScript.loadingNewScreen) {
-			/*if (y < 0) {
-				rotateSpeed = -1 * movingRotateSpeed;
+		if (!menuScript.quitting && !menuScript.loadingNewScreen && !lerping) {
+			if (y < 0) {
+				rotateSpeed = movingRotateSpeed;
 				rotatingLeft = -1;
 			}
 			else if (y > 0) { 
@@ -129,8 +129,8 @@ public class CursorMenu : MonoBehaviour {
 				rotatingLeft = 1;
 			}
 			else {
-				rotateSpeed = restingRotateSpeed * rotatingLeft;
-			}*/
+				rotateSpeed = restingRotateSpeed;
+			}
 		}
 		if (menuScript.loadingNewScreen) {
 			transform.RotateAround (transform.position, Vector3.forward, loadingRotateSpeed * rotatingLeft * Time.deltaTime);

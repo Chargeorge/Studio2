@@ -1031,6 +1031,8 @@ MonoBehaviour:
   movingRotateSpeed: 125
   restingRotateSpeed: 20
   loadingRotateSpeed: 500
+  rotateSpeed: 0
+  rotatingLeft: 0
   menu: {fileID: 1451874152}
   lerpRate: 0
 --- !u!1001 &1889330393
