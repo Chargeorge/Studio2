@@ -150,7 +150,7 @@ public class Player : MonoBehaviour {
 						
 						BaseTile newTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
 						if (newTile != currentTile) {
-							Debug.Log ("Getting New Tile");
+//							Debug.Log ("Getting New Tile");
 							//currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
 							doNewTile(currentTile, newTile);
 						}
@@ -266,89 +266,94 @@ public class Player : MonoBehaviour {
 							// if us 
 								//start building beacon				
 						if (buildButtonDown){
+							
 							List<Player> opponentsOnSameTile = OpponentsOnSameTile();
-							if (opponentsOnSameTile != null) {
+							if (opponentsOnSameTile.Count != 0) {
 								foreach (Player p in opponentsOnSameTile) { 
 									if (p.IsActing ()) {
-										Debug.Log ("sup");
-									}
-									else {
-										Debug.Log ("sup yo yo");
+										teleportTarget = team.startingLocation;
+										teleportTarget = Vector2.Lerp(new Vector2 (transform.parent.position.x, transform.position.y), team.startingLocation, 0.25f);
+										//teleportTarget = (transform.parent.position + team.goGetHomeTile().transform.parent.position) / 4.0f;
+										_currentState = PlayerState.teleporting;
 									}
 								}
 							}
-							moveTowardCenterOfTile (currentTile);
-							//NO BEACON HERE, GOTTA DO STUFF.
-							//Check influence first
-							if(currentTile.controllingTeam !=null){
-								
-								if(currentTile.controllingTeam.teamNumber == team.teamNumber){
-									if(currentTile.percControlled < 100f){
-									Pulsate ();
-										_currentState = PlayerState.influencing;
-									}
-															
-									//DO Tile Control 
-									else if(currentTile.getLocalAltar()!=null ){
-											
-										currentTile.getLocalAltar().doCapture(team);
-										
-									}
-		
-									//Building
-									else if((currentTile.beacon == null || 
-											//currentTile.beacon.GetComponent<Beacon>().percBuildComplete < 100f &&
-											currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingBasic) && 
-											currentTile.buildable ())
-									{
+							
+							if (_currentState != PlayerState.teleporting) {
+							
+								moveTowardCenterOfTile (currentTile);
+								//NO BEACON HERE, GOTTA DO STUFF.
+								//Check influence first
+								if(currentTile.controllingTeam !=null){
+									
+									if(currentTile.controllingTeam.teamNumber == team.teamNumber){
+										if(currentTile.percControlled < 100f){
 										Pulsate ();
-										audioSourceInfluenceDone.volume = sRef.playerInfluenceDoneVolume;
-										//audioSourceInfluenceDone.Play ();
-										_currentState = PlayerState.building;
-										
-										float vpsBuildRate = sRef.vpsBaseBuild * getAltarBuildBoost ();
-										addProgressToAction(vpsBuildRate);
-		
-										GameObject beaconBeingBuilt;
-										
-										if (currentTile.beacon == null) { 
-											beaconBeingBuilt = (GameObject)GameObject.Instantiate(_prfbBeacon, new Vector3(0,0,0), Quaternion.identity);
-											beaconBeingBuilt.name = "Beacon for" + team.teamNumber;
+											_currentState = PlayerState.influencing;
+										}
+																
+										//DO Tile Control 
+										else if(currentTile.getLocalAltar()!=null ){
+												
+											currentTile.getLocalAltar().doCapture(team);
 											
 										}
-										else {
-											beaconBeingBuilt = currentTile.beacon;
-										}
-										
-										beaconInProgress = beaconBeingBuilt.GetComponent<Beacon>();
-										beaconInProgress.startBuilding(currentTile.gameObject, this.gameObject, vpsBuildRate);
-										beaconInProgress.setDirection(facing);
-										beaconInProgress.selfDestructing = false;
-									}
-									else{
-										if ((!currentTile.buildable() && currentTile.beacon == null) || 
-											(currentTile.beacon != null && //If there's a beacon...
-												(currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Advanced && 
-												currentTile.beacon.GetComponent<Beacon>().facing == facing)	//...and it's advanced and you're not gonna rotate it...
-											))
-											
+			
+										//Building
+										else if((currentTile.beacon == null || 
+												//currentTile.beacon.GetComponent<Beacon>().percBuildComplete < 100f &&
+												currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingBasic) && 
+												currentTile.buildable ())
 										{
-											_invalidAction = true;
-											if(!audioSourceInvalid.isPlaying){ 
-												playInvalid (0.3f);										
+											Pulsate ();
+											audioSourceInfluenceDone.volume = sRef.playerInfluenceDoneVolume;
+											//audioSourceInfluenceDone.Play ();
+											_currentState = PlayerState.building;
+											
+											float vpsBuildRate = sRef.vpsBaseBuild * getAltarBuildBoost ();
+											addProgressToAction(vpsBuildRate);
+			
+											GameObject beaconBeingBuilt;
+											
+											if (currentTile.beacon == null) { 
+												beaconBeingBuilt = (GameObject)GameObject.Instantiate(_prfbBeacon, new Vector3(0,0,0), Quaternion.identity);
+												beaconBeingBuilt.name = "Beacon for" + team.teamNumber;
+												
+											}
+											else {
+												beaconBeingBuilt = currentTile.beacon;
+											}
+											
+											beaconInProgress = beaconBeingBuilt.GetComponent<Beacon>();
+											beaconInProgress.startBuilding(currentTile.gameObject, this.gameObject, vpsBuildRate);
+											beaconInProgress.setDirection(facing);
+											beaconInProgress.selfDestructing = false;
+										}
+										else{
+											if ((!currentTile.buildable() && currentTile.beacon == null) || 
+												(currentTile.beacon != null && //If there's a beacon...
+													(currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Advanced && 
+													currentTile.beacon.GetComponent<Beacon>().facing == facing)	//...and it's advanced and you're not gonna rotate it...
+												))
+												
+											{
+												_invalidAction = true;
+												if(!audioSourceInvalid.isPlaying){ 
+													playInvalid (0.3f);										
+												}
 											}
 										}
+									} else{
+										_currentState = PlayerState.influencing;
 									}
-								} else{
-									_currentState = PlayerState.influencing;
 								}
-							}
-							else {
-								Pulsate ();
-								float vpsInfluenceRate = sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost();
-								addProgressToAction(vpsInfluenceRate);
-								_currentState = PlayerState.influencing;
-								currentTile.startInfluence(currentActionProgress, team);
+								else {
+									Pulsate ();
+									float vpsInfluenceRate = sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost();
+									addProgressToAction(vpsInfluenceRate);
+									_currentState = PlayerState.influencing;
+									currentTile.startInfluence(currentActionProgress, team);
+								}
 							}
 						}
 						
