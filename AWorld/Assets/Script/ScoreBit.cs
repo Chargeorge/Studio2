@@ -19,6 +19,8 @@ public class ScoreBit : MonoBehaviour {
 			targets = new List<GameObject>();
 		}
 		
+		transform.position = new Vector3 (transform.position.x, transform.position.y, -8);
+		
 		switch (PlayerPrefs.GetInt (PreferencesOptions.gameSpeed.ToString())) {
 		case 1: 
 			speed = 0.1f;

@@ -20,6 +20,7 @@ public class GUIManager : MonoBehaviour {
 
 	bool restart;
 	bool menu;
+	bool loadingNewScreen;
 	
 	Rect TeamRect2, ScoreRect2;
 	// Use this for initialization
@@ -114,20 +115,22 @@ public class GUIManager : MonoBehaviour {
 		
 		case GameState.gameRestartable:
 
-			if(Input.GetAxis("HorizontalPlayer1") > 0f && restart){
+			if(Input.GetAxis("HorizontalPlayer1") > 0f && restart && !loadingNewScreen){
 				menu = true;
 				restart = false;
 			}
-			if(Input.GetAxis("HorizontalPlayer1") < 0f && menu){
+			if(Input.GetAxis("HorizontalPlayer1") < 0f && menu && !loadingNewScreen){
 				restart = true;
 				menu = false;
 			}
 			if(Input.GetButton("BuildPlayer1") && restart){
 				if (!audio.isPlaying) audio.Play();
+				loadingNewScreen = true;
 				Invoke("replay", 1.5f);
 			}
 			if(Input.GetButton("BuildPlayer1") && menu){
 				if (!audio.isPlaying) audio.Play();
+				loadingNewScreen = true;
 				Invoke("mainMenu", 1.5f);
 			}
 
