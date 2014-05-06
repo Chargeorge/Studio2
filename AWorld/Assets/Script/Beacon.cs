@@ -107,7 +107,7 @@ public class Beacon : MonoBehaviour {
 			
 			setVisualDirection();	//Why is this happening every frame?
 
-			if (lastTileInfluenced != null){
+			if (lastTileInfluenced != null && !Pause.paused){
 				if(newShot){
 					shootSetup();
 				}

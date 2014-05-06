@@ -6,7 +6,8 @@ public enum GameState
 	gameWon = 2,
 	gameNotStarted = 3,
 	gameRestartable = 4,
-	tutorial = 5 
+	tutorial = 5, 
+	paused = 6
 }
 
 

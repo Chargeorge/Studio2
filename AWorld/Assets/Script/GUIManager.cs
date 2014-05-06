@@ -148,6 +148,12 @@ public class GUIManager : MonoBehaviour {
 			break;
 
 		case GameState.playing:
+
+			break;
+
+		case GameState.paused:
+			GUI.DrawTexture(new Rect(0,0,boxWidth,boxHeight), (Texture)Resources.Load("Sprites/victoryBackground3"), ScaleMode.StretchToFill, true, 1.0f);
+			GUI.Label (new Rect(Screen.width/3, Screen.height/2, Screen.width/3, Screen.height/15), "Pause", victoryStyle);
 			break;
 		}
 
