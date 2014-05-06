@@ -648,9 +648,9 @@ public class GameManager : MonoBehaviour {
 		}
 
 		if(_currentState == GameState.gameRestartable){
-			if(Input.GetButtonDown("BuildPlayer1")){
-				Application.LoadLevel(Application.loadedLevel);
-			}
+			//if(Input.GetButtonDown("BuildPlayer1")){
+			//	Application.LoadLevel(Application.loadedLevel);
+			//}
 		}
 
 

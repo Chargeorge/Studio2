@@ -123,11 +123,11 @@ public class GUIManager : MonoBehaviour {
 				menu = false;
 			}
 			if(Input.GetButton("BuildPlayer1") && restart){
-				audio.Play();
+				if (!audio.isPlaying) audio.Play();
 				Invoke("replay", 1.5f);
 			}
 			if(Input.GetButton("BuildPlayer1") && menu){
-				audio.Play();
+				if (!audio.isPlaying) audio.Play();
 				Invoke("mainMenu", 1.5f);
 			}
 
