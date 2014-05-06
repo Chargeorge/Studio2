@@ -97,10 +97,13 @@ public class GUIManager : MonoBehaviour {
 			}
 			winningTeam =gRef.vIsForVendetta.completingTeam;
 			/*GUI.BeginGroup(new Rect(Screen.width/2 - boxWidth/2, Screen.height/2 - boxHeight/2, boxWidth, boxHeight));*/
+
 			GUI.DrawTexture(new Rect(0,0,boxWidth,boxHeight), winningTeam.winTexture, ScaleMode.StretchToFill, true, 1.0f);
 			/*GUI.EndGroup();*/
-			victoryStyle.normal.textColor = winningTeam.teamColor;
-			GUI.Label (new Rect(Screen.width/3, Screen.height/15, Screen.width/3, Screen.height/15), victoryString, victoryStyle);
+			//victoryStyle.normal.textColor = winningTeam.teamColor;
+			Color32 blackText = new Color32(0,0,0, 255);
+			victoryStyle.normal.textColor = blackText;
+			GUI.Label (new Rect(Screen.width/3, Screen.height/2, Screen.width/3, Screen.height/15), victoryString, victoryStyle);
 			
 			if(restart) GUI.Label (new Rect(subStyleX*2, subStyleY, subStyleWidth, subStyleHeight), "Restart", subStyleHighlight);
 			if(!restart) GUI.Label(new Rect(subStyleX*2, subStyleY, subStyleWidth, subStyleHeight), "Restart", subStyle);
@@ -132,8 +135,9 @@ public class GUIManager : MonoBehaviour {
 			/*GUI.BeginGroup(new Rect(Screen.width/2 - boxWidth/2, Screen.height/2 - boxHeight/2, boxWidth, boxHeight));*/
 			GUI.DrawTexture(new Rect(0,0,boxWidth,boxHeight), winningTeam.winTexture, ScaleMode.StretchToFill, true, 1.0f);
 			/*GUI.EndGroup();*/
-			victoryStyle.normal.textColor = winningTeam.teamColor;
-			GUI.Label (new Rect(Screen.width/3, Screen.height/15, Screen.width/3, Screen.height/15), victoryString, victoryStyle);
+			blackText = new Color32(0,0,0, 255);
+			victoryStyle.normal.textColor = blackText;
+			GUI.Label (new Rect(Screen.width/3, Screen.height/2, Screen.width/3, Screen.height/15), victoryString, victoryStyle);
 			
 			if(restart) GUI.Label (new Rect(subStyleX*2, subStyleY, subStyleWidth, subStyleHeight), "Restart", subStyleHighlight);
 			if(!restart) GUI.Label(new Rect(subStyleX*2, subStyleY, subStyleWidth, subStyleHeight), "Restart", subStyle);
