@@ -153,7 +153,7 @@ public class Altar : MonoBehaviour {
 									gameObject.transform.renderer.material.shader = Shader.Find ("Transparent/Diffuse");
 									Color32 drainedColor = gameObject.renderer.material.color;
 									drainedColor.a = (byte) (sRef.drainedAltarAlpha * 255f);
-									Debug.Log (drainedColor.a);
+									//Debug.Log (drainedColor.a);
 									gameObject.renderer.material.color = drainedColor;
 								}
 							}
