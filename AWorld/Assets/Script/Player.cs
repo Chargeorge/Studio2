@@ -103,6 +103,9 @@ public class Player : MonoBehaviour {
 		jiggleHash.Add ("x", _jiggleRange);
 		jiggleHash.Add ("y", _jiggleRange);
 		jiggleHash.Add("time", .02f);
+		jiggleHash.Add("oncomplete", "resetPos");
+		jiggleHash.Add("oncompletetarget", gameObject);
+		
 		
 		if(PlayerNumber == 1){
 			winTexture = gm.winTexture1;
@@ -1272,7 +1275,11 @@ public class Player : MonoBehaviour {
 //		_positionOffset = new Vector2 (Random.Range (-1 * _jiggleRange, _jiggleRange), Random.Range(-1 * _jiggleRange, _jiggleRange));
 		//pa = new Vector2 (Random.Range (-1 * _jiggleRange, _jiggleRange), 0);
 		
-		iTween.ShakePosition(transform.parent.gameObject, jiggleHash);
+		iTween.ShakePosition(gameObject, jiggleHash);
+	}
+	
+	public void resetPos(){
+		transform.localPosition = new Vector3(0,0,0);
 	}
 	
 	/// <summary>
