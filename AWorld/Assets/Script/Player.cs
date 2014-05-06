@@ -829,7 +829,7 @@ public class Player : MonoBehaviour {
 									Debug.Log (sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime);
 									Debug.Log (currentTile.brdXPos);
 									Debug.Log(currentTile.percControlled);
-								     float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime);
+								    float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime);
 									currentActionProgress = currentTile.percControlled;
 									
 									float averageActionProgress = getAverageActionProgress();
@@ -847,12 +847,12 @@ public class Player : MonoBehaviour {
 								
 								
 								if(test > 0f || (currentTile.owningTeam != null && currentTile.owningTeam == team)){
-										
+									Debug.Log ("here");
 										if (currentTile.getLocalAltar () != null || currentTile.tooCloseToBeacon() || currentTile.gameObject.transform.FindChild ("Home(Clone)") != null) {
 								
-											_invalidAction = true;
+											//_invalidAction = true;
 										
-											//_currentState = PlayerState.standing;
+											_currentState = PlayerState.standing;
 											
 										}
 										
@@ -870,7 +870,7 @@ public class Player : MonoBehaviour {
 											}
 											
 											beaconInProgress = beaconBeingBuilt.GetComponent<Beacon>();					
-										
+											
 											if (currentTile.buildable () && 
 												(beaconInProgress.currentState == null || beaconInProgress.currentState == BeaconState.BuildingBasic)) 
 											{
