@@ -11,7 +11,12 @@ public class BaseTile : MonoBehaviour {
 	public GameObject qudInfluenceLayer;
 	
 	public TeamInfo controllingTeam;  //LOGIC TO ADD owningTeam ONLY CHANGES when controlling team reaches 100 or 0
-	public float percControlled;
+	private float _percControlled;
+	public float percControlled{
+		get{
+			return _percControlled;
+		}
+	}
 	public TeamInfo owningTeam;  //OWNING team is the official owning team, use it for defining networks and movement cost.
 	
 	private Settings _sRef;
@@ -330,19 +335,19 @@ public class BaseTile : MonoBehaviour {
 
 			qudInfluenceLayer.SetActive(true);
 			Color32 controllingTeamColor = controllingTeam.tileColor;
-			//controllingTeamColor.a = (byte) (255*(percControlled/100f));
+			//controllingTeamColor.a = (byte) (255*(_percControlled/100f));
 
 
 			transform.Find("NoBuildLayer").renderer.material.color = controllingTeam.tileColor;
 			
 			if (owningTeam != null && owningTeam == controllingTeam) {
-				controllingTeamColor.a = (byte) (255-255*((1.0f-percControlled/100f) * (1.0f - sRef.percMaxInfluenceColor)));
+				controllingTeamColor.a = (byte) (255-255*((1.0f-_percControlled/100f) * (1.0f - sRef.percMaxInfluenceColor)));
 			}
 			else {
-				controllingTeamColor.a = (byte) (255*(percControlled/100f) * sRef.percMaxInfluenceColor);
+				controllingTeamColor.a = (byte) (255*(_percControlled/100f) * sRef.percMaxInfluenceColor);
 			}
 			
-			if (percControlled >= 100f) controllingTeamColor.a = (byte) 255;
+			if (_percControlled >= 100f) controllingTeamColor.a = (byte) 255;
 			
 			qudInfluenceLayer.renderer.material.color = controllingTeamColor;
 //			qudInfluenceLayer.renderer.material.color = controllingTeam.tileColor;			
@@ -392,7 +397,7 @@ public class BaseTile : MonoBehaviour {
 		//			jigglePos = transform.position + positionOffset;
 				tiltTimer += Time.deltaTime;
 				tiltZ = Mathf.Sin(tiltTimer * tiltRate) * _maxTiltAngle;
-		//			Debug.Log (percControlled);
+		//			Debug.Log (_percControlled);
 				/**
 				Quaternion toSlerp;
 				if (tiltingLeft) {
@@ -802,11 +807,11 @@ public class BaseTile : MonoBehaviour {
 		///TODO: add start semaphore stuff here
 		currentState = TileState.beingInfluenced;
 		controllingTeam = team;
-		percControlled = initialProgress;
+		_percControlled = initialProgress;
 	}
 	
 	public void addProgressToInfluence(float rate){
-		percControlled += rate*Time.deltaTime;
+		_percControlled += rate*Time.deltaTime;
 		influenceThisFrame += rate*Time.deltaTime;
 	}
 	/// <summary>
@@ -818,10 +823,10 @@ public class BaseTile : MonoBehaviour {
 	public bool addProgressToInfluence(float rate, TeamInfo newTeam){
 		bool returnable  = false;
 		if(controllingTeam != null && controllingTeam.teamNumber != newTeam.teamNumber){
-			percControlled -= rate*Time.deltaTime;
+			_percControlled -= rate*Time.deltaTime;
 			influenceThisFrame -= rate*Time.deltaTime;
-			if(percControlled <=0) {
-				percControlled = 0;
+			if(_percControlled <=0) {
+				_percControlled = 0;
 				flipInfluence(newTeam);
 			}
 		}else{
@@ -829,9 +834,9 @@ public class BaseTile : MonoBehaviour {
 				startInfluence(rate*Time.deltaTime, newTeam);
 			}
 			else{
-				percControlled += rate*Time.deltaTime;
+				_percControlled += rate*Time.deltaTime;
 				influenceThisFrame += rate*Time.deltaTime;
-				if(percControlled >= 100) {
+				if(_percControlled >= 100) {
 					finishInfluence();
 					returnable = true;
 				}
@@ -846,14 +851,14 @@ public class BaseTile : MonoBehaviour {
 	/// <returns>The tract influence.</returns>
 	/// <param name="rate">Rate.</param>
 	public float subTractInfluence(float amt, TeamInfo subtractingTeam){
-		if(percControlled > 0){
-			percControlled -= amt;
+		if(_percControlled > 0){
+			_percControlled -= amt;
 			influenceThisFrame -= amt;
 			return 0f;
 		}
 
 		else{
-			float returnable = Math.Abs (percControlled);
+			float returnable = Math.Abs (_percControlled);
 			flipInfluence(subtractingTeam);
 			return returnable;
 			
@@ -863,12 +868,12 @@ public class BaseTile : MonoBehaviour {
 	
 	///
 	public float addInfluenceReturnOverflow(float amt){
-		if(percControlled < 100f){
-			percControlled += amt;
+		if(_percControlled < 100f){
+			_percControlled += amt;
 			influenceThisFrame += amt;
 		}
-		if(percControlled >100f){
-			float returnable = percControlled -100f;
+		if(_percControlled >100f){
+			float returnable = _percControlled -100f;
 			finishInfluence();
 			return returnable;
 		}
@@ -884,7 +889,7 @@ public class BaseTile : MonoBehaviour {
 			owningTeam.score -= getTileScore();
 		}
 		controllingTeam = newTeam;
-		percControlled = 0;
+		_percControlled = 0;
 		owningTeam = null;
 		
 		Beacon localBeacon = GetComponentInChildren<Beacon>();
@@ -906,8 +911,8 @@ public class BaseTile : MonoBehaviour {
 	public void finishInfluence(){
 		///TODO: add end semaphore stuff her
 		if(controllingTeam != owningTeam){
-			if(percControlled > 100f){
-				percControlled = 100f;
+			if(_percControlled > 100f){
+				_percControlled = 100f;
 				currentState = TileState.normal;
 				if(controllingTeam.teamNumber == 1)	audio.clip = sRef.InfluenceDoneLo;
 				if(controllingTeam.teamNumber == 2) audio.clip = sRef.InfluenceDoneHi;
@@ -944,7 +949,7 @@ public class BaseTile : MonoBehaviour {
 		
 	}
 	public void clearInfluence(){
-		percControlled = 0;
+		_percControlled = 0;
 		controllingTeam = null;
 		owningTeam = null;
 		
@@ -1079,7 +1084,7 @@ public class BaseTile : MonoBehaviour {
 	}
 
 	public float percentInfluenced(){
-		return percControlled;
+		return _percControlled;
 	}
 
 	public void LateUpdate() 

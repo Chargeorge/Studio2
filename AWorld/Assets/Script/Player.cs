@@ -339,6 +339,7 @@ public class Player : MonoBehaviour {
 											beaconInProgress.setDirection(facing);
 											beaconInProgress.selfDestructing = false;
 											_invalidAction = true;
+											Debug.Log ("332");
 										}
 										else{
 											if ((!currentTile.buildable() && currentTile.beacon == null) || 
@@ -349,9 +350,10 @@ public class Player : MonoBehaviour {
 												
 											{
 												_invalidAction = true;
-												if(!audioSourceInvalid.isPlaying){ 
-													playInvalid (0.3f);										
-												}
+												Debug.Log ("343");
+											//												if(!audioSourceInvalid.isPlaying){ 
+//													playInvalid (0.3f);										
+//												}
 											}
 										}
 									} else{
@@ -360,6 +362,7 @@ public class Player : MonoBehaviour {
 								}
 								else {
 									Pulsate ();
+									currentActionProgress = 0f;
 									float vpsInfluenceRate = sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost();
 									addProgressToAction(vpsInfluenceRate);
 									_currentState = PlayerState.influencing;
@@ -748,7 +751,8 @@ public class Player : MonoBehaviour {
 								}
 								else{
 									_invalidAction = true;
-									
+									Debug.Log ("743");
+								
 								}
 							}
 							else
@@ -765,8 +769,8 @@ public class Player : MonoBehaviour {
 							_currentState = PlayerState.standing;
 							//StopSFX ();
 							_invalidAction = true;
-							
-							//PlaySFX(invalid_Input, 1.0f);
+							Debug.Log ("761");
+						//PlaySFX(invalid_Input, 1.0f);
 							}
 					break;
 					
@@ -806,21 +810,24 @@ public class Player : MonoBehaviour {
 							if(currentTile.controllingTeam != null){
 								if(currentTile.controllingTeam.teamNumber == teamNumber)
 								{                                      
-									//Debug.Log("Adding Influence");
-									float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime);
+									Debug.Log("Adding Influence");
+									
+									Debug.Log (sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime);
+									Debug.Log (currentTile.brdXPos);
+									Debug.Log(currentTile.percControlled);
+								           float test = currentTile.addInfluenceReturnOverflow( sRef.vpsBasePlayerInfluence * getPlayerInfluenceBoost() * Time.deltaTime);
 									currentActionProgress = currentTile.percControlled;
 									
 									float averageActionProgress = getAverageActionProgress();
 								if(_currentState == PlayerState.influencing){
 									
 //									Debug.Log (averageActionProgress*100 +" " +  currentTile.percControlled);
-									if(averageActionProgress*100 > currentTile.percControlled){
-//										Debug.Log("In total");
+									if(averageActionProgress*100 > currentTile.percControlled  && isInfluenceNotFrameOne()){
+										Debug.Log("In total");
 										_invalidAction = true;		
 									}
-									if(Mathf.Abs(getAverageActionProgressDifference()) < .001 ){  
-//										Debug.Log(getAverageActionProgressDifference());
-//										Debug.Log("In average");
+									if(Mathf.Abs(getAverageActionProgressDifference()) < .001 && isInfluenceNotFrameOne() ){  
+										
 										
 										_invalidAction = true;	
 									}
@@ -831,7 +838,8 @@ public class Player : MonoBehaviour {
 										if (currentTile.getLocalAltar () != null || currentTile.tooCloseToBeacon() || currentTile.gameObject.transform.FindChild ("Home(Clone)") != null) {
 								
 											_invalidAction = true;
-											_currentState = PlayerState.standing;
+										Debug.Log ("827");
+										_currentState = PlayerState.standing;
 											if(currentTile.tooCloseToBeacon() && currentTile.beacon == null && !audioSourceInvalid.isPlaying) {
 												playInvalid (0.3f);																									
 											}
@@ -904,13 +912,14 @@ public class Player : MonoBehaviour {
 									if(_currentState == PlayerState.influencing){
 										
 //										Debug.Log (averageActionProgress*100 +" " +  currentTile.percControlled);
-									       if(averageActionProgress*100 < currentTile.percControlled){
-//												Debug.Log("In total");
-													_invalidAction = true;		
+									if(averageActionProgress*100 < currentTile.percControlled  && isInfluenceNotFrameOne()){
+										Debug.Log("In total");
+													_invalidAction = true;	
+														
 											}
-									    if(Mathf.Abs(getAverageActionProgressDifference()) < .001 ){  
-//										Debug.Log(getAverageActionProgressDifference());
-//										          Debug.Log("In average");
+									    if(Mathf.Abs(getAverageActionProgressDifference()) < .001 && isInfluenceNotFrameOne()){  
+											Debug.Log(getAverageActionProgressDifference());
+										        Debug.Log("In average");
 										
 											_invalidAction = true;	
 										}
@@ -1546,6 +1555,17 @@ public class Player : MonoBehaviour {
 		}
 //		Debug.Log ("count: " + count);
 		return max-min;
+	}
+	
+	public bool isInfluenceNotFrameOne(){
+		int zeroCount = 0;
+		for(int i = 0; i <actionProgress.Length; i++){
+			if(actionProgress[i] != 0) {
+				if(actionProgress[i] ==0) { zeroCount++;}
+				
+			}
+		}
+		if(zeroCount>=2) return true; else return false;
 	}
 	
 	
