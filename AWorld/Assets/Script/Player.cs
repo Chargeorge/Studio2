@@ -61,7 +61,7 @@ public class Player : MonoBehaviour {
 
 	private GameObject qudProgessCircle;
 	private GameObject qudActionableGlow;
-
+	private Hashtable jiggleHash;
 	/// <summary>
 	/// Gets or sets the grd location.  Sets transform to corresponding center square of tile.  
 	/// I'm not sure if I like that it does this, maybe we should break into seperate calls?  
@@ -99,7 +99,11 @@ public class Player : MonoBehaviour {
 		qudProgessCircle = transform.parent.FindChild("ActionTimer").gameObject;
 		qudProgessCircle.renderer.material.color = team.beaconColor;
 		qudActionableGlow = transform.parent.FindChild("ActionableGlow").gameObject;
-
+		jiggleHash = new Hashtable();
+		jiggleHash.Add ("x", _jiggleRange);
+		jiggleHash.Add ("y", _jiggleRange);
+		jiggleHash.Add("time", .02f);
+		
 		if(PlayerNumber == 1){
 			winTexture = gm.winTexture1;
 			audioSourceMove.clip = Resources.Load("SFX/Player_Moving_Lo") as AudioClip;
@@ -1083,6 +1087,9 @@ public class Player : MonoBehaviour {
 				if (!Pause.paused) {		
 					if(_invalidAction){
 						qudActionableGlow.renderer.material.color = Color.red;	
+						Jiggle();
+						
+						
 						if(!audioSourceInvalid.isPlaying){
 							playInvalid(1f);
 						}
@@ -1257,8 +1264,9 @@ public class Player : MonoBehaviour {
 	private void Jiggle () {
 	
 //		_positionOffset = new Vector2 (Random.Range (-1 * _jiggleRange, _jiggleRange), Random.Range(-1 * _jiggleRange, _jiggleRange));
-		_positionOffset = new Vector2 (Random.Range (-1 * _jiggleRange, _jiggleRange), 0);
+		//pa = new Vector2 (Random.Range (-1 * _jiggleRange, _jiggleRange), 0);
 		
+		iTween.ShakePosition(transform.parent.gameObject, jiggleHash);
 	}
 	
 	/// <summary>
