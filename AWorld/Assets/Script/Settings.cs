@@ -231,7 +231,7 @@ public class Settings : MonoBehaviour {
 		scoreBitExplosionFinishSpeed = 1.0f;
 		arrowSpeed = 5f;					//how fast beacon arrows shoot
 		arrowInterval = 2f;					//how often beacon arrows shoot
-		sharedTileColor = new Color32 (76, 153, 0, 255);
+		sharedTileColor = new Color32 (76, 153, 0, 150);
 		
 		//Player movement stuff
 		playerAccelRate = 0.38f;
