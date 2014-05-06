@@ -677,26 +677,16 @@ public class GameManager : MonoBehaviour {
 		Hashtable qud2HT = new Hashtable();
 		
 		if(tutorials.Length > tutorialIndex+1){
-			qudTutorial2.renderer.material.mainTexture = tutorials[tutorialIndex+1];
+			qudTutorial1.renderer.material.mainTexture = tutorials[tutorialIndex+1];
 		}
 		else{
-			
-			qud1HT.Add("y", 25);
-			qud1HT.Add("time", 3f);
-			qud1HT.Add("easetype", iTween.EaseType.easeOutElastic);
-			iTween.MoveTo(qudTutorial1, qud1HT);
-			
-			qud2HT.Add("y", 100 -.5f);
-			qud2HT.Add("time", .5f);
-			qud2HT.Add("easetype", iTween.EaseType.easeOutElastic);
-			iTween.MoveTo(qudTutorial2, qud2HT);
-			
+			qudTutorial1.SetActive(false);
 			
 			return false;
 			
 		}
 		
-		GameObject swapHolder;
+		/*GameObject swapHolder;
 		qudTutorial2.transform.position = new Vector3((sRef.boardSize.x/2)-.5f, -20, -3);
 		
 		qud1HT.Add("y", 40);
