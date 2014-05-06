@@ -23,7 +23,7 @@ public class Altar : MonoBehaviour {
 	public GameObject prfbScoreBit;
 	public Transform symbol;
 	
-	public AudioClip Praying;
+	public AudioClip Praying; //not used anymore, it is played through TeamInfo>Bar
 	
 	public GameObject scoreBar {
 		get {

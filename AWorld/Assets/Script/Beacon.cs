@@ -297,7 +297,7 @@ public class Beacon : MonoBehaviour {
 	public void startUpgrading(){
 		this._currentState = BeaconState.BuildingAdvanced;
 		
-		upgradingTargetVol = 0.8f;
+		upgradingTargetVol = sRef.beaconUpgradingVolume;
 		
 		if (!audioSourceUpgrading.isPlaying) {
 			audioSourceUpgrading.volume = 0.0f;
@@ -308,7 +308,7 @@ public class Beacon : MonoBehaviour {
 	public void startRotating (DirectionEnum? dir) {
 		dirRotatingToward = dir;
 		
-		rotatingTargetVol = 0.7f;
+		rotatingTargetVol = sRef.beaconRotatingVolume;
 		
 		if (!audioSourceRotating.isPlaying) {
 			audioSourceRotating.volume = 0.0f;
@@ -380,7 +380,7 @@ public class Beacon : MonoBehaviour {
 			audioSourceBuilding.volume = 0.0f;
 			audioSourceBuilding.Play (); 	//Dunno why the fuck this is necessary but whatever
 		}
-		buildingTargetVol = 0.5f;
+		buildingTargetVol = sRef.beaconBuildingVolume;
 	
 		percBuildComplete += rate*Time.deltaTime;
 						
@@ -448,7 +448,7 @@ public class Beacon : MonoBehaviour {
 			audioSourceRotating.volume = 0.0f;
 			audioSourceRotating.Play ();
 		}
-		rotatingTargetVol = 0.7f;
+		rotatingTargetVol = sRef.beaconRotatingVolume;
 		
 		percRotateComplete += rate*Time.deltaTime;
 		losingRotateProgress = false;
@@ -459,7 +459,7 @@ public class Beacon : MonoBehaviour {
 			audioSourceUpgrading.volume = 0.0f;
 			audioSourceUpgrading.Play (); 	//Dunno why the fuck this is necessary but whatever
 		}
-		upgradingTargetVol = 0.8f;
+		upgradingTargetVol = sRef.beaconUpgradingVolume;
 		
 		percUpgradeComplete += rate*Time.deltaTime;
 		updateUpgradeAnim ();
@@ -966,7 +966,7 @@ public class Beacon : MonoBehaviour {
 
 		rotatingTargetVol = 0.0f;
 		audioSourceActionCompleted.clip = beaconRotated;
-		audioSourceActionCompleted.volume = 1.0f;
+		audioSourceActionCompleted.volume = sRef.beaconRotatedVolume;
 		audioSourceActionCompleted.Play ();
 
 		if(percRotateComplete >= 100f){
@@ -1042,7 +1042,7 @@ public class Beacon : MonoBehaviour {
 			percBuildComplete = 100f;
 			buildingTargetVol = 0.0f;
 			audioSourceActionCompleted.clip = beaconBuilt;
-			audioSourceActionCompleted.volume = 0.8f;
+			audioSourceActionCompleted.volume = sRef.beaconBuiltVolume;
 			audioSourceActionCompleted.Play ();
 			
 			_currentState = BeaconState.Basic;
@@ -1105,7 +1105,7 @@ public class Beacon : MonoBehaviour {
 
 		upgradingTargetVol = 0.0f;
 		audioSourceActionCompleted.clip = beaconUpgraded;
-		audioSourceActionCompleted.volume = 1.0f;
+		audioSourceActionCompleted.volume = sRef.beaconUpgradedVolume;
 		audioSourceActionCompleted.Play ();
 
 		_currentState = BeaconState.Advanced;

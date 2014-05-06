@@ -68,7 +68,7 @@ public class Bar : MonoBehaviour {
 
 		audioSources = gameObject.GetComponents<AudioSource>();
 		for(int i = 0; i < audioSources.Length; i++){
-			audioSources[i].volume = 0.4f;
+			audioSources[i].volume = sRef.altarScoreVolume;
 		if (team.teamNumber == 1) {
 			audioSources[i].clip = Resources.Load("SFX/Altar_Score_Perc_Lo") as AudioClip;
 			/*audioSources[1].clip = Resources.Load("SFX/Altar_Score_PentaScale_Lo_2") as AudioClip;

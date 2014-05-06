@@ -47,6 +47,14 @@ public class MainMenu : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+		GameObject _musicObject  = GameObject.FindGameObjectWithTag("Music");
+		Debug.Log(_musicObject);
+		if(_musicObject == null){
+			Instantiate(musicObject);
+			musicObject.audio.Play();
+		}
+
 		/**
 		// Handled in cursor now
 		if(cursor.transform.position.y < -0.4 && cursor.transform.position.y > -1.4){
@@ -65,10 +73,8 @@ public class MainMenu : MonoBehaviour {
 			startSelected = false;
 			optionsSelected = false;
 			quitSelected = false;
-		}
-		*/
+		}*/
 
-		Debug.Log ("volume :"+music.volume);
 		/*if(joystickActive){
 		if(startSelected){
 			if(Input.GetAxisRaw("VerticalPlayer1") < -deadZone){

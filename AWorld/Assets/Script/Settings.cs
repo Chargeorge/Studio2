@@ -106,10 +106,30 @@ public class Settings : MonoBehaviour {
 	
 	//Audio stuff
 	public float moveVolume;
+	public float moveEnemyVolume;
 	public float moveVolumeLerpRate;
 	public float playerInfluenceStartVolume;
 	public float playerInfluenceStartVolumeLerpRate;
 	public float playerInfluenceDoneVolume;
+	public float playerDeinfluencingVolume;
+	public float invalidInputVolume;
+
+	public float beaconBuildingVolume;
+	public float beaconBuiltVolume;
+	public float beaconUpgradingVolume;
+	public float beaconUpgradedVolume;
+	public float beaconRotatingVolume;
+	public float beaconRotatedVolume;
+
+	public float altarScoreVolume;
+
+	public float soundtrackVolume;
+	public float layersVolume;
+	public float musicClimaxVolume;
+
+	public float startGameVolume;
+	public float victoryVolume;
+	public float restartVolume;
 	
 	public AudioClip InfluenceDoneHi;
 	public AudioClip InfluenceDoneLo;
@@ -233,7 +253,26 @@ public class Settings : MonoBehaviour {
 		moveVolumeLerpRate = 0.2f;
 		playerInfluenceStartVolume = 1.0f;
 		playerInfluenceStartVolumeLerpRate = 0.1f;
-		playerInfluenceDoneVolume = 0.2f;
+		playerInfluenceDoneVolume = 0.1f;
+		playerDeinfluencingVolume = 0.2f;
+		invalidInputVolume = 0.5f;
+
+		beaconBuildingVolume = 0.5f;
+		beaconBuiltVolume = 0.8f;
+		beaconUpgradingVolume = 0.9f;
+		beaconUpgradedVolume = 0.8f;
+		beaconRotatingVolume = 0.8f;
+		beaconRotatedVolume = 1f;
+		
+		altarScoreVolume = 0.3f;
+		
+		soundtrackVolume = 0.4f;
+		layersVolume = 0.6f;
+		musicClimaxVolume = 1f;
+		
+		startGameVolume = 0.8f;
+		victoryVolume = 1f;
+		restartVolume = 0.5f;
 		
 		InfluenceDoneHi = Resources.Load("SFX/Influence_Done_Hi") as AudioClip;
 		InfluenceDoneLo = Resources.Load("SFX/Influence_Done_Lo") as AudioClip;

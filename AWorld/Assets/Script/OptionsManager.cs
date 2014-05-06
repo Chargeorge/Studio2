@@ -77,7 +77,12 @@ public class OptionsManager : MonoBehaviour {
 	void Start () {
 		turnOffMusic = false;
 
-		musicObject = GameObject.Find("MusicOptions");
+		musicObject = GameObject.FindWithTag("Music");
+
+		if(musicObject == null){
+			musicObject = GameObject.FindWithTag("Finish");
+			musicObject.audio.Play();
+		}
 
 		music = musicObject.GetComponent<AudioSource>();
 

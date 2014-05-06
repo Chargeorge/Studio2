@@ -91,7 +91,7 @@ public class GameManager : MonoBehaviour {
 		Camera.main.orthographicSize = sRef.cameraSize;
 		Camera.main.transform.position = sRef.cameraPosition;
 
-		audio.PlayOneShot(Game_Launch, 0.9f);
+		audio.PlayOneShot(Game_Launch, sRef.startGameVolume);
 		qudTutorial1 = (GameObject)GameObject.Instantiate(prfbTutorial, new Vector3(100f,100f,10f), Quaternion.identity);
 		
 		qudTutorial2 = (GameObject)GameObject.Instantiate(prfbTutorial, new Vector3(101f,101f,10f), Quaternion.identity);
@@ -630,7 +630,7 @@ public class GameManager : MonoBehaviour {
 				//Debug.Log("checstate done");
 
 				if(v.isCompleted && !isPlaying){
-					audio.PlayOneShot(Victory_Gong, 0.9f);
+					audio.PlayOneShot(Victory_Gong, sRef.victoryVolume);
 					isPlaying = true;
 					_currentState = GameState.gameWon;
 					_victoryString += v.getVictorySting();
