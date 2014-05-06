@@ -4,6 +4,9 @@ using System.Collections;
 public class GUIManager : MonoBehaviour {
 	Settings sRef;
 	GameManager gRef;
+
+	Bar bar;
+
 	public float scoreBarH = 30;
 	public float scoreBarW = 75;
 	Rect TeamRect1, ScoreRect1;
@@ -80,7 +83,9 @@ public class GUIManager : MonoBehaviour {
 		TeamInfo winningTeam;
 		switch (gRef.currentState){
 		case GameState.gameWon:
-
+			/*for(int i = 0; i < bar.audioSources.Length; i++){
+				bar.audioSources[i].volume = 0.0f;
+			}*/
 			if(Input.GetAxis("HorizontalPlayer1") > 0f&& restart){
 				menu = true;
 				restart = false;
@@ -90,7 +95,7 @@ public class GUIManager : MonoBehaviour {
 				menu = false;
 			}
 			if(Input.GetButton("BuildPlayer1") && restart){
-				audio.Play();
+				//audio.Play();
 				Invoke("replay", 1.5f);
 			}
 			if(Input.GetButton("BuildPlayer1") && menu){
@@ -122,7 +127,7 @@ public class GUIManager : MonoBehaviour {
 				menu = false;
 			}
 			if(Input.GetButton("BuildPlayer1") && restart){
-				audio.Play();
+				//audio.Play();
 				Invoke("replay", 1.5f);
 			}
 			if(Input.GetButton("BuildPlayer1") && menu){

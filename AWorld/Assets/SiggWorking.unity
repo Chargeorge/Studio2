@@ -1429,21 +1429,21 @@ MonoBehaviour:
   moveVolumeLerpRate: .200000003
   playerInfluenceStartVolume: 1
   playerInfluenceStartVolumeLerpRate: .100000001
-  playerInfluenceDoneVolume: .200000003
-  playerDeinfluencingVolume: .800000012
+  playerInfluenceDoneVolume: .100000001
+  playerDeinfluencingVolume: .100000001
   invalidInputVolume: .300000012
   beaconBuildingVolume: .5
-  beaconBuiltVolume: .699999988
+  beaconBuiltVolume: .800000012
   beaconUpgradingVolume: .800000012
-  beaconUpgradedVolume: .699999988
+  beaconUpgradedVolume: .800000012
   beaconRotatingVolume: .699999988
   beaconRotatedVolume: 1
   altarScoreVolume: .400000006
-  soundtrackVolume: .400000006
-  layersVolume: .400000006
+  soundtrackVolume: .300000012
+  layersVolume: .5
   musicClimaxVolume: 1
-  startGameVolume: .899999976
-  victoryVolume: .899999976
+  startGameVolume: .800000012
+  victoryVolume: 1
   restartVolume: .5
   InfluenceDoneHi: {fileID: 0}
   InfluenceDoneLo: {fileID: 0}

@@ -29,8 +29,8 @@ public class DynamicMusic : MonoBehaviour {
 
 		layerVolume = sRef.layersVolume;
 		layerVolumeClimax = sRef.musicClimaxVolume;
-		lerpRate = 0.1f;
-		lerpRateFast = 0.3f;
+		lerpRate = 0.3f;
+		lerpRateFast = 0.5f;
 
 		layer1Lo.volume = 0.0f;
 		layer2LoMid.volume = 0.0f;
@@ -67,8 +67,8 @@ public class DynamicMusic : MonoBehaviour {
 			if(scorePlayer1 > .9f || scorePlayer2 > .9f){ //this is when two players are really tied
 				audioLerp(layer1Lo, 0.0f, lerpRateFast); //turn off the first layer
 				audioLerp(layer2LoMid, 0.0f, lerpRateFast); //turn off the second layer
-				audioLerp(layer3MidHi, layerVolumeClimax, lerpRateFast);
-				audioLerp(soundtrack, layerVolumeClimax, lerpRateFast);
+				audioLerp(layer3MidHi, layerVolumeClimax, lerpRate);
+				audioLerp(soundtrack, layerVolumeClimax, lerpRate);
 			}
 		}
 

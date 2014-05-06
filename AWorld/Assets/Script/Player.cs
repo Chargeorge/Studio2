@@ -750,13 +750,16 @@ public class Player : MonoBehaviour {
 					moveTowardCenterOfTile (currentTile);
 		
 					if(currentTile.controllingTeam!= null && currentTile.controllingTeam.teamNumber != teamNumber){
+							audioSourceInfluenceStart.volume = sRef.playerDeinfluencingVolume;
 							audioSourceInfluenceStart.clip = Resources.Load("SFX/Player_DeInfluencing_2") as AudioClip;
+							
 							if(!audioSourceInfluenceStart.isPlaying){
 								audioSourceInfluenceStart.Play();
 //							Debug.Log(audioSourceInfluenceStart.clip);
 							}
 						} else if(currentTile.owningTeam == null || currentTile.controllingTeam.teamNumber == teamNumber){
 							audioSourceInfluenceStart.clip = Resources.Load("SFX/Player_Influencing") as AudioClip;
+						audioSourceInfluenceStart.volume = sRef.playerInfluenceStartVolume;
 						}
 						
 						audioLerp (audioSourceMove, 0.0f, sRef.moveVolumeLerpRate);

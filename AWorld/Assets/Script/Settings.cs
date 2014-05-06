@@ -251,25 +251,25 @@ public class Settings : MonoBehaviour {
 		moveVolumeLerpRate = 0.2f;
 		playerInfluenceStartVolume = 1.0f;
 		playerInfluenceStartVolumeLerpRate = 0.1f;
-		playerInfluenceDoneVolume = 0.2f;
-		playerDeinfluencingVolume = 0.8f;
-		invalidInputVolume = 0.3f;
+		playerInfluenceDoneVolume = 0.1f;
+		playerDeinfluencingVolume = 0.2f;
+		invalidInputVolume = 0.5f;
 
 		beaconBuildingVolume = 0.5f;
-		beaconBuiltVolume = 0.7f;
-		beaconUpgradingVolume = 0.8f;
-		beaconUpgradedVolume = 0.7f;
-		beaconRotatingVolume = 0.7f;
+		beaconBuiltVolume = 0.8f;
+		beaconUpgradingVolume = 0.9f;
+		beaconUpgradedVolume = 0.8f;
+		beaconRotatingVolume = 0.8f;
 		beaconRotatedVolume = 1f;
 		
-		altarScoreVolume = 0.4f;
+		altarScoreVolume = 0.3f;
 		
 		soundtrackVolume = 0.4f;
-		layersVolume = 0.4f;
+		layersVolume = 0.6f;
 		musicClimaxVolume = 1f;
 		
-		startGameVolume = 0.9f;
-		victoryVolume = 0.9f;
+		startGameVolume = 0.8f;
+		victoryVolume = 1f;
 		restartVolume = 0.5f;
 		
 		InfluenceDoneHi = Resources.Load("SFX/Influence_Done_Hi") as AudioClip;
@@ -292,7 +292,7 @@ public class Settings : MonoBehaviour {
 			new SizeSetting(new Vector2(28,20),new Vector2(2,10), new Vector2(26,10),10.6f,new Vector2(13.4f, 9.5f), new Vector2(-3.085168f,0), new Vector2 (29.88822f,0), 19.14f, 10f, 9.2f)};
 		
 		setPrefs();
-		useReadyUp = true;
+		useReadyUp = false;
 
 	}
 
