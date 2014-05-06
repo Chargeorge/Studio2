@@ -1428,12 +1428,12 @@ MonoBehaviour:
   influenceRevealRange: 0
   secTillRestartable: 0
   moveVolume: .600000024
-  moveEnemyVolume: .600000024
+  moveEnemyVolume: .300000012
   moveVolumeLerpRate: .200000003
   playerInfluenceStartVolume: 1
   playerInfluenceStartVolumeLerpRate: .100000001
   playerInfluenceDoneVolume: .100000001
-  playerDeinfluencingVolume: .100000001
+  playerDeinfluencingVolume: .00999999978
   invalidInputVolume: .300000012
   beaconBuildingVolume: .5
   beaconBuiltVolume: .800000012

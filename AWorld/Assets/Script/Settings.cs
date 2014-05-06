@@ -250,11 +250,12 @@ public class Settings : MonoBehaviour {
 
 		//Audio stuff
 		moveVolume = 0.6f;
+		moveEnemyVolume = 0.2f;
 		moveVolumeLerpRate = 0.2f;
 		playerInfluenceStartVolume = 1.0f;
 		playerInfluenceStartVolumeLerpRate = 0.1f;
 		playerInfluenceDoneVolume = 0.1f;
-		playerDeinfluencingVolume = 0.2f;
+		playerDeinfluencingVolume = 0.1f;
 		invalidInputVolume = 0.5f;
 
 		beaconBuildingVolume = 0.5f;
