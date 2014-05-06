@@ -530,15 +530,12 @@ public class GameManager : MonoBehaviour {
 				});
 				Debug.Log ("In tutorial");
 				
-			}
-			
-			
-			else if(sRef.useReadyUp){
+			} else if(sRef.useReadyUp){
 				_currentState = GameState.gameNotStarted;
 				ReadyUps.ForEach(delegate (GameObject g) {
 					g.SetActive(true);	
 				});
-			}else{
+			} else{
 				_currentState = GameState.playing;
 				ReadyUps.ForEach(delegate (GameObject g) {
 					g.SetActive(false);	
@@ -640,19 +637,32 @@ public class GameManager : MonoBehaviour {
 					vIsForVendetta = v;
 					Invoke("setRestartable", sRef.secTillRestartable);
 				}
-				
+
 			}
+			if(Pause.paused){
+				_currentState = GameState.paused;
+				Time.timeScale = 0;
+			} 
 		}
+
 		if(_currentState == GameState.gameWon){
 			
 		}
 
+		if(_currentState == GameState.paused){
+				if (Pause.paused == false){
+				Time.timeScale = 1;
+				_currentState = GameState.playing;
+
+			}
+		}
+			 
 		if(_currentState == GameState.gameRestartable){
 			//if(Input.GetButtonDown("BuildPlayer1")){
 			//	Application.LoadLevel(Application.loadedLevel);
 			//}
 		}
-
+		
 
 	}
 
