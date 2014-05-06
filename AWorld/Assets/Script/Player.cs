@@ -900,7 +900,7 @@ public class Player : MonoBehaviour {
 									if(test > 0f){
 										currentTile.addInfluenceReturnOverflow(test);
 										if (!audioSourceInvalid.isPlaying) {
-											audioSourceInvalid.volume = 0.3f;	//?
+											audioSourceInvalid.volume = sRef.invalidInputVolume;	//?
 											//audioSourceInvalid.Play ();
 											//Invoke("playInvalid", 1.0f);
 										}
@@ -1084,7 +1084,7 @@ public class Player : MonoBehaviour {
 					if(_invalidAction){
 						qudActionableGlow.renderer.material.color = Color.red;	
 						if(!audioSourceInvalid.isPlaying){
-							playInvalid(1f);
+							playInvalid(sRef.invalidInputVolume);
 						}
 					}
 					else{
@@ -1104,7 +1104,7 @@ public class Player : MonoBehaviour {
 	public void playInvalid(float vol){
 		if (!Pause.paused) {
 			//audioSourceInvalid.volume = vol;
-			audioSourceInvalid.volume = 1f;
+			audioSourceInvalid.volume = sRef.invalidInputVolume;
 			audioSourceInvalid.Play ();
 		}
 	}
