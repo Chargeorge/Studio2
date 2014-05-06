@@ -167,15 +167,27 @@ public class GameManager : MonoBehaviour {
 				// victoryConditions.Add (new NetworkEnemyBase(1));
 				
 				
-				GameObject Player1ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(2, sRef.boardSize.y-4, -3), Quaternion.identity);
-				GameObject Player2ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(2	, 2, -3), Quaternion.identity);
-				GameObject Player3ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(sRef.boardSize.x-2,  sRef.boardSize.y-4, -3), Quaternion.identity);
-				GameObject Player4ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(sRef.boardSize.x-2,2, -3), Quaternion.identity);
+				GameObject Player1ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(sRef.boardSize.x/8f, sRef.boardSize.y*6/8, -3f), Quaternion.identity);
+				GameObject Player2ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(sRef.boardSize.x/8f, sRef.boardSize.y*2/8, -3f), Quaternion.identity);
+				GameObject Player3ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(sRef.boardSize.x*7f/8f,  sRef.boardSize.y*6/8, -3f), Quaternion.identity);
+				GameObject Player4ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(sRef.boardSize.x*7f/8f,sRef.boardSize.y*2/8, -3), Quaternion.identity);
 				
 				Player1ReadyUp.GetComponent<ReadyUp>().setPlayer(p1);	
 				Player2ReadyUp.GetComponent<ReadyUp>().setPlayer(p2);
 				Player3ReadyUp.GetComponent<ReadyUp>().setPlayer(p3);
 				Player4ReadyUp.GetComponent<ReadyUp>().setPlayer(p4);
+				
+				Camera cam = Camera.main;
+				float height = 2f * cam.orthographicSize;
+				float width = height * cam.aspect;
+				
+				Vector3 size = new Vector3(width*.3f, height * .3f,1f);
+				
+				Player1ReadyUp.transform.localScale = size;
+				Player2ReadyUp.transform.localScale = size;
+				Player3ReadyUp.transform.localScale = size;
+				Player4ReadyUp.transform.localScale = size;
+				
 				
 				ReadyUps.Add (Player1ReadyUp);
 				ReadyUps.Add(Player2ReadyUp);
@@ -204,8 +216,20 @@ public class GameManager : MonoBehaviour {
 				team2Home = setUpTeamHome(p2);
 				
 				//
-				GameObject Player1ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(0	, sRef.boardSize.y/2, -3), Quaternion.identity);
-				GameObject Player2ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(sRef.boardSize.x, sRef.boardSize.y/2, -3), Quaternion.identity);
+				GameObject Player1ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(sRef.boardSize.x/8f	, sRef.boardSize.y/2, -3), Quaternion.identity);
+				GameObject Player2ReadyUp = (GameObject)Instantiate(prfbStartUp, new Vector3(sRef.boardSize.x*7f/8f, sRef.boardSize.y/2, -3), Quaternion.identity);
+				
+				Camera cam = Camera.main;
+				float height = 2f * cam.orthographicSize;
+				float width = height * cam.aspect;
+				
+				Vector3 size = new Vector3(width*.4f, height * .45f,1f);
+				
+				
+				
+				Player1ReadyUp.transform.localScale = size;
+				
+				Player2ReadyUp.transform.localScale = size;
 				
 				Player1ReadyUp.GetComponent<ReadyUp>().setPlayer(p1);
 				Player2ReadyUp.GetComponent<ReadyUp>().setPlayer(p2);
@@ -224,8 +248,10 @@ public class GameManager : MonoBehaviour {
 			teamBar2.GetComponent<Bar>().team = teams[1];
 			teams[0].ScoreBar = teamBar1;
 			teams[1].ScoreBar = teamBar2;
+			
 			teams[0].finalTarget = teamBar1.transform.FindChild ("ScoreBitFinalTarget").gameObject;
 			teams[1].finalTarget = teamBar2.transform.FindChild ("ScoreBitFinalTarget").gameObject;
+			
 			teams[0].sRef = sRef;
 			teams[1].sRef = sRef;
 			
@@ -491,12 +517,12 @@ public class GameManager : MonoBehaviour {
 			if(sRef.tutorial){
 				qudTutorial1.renderer.enabled = true;
 				qudTutorial1.transform.position = new Vector3((sRef.boardSize.x/2)-.5f, (sRef.boardSize.y/2)-.5f, -3);
-				qudTutorial1.transform.localScale = new Vector3(sRef.boardSize.x, sRef.boardSize.y, 1);
+				qudTutorial1.transform.localScale = new Vector3(sRef.boardSize.x, sRef.boardSize.x*(3f/4f), 1);
 				qudTutorial1.renderer.material.mainTexture = tutorials[tutorialIndex];
 				
 				qudTutorial2.renderer.enabled = true;
 				qudTutorial2.transform.position = new Vector3((sRef.boardSize.x/2)-.5f, -20, -3);
-				qudTutorial2.transform.localScale = new Vector3(sRef.boardSize.x, sRef.boardSize.y, 1);
+				qudTutorial2.transform.localScale = new Vector3(sRef.boardSize.x, sRef.boardSize.x*(3f/4f), 1);
 				qudTutorial2.renderer.material.mainTexture = tutorials[tutorialIndex];
 				_currentState = GameState.tutorial;
 				ReadyUps.ForEach(delegate (GameObject g) {
@@ -572,7 +598,7 @@ public class GameManager : MonoBehaviour {
 			qudTutorial2.transform.FindChild("TutorialClock").renderer.material.SetFloat("_Cutoff",1.01f-(tutorialPerc /100f));
 			
 			if(Input.GetButton("BuildAllPlayers") ){
-				tutorialPerc+= sRef.vpsBasePlayerInfluence * Time.deltaTime;	
+				tutorialPerc+= sRef.vpsBasePlayerInfluence*2f * Time.deltaTime;	
 				Debug.Log ("Here");
 			}
 			else{

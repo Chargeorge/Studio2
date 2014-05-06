@@ -21,9 +21,9 @@ public class ReadyUp : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(!ready){
-			readyCircle.renderer.material.SetFloat("_Cutoff",1-(readyPct /100f));
+			readyCircle.renderer.material.SetFloat("_Cutoff",1.001f-(readyPct /100f));
 			if(player.getPlayerBuild()){
-				readyPct += Settings.SettingsInstance.vpsBaseBuild * Time.deltaTime;
+				readyPct += Settings.SettingsInstance.vpsBaseBuild*2f * Time.deltaTime;
 				if(readyPct > 100f){
 					readyPct = 100f;
 					ready = true;
