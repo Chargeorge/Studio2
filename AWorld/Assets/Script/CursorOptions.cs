@@ -309,8 +309,7 @@ public class CursorOptions : MonoBehaviour {
 		else {
 			rotateSpeed = Mathf.Lerp (rotateSpeed, targetRotateSpeed, 0.1f);
 		}
-		Debug.Log (rotateSpeed);
-					
+							
 		if (optionsScript.loadingNewScreen) {
 			transform.RotateAround (transform.position, Vector3.forward, loadingRotateSpeed * rotatingLeft * Time.deltaTime);
 			if (transform.renderer.material.color.a > 0f) { 
