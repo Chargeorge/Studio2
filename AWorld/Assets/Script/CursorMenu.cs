@@ -9,6 +9,7 @@ public class CursorMenu : MonoBehaviour {
 	public float restingRotateSpeed;
 	public float loadingRotateSpeed;
 	public float rotateSpeed;
+	public float targetRotateSpeed;
 	public float rotatingLeft;	//-1 if rotating right, 1 if rotating left
 
 	public GameObject menu;
@@ -32,6 +33,7 @@ public class CursorMenu : MonoBehaviour {
 		menuScript = menu.GetComponent<MainMenu>();
 
 		rotateSpeed = restingRotateSpeed;
+		targetRotateSpeed = rotateSpeed;
 		rotatingLeft = -1;
 	
 		startPos = new Vector3(-2.5f, -0.45f, cursorDepth);
@@ -67,7 +69,7 @@ public class CursorMenu : MonoBehaviour {
 				rotateSpeed = movingRotateSpeed;
 				rotatingLeft = -1;
 			} else {
-				rotateSpeed = restingRotateSpeed;
+				targetRotateSpeed = restingRotateSpeed;
 			}
 		}
 
@@ -129,9 +131,17 @@ public class CursorMenu : MonoBehaviour {
 				rotatingLeft = 1;
 			}
 			else {
-				rotateSpeed = restingRotateSpeed;
+				targetRotateSpeed = restingRotateSpeed;
 			}
 		}
+		
+		if (Mathf.Abs (targetRotateSpeed - rotateSpeed) <= 1) {
+			rotateSpeed = targetRotateSpeed;
+		}
+		else {
+			rotateSpeed = Mathf.Lerp (rotateSpeed, targetRotateSpeed, 0.2f);
+		}
+		
 		if (menuScript.loadingNewScreen) {
 			transform.RotateAround (transform.position, Vector3.forward, loadingRotateSpeed * rotatingLeft * Time.deltaTime);
 			if (transform.renderer.material.color.a > 0f) { 

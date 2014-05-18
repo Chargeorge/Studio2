@@ -1326,6 +1326,10 @@ Prefab:
       propertyPath: options
       value: 
       objectReference: {fileID: 39365709}
+    - target: {fileID: 11400000, guid: 52ada983002de774fac121c1ec440ec7, type: 2}
+      propertyPath: movingRotateSpeed
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 52ada983002de774fac121c1ec440ec7, type: 2}
   m_RootGameObject: {fileID: 279154248}
