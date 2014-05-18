@@ -107,13 +107,6 @@ public class Beacon : MonoBehaviour {
 			
 			setVisualDirection();	//Why is this happening every frame?
 
-			if (lastTileInfluenced != null && !Pause.paused){
-				if(newShot){
-					shootSetup();
-				}
-				shootArrow();
-			}
-
 			buildButtonDown = getPlayerBuild();
 
 			if (!buildButtonDown){
@@ -233,6 +226,12 @@ public class Beacon : MonoBehaviour {
 		*/
 		}
 		
+		if (lastTileInfluenced != null && !Pause.paused){
+			if(newShot){
+				shootSetup();
+			}
+			shootArrow();
+		}
 	}
 	
 	//START BUILDING:
@@ -974,7 +973,10 @@ public class Beacon : MonoBehaviour {
 			//audio.PlayOneShot(beaconRotated, 1.0f);	
 			transform.FindChild("ArrowShot").renderer.enabled = false;
 		}
-
+		
+		else {
+			transform.FindChild("ArrowShot").renderer.enabled = !facingAdjacentWater();
+		}
 	}
 	
 	//Stops a-jiggling what ought not be a-jiggling - use before UpdateInfluencePatterns
@@ -1068,8 +1070,9 @@ public class Beacon : MonoBehaviour {
 		animColor.a = 0;
 		transform.FindChild("Anim").renderer.material.color = animColor;
 		
-//		transform.FindChild("Point light").GetComponent<Light>().enabled = true;
+		transform.FindChild("ArrowShot").renderer.enabled = !facingAdjacentWater();
 		
+//		transform.FindChild("Point light").GetComponent<Light>().enabled = true;
 	}
 	
 	
@@ -1269,7 +1272,7 @@ public class Beacon : MonoBehaviour {
 
 		Transform arrow = this.transform.FindChild("ArrowShot");
 		arrowStartPos = this.transform.FindChild("Base").position;
-		transform.FindChild("ArrowShot").renderer.enabled = true;
+		transform.FindChild("ArrowShot").renderer.enabled = !facingAdjacentWater();
 		arrow.position = arrowStartPos;
 		if(lastTileInfluenced != null){
 			tilePos = lastTileInfluenced.transform.position;
@@ -1333,6 +1336,26 @@ public class Beacon : MonoBehaviour {
 	public void StartShooting () {
 		newShot = true;
 	}
-
+	
+	//Returns whether this beacon is facing and immediately adjacent to a water tile. 
+	public bool facingAdjacentWater () {
+		int brdX = transform.parent.gameObject.GetComponent<BaseTile>().brdXPos;
+		int brdY = transform.parent.gameObject.GetComponent<BaseTile>().brdYPos;
+		
+		if (_patternList != null) {
+			foreach (List<InfluencePatternHolder> list in _patternList) {
+				foreach (InfluencePatternHolder p in list) {
+					int x = (int)brdX + (int)Mathf.RoundToInt(p.relCoordRotated.x);
+					int y = (int)brdY + (int)Mathf.RoundToInt(p.relCoordRotated.y);
+					GameObject tile;
+					if (gm.tiles[x,y] == null) { return true; }
+					tile = gm.tiles[x,y];
+					return (tile != null && 
+					    tile.GetComponent<BaseTile>().currentType == TileTypeEnum.water && 
+					    !gm.getCapturedAltars (controllingTeam).Contains (AltarType.Thotzeti));
+				}
+			}
+		}
+		return false;	
+	}
 }
-
