@@ -142,6 +142,7 @@ public class Player : MonoBehaviour {
 			BaseTile currentTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
 	
 			bool buildButtonDown = getPlayerBuild();
+			if (!buildButtonDown) { audioSourceInvalid.Stop (); }
 			//if(x.HasValue) Debug.Log(x.Value);
 			_pulsating = false;	//Pulsate () sets this to true; if false at the end of this method, reset scale and _expanding
 			
