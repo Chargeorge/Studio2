@@ -1110,6 +1110,10 @@ public class Player : MonoBehaviour {
 				}
 			}
 		}
+		else {
+			//Game over - pause de-influence sound
+			audioSourceInfluenceStart.Stop ();
+		}
 	}
 	
 	//Not used with free movement.
