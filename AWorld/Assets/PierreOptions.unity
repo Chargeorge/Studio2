@@ -596,7 +596,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: dfcb33793aef3d0478bfb3b750255a82, type: 2}
       propertyPath: m_TagString
-      value: Finish
+      value: MenuMusic
+      objectReference: {fileID: 0}
+    - target: {fileID: 8200000, guid: dfcb33793aef3d0478bfb3b750255a82, type: 2}
+      propertyPath: m_PlayOnAwake
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 11400000, guid: dfcb33793aef3d0478bfb3b750255a82, type: 2}
@@ -879,7 +883,7 @@ GameObject:
   - 114: {fileID: 642400153}
   m_Layer: 0
   m_Name: MusicOptions2
-  m_TagString: Finish
+  m_TagString: MenuMusic
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -892,7 +896,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 642400152}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 016f77f3481d5df4784cae9db0c3549b, type: 3}
+  m_Script: {fileID: 11500000, guid: 5246ab77c22976e4db8f81d731242f6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!82 &642400154
@@ -905,7 +909,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 3
   m_audioClip: {fileID: 8300000, guid: 1542cdebf35f1a54ca1ce3fe65760ccc, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 1

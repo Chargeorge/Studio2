@@ -156,7 +156,7 @@ GameObject:
   - 114: {fileID: 262419394}
   m_Layer: 0
   m_Name: MusicOptions
-  m_TagString: Music
+  m_TagString: MenuMusic
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -171,7 +171,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 3
   m_audioClip: {fileID: 8300000, guid: 1542cdebf35f1a54ca1ce3fe65760ccc, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 1
@@ -357,6 +357,14 @@ Prefab:
     - target: {fileID: 400000, guid: dfcb33793aef3d0478bfb3b750255a82, type: 2}
       propertyPath: m_LocalRotation.w
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: dfcb33793aef3d0478bfb3b750255a82, type: 2}
+      propertyPath: m_TagString
+      value: MenuMusic
+      objectReference: {fileID: 0}
+    - target: {fileID: 8200000, guid: dfcb33793aef3d0478bfb3b750255a82, type: 2}
+      propertyPath: m_PlayOnAwake
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: dfcb33793aef3d0478bfb3b750255a82, type: 2}

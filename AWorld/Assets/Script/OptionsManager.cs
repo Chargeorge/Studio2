@@ -77,10 +77,10 @@ public class OptionsManager : MonoBehaviour {
 	void Start () {
 		turnOffMusic = false;
 
-		musicObject = GameObject.FindWithTag("Music");
+		musicObject = GameObject.FindWithTag("MenuMusic");
 
 		if(musicObject == null){
-			musicObject = GameObject.FindWithTag("Finish");
+			musicObject = GameObject.FindWithTag("MenuMusic");
 			musicObject.audio.Play();
 		}
 
@@ -260,8 +260,10 @@ public class OptionsManager : MonoBehaviour {
 		//LET'S MAKE SHIT HAPPEN WHEN SOMETHING IS SELECTED AND THE BUTTON IS PRESSED
 		if(Input.GetButtonDown("BuildPlayer1")){
 
-			audio.Stop ();
-			audio.PlayOneShot(select, 0.8f);
+			if (!loadingNewScreen) {
+				audio.Stop ();
+				audio.PlayOneShot(select, 0.8f);
+			}
 
 			if(playersSelected){
 				if(numberOfPlayers == 2){

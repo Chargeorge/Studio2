@@ -28,8 +28,6 @@ public class MainMenu : MonoBehaviour {
 
 	bool turnOffMusic;
 
-
-
 	public GameObject cursor;
 
 	// Use this for initialization
@@ -40,20 +38,23 @@ public class MainMenu : MonoBehaviour {
 		loadingNewScreen = false;
 		quitting = false;
 
+		musicObject = GameObject.FindWithTag ("MenuMusic");
 		music = musicObject.GetComponent<AudioSource>();
 
 		turnOffMusic = false;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-
-		GameObject _musicObject  = GameObject.FindGameObjectWithTag("Music");
+		
+		GameObject _musicObject  = GameObject.FindGameObjectWithTag("MenuMusic");
 		//Debug.Log(_musicObject);
 		if(_musicObject == null){
 			Instantiate(musicObject);
 			musicObject.audio.Play();
 		}
+	}
+	
+	// Update is called once per frame
+	void Update () {
+
+		
 
 		/**
 		// Handled in cursor now

@@ -73,6 +73,11 @@ public class GameManager : MonoBehaviour {
 	// Use this for initializatio
 	void Start () {
 
+		//Fuck
+		GameObject menuMusic;
+		menuMusic = GameObject.FindWithTag ("MenuMusic");
+		if (menuMusic != null) GameObject.Destroy (menuMusic);
+
 		_prfbBar = (GameObject)Resources.Load("Prefabs/ScoreBar");
 		prfbStartUp = (GameObject)Resources.Load("Prefabs/ReadyBackGround");
 		ReadyUps = new List<GameObject>();
