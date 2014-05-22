@@ -37,7 +37,6 @@ public class Beacon : MonoBehaviour {
 	Vector3 tilePos;
 	Vector2 destPos;
 
-
 	public GameObject lastTileInfluenced {
 		get {
 			if(controllingTeam != null){
@@ -1348,6 +1347,7 @@ public class Beacon : MonoBehaviour {
 					int x = (int)brdX + (int)Mathf.RoundToInt(p.relCoordRotated.x);
 					int y = (int)brdY + (int)Mathf.RoundToInt(p.relCoordRotated.y);
 					GameObject tile;
+					if (x < 0 || y < 0 || x >= gm.boardX || y >= gm.boardY) return true;
 					if (gm.tiles[x,y] == null) { return true; }
 					tile = gm.tiles[x,y];
 					return (tile != null && 

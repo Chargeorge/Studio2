@@ -421,6 +421,7 @@ public class BaseTile : MonoBehaviour {
 			qudBaseLayer.transform.localEulerAngles = endRot;
 			qudSelectedLayer.transform.localEulerAngles = endRot;
 			qudInfluenceLayer.transform.localEulerAngles = endRot;
+			qudPulsingOwnedLayer.transform.localEulerAngles = endRot;
 			qudOwnedLayer.transform.localEulerAngles = endRot;
 			
 			if (beacon != null) {

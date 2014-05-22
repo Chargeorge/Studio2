@@ -1071,7 +1071,7 @@ public class Player : MonoBehaviour {
 						else {
 						
 							currentActionProgress = 0;
-							currentTile.beacon.GetComponent<Beacon>().AbortUpgrade();
+							if (currentTile.beacon != null) currentTile.beacon.GetComponent<Beacon>().AbortUpgrade();
 							_currentState = PlayerState.standing;
 							//StopSFX ();
 						

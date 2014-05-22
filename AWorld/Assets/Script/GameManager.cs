@@ -69,6 +69,8 @@ public class GameManager : MonoBehaviour {
 
 	private float tutorialPerc = 0;
 
+	public int boardX;
+	public int boardY;	//Storing for Beacon.facingAdjacentWater; there's probably a better way
 
 	// Use this for initializatio
 	void Start () {
@@ -100,7 +102,7 @@ public class GameManager : MonoBehaviour {
 		qudTutorial1 = (GameObject)GameObject.Instantiate(prfbTutorial, new Vector3(100f,100f,10f), Quaternion.identity);
 		
 		qudTutorial2 = (GameObject)GameObject.Instantiate(prfbTutorial, new Vector3(101f,101f,10f), Quaternion.identity);
-		
+			
 	}
 	/// <summary>
 	/// For the length of the script, every number of frames, u
@@ -122,6 +124,10 @@ public class GameManager : MonoBehaviour {
 	}
 	
 		if (setup){
+		
+			boardX = (int)Settings.SettingsInstance.boardSize.x;
+			boardY = (int)Settings.SettingsInstance.boardSize.y;
+			
 			GameObject team1Home, team2Home;
 			team1Home  = null;
 			team2Home = null;
