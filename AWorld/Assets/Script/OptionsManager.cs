@@ -260,8 +260,7 @@ public class OptionsManager : MonoBehaviour {
 		//LET'S MAKE SHIT HAPPEN WHEN SOMETHING IS SELECTED AND THE BUTTON IS PRESSED
 		if(Input.GetButtonDown("BuildPlayer1")){
 
-			if (!loadingNewScreen) {
-				audio.Stop ();
+			if (!loadingNewScreen && !audio.isPlaying) {
 				audio.PlayOneShot(select, 0.8f);
 			}
 
@@ -361,7 +360,7 @@ public class OptionsManager : MonoBehaviour {
 		}
 		
 		if(backSelected && Input.GetButton("BuildPlayer1") && !loadingNewScreen){
-			audio.PlayOneShot(select, 0.8f);
+//			audio.PlayOneShot(select, 0.8f);
 			loadingNewScreen = true;
 			Invoke ("goToMainMenu", 1.0f);
 		}
