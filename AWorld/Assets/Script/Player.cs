@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using InControl;
 public class Player : MonoBehaviour {
 
 	public TeamInfo team;
@@ -23,6 +24,8 @@ public class Player : MonoBehaviour {
 	private int _invalidActionFrames = 0;
 	private float _jiggleRange = 0.1f;			//Max distance from center of grid the player will jiggle
 	private float _lastActionProgress;
+	
+	private InputDevice _controller;
 	
 	private bool _pulsating;	//Set to false every Update function; Pulsate sets it to true; if false at end of update, resets scale and _expanding
 	private bool _expanding;	//Used during pulsating
@@ -89,6 +92,7 @@ public class Player : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+	
 		actionProgressTicker = 0;
 		actionProgress = new float[3];
 		altars = new List<AltarType>();
@@ -127,6 +131,9 @@ public class Player : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update (){ 
+	
+		_controller = (InputManager.Devices.Count > PlayerNumber) ? InputManager.Devices[PlayerNumber] : null;
+		
 		if(gm.currentState == GameState.playing){
 			if(_invalidAction) {
 				_invalidActionFrames++;
@@ -1154,7 +1161,8 @@ public class Player : MonoBehaviour {
 	/// <returns>The player X axis.</returns>
 	private float getPlayerXAxis(){
 		//Input.GetAxis("HorizontalPlayer"+PlayerNumber);
-		return Input.GetAxis("HorizontalPlayer"+PlayerNumber);	
+		//return Input.GetAxis("HorizontalPlayer"+PlayerNumber);	
+		return _controller.LeftStickX;
 	}
 				
 	/// <summary>
@@ -1163,7 +1171,7 @@ public class Player : MonoBehaviour {
 	/// <returns>The player X axis.</returns>
 	private float getPlayerYAxis(){
 		//Debug.Log(Input.GetAxis("VerticalPlayer"+PlayerNumber));
-		return Input.GetAxis("VerticalPlayer"+PlayerNumber);	
+		return _controller.LeftStickY;
 	}
 
 	/// <summary>
@@ -1171,7 +1179,7 @@ public class Player : MonoBehaviour {
 	/// </summary>
 	/// <returns>The player X axis.</returns>
 	public bool getPlayerBuild(){
-		return Input.GetButton("BuildPlayer"+PlayerNumber);	
+		return _controller.Action1;
 	}
 
 	/// <summary>

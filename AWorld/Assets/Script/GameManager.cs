@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-
+using InControl;
 public class GameManager : MonoBehaviour {
 	public static bool overrideTutorial = false;
 	public Settings sRef;
@@ -72,7 +72,8 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for initializatio
 	void Start () {
-
+		InputManager.Setup();
+		
 		_prfbBar = (GameObject)Resources.Load("Prefabs/ScoreBar");
 		prfbStartUp = (GameObject)Resources.Load("Prefabs/ReadyBackGround");
 		ReadyUps = new List<GameObject>();
@@ -110,6 +111,8 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 //	Debug.Log(currentState);
+	InputManager.Update();
+	
 	if(Input.GetKeyDown("r")) {
 		Time.timeScale = 1.0f;
 		Pause.paused = false;
@@ -547,28 +550,28 @@ public class GameManager : MonoBehaviour {
 		if(hoveredTile!= null){
 			debugMouse = getHoveredTile().GetComponent<BaseTile>();
 		}
-		if(Input.GetButtonDown("Fire1")){
-			//A* test
-//			if(debugMouse.owningTeam != null){
-//				BaseTile finalDestination = tiles[(int)debugMouse.owningTeam.startingLocation.x,(int)debugMouse.owningTeam.startingLocation.y].GetComponent<BaseTile>();
-//				if(debugMouse.owningTeam != null){
-//					debug
-//					debugString = string.Format("A star len: {0}", As.Count);
-//				}
+//		if(Input.GetButtonDown("Fire1")){
+//			//A* test
+////			if(debugMouse.owningTeam != null){
+////				BaseTile finalDestination = tiles[(int)debugMouse.owningTeam.startingLocation.x,(int)debugMouse.owningTeam.startingLocation.y].GetComponent<BaseTile>();
+////				if(debugMouse.owningTeam != null){
+////					debug
+////					debugString = string.Format("A star len: {0}", As.Count);
+////				}
+////			}
+//			if(debugMouse != null){
+////				Debug.Log (debugMouse.findEdges());
 //			}
-			if(debugMouse != null){
-//				Debug.Log (debugMouse.findEdges());
-			}
-		}
-		if(Input.GetButtonDown("Fire2")){
-			if(debugMouse!= null){
-				debugMouse.owningTeam = players[0].GetComponentInChildren<Player>().team;
-				
-				debugMouse.controllingTeam = players[0].GetComponentInChildren<Player>().team;
-				
-				debugMouse.addInfluenceReturnOverflow(100f);
-			}
-		}
+//		}
+//		if(Input.GetButtonDown("Fire2")){
+//			if(debugMouse!= null){
+//				debugMouse.owningTeam = players[0].GetComponentInChildren<Player>().team;
+//				
+//				debugMouse.controllingTeam = players[0].GetComponentInChildren<Player>().team;
+//				
+//				debugMouse.addInfluenceReturnOverflow(100f);
+//			}
+//		}
 
 		if(_currentState == GameState.gameNotStarted){
 			bool startMatch  = true;

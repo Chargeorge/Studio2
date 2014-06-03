@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using InControl;
 
 public class CursorMenu : MonoBehaviour {
 
@@ -25,6 +26,8 @@ public class CursorMenu : MonoBehaviour {
 	bool goingUpUpAndAway;
 	bool goingLowLowLow;
 
+	private InputDevice _controller;
+	
 	// Use this for initialization
 	void Start () {
 
@@ -50,7 +53,7 @@ public class CursorMenu : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+		_controller = InputManager.Devices[0];
 		if(lerping){
 			Vector3 newPos = transform.position;
 			newPos.y = Mathf.Lerp(transform.position.y, target.y, lerpRate);
@@ -73,12 +76,12 @@ public class CursorMenu : MonoBehaviour {
 			}
 		}
 
-		float x = Input.GetAxis("HorizontalPlayer1") * moveSpeed * Time.deltaTime;
-		float y = Input.GetAxis("VerticalPlayer1") * moveSpeed * Time.deltaTime;
+		float x =_controller.LeftStick.X * moveSpeed * Time.deltaTime;
+		float y = _controller.LeftStick.Y * moveSpeed * Time.deltaTime;
 		
 		if (!menu.GetComponent<MainMenu>().loadingNewScreen && !lerping){
 			if(MainMenu.startSelected){
-				if(Input.GetAxis("VerticalPlayer1") < -0.1f){
+				if(y < -0.1f){
 					lerping = true;
 					target = optionsPos;
 					goingUpUpAndAway = false;
@@ -89,7 +92,7 @@ public class CursorMenu : MonoBehaviour {
 				}
 			}
 			else if(MainMenu.optionsSelected){
-				if(Input.GetAxis("VerticalPlayer1") > 0.1f){
+				if(y > 0.1f){
 						lerping = true;
 						target = startPos;
 						goingUpUpAndAway = true;
@@ -97,7 +100,7 @@ public class CursorMenu : MonoBehaviour {
 						MainMenu.optionsSelected = false;
 						MainMenu.startSelected = true;
 						StartCoroutine("waitMenu");
-				}else if(Input.GetAxis("VerticalPlayer1") < -0.1f){
+				}else if(y < -0.1f){
 						lerping = true;
 						target = quitPos;
 						goingUpUpAndAway = false;
@@ -108,7 +111,7 @@ public class CursorMenu : MonoBehaviour {
 				}
 			}
 			else if(MainMenu.quitSelected){
-				if(Input.GetAxis("VerticalPlayer1") > 0.1f){
+				if(y > 0.1f){
 					lerping = true;
 					target = optionsPos;
 					goingUpUpAndAway = true;
