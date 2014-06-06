@@ -245,11 +245,20 @@ public class Beacon : MonoBehaviour {
 	/// <param name="valInit">Value init.</param>
 	/// 
 	private bool getPlayerBuild(){
-		int num = PlayerNumber;
-		if(num != 0){
-			return Input.GetButton("BuildPlayer"+num);	
-		}
-		else return false;
+		List<GameObject> p = GameManager.GameManagerInstance.players;
+		BaseTile parent = transform.parent.gameObject.GetComponent<BaseTile>();
+		GameObject playerOnTop = null;
+		bool returnable = false;
+		p.ForEach( delegate (GameObject go){
+//				Debug.Log (go.GetComponentInChildren<Player>());
+			if(go.GetComponentInChildren<Player>().currentTile == parent){
+				if(go.GetComponentInChildren<Player>().getPlayerBuild())
+					returnable = true;
+			}
+		});
+		
+	
+		return returnable;
 	}
 		
 	public void startBuilding(GameObject tileLocation, GameObject player, float valInit){

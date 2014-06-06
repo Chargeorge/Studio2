@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections;
-
+using InControl;
 public class CursorMenu : MonoBehaviour {
 
 	public float moveSpeed;
@@ -11,10 +11,10 @@ public class CursorMenu : MonoBehaviour {
 	public float rotateSpeed;
 	public float targetRotateSpeed;
 	public float rotatingLeft;	//-1 if rotating right, 1 if rotating left
-
+	
 	public GameObject menu;
 	private MainMenu menuScript;
-
+	private InputDevice _controller;
 	Vector3 startPos;
 	Vector3 optionsPos;
 	Vector3 quitPos;
@@ -50,7 +50,7 @@ public class CursorMenu : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+		_controller = InputManager.ActiveDevice;
 		if(lerping){
 			Vector3 newPos = transform.position;
 			newPos.y = Mathf.Lerp(transform.position.y, target.y, lerpRate);
@@ -73,12 +73,12 @@ public class CursorMenu : MonoBehaviour {
 			}
 		}
 
-		float x = Input.GetAxis("HorizontalPlayer1") * moveSpeed * Time.deltaTime;
-		float y = Input.GetAxis("VerticalPlayer1") * moveSpeed * Time.deltaTime;
+		float x = _controller.LeftStick.X;
+		float y = _controller.LeftStick.Y;
 		
 		if (!menu.GetComponent<MainMenu>().loadingNewScreen && !lerping){
 			if(MainMenu.startSelected){
-				if(Input.GetAxis("VerticalPlayer1") < -0.1f){
+				if(y < -0.1f){
 					lerping = true;
 					target = optionsPos;
 					goingUpUpAndAway = false;
@@ -89,7 +89,7 @@ public class CursorMenu : MonoBehaviour {
 				}
 			}
 			else if(MainMenu.optionsSelected){
-				if(Input.GetAxis("VerticalPlayer1") > 0.1f){
+				if(y > 0.1f){
 						lerping = true;
 						target = startPos;
 						goingUpUpAndAway = true;
@@ -97,7 +97,7 @@ public class CursorMenu : MonoBehaviour {
 						MainMenu.optionsSelected = false;
 						MainMenu.startSelected = true;
 						StartCoroutine("waitMenu");
-				}else if(Input.GetAxis("VerticalPlayer1") < -0.1f){
+				}else if(y < -0.1f){
 						lerping = true;
 						target = quitPos;
 						goingUpUpAndAway = false;
@@ -108,7 +108,7 @@ public class CursorMenu : MonoBehaviour {
 				}
 			}
 			else if(MainMenu.quitSelected){
-				if(Input.GetAxis("VerticalPlayer1") > 0.1f){
+				if(y > 0.1f){
 					lerping = true;
 					target = optionsPos;
 					goingUpUpAndAway = true;

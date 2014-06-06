@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using InControl;
+
 public class Player : MonoBehaviour {
 
 	public TeamInfo team;
@@ -10,7 +12,7 @@ public class Player : MonoBehaviour {
 	private PlayerState _currentState;
 	public int PlayerNumber;
 	public GameManager gm;
-
+	private InputDevice _controller;
 	public float currentActionProgress;
 	private float previousActionProgress;
 	public float previousFrameProgress;
@@ -40,6 +42,14 @@ public class Player : MonoBehaviour {
 	//public AudioClip influenceStart;
 	//public AudioClip influenceDone;
 	//public AudioClip invalid_Input;
+	
+	private BaseTile _currentTile;
+
+	public BaseTile currentTile {
+		get {
+			return _currentTile;
+		}
+	}
 	
 	public AudioSource audioSourceMove;
 	public AudioSource audioSourceMoveEnemyTerrain;
@@ -87,6 +97,7 @@ public class Player : MonoBehaviour {
 	int actionProgressTicker;
 	float[] actionProgress;
 
+	
 	// Use this for initialization
 	void Start () {
 		actionProgressTicker = 0;
@@ -124,9 +135,14 @@ public class Player : MonoBehaviour {
 
 	}
 	
-	
 	// Update is called once per frame
 	void Update (){ 
+		_controller = (InputManager.Devices.Count > PlayerNumber-1) ? InputManager.Devices[PlayerNumber-1] : null;
+		_currentTile =  gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
+		
+		if(_controller == null){
+			Debug.Log ("InputDevice");
+		}
 		if(gm.currentState == GameState.playing){
 			if(_invalidAction) {
 				_invalidActionFrames++;
@@ -139,14 +155,13 @@ public class Player : MonoBehaviour {
 			DirectionEnum? x = getStickDirection();
 			//BaseTile currentTile = gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>();	//Not used with free movement
 	
-			BaseTile currentTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
-	
+			
 			bool buildButtonDown = getPlayerBuild();
 			if (!buildButtonDown) { audioSourceInvalid.Stop (); }
 			//if(x.HasValue) Debug.Log(x.Value);
 			_pulsating = false;	//Pulsate () sets this to true; if false at the end of this method, reset scale and _expanding
 			
-			if (OpponentsOnTile (currentTile).Count == 0) {
+			if (OpponentsOnTile ().Count == 0) {
 				currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = true;
 				currentTile.gameObject.transform.Find("OwnedLayer").GetComponent<MeshRenderer>().material.color = team.highlightColor;
 			}
@@ -293,7 +308,7 @@ public class Player : MonoBehaviour {
 								//start building beacon				
 							if (buildButtonDown){
 								
-								List<Player> opponentsOnSameTile = OpponentsOnTile (currentTile);
+								List<Player> opponentsOnSameTile = OpponentsOnTile ();
 								if (opponentsOnSameTile.Count != 0) {
 									foreach (Player p in opponentsOnSameTile) { 
 										if (p.IsActing ()) {
@@ -1159,7 +1174,10 @@ public class Player : MonoBehaviour {
 	/// <returns>The player X axis.</returns>
 	private float getPlayerXAxis(){
 		//Input.GetAxis("HorizontalPlayer"+PlayerNumber);
-		return Input.GetAxis("HorizontalPlayer"+PlayerNumber);	
+		if (_controller != null){
+			return _controller.LeftStick.X;	
+		}
+		else return 0f;
 	}
 				
 	/// <summary>
@@ -1168,7 +1186,13 @@ public class Player : MonoBehaviour {
 	/// <returns>The player X axis.</returns>
 	private float getPlayerYAxis(){
 		//Debug.Log(Input.GetAxis("VerticalPlayer"+PlayerNumber));
-		return Input.GetAxis("VerticalPlayer"+PlayerNumber);	
+		if(_controller != null){
+		
+			return _controller.LeftStick.Y;	
+		}
+		else{
+			return 0f;
+		}
 	}
 
 	/// <summary>
@@ -1176,7 +1200,10 @@ public class Player : MonoBehaviour {
 	/// </summary>
 	/// <returns>The player X axis.</returns>
 	public bool getPlayerBuild(){
-		return Input.GetButton("BuildPlayer"+PlayerNumber);	
+		if(_controller != null){
+			return _controller.Action1.IsPressed;
+		}
+		else return false;
 	}
 
 	/// <summary>
@@ -1256,8 +1283,10 @@ public class Player : MonoBehaviour {
 	/// </summary>
 	public void RevealTiles () {
 		
-		BaseTile currentTile = GameManager.GameManagerInstance.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
-		currentTile.Reveal(_vision);
+		//BaseTile currentTile = GameManager.GameManagerInstance.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
+		if(currentTile != null){
+			currentTile.Reveal(_vision);
+		}
 		/**
 		for (int i = _vision * -1; i <= _vision; i++) {
 			for (int j = (_vision - Mathf.Abs (i)) * -1; j <= _vision - Mathf.Abs (i); j++) {
@@ -1602,13 +1631,27 @@ public class Player : MonoBehaviour {
 		}
 	}
 	
-	public List<Player> OpponentsOnTile (BaseTile currentTile) {
+	public List<Player> OpponentsOnTile () {
 //		BaseTile currentTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
 		List<Player> opponentsOnSameTile = new List<Player>();
 		foreach (GameObject o in gm.players) {
 			Player p = o.transform.FindChild ("PlayerInner").GetComponent<Player>();
 			if (p.team.teamNumber != team.teamNumber && 
 				gm.tiles[(int) Mathf.Floor (p.transform.position.x + 0.5f), (int) Mathf.Floor (p.transform.position.y + 0.5f)].GetComponent<BaseTile>() == currentTile)
+			{ 
+				opponentsOnSameTile.Add (p);
+			}
+		}
+		return opponentsOnSameTile;
+	}
+	
+	public List<Player> OpponentsOnTile (BaseTile bt) {
+		//		BaseTile currentTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
+		List<Player> opponentsOnSameTile = new List<Player>();
+		foreach (GameObject o in gm.players) {
+			Player p = o.transform.FindChild ("PlayerInner").GetComponent<Player>();
+			if (p.team.teamNumber != team.teamNumber && 
+			    gm.tiles[(int) Mathf.Floor (p.transform.position.x + 0.5f), (int) Mathf.Floor (p.transform.position.y + 0.5f)].GetComponent<BaseTile>() == bt)
 			{ 
 				opponentsOnSameTile.Add (p);
 			}

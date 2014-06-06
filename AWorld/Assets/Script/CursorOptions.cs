@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using InControl;
 public class CursorOptions : MonoBehaviour {
 
 	public float moveSpeed;
@@ -36,6 +36,7 @@ public class CursorOptions : MonoBehaviour {
 	bool lerping;
 	float lerpRate;
 		
+	private InputDevice _controller;
 	// Use this for initialization
 	void Start () {
 
@@ -81,7 +82,7 @@ public class CursorOptions : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+		_controller = InputManager.ActiveDevice;
 		if(lerping){
 			Vector3 newPos = transform.position;
 			newPos.x = Mathf.Lerp(newPos.x, target.x, lerpRate);
@@ -93,11 +94,11 @@ public class CursorOptions : MonoBehaviour {
 			}
 		}
 		
-		float x = Input.GetAxis("HorizontalPlayer1") * moveSpeed * Time.deltaTime;
-		float y = Input.GetAxis("VerticalPlayer1") * moveSpeed * Time.deltaTime;
+		float x = _controller.LeftStick.X ;
+		float y = _controller.LeftStick.Y ;
 		
 		if (!options.GetComponent<OptionsManager>().loadingNewScreen && !lerping && !waiting){
-			if(Input.GetAxis("HorizontalPlayer1") > 0.1f){//player wants to go right
+			if(x > 0.1f){//player wants to go right
 				if(OptionsManager.playersSelected){
 					lerping = true;
 					target = fogPos;
@@ -147,7 +148,7 @@ public class CursorOptions : MonoBehaviour {
 				}else if(OptionsManager.startSelected){
 					//don't do shit cause that's the end of the line, playa.
 				}
-			}else if(Input.GetAxis("HorizontalPlayer1") < -0.1f){//if the player wants to go left	
+			}else if(x < -0.1f){//if the player wants to go left	
 				if(OptionsManager.playersSelected){
 					//nope, that's not happening
 				}else if(OptionsManager.fogSelected){
@@ -197,7 +198,7 @@ public class CursorOptions : MonoBehaviour {
 					Invoke ("SwitchOption", 0.04f);
 					StartCoroutine("waitMenu");
 				}
-			}else if(Input.GetAxis("VerticalPlayer1") > 0.1f){//if the player wants to go up	
+			}else if(y > 0.1f){//if the player wants to go up	
 				if(OptionsManager.speedSelected){
 					lerping = true;
 					target = playersPos;
@@ -241,7 +242,7 @@ public class CursorOptions : MonoBehaviour {
 					Invoke ("SwitchOption", 0.04f);
 					StartCoroutine("waitMenu");
 				}
-			}else if(Input.GetAxis("VerticalPlayer1") < -0.1f){//if the player wants to go down	
+			}else if(y < -0.1f){//if the player wants to go down	
 				if(OptionsManager.playersSelected){
 					lerping = true;
 					target = speedPos;

@@ -420,7 +420,15 @@ MonoBehaviour:
   home2: {fileID: 0}
   currentMarquee: 0
   Victory_Gong: {fileID: 0}
+  Game_Launch: {fileID: 0}
   beacons: []
+  teamBar1: {fileID: 0}
+  teamBar2: {fileID: 0}
+  ReadyUps: []
+  tutorials: []
+  tutorialIndex: 0
+  boardX: 0
+  boardY: 0
 --- !u!4 &842739088
 Transform:
   m_ObjectHideFlags: 0
@@ -624,11 +632,8 @@ MonoBehaviour:
   prfbTile: {fileID: 100010, guid: 87f9a789346b544448cbc9bac6e40707, type: 2}
   matTest: {fileID: 0}
   manager: {fileID: 842739086}
-  boardX: 26
-  boardY: 13
   numberOfAltars: 0
   ranjitRangeTileTypes: 
-  fogOn: 0
 --- !u!4 &1669248506
 Transform:
   m_ObjectHideFlags: 0
@@ -710,6 +715,48 @@ Transform:
   m_LocalScale: {x: 50, y: 30, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+--- !u!1 &1809446196
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1809446198}
+  - 114: {fileID: 1809446197}
+  m_Layer: 0
+  m_Name: InControl
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1809446197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1809446196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7b5e8de77c5b4597ae7fbfb49a95e22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  invertYAxis: 0
+  enableXInput: 0
+  useFixedUpdate: 0
+  customProfiles: []
+--- !u!4 &1809446198
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1809446196}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
 --- !u!1 &1843163357
 GameObject:
   m_ObjectHideFlags: 0
@@ -745,7 +792,7 @@ MonoBehaviour:
   vpsBaseUpgrade: 25
   vpsScorePerAltarPerSecond: 1
   vpsBeaconBaseInfluence: 100
-  vpsScorePerMinePerSecond: 0
+  vpsScorePerBit: 0
   coefMoveNeutral: 1
   coefMoveAllied: 2
   coefMoveEnemy: .330000013
@@ -762,19 +809,21 @@ MonoBehaviour:
   optTilesGiveScore: 1
   valTileConvertScore: 1
   valPointsToWin: 300
-  valScorePerMine: 0
+  valScorePerAltar: 0
+  valTimePerScoreShot: 0
+  valScoreBaseCapture: 0
+  scoreBitIntervalSlow: 0
+  scoreBitIntervalNormal: 0
+  scoreBitIntervalFast: 0
   beaconBasicRange: 4
   beaconAdvancedRange: 8
   beaconNoBuildRange: 2
   selfDestructDelay: 0
   loseUpgradeProgressDelay: 0
-  team1Start: {x: 5, y: 5}
-  team2Start: {x: 15, y: 5}
-  optPerlinLevel: 1500
+  loseRotateProgressDelay: 0
   neutralBeaconCount: 12
   numAltars: 0
   numScoringAltars: 0
-  ranjitRangeAltars: 
   debugMode: 0
   gameMode: 0
   secMarqueeUpgradeTime: 0
@@ -789,11 +838,67 @@ MonoBehaviour:
   upgradeCircleFinishScale: 0
   upgradeCircleStartAlpha: 0
   upgradeCircleFinishAlpha: 0
+  drainedAltarAlpha: 0
+  scoreBitExplosionStartSize: 0
+  scoreBitExplosionFinishSize: 0
+  scoreBitExplosionStartSpeed: 0
+  scoreBitExplosionFinishSpeed: 0
+  arrowSpeed: 0
+  arrowInterval: 0
+  sharedTileColor:
+    serializedVersion: 2
+    rgba: 0
+  playerAccelRate: 0
+  playerFriction: 0
+  playerMaxSpeed: 0
+  playerMinSpeed: 0
   teleportRate: 0
   closeEnoughDistanceTeleport: 0
   moveToCenterRate: 0
   closeEnoughDistanceMoveToCenter: 0
   closeEnoughDistanceScoreBit: 0
+  influenceRevealRange: 0
+  secTillRestartable: 0
+  moveVolume: 0
+  moveEnemyVolume: 0
+  moveVolumeLerpRate: 0
+  playerInfluenceStartVolume: 0
+  playerInfluenceStartVolumeLerpRate: 0
+  playerInfluenceDoneVolume: 0
+  playerDeinfluencingVolume: 0
+  invalidInputVolume: 0
+  beaconBuildingVolume: 0
+  beaconBuiltVolume: 0
+  beaconUpgradingVolume: 0
+  beaconUpgradedVolume: 0
+  beaconRotatingVolume: 0
+  beaconRotatedVolume: 0
+  altarScoreVolume: 0
+  soundtrackVolume: 0
+  layersVolume: 0
+  musicClimaxVolume: 0
+  startGameVolume: 0
+  victoryVolume: 0
+  restartVolume: 0
+  InfluenceDoneHi: {fileID: 0}
+  InfluenceDoneLo: {fileID: 0}
+  team1Start: {x: 5, y: 5}
+  team2Start: {x: 15, y: 5}
+  boardSize: {x: 0, y: 0}
+  optPerlinLevel: 1500
+  ranjitRangeAltars: 
+  fogOn: 0
+  cameraSize: 0
+  perlinLevels: 
+  coefSpeed: []
+  cameraPosition: {x: 0, y: 0, z: 0}
+  scorePos1: {x: 0, y: 0}
+  scorePos2: {x: 0, y: 0}
+  scaleY: 0
+  bbLocalPosY: 0
+  sbMoveUp: 0
+  useReadyUp: 0
+  tutorial: 0
 --- !u!4 &1843163359
 Transform:
   m_ObjectHideFlags: 0
