@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using InControl;
 
 public class MainMenu : MonoBehaviour {
 
@@ -18,10 +19,9 @@ public class MainMenu : MonoBehaviour {
 	bool joystickActive = true;
 	public bool loadingNewScreen;
 	public bool quitting;
-
 	public GameObject musicObject;
 	AudioSource music;
-
+	private InputDevice _controller;
 	float startHeight = 0.55f;
 	float optionsHeight = 0.67f;
 	float quitHeight = 0.8f;
@@ -55,7 +55,7 @@ public class MainMenu : MonoBehaviour {
 	void Update () {
 
 		
-
+	_controller = InputManager.ActiveDevice;
 		/**
 		// Handled in cursor now
 		if(cursor.transform.position.y < -0.4 && cursor.transform.position.y > -1.4){
@@ -115,7 +115,7 @@ public class MainMenu : MonoBehaviour {
 		}
 		}*/
 
-		if(Input.GetButtonDown("BuildPlayer1") && !loadingNewScreen){
+		if(_controller.Action1.WasPressed && !loadingNewScreen){
 			if(startSelected){
 				//audioLerp(music, 0.0f, 0.2f);
 				turnOffMusic = true;

@@ -333,7 +333,8 @@ public class GameManager : MonoBehaviour {
 			for (int i = 0; i< altars.Count; i++){
 				Altar thisAltar = altars[i].GetComponent<Altar>();
 				if(i != altars.Count -1){
-
+					Debug.Log (altars.Count);
+					Debug.Log (i);
 					thisAltar.brdX = (int)alterPositions[i].x;
 					thisAltar.brdY = (int)alterPositions[i].y;
 					
@@ -558,20 +559,20 @@ public class GameManager : MonoBehaviour {
 		if(hoveredTile!= null){
 			debugMouse = getHoveredTile().GetComponent<BaseTile>();
 		}
-//		if(Input.GetButtonDown("Fire1")){
-			//A* test
-//			if(debugMouse.owningTeam != null){
-//				BaseTile finalDestination = tiles[(int)debugMouse.owningTeam.startingLocation.x,(int)debugMouse.owningTeam.startingLocation.y].GetComponent<BaseTile>();
-//				if(debugMouse.owningTeam != null){
-//					debug
-//					debugString = string.Format("A star len: {0}", As.Count);
-//				}
-//			}
-			if(debugMouse != null){
-//				Debug.Log (debugMouse.findEdges());
+	//	if(Input.GetButtonDown("Fire1")){
+//			//A* test
+////			if(debugMouse.owningTeam != null){
+////				BaseTile finalDestination = tiles[(int)debugMouse.owningTeam.startingLocation.x,(int)debugMouse.owningTeam.startingLocation.y].GetComponent<BaseTile>();
+////				if(debugMouse.owningTeam != null){
+////					debug
+////					debugString = string.Format("A star len: {0}", As.Count);
+////				}
+////			}
+//			if(debugMouse != null){
+////				Debug.Log (debugMouse.findEdges());
 //			}
 //		}
-//		if(Input.GetButtonDown("Fire2")){
+//		eif(Input.GetButtonDown("Fire2")){
 //			if(debugMouse!= null){
 //				debugMouse.owningTeam = players[0].GetComponentInChildren<Player>().team;
 //				
@@ -605,7 +606,7 @@ public class GameManager : MonoBehaviour {
 			qudTutorial1.transform.FindChild("TutorialClock").renderer.material.SetFloat("_Cutoff",1.01f-(tutorialPerc /100f));
 			qudTutorial2.transform.FindChild("TutorialClock").renderer.material.SetFloat("_Cutoff",1.01f-(tutorialPerc /100f));
 			
-			if(Input.GetButton("BuildAllPlayers") ){
+			if(InControl.InputManager.ActiveDevice.Action1 ){
 				tutorialPerc+= sRef.vpsBasePlayerInfluence*2f * Time.deltaTime;	
 				//Debug.Log ("Here");
 			}

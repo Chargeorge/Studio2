@@ -1174,7 +1174,10 @@ public class Player : MonoBehaviour {
 	/// <returns>The player X axis.</returns>
 	private float getPlayerXAxis(){
 		//Input.GetAxis("HorizontalPlayer"+PlayerNumber);
-		return _controller.LeftStick.X;	
+		if (_controller != null){
+			return _controller.LeftStick.X;	
+		}
+		else return 0f;
 	}
 				
 	/// <summary>
@@ -1183,7 +1186,13 @@ public class Player : MonoBehaviour {
 	/// <returns>The player X axis.</returns>
 	private float getPlayerYAxis(){
 		//Debug.Log(Input.GetAxis("VerticalPlayer"+PlayerNumber));
-		return _controller.LeftStick.Y;	
+		if(_controller != null){
+		
+			return _controller.LeftStick.Y;	
+		}
+		else{
+			return 0f;
+		}
 	}
 
 	/// <summary>
@@ -1191,7 +1200,10 @@ public class Player : MonoBehaviour {
 	/// </summary>
 	/// <returns>The player X axis.</returns>
 	public bool getPlayerBuild(){
-		return _controller.Action1.IsPressed;
+		if(_controller != null){
+			return _controller.Action1.IsPressed;
+		}
+		else return false;
 	}
 
 	/// <summary>
@@ -1272,7 +1284,9 @@ public class Player : MonoBehaviour {
 	public void RevealTiles () {
 		
 		//BaseTile currentTile = GameManager.GameManagerInstance.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
-		currentTile.Reveal(_vision);
+		if(currentTile != null){
+			currentTile.Reveal(_vision);
+		}
 		/**
 		for (int i = _vision * -1; i <= _vision; i++) {
 			for (int j = (_vision - Mathf.Abs (i)) * -1; j <= _vision - Mathf.Abs (i); j++) {

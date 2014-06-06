@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
+using InControl;
+
 public class OptionsManager : MonoBehaviour {
 
 	public GUIStyle titleStyle;
@@ -73,6 +76,8 @@ public class OptionsManager : MonoBehaviour {
 	float secondColumnBottom = 3.75f;
 	float thirdColumnBottom = 7.5f;
 
+
+	private InputDevice _controller;
 	// Use this for initialization
 	void Start () {
 		turnOffMusic = false;
@@ -168,6 +173,7 @@ public class OptionsManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		_controller = InputManager.ActiveDevice;
 		
 		PlayerPrefs.SetInt(PreferencesOptions.numberOfPlayers.ToString(), numberOfPlayers);
 		PlayerPrefs.SetInt(PreferencesOptions.fogOn.ToString(), fogDisplayed);
@@ -258,7 +264,7 @@ public class OptionsManager : MonoBehaviour {
 		*/
 
 		//LET'S MAKE SHIT HAPPEN WHEN SOMETHING IS SELECTED AND THE BUTTON IS PRESSED
-		if(Input.GetButtonDown("BuildPlayer1")){
+		if(_controller.Action1.WasPressed){
 
 			if (!loadingNewScreen && !audio.isPlaying) {
 				audio.PlayOneShot(select, 0.8f);
@@ -352,14 +358,14 @@ public class OptionsManager : MonoBehaviour {
 			}
 		}
 		
-		if(startSelected && Input.GetButtonDown("BuildPlayer1") && !loadingNewScreen){
+		if(startSelected && _controller.Action1.WasPressed && !loadingNewScreen){
 			turnOffMusic = true;
 			audio.PlayOneShot(launch, 0.9f);
 			loadingNewScreen = true;
 			Invoke ("launchGame", 1.5f);
 		}
 		
-		if(backSelected && Input.GetButton("BuildPlayer1") && !loadingNewScreen){
+		if(backSelected && _controller.Action1.WasPressed && !loadingNewScreen){
 //			audio.PlayOneShot(select, 0.8f);
 			loadingNewScreen = true;
 			Invoke ("goToMainMenu", 1.0f);
@@ -392,6 +398,8 @@ public class OptionsManager : MonoBehaviour {
 
 		Application.LoadLevel("PierreMenu");
 	}
+	
+	
 
 	void OnGUI(){
 		GUI.Label (new Rect(Screen.width/3, Screen.height/9, Screen.width/3, 50), "MODIFY", titleStyle);

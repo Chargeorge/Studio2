@@ -250,9 +250,9 @@ public class Beacon : MonoBehaviour {
 		GameObject playerOnTop = null;
 		bool returnable = false;
 		p.ForEach( delegate (GameObject go){
-				Debug.Log (go.GetComponentInChildren<Player>());
+//				Debug.Log (go.GetComponentInChildren<Player>());
 			if(go.GetComponentInChildren<Player>().currentTile == parent){
-				if(go.GetComponent<Player>().getPlayerBuild())
+				if(go.GetComponentInChildren<Player>().getPlayerBuild())
 					returnable = true;
 			}
 		});

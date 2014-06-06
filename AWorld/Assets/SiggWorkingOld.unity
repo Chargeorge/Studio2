@@ -502,8 +502,6 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 078b2c5479956524baca14a59d712c7c, type: 3}
   - {fileID: 2800000, guid: 6e95830a1ff1f9d4a8260745d4038270, type: 3}
   tutorialIndex: 0
-  boardX: 0
-  boardY: 0
 --- !u!4 &842739088
 Transform:
   m_ObjectHideFlags: 0
@@ -1327,48 +1325,6 @@ MonoBehaviour:
   layerVolumeClimax: .899999976
   lerpRate: .100000001
   lerpRateFast: .300000012
---- !u!1 &1799623853
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 1799623855}
-  - 114: {fileID: 1799623854}
-  m_Layer: 0
-  m_Name: InControl
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1799623854
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1799623853}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7b5e8de77c5b4597ae7fbfb49a95e22, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  invertYAxis: 0
-  enableXInput: 0
-  useFixedUpdate: 0
-  customProfiles: []
---- !u!4 &1799623855
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1799623853}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
 --- !u!1 &1843163357
 GameObject:
   m_ObjectHideFlags: 0
