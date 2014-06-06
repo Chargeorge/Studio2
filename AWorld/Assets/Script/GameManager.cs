@@ -558,7 +558,7 @@ public class GameManager : MonoBehaviour {
 		if(hoveredTile!= null){
 			debugMouse = getHoveredTile().GetComponent<BaseTile>();
 		}
-		if(Input.GetButtonDown("Fire1")){
+//		if(Input.GetButtonDown("Fire1")){
 			//A* test
 //			if(debugMouse.owningTeam != null){
 //				BaseTile finalDestination = tiles[(int)debugMouse.owningTeam.startingLocation.x,(int)debugMouse.owningTeam.startingLocation.y].GetComponent<BaseTile>();
@@ -569,17 +569,17 @@ public class GameManager : MonoBehaviour {
 //			}
 			if(debugMouse != null){
 //				Debug.Log (debugMouse.findEdges());
-			}
-		}
-		if(Input.GetButtonDown("Fire2")){
-			if(debugMouse!= null){
-				debugMouse.owningTeam = players[0].GetComponentInChildren<Player>().team;
-				
-				debugMouse.controllingTeam = players[0].GetComponentInChildren<Player>().team;
-				
-				debugMouse.addInfluenceReturnOverflow(100f);
-			}
-		}
+//			}
+//		}
+//		if(Input.GetButtonDown("Fire2")){
+//			if(debugMouse!= null){
+//				debugMouse.owningTeam = players[0].GetComponentInChildren<Player>().team;
+//				
+//				debugMouse.controllingTeam = players[0].GetComponentInChildren<Player>().team;
+//				
+//				debugMouse.addInfluenceReturnOverflow(100f);
+//			}
+//		}
 
 		if(_currentState == GameState.gameNotStarted){
 			bool startMatch  = true;
