@@ -295,7 +295,7 @@ public class Settings : MonoBehaviour {
 			new SizeSetting(new Vector2(28,20),new Vector2(2,10), new Vector2(26,10),10.6f,new Vector2(13.4f, 9.5f), new Vector2(-3.085168f,0), new Vector2 (29.88822f,0), 19.14f, 10f, 9.2f)};
 		
 		setPrefs();
-		useReadyUp = true;
+		useReadyUp = false;
 
 	}
 

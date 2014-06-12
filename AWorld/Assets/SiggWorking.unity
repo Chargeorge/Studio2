@@ -1357,7 +1357,8 @@ MonoBehaviour:
   invertYAxis: 0
   enableXInput: 0
   useFixedUpdate: 0
-  customProfiles: []
+  customProfiles:
+  - CustomProfileExample.GenesesKeyboardExample
 --- !u!4 &1799623855
 Transform:
   m_ObjectHideFlags: 0

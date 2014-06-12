@@ -370,26 +370,38 @@ public class GameManager : MonoBehaviour {
 				}
 			}
 
-
-			int randomXOffset = Random.Range(0,3);
-			int randomYOffset = Random.Range(0,2);
-			
+			int randomXOffset , randomYOffset;
+			if(PlayerPrefs.GetInt(PreferencesOptions.terrainSize.ToString()) > 0){
+				 randomXOffset = Random.Range(0,3);
+				 randomYOffset = Random.Range(0,2);
+			}
+			else{
+				randomXOffset = 1;
+				randomYOffset = 1;
+			}
 			for(int i = 0; i < altars.Count; i++){
+				int negativeOffset = 1;
+				
 				if( (i % 2) == 1){
-					altars[Random.Range(0,altars.Count)].GetComponent<Altar>().brdX+=randomXOffset;
 					
-					altars[Random.Range(0,altars.Count)].GetComponent<Altar>().brdY+=randomYOffset;
 				}else{
-					
-					altars[Random.Range(0,altars.Count)].GetComponent<Altar>().brdX-=randomXOffset;
-					
-					altars[Random.Range(0,altars.Count)].GetComponent<Altar>().brdY-=randomYOffset;
+					negativeOffset *=-1;
 				
 				}
 				
+				Altar a = altars[Random.Range(0,altars.Count)].GetComponent<Altar>();
+				
+				if(	tiles[ a.brdX +(randomXOffset *negativeOffset), a.brdY].GetComponent<BaseTile>().buildable()){
+					a.brdX+=(randomXOffset*negativeOffset);
+				}
+				
+				a = altars[Random.Range(0,altars.Count)].GetComponent<Altar>();
+				if(	tiles[ a.brdX , a.brdY + (randomYOffset *negativeOffset)].GetComponent<BaseTile>().buildable()){
+					a.brdY+= (randomYOffset *negativeOffset);
+				}
 			}
-
-
+			
+			
 			int AStarTotalTeam1 = 0;
 			int AStarTotalTeam2 = 0;
 			
