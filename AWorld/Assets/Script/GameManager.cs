@@ -333,8 +333,8 @@ public class GameManager : MonoBehaviour {
 			for (int i = 0; i< altars.Count; i++){
 				Altar thisAltar = altars[i].GetComponent<Altar>();
 				if(i != altars.Count -1){
-					Debug.Log (altars.Count);
-					Debug.Log (i);
+//					Debug.Log (altars.Count);
+//					Debug.Log (i);
 					thisAltar.brdX = (int)alterPositions[i].x;
 					thisAltar.brdY = (int)alterPositions[i].y;
 					
@@ -533,7 +533,8 @@ public class GameManager : MonoBehaviour {
 				}
 			}
 			foreach (GameObject o in players) {
-			 o.GetComponentInChildren<Player>().RevealTiles (); 
+				Debug.Log ("Revealing!");
+			 	o.GetComponentInChildren<Player>().RevealTiles (); 
 			 }
 						
 			setup = false;

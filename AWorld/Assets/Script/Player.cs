@@ -132,7 +132,8 @@ public class Player : MonoBehaviour {
 			audioSourceMove.Play();
 		}
 	
-
+		_currentTile =  gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
+		currentTile.Reveal (_vision);
 	}
 	
 	// Update is called once per frame
@@ -141,7 +142,7 @@ public class Player : MonoBehaviour {
 		_currentTile =  gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
 		
 		if(_controller == null){
-			Debug.Log ("InputDevice");
+//			Debug.Log ("InputDevice");
 		}
 		if(gm.currentState == GameState.playing){
 			if(_invalidAction) {
@@ -1163,7 +1164,8 @@ public class Player : MonoBehaviour {
 /// </summary>
 	public void MoveToTeamStart(){
 		if (team != null) {
-			grdLocation = team.startingLocation;		
+			grdLocation = team.startingLocation;	
+			//_currentTile = gm.tiles[(int)grdLocation.x,(int)grdLocation.y].GetComponent<BaseTile>();
 		}
 		_positionOffset = new Vector2 (0,0);
 	}
@@ -1283,6 +1285,7 @@ public class Player : MonoBehaviour {
 	/// </summary>
 	public void RevealTiles () {
 		
+		Debug.Log("In working player reveal");
 		//BaseTile currentTile = GameManager.GameManagerInstance.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
 		if(currentTile != null){
 			currentTile.Reveal(_vision);

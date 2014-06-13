@@ -980,6 +980,7 @@ public class BaseTile : MonoBehaviour {
 	/// <param name="range">The maximum distance at which new tiles should be revealed. Ex 1 = xox</param>
 	///																			 x
 	public void Reveal (int range) {
+		Debug.Log("In working Reveal");
 		for (int i = range * -1; i <= range; i++){
 			for (int j = (range - Mathf.Abs (i)) * -1; j <= range - Mathf.Abs (i); j++) {
 				GameObject tile;
