@@ -79,20 +79,20 @@ public class GUIManager : MonoBehaviour {
 		TeamInfo winningTeam;
 		switch (gRef.currentState){
 		case GameState.gameWon:
-
-			if(Input.GetAxis("HorizontalPlayer1") > 0f&& restart){
+			var controller = InControl.InputManager.ActiveDevice;
+			if(controller.LeftStickX > 0f&& restart){
 				menu = true;
 				restart = false;
 			}
-			if(Input.GetAxis("HorizontalPlayer1") < 0f && menu){
+			if(controller.LeftStickX < 0f && menu){
 				restart = true;
 				menu = false;
 			}
-			if(Input.GetButton("BuildPlayer1") && restart){
+			if(controller.Action1 && restart){
 			//	audio.Play();
 			//	Invoke("replay", 1.5f);
 			}
-			if(Input.GetButton("BuildPlayer1") && menu){
+			if(controller.Action1 && menu){
 			//	audio.Play();
 			//	Invoke("mainMenu", 1.5f);
 			}
@@ -115,21 +115,21 @@ public class GUIManager : MonoBehaviour {
 			break;
 		
 		case GameState.gameRestartable:
-
-			if(Input.GetAxis("HorizontalPlayer1") > 0f && restart && !loadingNewScreen){
+			var Controller = InControl.InputManager.ActiveDevice;
+			if(Controller.LeftStickX > 0f && restart && !loadingNewScreen){
 				menu = true;
 				restart = false;
 			}
-			if(Input.GetAxis("HorizontalPlayer1") < 0f && menu && !loadingNewScreen){
+			if(Controller.LeftStickX < 0f && menu && !loadingNewScreen){
 				restart = true;
 				menu = false;
 			}
-			if(Input.GetButton("BuildPlayer1") && restart){
+			if(Controller.Action1 && restart){
 				if (!audio.isPlaying) audio.Play();
 				loadingNewScreen = true;
 				Invoke("replay", 1.5f);
 			}
-			if(Input.GetButton("BuildPlayer1") && menu){
+			if(Controller.Action1 && menu){
 				if (!audio.isPlaying) audio.Play();
 				loadingNewScreen = true;
 				Invoke("mainMenu", 1.5f);
