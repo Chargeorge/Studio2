@@ -74,8 +74,8 @@ public class GUIManager : MonoBehaviour {
 		//		GUI.DrawTexture(new Rect((Screen.width - scoreBarW)*(PlayerNumber-1)+ 2, Screen.height, scoreBarW, -Screen.height *perScore),scoreTexture, ScaleMode.StretchToFill, true, 1.0f);
 		
 		
-		int boxWidth = 1600;
-		int boxHeight = 900;
+		int boxWidth = Screen.width;
+		int boxHeight = Screen.height;
 		TeamInfo winningTeam;
 		switch (gRef.currentState){
 		case GameState.gameWon:
