@@ -86,7 +86,7 @@ public class TileCreation : MonoBehaviour {
 		
 		//Perlin Pass to generate terrrain
 
-		perlinPass (TileTypeEnum.water, Settings.SettingsInstance.optPerlinLevel);
+		//perlinPass (TileTypeEnum.water, Settings.SettingsInstance.optPerlinLevel,Settings.SettingsInstance.mirrorMap);
 		/*
 		Character test = HeroFactory.CreateHero(HeroType.warrior, gm);
 		Character enemyTest = HeroFactory.CreateEnemy(EnemyType.dragon, gm);
@@ -102,9 +102,11 @@ public class TileCreation : MonoBehaviour {
 		
 		}
 
-	public  void perlinPass(TileTypeEnum tte, int threshold	){
+	public  void perlinPass(TileTypeEnum tte, int threshold, bool evenMap){
 		float RandomChange  = Random.value;
-		for(int x= 0;x < boardX; x++ ){
+		int xLen = (!evenMap) ? boardX : boardX/2;
+		
+		for(int x= 0;x < xLen; x++ ){
 			for(int y=0; y< boardY; y++ ){
 				float xVal  = (x+RandomChange)*2.5f;
 				float yVal = (y+RandomChange)*2.5f;
@@ -117,6 +119,15 @@ public class TileCreation : MonoBehaviour {
 				}
 				//tilesGameBoard[x,y].renderer.material= matTest;
 				//tilesGameBoard[x,y].renderer.material =(Material)Resources.Load("Sprites/Materials/River");
+			}
+		}
+		
+		if(evenMap){
+			for(int x= 0;x < xLen; x++ ){
+				for(int y=0; y< boardY; y++ ){
+					
+					BaseTile.createTile(tilesGameBoard[x,y].GetComponent<BaseTile>().currentType, tilesGameBoard[boardX-x-1,y]);
+				}
 			}
 		}
 	}

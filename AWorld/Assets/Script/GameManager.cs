@@ -280,6 +280,7 @@ public class GameManager : MonoBehaviour {
 			team2Tile = tiles[(int)teams[1].startingLocation.x,(int)teams[1].startingLocation.y].GetComponent<BaseTile>();
 			int maxTries = 10;
 			
+			GameObject.Find("TileCreator").GetComponent<TileCreation>().perlinPass(TileTypeEnum.water, sRef.optPerlinLevel, sRef.mirrorMap);
 			
 			checkFlipWater(team1Tile.brdXPos, team1Tile.brdYPos);
 			checkFlipWater(team2Tile.brdXPos, team2Tile.brdYPos);
@@ -287,7 +288,7 @@ public class GameManager : MonoBehaviour {
 			while(!team1Tile.findEdges() && !team2Tile.findEdges() && maxTries > 0){
 					Debug.Log ("Attempt: " + maxTries);
 					tileSendMessage("Reset");
-					GameObject.Find("TileCreator").GetComponent<TileCreation>().perlinPass(TileTypeEnum.water, sRef.optPerlinLevel);
+					GameObject.Find("TileCreator").GetComponent<TileCreation>().perlinPass(TileTypeEnum.water, sRef.optPerlinLevel, sRef.mirrorMap);
 					maxTries--;
 				
 				checkFlipWater(team1Tile.brdXPos, team1Tile.brdYPos);
