@@ -119,7 +119,7 @@ public class MainMenu : MonoBehaviour {
 			if(startSelected){
 				//audioLerp(music, 0.0f, 0.2f);
 				turnOffMusic = true;
-				audio.PlayOneShot(launch, 0.9f);
+				audio.PlayOneShot(launch, 0.8f);
 				loadingNewScreen = true;
 				Invoke("launchGame", 1.5f);
 			}

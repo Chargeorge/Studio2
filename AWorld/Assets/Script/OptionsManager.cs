@@ -360,7 +360,7 @@ public class OptionsManager : MonoBehaviour {
 		
 		if(startSelected && _controller.Action1.WasPressed && !loadingNewScreen){
 			turnOffMusic = true;
-			audio.PlayOneShot(launch, 0.9f);
+			audio.PlayOneShot(launch, 0.85f);
 			loadingNewScreen = true;
 			Invoke ("launchGame", 1.5f);
 		}
