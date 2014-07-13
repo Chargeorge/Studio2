@@ -9,7 +9,7 @@ namespace InControl
 		public const int Minor = 1;
 		public const int Patch = 2;
 
-		public const int Build = 2138;
+		public const int Build = 2176;
 
 
 		public override string ToString()

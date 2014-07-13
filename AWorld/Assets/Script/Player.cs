@@ -214,7 +214,7 @@ public class Player : MonoBehaviour {
 					
 					//If we are standing and we get an input, handle it.
 		//			Debug.Log (string.Format("Player number {0}, buld button down: {1}", PlayerNumber, buildButtonDown));
-						if (!Pause.paused) qudProgessCircle.renderer.enabled = false;
+						if (!Pause.paused) qudProgessCircle.GetComponent<ThreeLevelTimer>().turnAllOff();
 						if(x.HasValue && !buildButtonDown) {
 							
 							setDirection(x.Value);	//Still need a 4-directional facing for building/rotating beacons
@@ -435,7 +435,7 @@ public class Player : MonoBehaviour {
 							} else { audioSourceInfluenceStart.Stop (); }
 						//audioLerp (audioSourceMove, sRef.moveVolume, sRef.moveVolumeLerpRate);
 			
-						qudProgessCircle.renderer.enabled = false;
+						qudProgessCircle.GetComponent<ThreeLevelTimer>().turnAllOff();
 						currentTile.Reveal (_vision);
 					
 						//This lets you hit build button while moving to start doing stuff
@@ -747,7 +747,7 @@ public class Player : MonoBehaviour {
 						if (audioSourceInfluenceStart.volume > 0.01f) { audioLerp (audioSourceInfluenceStart, 0.0f, sRef.playerInfluenceStartVolumeLerpRate);
 							} else { audioSourceInfluenceStart.Stop (); }
 						
-						setProgressCircle(beaconInProgress.percBuildComplete/100);
+						setProgressCircle(currentTile, false, beaconInProgress.percBuildComplete);
 						/*
 						qudProgessCircle.renderer.enabled = true;
 						qudProgessCircle.renderer.material.SetFloat("_Cutoff", 1-(beaconInProgress.percBuildComplete/100));
@@ -822,14 +822,10 @@ public class Player : MonoBehaviour {
 						
 						
 						
-		    			qudProgessCircle.renderer.enabled = true;
-						if (currentTile.controllingTeam != null) {
-							setProgressCircle( currentTile.percControlled/100 , currentTile.controllingTeam.teamColor);
-						}
-						else{
-							setProgressCircle( currentTile.percControlled/100 );
+		    			
+						setProgressCircle( currentTile,false, currentTile.percControlled );
 							
-						}	
+					
 						if(buildButtonDown && currentTile.GetComponent<BaseTile>().currentType != TileTypeEnum.water){
 					//		Jiggle ();	//Gotta jiggle
 							Pulsate ();
@@ -1013,7 +1009,7 @@ public class Player : MonoBehaviour {
 							
 							Beacon beacon = currentTile.beacon.GetComponent<Beacon>();
 							
-							setProgressCircle(beacon.percRotateComplete/100);
+							setProgressCircle(currentTile, true, beacon.percRotateComplete);
 							
 							/** This is to let players change facing mid-rotation 
 							if (x.HasValue) { 
@@ -1071,7 +1067,7 @@ public class Player : MonoBehaviour {
 							beacon.addUpgradeProgress (vpsUpgradeRate);
 							beacon.losingUpgradeProgress = false;
 							
-							setProgressCircle(beacon.percUpgradeComplete/100);
+							setProgressCircle(currentTile, true, beacon.percUpgradeComplete);
 							
 							if (beacon.percUpgradeComplete >= 100f) {
 							
@@ -1552,29 +1548,65 @@ public class Player : MonoBehaviour {
 		}
 	}
 	
-	public void setProgressCircle(float progress){
+	public void setProgressCircle(float progressOuter, float progressMiddle, float progressInner, float actionProgressVal){
 		if (!Pause.paused) {
-			qudProgessCircle.renderer.enabled = true;
-			qudProgessCircle.renderer.material.color = team.beaconColor;
-			float val = 1.001f-progress;
+			qudProgessCircle.GetComponent<ThreeLevelTimer>().turnAllOn();
+			qudProgessCircle.GetComponent<ThreeLevelTimer>().setColor( team.beaconColor );
+			float val = 1.001f-progressOuter;
 			if (val<= 0) {val =.001f;}
-			qudProgessCircle.renderer.material.SetFloat("_Cutoff",val);
+			qudProgessCircle.GetComponent<ThreeLevelTimer>().setTimersBase100(progressInner, progressMiddle, progressOuter);
+			
+			///I JUST BROKE THIS
 			actionProgressTicker = (++actionProgressTicker) % actionProgress.Length;
-			actionProgress[actionProgressTicker] = progress;
+			actionProgress[actionProgressTicker] = progressOuter;
 		}
 	}
 	
-	public void setProgressCircle(float progress, Color32 barColor){
+	public void setProgressCircle(BaseTile bt, bool useInner,  float actionInQuestion){
 		if (!Pause.paused) {
-			qudProgessCircle.renderer.enabled = true;
-			qudProgessCircle.renderer.material.color = barColor;
-			float val = 1.001f-progress;
+			qudProgessCircle.GetComponent<ThreeLevelTimer>().turnAllOn();
+			qudProgessCircle.GetComponent<ThreeLevelTimer>().setColor( (bt.owningTeam == null) ? team.beaconColor : bt.owningTeam.beaconColor );
+			
+			float beaconVal;
+			Color32 beaconCol;
+			
+			if(bt.beacon !=null){
+				beaconVal = bt.beacon.GetComponent<Beacon>().percBuildComplete;
+				beaconCol = (bt.owningTeam != null) ? bt.controllingTeam.beaconColor : (Color32)Color.gray;
+			
+			}
+			else{
+				beaconVal = 0;
+				beaconCol = Color.gray;
+			}
+			
+			qudProgessCircle.GetComponent<ThreeLevelTimer>().setTimersBase100(bt.percControlled, 
+																		beaconVal, 
+																		(useInner) ? actionInQuestion : 0f
+																		);
+			Color32 outerRingColor = (bt.controllingTeam != null) ? bt.controllingTeam.beaconColor : (Color32)Color.gray;
+			qudProgessCircle.GetComponent<ThreeLevelTimer>().setColor(outerRingColor, beaconCol, team.beaconColor);
+			
+			///I JUST BROKE THIS
+			actionProgressTicker = (++actionProgressTicker) % actionProgress.Length;
+				actionProgress[actionProgressTicker] = actionInQuestion/100;
+		}
+	}
+	
+	
+	
+	public void setProgressCircle(float progressOuter, float progressMiddle, float progressInner, Color32 barColorOuter, Color32 barColorMiddle, Color32 barColorInner,  float actionProgressVal){
+		if (!Pause.paused) {
+			
+			qudProgessCircle.GetComponent<ThreeLevelTimer>().turnAllOn();
+			qudProgessCircle.GetComponent<ThreeLevelTimer>().setColor( barColorInner, barColorMiddle, barColorOuter);
+			float val = 1.001f-progressOuter;
 			if (val<= 0) { val =.001f; }
 			
 			qudProgessCircle.renderer.material.SetFloat("_Cutoff", val);
 		
 			actionProgressTicker = (++actionProgressTicker) % actionProgress.Length;
-			actionProgress[actionProgressTicker] = progress;
+			actionProgress[actionProgressTicker] = progressOuter;
 		}
 	}
 	

@@ -45,15 +45,15 @@ public class ThreeLevelTimer : MonoBehaviour {
 	public void setTimersBase100(float? inner, float? middle, float? outer){
 		if(inner.HasValue){
 			inner = inner.Value / 100f;
-			inner = 1f-inner.Value;
+			inner = 1.0005f-inner.Value;
 		}	
 		if(middle.HasValue){
 			middle = middle.Value /100f;
-			middle = 1f-middle.Value;
+			middle = 1.0005f-middle.Value;
 		}
 		if(outer.HasValue){
 			outer = outer.Value/ 100f;
-			outer = 1f-outer.Value;
+			outer = 1.0005f-outer.Value;
 		}
 	
 
@@ -83,9 +83,15 @@ public class ThreeLevelTimer : MonoBehaviour {
 		}
 	}
 	
-	void setColor(Color32 col){
+	public void setColor(Color32 col){
 		InnerTimer.renderer.material.color = col;
 		MiddleTimer.renderer.material.color = col;
 		OuterTimer.renderer.material.color = col;
+	}
+	
+	public void setColor(Color32 outerColor, Color32 middleColor, Color32 innerColor){
+		InnerTimer.renderer.material.color = innerColor;
+		MiddleTimer.renderer.material.color = middleColor;
+		OuterTimer.renderer.material.color = outerColor;
 	}
 }

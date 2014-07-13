@@ -45,6 +45,8 @@ public class BaseTile : MonoBehaviour {
 		}
 	}
 	public GameObject beacon;
+	
+	
 	private Animator anim;
 	private GameObject _scoreBitTarget;
 			
