@@ -107,8 +107,8 @@ public class Player : MonoBehaviour {
 		_prfbBeacon = (GameObject)Resources.Load("Prefabs/Beacon");
 		sRef = Settings.SettingsInstance;
 		gm = GameManager.GameManagerInstance;
-		qudProgessCircle = transform.parent.FindChild("ActionTimer").gameObject;
-		qudProgessCircle.renderer.material.color = team.beaconColor;
+		qudProgessCircle = transform.parent.FindChild("3LevelTimer").gameObject;
+		qudProgessCircle.GetComponent<ThreeLevelTimer>().turnAllOff();
 		qudActionableGlow = transform.parent.FindChild("ActionableGlow").gameObject;
 		jiggleHash = new Hashtable();
 		jiggleHash.Add ("x", _jiggleRange);

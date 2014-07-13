@@ -67,17 +67,17 @@ public class ThreeLevelTimer : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		setTimers(Mathf.Sin (Time.time), Mathf.Cos (Time.time), Mathf.Tan(Time.time));
+		//setTimers(Mathf.Sin (Time.time), Mathf.Cos (Time.time), Mathf.Tan(Time.time));
 		
 	}
 	
-	void turnAllOff(){
+	public void turnAllOff(){
 		foreach(Renderer t in transform.GetComponentsInChildren<Renderer>()){
 			t.enabled = false;
 		}
 	}
 	
-	void turnAllOn(){
+	public void turnAllOn(){
 		foreach(Renderer t in transform.GetComponentsInChildren<Renderer>()){
 			t.enabled = true;
 		}
