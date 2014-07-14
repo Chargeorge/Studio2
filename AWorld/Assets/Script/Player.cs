@@ -1580,12 +1580,12 @@ public class Player : MonoBehaviour {
 				beaconCol = Color.gray;
 			}
 			
-			qudProgessCircle.GetComponent<ThreeLevelTimer>().setTimersBase100(bt.percControlled, 
+			qudProgessCircle.GetComponent<ThreeLevelTimer>().setTimersBase100((useInner) ? actionInQuestion : 0f, 
 																		beaconVal, 
-																		(useInner) ? actionInQuestion : 0f
+			                                                            bt.percControlled
 																		);
 			Color32 outerRingColor = (bt.controllingTeam != null) ? bt.controllingTeam.beaconColor : (Color32)Color.gray;
-			qudProgessCircle.GetComponent<ThreeLevelTimer>().setColor(outerRingColor, beaconCol, team.beaconColor);
+			qudProgessCircle.GetComponent<ThreeLevelTimer>().setColor(team.beaconColor, beaconCol, outerRingColor);
 			
 			///I JUST BROKE THIS
 			actionProgressTicker = (++actionProgressTicker) % actionProgress.Length;

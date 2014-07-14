@@ -89,7 +89,7 @@ public class ThreeLevelTimer : MonoBehaviour {
 		OuterTimer.renderer.material.color = col;
 	}
 	
-	public void setColor(Color32 outerColor, Color32 middleColor, Color32 innerColor){
+	public void setColor(Color32 innerColor, Color32 middleColor, Color32 outerColor){
 		InnerTimer.renderer.material.color = innerColor;
 		MiddleTimer.renderer.material.color = middleColor;
 		OuterTimer.renderer.material.color = outerColor;
