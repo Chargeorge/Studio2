@@ -15,7 +15,7 @@ public class Pause : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (InputManager.ActiveDevice.MenuWasPressed || Input.GetKeyDown("p")){
-			if (paused == false){
+			if (paused == false && gRef.currentState == GameState.playing){
 			//	Time.timeScale = 0;
 				paused = true;
 

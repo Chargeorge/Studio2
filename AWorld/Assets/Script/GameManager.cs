@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using InControl;
 using UnityEngine;
 using System.Linq;
 
@@ -116,8 +117,11 @@ public class GameManager : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
+	
 //	Debug.Log(currentState);
-	if(Input.GetKeyDown("r")) {
+	
+	// Reset to options menu
+	if(Input.GetKeyDown("r") || (InputManager.ActiveDevice.LeftBumper && InputManager.ActiveDevice.RightBumper)) {
 		Time.timeScale = 1.0f;
 		Pause.paused = false;
 		Application.LoadLevel("PierreOptions");
@@ -534,7 +538,7 @@ public class GameManager : MonoBehaviour {
 				}
 			}
 			foreach (GameObject o in players) {
-				Debug.Log ("Revealing!");
+			//	Debug.Log ("Revealing!");
 			 	o.GetComponentInChildren<Player>().RevealTiles (); 
 			 }
 						
@@ -960,12 +964,18 @@ public Vector2 generateValidAltarPosition(Altar thisAltar, Vector2 startPos, boo
 		if(BT.GetComponent<BaseTile>().buildable()){
 			GameObject beacon = (GameObject)Instantiate(prfbBeacon, Vector3.zero, Quaternion.identity);
 			beacon.GetComponent<Beacon>().buildNeutral(BT);
-			beacons.Add(beacon);
-			if (BT.GetComponent<BaseTile>().IsRevealed && BT.GetComponent<BaseTile>().beacon != null){
-				BT.GetComponent<BaseTile>().beacon.transform.FindChild ("Arrow").GetComponent<MeshRenderer>().enabled = true;	
-				BT.GetComponent<BaseTile>().beacon.transform.FindChild ("ArrowShot").GetComponent<MeshRenderer>().enabled = true;	
+			if (BT.GetComponent<BaseTile>().oneTileIsland () || !beacon.GetComponent<Beacon>().findNeutralFacing ()) {
+				GameObject.Destroy (beacon);
+				return false;
 			}
-			return true;
+			else {
+				beacons.Add(beacon);
+				if (BT.GetComponent<BaseTile>().IsRevealed && BT.GetComponent<BaseTile>().beacon != null){
+					BT.GetComponent<BaseTile>().beacon.transform.FindChild ("Arrow").GetComponent<MeshRenderer>().enabled = true;	
+					BT.GetComponent<BaseTile>().beacon.transform.FindChild ("ArrowShot").GetComponent<MeshRenderer>().enabled = true;	
+				}
+				return true;
+			}
 		}
 		else{
 			return false;

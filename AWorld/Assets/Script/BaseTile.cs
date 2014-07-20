@@ -980,7 +980,7 @@ public class BaseTile : MonoBehaviour {
 	/// <param name="range">The maximum distance at which new tiles should be revealed. Ex 1 = xox</param>
 	///																			 x
 	public void Reveal (int range) {
-		Debug.Log("In working Reveal");
+	//	Debug.Log("In working Reveal");
 		for (int i = range * -1; i <= range; i++){
 			for (int j = (range - Mathf.Abs (i)) * -1; j <= range - Mathf.Abs (i); j++) {
 				GameObject tile;
@@ -1057,7 +1057,7 @@ public class BaseTile : MonoBehaviour {
 					tile.GetComponent<BaseTile>().beacon != null && 
 					tile.GetComponent<BaseTile>().beacon.GetComponent<Beacon>().currentState != BeaconState.BuildingBasic) 
 				{
-					if(this.beacon == null){
+					if(this.beacon == null && this.getLocalAltar() == null){
 						qudNoBuildLayer.renderer.enabled = true;
 					}
 					return true;
@@ -1105,6 +1105,13 @@ public class BaseTile : MonoBehaviour {
 	
 	public void Reset(){
 		this.setTileType(TileTypeEnum.regular);
+	}
+	
+	public bool oneTileIsland () {
+		return  ( _North == null || _North.currentType == TileTypeEnum.water) && 
+				( _South == null || _South.currentType == TileTypeEnum.water) && 
+				( _East == null || _East.currentType == TileTypeEnum.water) && 
+				( _West == null || _West.currentType == TileTypeEnum.water);
 	}
 }
 

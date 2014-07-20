@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using InControl;
 using System.Collections;
 
 public class GUIManager : MonoBehaviour {

@@ -287,18 +287,36 @@ public class Beacon : MonoBehaviour {
 
 	public void buildNeutral(GameObject tileLocation){
 		this.gameObject.transform.parent = tileLocation.transform;
-		this.facing = (DirectionEnum)Random.Range(1,5);
-		this.dirRotatingToward = facing;
 		this._currentState	= BeaconState.Basic;
 		this.setTeam(null);
 		this.transform.localPosition = new Vector3(0f,0f,-.5f);
 		tileLocation.GetComponent<BaseTile>().beacon = this.gameObject;
-
 		_currentState = BeaconState.Basic;
-
 		_patternList = createBasicInfluenceList(getAngleForDir(facing));
-
+	}
+	
+	// Returns whether beacon found a direction to face that is not immediately shooting into water
+	public bool findNeutralFacing () {
 		
+		int initFacing = Random.Range (1,5);
+		this.facing = (DirectionEnum) initFacing;
+		
+		if (neutralFacingAdjacentWater ()) {
+			for (int i = 0; i < 4 && neutralFacingAdjacentWater (); i++) {
+				this.facing = (DirectionEnum) ((initFacing + i) % 4 + 1);
+			}
+			if (neutralFacingAdjacentWater ()) {
+				return false;
+			}
+			else {
+				this.dirRotatingToward = facing;
+				return true;
+			}
+		}
+		else {
+			this.dirRotatingToward = facing;
+			return true;
+		}		
 	}
 
 	public void startUpgrading(){
@@ -1345,6 +1363,7 @@ public class Beacon : MonoBehaviour {
 		newShot = true;
 	}
 	
+	
 	//Returns whether this beacon is facing and immediately adjacent to a water tile. 
 	public bool facingAdjacentWater () {
 		int brdX = transform.parent.gameObject.GetComponent<BaseTile>().brdXPos;
@@ -1356,7 +1375,7 @@ public class Beacon : MonoBehaviour {
 					int x = (int)brdX + (int)Mathf.RoundToInt(p.relCoordRotated.x);
 					int y = (int)brdY + (int)Mathf.RoundToInt(p.relCoordRotated.y);
 					GameObject tile;
-					if (x < 0 || y < 0 || x >= gm.boardX || y >= gm.boardY) return true;
+					if (x < 0 || y < 0 || x >= gm.boardX || y >= gm.boardY) { return true; }
 					if (gm.tiles[x,y] == null) { return true; }
 					tile = gm.tiles[x,y];
 					return (tile != null && 
@@ -1366,5 +1385,44 @@ public class Beacon : MonoBehaviour {
 			}
 		}
 		return false;	
+	}
+	
+	// Like the above, but for neutral beacons (which don't have any pattern holders in their pattern list)
+	public bool neutralFacingAdjacentWater () {
+		gm = GameObject.Find ("GameManager").GetComponent<GameManager>();
+		int brdX = transform.parent.gameObject.GetComponent<BaseTile>().brdXPos;
+		int brdY = transform.parent.gameObject.GetComponent<BaseTile>().brdYPos;
+		
+		switch (facing) {
+			
+		case DirectionEnum.East:
+			return (brdX == gm.boardX-1 || 
+					gm.tiles[brdX+1,brdY] == null ||
+					gm.tiles[brdX+1,brdY].GetComponent<BaseTile>().currentType == TileTypeEnum.water);
+			break;
+		
+		case DirectionEnum.West:
+ 			return (brdX == 0 || 
+					gm.tiles[brdX-1,brdY] == null || 
+					gm.tiles[brdX-1,brdY].GetComponent<BaseTile>().currentType == TileTypeEnum.water);
+			break;
+		
+		case DirectionEnum.North:
+			return (brdY == gm.boardY-1 || 
+					gm.tiles[brdX,brdY+1] == null || 
+					gm.tiles[brdX,brdY+1].GetComponent<BaseTile>().currentType == TileTypeEnum.water);
+			break;
+		
+		case DirectionEnum.South:
+			return (brdY == 0 || 
+					gm.tiles[brdX,brdY-1] == null || 
+					gm.tiles[brdX,brdY-1].GetComponent<BaseTile>().currentType == TileTypeEnum.water);
+			break;
+		
+		default:
+			Debug.LogWarning ("Error while checking whether neutral beacons are facing adjacent water");
+			return false;
+			break;
+		}
 	}
 }

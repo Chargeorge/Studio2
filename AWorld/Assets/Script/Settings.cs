@@ -243,7 +243,7 @@ public class Settings : MonoBehaviour {
 		//Misc
 		teleportRate = .2f;
 		closeEnoughDistanceTeleport = 0.2f;
-		moveToCenterRate = 0.014f;
+		moveToCenterRate = 0.07f;
 		closeEnoughDistanceMoveToCenter = 0.012f;
 		closeEnoughDistanceScoreBit = 0.1f;
 		influenceRevealRange = 3; 			//Radius of fog reveal when tile is influenced

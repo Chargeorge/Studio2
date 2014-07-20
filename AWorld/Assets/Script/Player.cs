@@ -1285,7 +1285,7 @@ public class Player : MonoBehaviour {
 	/// </summary>
 	public void RevealTiles () {
 		
-		Debug.Log("In working player reveal");
+		//Debug.Log("In working player reveal");
 		//BaseTile currentTile = GameManager.GameManagerInstance.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
 		if(currentTile != null){
 			currentTile.Reveal(_vision);
