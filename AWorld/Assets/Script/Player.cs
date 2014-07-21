@@ -247,8 +247,9 @@ public class Player : MonoBehaviour {
 							facing != currentTile.beacon.GetComponent<Beacon>().facing && 
 						    (currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Basic || 			//Making sure the beacon is at least complete at basic level
 						     currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingAdvanced || 	//Is there a better way of doing this?
-				 			 currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Advanced)) 
-				 		{
+				 			 currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Advanced) && 
+							!OpponentsActingOnTile ())
+					{
 				 			//Debug.Log("in rotate");
 							if (audioSourceInfluenceStart.volume > 0.01f) { audioLerp (audioSourceInfluenceStart, 0.0f, sRef.playerInfluenceStartVolumeLerpRate);
 								} else { audioSourceInfluenceStart.Stop (); }
@@ -278,9 +279,10 @@ public class Player : MonoBehaviour {
 						else if (buildButtonDown && 
 					    	currentTile.owningTeam == team &&
 					    	currentTile.beacon != null &&
-							facing == currentTile.beacon.GetComponent<Beacon>().facing &&
+					       	facing == currentTile.beacon.GetComponent<Beacon>().facing &&
 							(currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.Basic ||
-							 currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingAdvanced)) 
+							 currentTile.beacon.GetComponent<Beacon>().currentState == BeaconState.BuildingAdvanced) &&
+					        !OpponentsActingOnTile ())  
 						{
 							//Debug.Log("in upgrade");
 							if (audioSourceInfluenceStart.volume > 0.01f) { audioLerp (audioSourceInfluenceStart, 0.0f, sRef.playerInfluenceStartVolumeLerpRate);
@@ -307,20 +309,8 @@ public class Player : MonoBehaviour {
 								//start removing 
 							// if us 
 								//start building beacon				
-							if (buildButtonDown){
-								
-								List<Player> opponentsOnSameTile = OpponentsOnTile ();
-								if (opponentsOnSameTile.Count != 0) {
-									foreach (Player p in opponentsOnSameTile) { 
-										if (p.IsActing ()) {
-											teleportTarget = team.startingLocation;
-											teleportTarget = Vector2.Lerp(new Vector2 (transform.parent.position.x, transform.position.y), team.startingLocation, 0.25f);
-											//teleportTarget = (transform.parent.position + team.goGetHomeTile().transform.parent.position) / 4.0f;
-											_currentState = PlayerState.teleporting;
-										}
-									}
-								}
-								
+							if (buildButtonDown && !OpponentsActingOnTile ()){
+																
 								if (_currentState != PlayerState.teleporting) {
 								
 									moveTowardCenterOfTile (currentTile);
@@ -1665,5 +1655,23 @@ public class Player : MonoBehaviour {
 	public bool IsActing () {
 		return (currentState == PlayerState.building || currentState == PlayerState.influencing || currentState == PlayerState.rotating || 
 				currentState == PlayerState.upgrading);
+	}
+	
+	public bool OpponentsActingOnTile () {	
+		List<Player> opponentsOnSameTile = OpponentsOnTile ();
+		if (opponentsOnSameTile.Count != 0) {
+			foreach (Player p in opponentsOnSameTile) { 
+				if (p.IsActing ()) {
+					teleportTarget = team.startingLocation;
+					teleportTarget = Vector2.Lerp(new Vector2 (transform.parent.position.x, transform.position.y), team.startingLocation, 0.25f);
+					//teleportTarget = (transform.parent.position + team.goGetHomeTile().transform.parent.position) / 4.0f;
+						_currentState = PlayerState.teleporting;
+						return true;
+				}
+			}
 		}
+		return false;
+	}
+		
+	
 }

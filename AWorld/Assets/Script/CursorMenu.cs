@@ -78,7 +78,7 @@ public class CursorMenu : MonoBehaviour {
 		
 		if (!menu.GetComponent<MainMenu>().loadingNewScreen && !lerping){
 			if(MainMenu.startSelected){
-				if(y < -0.1f){
+				if(y < -0.2f){
 					lerping = true;
 					target = optionsPos;
 					goingUpUpAndAway = false;
@@ -89,7 +89,7 @@ public class CursorMenu : MonoBehaviour {
 				}
 			}
 			else if(MainMenu.optionsSelected){
-				if(y > 0.1f){
+				if(y > 0.2f){
 						lerping = true;
 						target = startPos;
 						goingUpUpAndAway = true;
@@ -97,7 +97,7 @@ public class CursorMenu : MonoBehaviour {
 						MainMenu.optionsSelected = false;
 						MainMenu.startSelected = true;
 						StartCoroutine("waitMenu");
-				}else if(y < -0.1f){
+				}else if(y < -0.2f){
 						lerping = true;
 						target = quitPos;
 						goingUpUpAndAway = false;
@@ -108,7 +108,7 @@ public class CursorMenu : MonoBehaviour {
 				}
 			}
 			else if(MainMenu.quitSelected){
-				if(y > 0.1f){
+				if(y > 0.2f){
 					lerping = true;
 					target = optionsPos;
 					goingUpUpAndAway = true;
@@ -122,13 +122,25 @@ public class CursorMenu : MonoBehaviour {
 		}
 		
 		if (!menuScript.quitting && !menuScript.loadingNewScreen && !lerping) {
-			if (y < 0) {
-				rotateSpeed = movingRotateSpeed;
-				rotatingLeft = -1;
+			if (Mathf.Abs (y) > Mathf.Abs (x)) {
+				if (y < 0) {
+					rotateSpeed = movingRotateSpeed;
+					rotatingLeft = -1;
+				}
+				else if (y > 0) { 
+					rotateSpeed = movingRotateSpeed;
+					rotatingLeft = 1;
+				}
 			}
-			else if (y > 0) { 
-				rotateSpeed = movingRotateSpeed;
-				rotatingLeft = 1;
+			else if (Mathf.Abs (x) > Mathf.Abs (y)) {
+				if (x > 0) {
+					rotateSpeed = movingRotateSpeed;
+					rotatingLeft = -1;
+				}
+				else if (x < 0) {
+					rotateSpeed = movingRotateSpeed;
+					rotatingLeft = 1;
+				}
 			}
 			else {
 				targetRotateSpeed = restingRotateSpeed;
