@@ -346,6 +346,10 @@ public class CursorOptions : MonoBehaviour {
 		else {
 			rotateSpeed = Mathf.Lerp (rotateSpeed, targetRotateSpeed, 0.1f);
 		}
+
+		if (Mathf.Abs (rotateSpeed) < restingRotateSpeed) {
+			rotateSpeed = Mathf.Sign (rotateSpeed) * restingRotateSpeed;
+		}
 							
 		if (optionsScript.loadingNewScreen) {
 			transform.RotateAround (transform.position, Vector3.forward, loadingRotateSpeed * rotatingLeft * Time.deltaTime);

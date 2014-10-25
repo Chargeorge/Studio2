@@ -153,6 +153,10 @@ public class CursorMenu : MonoBehaviour {
 		else {
 			rotateSpeed = Mathf.Lerp (rotateSpeed, targetRotateSpeed, 0.2f);
 		}
+
+		if (Mathf.Abs (rotateSpeed) < restingRotateSpeed) {
+			rotateSpeed = Mathf.Sign (rotateSpeed) * restingRotateSpeed;
+		}
 		
 		if (menuScript.loadingNewScreen) {
 			transform.RotateAround (transform.position, Vector3.forward, loadingRotateSpeed * rotatingLeft * Time.deltaTime);
