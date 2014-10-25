@@ -322,17 +322,22 @@ public class CursorOptions : MonoBehaviour {
 		
 		
 		if (!optionsScript.loadingNewScreen && !goingRight && !goingLeft && !goingUp && !goingDown) {
+			if (x == 0.0f && y == 0.0f) {
+				targetRotateSpeed = restingRotateSpeed;
+			}
+			else if (Mathf.Abs (x) > Mathf.Abs (y)) {
+				targetRotateSpeed = movingRotateSpeed * Mathf.Abs (x);
+			}
+			else {
+				targetRotateSpeed = movingRotateSpeed * Mathf.Abs (y);
+			}
+
 			if (x > 0.0f || y > 0.0f) {
 				rotatingLeft = -1;
-				rotateSpeed = movingRotateSpeed;
 			}
 			else if (x < 0.0f || y < 0.0f) {
 				rotatingLeft = 1;
-				rotateSpeed = movingRotateSpeed;
 			}
-			else { 
-				targetRotateSpeed = restingRotateSpeed;
-			}	
 		}
 		
 		if (Mathf.Abs (targetRotateSpeed - rotateSpeed) <= 1) {

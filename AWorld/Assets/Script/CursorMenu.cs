@@ -124,21 +124,21 @@ public class CursorMenu : MonoBehaviour {
 		if (!menuScript.quitting && !menuScript.loadingNewScreen && !lerping) {
 			if (Mathf.Abs (y) > Mathf.Abs (x)) {
 				if (y < 0) {
-					rotateSpeed = movingRotateSpeed;
+					targetRotateSpeed = movingRotateSpeed * Mathf.Abs (y);
 					rotatingLeft = -1;
 				}
 				else if (y > 0) { 
-					rotateSpeed = movingRotateSpeed;
+					targetRotateSpeed = movingRotateSpeed * Mathf.Abs (y);
 					rotatingLeft = 1;
 				}
 			}
 			else if (Mathf.Abs (x) > Mathf.Abs (y)) {
 				if (x > 0) {
-					rotateSpeed = movingRotateSpeed;
+					targetRotateSpeed = movingRotateSpeed * Mathf.Abs (x);
 					rotatingLeft = -1;
 				}
 				else if (x < 0) {
-					rotateSpeed = movingRotateSpeed;
+					targetRotateSpeed = movingRotateSpeed * Mathf.Abs (x);
 					rotatingLeft = 1;
 				}
 			}
