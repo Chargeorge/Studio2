@@ -86,7 +86,7 @@ public class OptionsManager : MonoBehaviour {
 
 		if(musicObject == null){
 			musicObject = GameObject.FindWithTag("MenuMusic");
-			musicObject.audio.Play();
+			musicObject.GetComponent<AudioSource>().Play();
 		}
 
 		music = musicObject.GetComponent<AudioSource>();
@@ -97,65 +97,65 @@ public class OptionsManager : MonoBehaviour {
 
 		//Set up the default values for the game
 		numberOfPlayers = (PlayerPrefs.GetInt(PreferencesOptions.numberOfPlayers.ToString()) == 2) ? 2 : 4;
-		playersDisplay.renderer.material = (PlayerPrefs.GetInt(PreferencesOptions.numberOfPlayers.ToString()) == 2) ? twoPlayersMat : fourPlayersMat;
+		playersDisplay.GetComponent<Renderer>().material = (PlayerPrefs.GetInt(PreferencesOptions.numberOfPlayers.ToString()) == 2) ? twoPlayersMat : fourPlayersMat;
 		fogDisplayed = (PlayerPrefs.GetInt(PreferencesOptions.fogOn.ToString()) == 1) ? 1 : 0;
-		fogDisplay.renderer.material = (PlayerPrefs.GetInt(PreferencesOptions.fogOn.ToString()) == 1) ? fogOnMat : fogOffMat;
+		fogDisplay.GetComponent<Renderer>().material = (PlayerPrefs.GetInt(PreferencesOptions.fogOn.ToString()) == 1) ? fogOnMat : fogOffMat;
 		fogDisplay.transform.localScale = (PlayerPrefs.GetInt(PreferencesOptions.fogOn.ToString()) == 1) ? new Vector3 (2f, 1f, 1f) : new Vector3(1.5f, 1.5f, 1f);
 		terrainIntensity = PlayerPrefs.GetInt (PreferencesOptions.terrainIntensity.ToString ());
 		tutorialToggle = (PlayerPrefs.GetInt (PreferencesOptions.tutorial.ToString()) == 1) ? 1 : 0;
-		tutorialDisplay.renderer.material = (PlayerPrefs.GetInt(PreferencesOptions.tutorial.ToString()) == 1) ? tutorialOnMat : tutorialOffMat;
+		tutorialDisplay.GetComponent<Renderer>().material = (PlayerPrefs.GetInt(PreferencesOptions.tutorial.ToString()) == 1) ? tutorialOnMat : tutorialOffMat;
 
 		switch (terrainIntensity) {
 			case 1:
-				terrainDisplay.renderer.material = terrainIntensityNoWater;
+				terrainDisplay.GetComponent<Renderer>().material = terrainIntensityNoWater;
 				break;
 			case 2:
-				terrainDisplay.renderer.material = terrainIntensitySwamp;
+				terrainDisplay.GetComponent<Renderer>().material = terrainIntensitySwamp;
 				break;
 			case 3:
-				terrainDisplay.renderer.material = terrainIntensityFlooded;
+				terrainDisplay.GetComponent<Renderer>().material = terrainIntensityFlooded;
 				break;
 			default:	//In case of errors
 				Debug.LogWarning ("Terrain intensity was a weird value in PlayerPrefs");
 				PlayerPrefs.SetInt(PreferencesOptions.terrainIntensity.ToString(), 2);
 				terrainIntensity = 2;
-				terrainDisplay.renderer.material = terrainIntensitySwamp;
+				terrainDisplay.GetComponent<Renderer>().material = terrainIntensitySwamp;
 				break;
 		}
 		terrainSize = PlayerPrefs.GetInt (PreferencesOptions.terrainSize.ToString ()); //1 is small, 2 is normal, 3 is large;
 		switch (terrainSize) {
 			case 1:
-				sizeDisplay.renderer.material = sizeSmallMat;
+				sizeDisplay.GetComponent<Renderer>().material = sizeSmallMat;
 				break;
 			case 2:
-				sizeDisplay.renderer.material = sizeNormalMat;
+				sizeDisplay.GetComponent<Renderer>().material = sizeNormalMat;
 				break;
 			case 3:
-				sizeDisplay.renderer.material = sizeLargeMat;
+				sizeDisplay.GetComponent<Renderer>().material = sizeLargeMat;
 				break;
 			default:	//In case of errors
 				Debug.LogWarning ("Terrain size was a weird value in PlayerPrefs");
 				PlayerPrefs.SetInt(PreferencesOptions.terrainSize.ToString(), 2);
 				terrainSize = 2;
-				sizeDisplay.renderer.material = sizeNormalMat;
+				sizeDisplay.GetComponent<Renderer>().material = sizeNormalMat;
 				break;
 		}
 		gameSpeed = PlayerPrefs.GetInt (PreferencesOptions.gameSpeed.ToString ()); //idem
 		switch (gameSpeed) {
 			case 1:
-				speedDisplay.renderer.material = speedHalfMat;
+				speedDisplay.GetComponent<Renderer>().material = speedHalfMat;
 				break;
 			case 2:
-				speedDisplay.renderer.material = speedNormalMat;
+				speedDisplay.GetComponent<Renderer>().material = speedNormalMat;
 				break;
 			case 3:
-				speedDisplay.renderer.material = speedDoubleMat;
+				speedDisplay.GetComponent<Renderer>().material = speedDoubleMat;
 				break;
 			default:	//In case of errors
 				Debug.LogWarning ("Game speed was a weird value in PlayerPrefs");
 				PlayerPrefs.SetInt(PreferencesOptions.gameSpeed.ToString(), 2);
 				gameSpeed = 2;
-				speedDisplay.renderer.material = speedNormalMat;
+				speedDisplay.GetComponent<Renderer>().material = speedNormalMat;
 				break;
 		}
 
@@ -266,27 +266,27 @@ public class OptionsManager : MonoBehaviour {
 		//LET'S MAKE SHIT HAPPEN WHEN SOMETHING IS SELECTED AND THE BUTTON IS PRESSED
 		if(_controller.Action1.WasPressed){
 
-			if (!loadingNewScreen && !audio.isPlaying) {
-				audio.PlayOneShot(select, 0.8f);
+			if (!loadingNewScreen && !GetComponent<AudioSource>().isPlaying) {
+				GetComponent<AudioSource>().PlayOneShot(select, 0.8f);
 			}
 
 			if(playersSelected){
 				if(numberOfPlayers == 2){
-					playersDisplay.renderer.material = fourPlayersMat;
+					playersDisplay.GetComponent<Renderer>().material = fourPlayersMat;
 					numberOfPlayers = 4;
 					} else if(numberOfPlayers == 4){
-						playersDisplay.renderer.material = twoPlayersMat;
+						playersDisplay.GetComponent<Renderer>().material = twoPlayersMat;
 						numberOfPlayers = 2;
 					}
 				}
 		
 				if(fogSelected){
 					if(fogDisplayed == 1){
-						fogDisplay.renderer.material = fogOffMat;
+						fogDisplay.GetComponent<Renderer>().material = fogOffMat;
 						fogDisplay.transform.localScale = new Vector3 (1.5f, 1.5f, fogDisplay.transform.localScale.z);
 						fogDisplayed = 0;
 					} else if(fogDisplayed == 0){
-						fogDisplay.renderer.material = fogOnMat;
+						fogDisplay.GetComponent<Renderer>().material = fogOnMat;
 						fogDisplay.transform.localScale = new Vector3 (2f, 1f, fogDisplay.transform.localScale.z);
 						fogDisplayed = 1;
 					}
@@ -294,73 +294,73 @@ public class OptionsManager : MonoBehaviour {
 		
 				if(waterSelected){
 					if(terrainIntensity == 1){ //change from small to medium
-						terrainDisplay.renderer.material = terrainIntensitySwamp;
+						terrainDisplay.GetComponent<Renderer>().material = terrainIntensitySwamp;
 						terrainIntensity = 2;
 					} else if(terrainIntensity == 2){ //change from small to medium
-						terrainDisplay.renderer.material = terrainIntensityFlooded;
+						terrainDisplay.GetComponent<Renderer>().material = terrainIntensityFlooded;
 						terrainIntensity = 3;
 					} else if(terrainIntensity == 3){ //change from small to medium
-						terrainDisplay.renderer.material = terrainIntensityNoWater;
+						terrainDisplay.GetComponent<Renderer>().material = terrainIntensityNoWater;
 						terrainIntensity = 1;
 					}
 				}
 		
 				if(speedSelected){
 					if(gameSpeed == 1){
-						speedDisplay.renderer.material = speedNormalMat;
+						speedDisplay.GetComponent<Renderer>().material = speedNormalMat;
 						gameSpeed = 2;
 					} else if(gameSpeed == 2){
-						speedDisplay.renderer.material = speedDoubleMat;
+						speedDisplay.GetComponent<Renderer>().material = speedDoubleMat;
 						gameSpeed = 3;
 					} else if(gameSpeed == 3){
-						speedDisplay.renderer.material = speedHalfMat;
+						speedDisplay.GetComponent<Renderer>().material = speedHalfMat;
 						gameSpeed = 1;
 					}
 				}
 		
 				if(sizeSelected){
 					if(terrainSize == 1){
-						sizeDisplay.renderer.material = sizeNormalMat;
+						sizeDisplay.GetComponent<Renderer>().material = sizeNormalMat;
 						terrainSize = 2;
 					} else if(terrainSize == 2){
-						sizeDisplay.renderer.material = sizeLargeMat;
+						sizeDisplay.GetComponent<Renderer>().material = sizeLargeMat;
 						terrainSize = 3;
 					} else if(terrainSize == 3){
-						sizeDisplay.renderer.material = sizeSmallMat;
+						sizeDisplay.GetComponent<Renderer>().material = sizeSmallMat;
 						terrainSize = 1;
 					}
 				}
 	
 				if(tutorialSelected){
 					if(tutorialToggle == 1){
-						tutorialDisplay.renderer.material = tutorialOffMat;
+						tutorialDisplay.GetComponent<Renderer>().material = tutorialOffMat;
 						tutorialToggle = 0;
 					} else if(tutorialToggle == 0){
-						tutorialDisplay.renderer.material = tutorialOnMat;
+						tutorialDisplay.GetComponent<Renderer>().material = tutorialOnMat;
 						tutorialToggle = 1;
 					}
 				}
 			
 			if (resetSelected){
-				playersDisplay.renderer.material = twoPlayersMat;
+				playersDisplay.GetComponent<Renderer>().material = twoPlayersMat;
 				numberOfPlayers = 2;
-				fogDisplay.renderer.material = fogOnMat;
+				fogDisplay.GetComponent<Renderer>().material = fogOnMat;
 				fogDisplay.transform.localScale = new Vector3 (2f, 1f, fogDisplay.transform.localScale.z);
 				fogDisplayed = 1;
-				terrainDisplay.renderer.material = terrainIntensitySwamp;
+				terrainDisplay.GetComponent<Renderer>().material = terrainIntensitySwamp;
 				terrainIntensity = 2;
-				speedDisplay.renderer.material = speedNormalMat;
+				speedDisplay.GetComponent<Renderer>().material = speedNormalMat;
 				gameSpeed = 2;
-				sizeDisplay.renderer.material = sizeNormalMat;
+				sizeDisplay.GetComponent<Renderer>().material = sizeNormalMat;
 				terrainSize = 2;
-				tutorialDisplay.renderer.material = tutorialOnMat;
+				tutorialDisplay.GetComponent<Renderer>().material = tutorialOnMat;
 				tutorialToggle = 1;
 			}
 		}
 		
 		if(startSelected && _controller.Action1.WasPressed && !loadingNewScreen){
 			turnOffMusic = true;
-			audio.PlayOneShot(launch, 0.85f);
+			GetComponent<AudioSource>().PlayOneShot(launch, 0.85f);
 			loadingNewScreen = true;
 			Invoke ("launchGame", 1.5f);
 		}

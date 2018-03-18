@@ -17,23 +17,23 @@ public class ReadyUp : MonoBehaviour {
 		Color32 readyColor = player.team.beaconColor;
 	//	readyColor.a = 130;
 	//	transform.FindChild("Back").renderer.material.color = readyColor;
-		this.renderer.enabled = false;
-		readyText.renderer.enabled = true;
-		readiedText.renderer.enabled = false;
+		this.GetComponent<Renderer>().enabled = false;
+		readyText.GetComponent<Renderer>().enabled = true;
+		readiedText.GetComponent<Renderer>().enabled = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if(!ready){
-			readyCircle.renderer.material.SetFloat("_Cutoff",1.001f-(readyPct /100f));
+			readyCircle.GetComponent<Renderer>().material.SetFloat("_Cutoff",1.001f-(readyPct /100f));
 			if(player.getPlayerBuild()){
 				readyPct += Settings.SettingsInstance.vpsBaseBuild*2f * Time.deltaTime;
 				if(readyPct > 100f){
 					readyPct = 100f;
 					ready = true;
-					readiedText.renderer.enabled = true;
-					readyText.renderer.enabled = false;
-					readyCircle.renderer.enabled = false;
+					readiedText.GetComponent<Renderer>().enabled = true;
+					readyText.GetComponent<Renderer>().enabled = false;
+					readyCircle.GetComponent<Renderer>().enabled = false;
 				}
 			}		
 			else{
@@ -51,7 +51,7 @@ public class ReadyUp : MonoBehaviour {
 	
 	public void setPlayer(Player p){
 		player  = p;
-		readyCircle.renderer.material.color = player.renderer.material.color;
+		readyCircle.GetComponent<Renderer>().material.color = player.GetComponent<Renderer>().material.color;
 		readyText.GetComponent<TextMesh>().text  = string.Format(readyText.GetComponent<TextMesh>().text, player.PlayerNumber);
 		readiedText.GetComponent<TextMesh>().text  = string.Format(readiedText.GetComponent<TextMesh>().text, player.PlayerNumber);
 	}

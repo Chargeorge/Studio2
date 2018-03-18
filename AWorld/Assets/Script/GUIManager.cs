@@ -126,12 +126,12 @@ public class GUIManager : MonoBehaviour {
 				menu = false;
 			}
 			if(Controller.Action1 && restart){
-				if (!audio.isPlaying) audio.Play();
+				if (!GetComponent<AudioSource>().isPlaying) GetComponent<AudioSource>().Play();
 				loadingNewScreen = true;
 				Invoke("replay", 1.5f);
 			}
 			if(Controller.Action1 && menu){
-				if (!audio.isPlaying) audio.Play();
+				if (!GetComponent<AudioSource>().isPlaying) GetComponent<AudioSource>().Play();
 				loadingNewScreen = true;
 				Invoke("mainMenu", 1.5f);
 			}

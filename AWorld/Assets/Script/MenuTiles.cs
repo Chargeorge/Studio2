@@ -34,7 +34,7 @@ public class MenuTiles : MonoBehaviour {
 				tilesGameBoard[x,y].GetComponent<BaseTile>().brdXPos = x;
 				tilesGameBoard[x,y].GetComponent<BaseTile>().brdYPos = y;
 				
-				tilesGameBoard[x,y].renderer.material = textureResources[1];
+				tilesGameBoard[x,y].GetComponent<Renderer>().material = textureResources[1];
 				//tilesGameBoard[x,y].renderer.material= matTest;
 				//tilesGameBoard[x,y].renderer.material =(Material)Resources.Load("Sprites/Materials/River");
 			}
@@ -88,7 +88,8 @@ public class MenuTiles : MonoBehaviour {
 				float perlinVal = Mathf.PerlinNoise(xVal,yVal)*10;
 				
 				//if(perlinVal*perlinVal > 60 && perlinVal*perlinVal < 80){
-				if(perlinVal*perlinVal*perlinVal*perlinVal > threshold){
+//				if(perlinVal*perlinVal*perlinVal*perlinVal > threshold){
+				if(perlinVal*perlinVal > threshold/perlinVal){
 					BaseTile.createTile(tte, tilesGameBoard[x,y]);
 					
 				}

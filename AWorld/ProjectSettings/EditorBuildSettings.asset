@@ -7,11 +7,16 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 0
     path: Assets/Charplaying.unity
-  - enabled: 1
+    guid: ebf280393b067f84b8e7b64cb489d456
+  - enabled: 0
     path: Assets/PierreMenu.unity
+    guid: 53e1d08224eb73140b14a7a26aade29a
   - enabled: 0
     path: Assets/SiggWorkingOld.unity
-  - enabled: 1
+    guid: b05c23d804f574e1b896e24bb8fc6e31
+  - enabled: 0
     path: Assets/PierreOptions.unity
-  - enabled: 1
+    guid: 19eb7bff40f2c9b4fa8ba709ba9c604a
+  - enabled: 0
     path: Assets/SiggWorking.unity
+    guid: 10dad84261c5e42368a6892f94426512

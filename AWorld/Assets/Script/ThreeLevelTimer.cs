@@ -5,7 +5,7 @@ public class ThreeLevelTimer : MonoBehaviour {
 	public GameObject InnerTimer{
 		get{
 			if(_InnerTimer == null){
-				_InnerTimer = transform.FindChild ("InnerTimer").gameObject;
+				_InnerTimer = transform.Find ("InnerTimer").gameObject;
 			}
 			return _InnerTimer;
 		}
@@ -14,7 +14,7 @@ public class ThreeLevelTimer : MonoBehaviour {
 	public GameObject MiddleTimer{
 		get{
 			if(_MiddelTimer == null){
-				_MiddelTimer = transform.FindChild("MiddleTimer").gameObject;
+				_MiddelTimer = transform.Find("MiddleTimer").gameObject;
 			}
 			return _MiddelTimer;
 		}
@@ -23,7 +23,7 @@ public class ThreeLevelTimer : MonoBehaviour {
 	public GameObject OuterTimer{
 		get{
 			if(_OuterTimer == null){
-				_OuterTimer =transform.FindChild ("OuterTimer").gameObject;
+				_OuterTimer =transform.Find ("OuterTimer").gameObject;
 			}
 			return _OuterTimer;
 		}
@@ -31,13 +31,13 @@ public class ThreeLevelTimer : MonoBehaviour {
 	
 	public void setTimers(float? inner, float? middle, float? outer){
 		if(inner.HasValue){
-			InnerTimer.renderer.material.SetFloat("_Cutoff",inner.Value);
+			InnerTimer.GetComponent<Renderer>().material.SetFloat("_Cutoff",inner.Value);
 		}	
 		if(middle.HasValue){
-			MiddleTimer.renderer.material.SetFloat("_Cutoff",middle.Value);
+			MiddleTimer.GetComponent<Renderer>().material.SetFloat("_Cutoff",middle.Value);
 		}
 		if(outer.HasValue){
-			OuterTimer.renderer.material.SetFloat("_Cutoff",outer.Value);
+			OuterTimer.GetComponent<Renderer>().material.SetFloat("_Cutoff",outer.Value);
 		}
 		
 	}
@@ -84,8 +84,8 @@ public class ThreeLevelTimer : MonoBehaviour {
 	}
 	
 	void setColor(Color32 col){
-		InnerTimer.renderer.material.color = col;
-		MiddleTimer.renderer.material.color = col;
-		OuterTimer.renderer.material.color = col;
+		InnerTimer.GetComponent<Renderer>().material.color = col;
+		MiddleTimer.GetComponent<Renderer>().material.color = col;
+		OuterTimer.GetComponent<Renderer>().material.color = col;
 	}
 }

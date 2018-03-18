@@ -118,8 +118,7 @@ namespace InControl
 			}
 
 			if (Application.platform == RuntimePlatform.OSXEditor ||
-			    Application.platform == RuntimePlatform.OSXPlayer ||
-			    Application.platform == RuntimePlatform.OSXWebPlayer)
+			    Application.platform == RuntimePlatform.OSXPlayer)
 			{
 				if (unityJoystickName == "Unknown Wireless Controller")
 				{

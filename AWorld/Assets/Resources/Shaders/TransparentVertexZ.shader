@@ -22,7 +22,7 @@ SubShader {
             Ambient [_Color]
         }
         Lighting On
-        SetTexture [_MainTex] {
+        Set	Texture [_MainTex] {
             Combine texture * primary DOUBLE, texture * primary
         } 
     }

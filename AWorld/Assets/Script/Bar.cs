@@ -26,9 +26,9 @@ public class Bar : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		scoreBitFinal = transform.FindChild("ScoreBitFinalTarget").gameObject;
-		transform.FindChild ("NoBuildLayer").renderer.material.color = team.tileColor;
-		transform.FindChild ("Quad").renderer.material.color = team.tileColor;
+		scoreBitFinal = transform.Find("ScoreBitFinalTarget").gameObject;
+		transform.Find ("NoBuildLayer").GetComponent<Renderer>().material.color = team.tileColor;
+		transform.Find ("Quad").GetComponent<Renderer>().material.color = team.tileColor;
 		sRef = Settings.SettingsInstance;
 		gRef = GameManager.GameManagerInstance;
 
@@ -53,14 +53,14 @@ public class Bar : MonoBehaviour {
 		//this.transform.position = startPos;
 
 		teamScale = new Vector3 (1f,0,0);
-		bar = this.transform.FindChild("Bar");
-		capture = this.transform.FindChild("Capture");
-		backBar = this.transform.FindChild("BarBack");
+		bar = this.transform.Find("Bar");
+		capture = this.transform.Find("Capture");
+		backBar = this.transform.Find("BarBack");
 		teamScale.y = sRef.scaleY;
 		backBar.transform.localScale = teamScale;
 		teamPos.y = sRef.bbLocalPosY;
 		backBar.transform.localPosition = teamPos; 
-		backBar.renderer.materials[ 0 ].SetTextureScale( "_MainTex", new Vector2(0.7f,sRef.scaleY));
+		backBar.GetComponent<Renderer>().materials[ 0 ].SetTextureScale( "_MainTex", new Vector2(0.7f,sRef.scaleY));
 	
 //s		barAlpha = team.teamColor;
 //		barAlpha.a = 100;
@@ -118,13 +118,13 @@ public class Bar : MonoBehaviour {
 		bar.localScale = teamScale;
 		bar.localPosition = teamPos;
 
-		bar.renderer.material.color = team.teamColor;
-		capture.renderer.material.color = team.beaconColor;
+		bar.GetComponent<Renderer>().material.color = team.teamColor;
+		capture.GetComponent<Renderer>().material.color = team.beaconColor;
 
 		Color32 backBarColor = team.tileColor;
 		//Color32 backBarColor = new Color32 (200, 200, 200, 170);
 		backBarColor.a = 100;
-		backBar.renderer.material.color = backBarColor;
+		backBar.GetComponent<Renderer>().material.color = backBarColor;
 
 	//	team = gRef.teams[1];
 	//	perScore = team.score / sRef.valPointsToWin;

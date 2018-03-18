@@ -12,12 +12,12 @@ public class MusicOptions : MonoBehaviour {
 		
 		if (musicObjects.Length == 1) {
 			DontDestroyOnLoad(this);
-			audio.Play ();
+			GetComponent<AudioSource>().Play ();
 		}
 		
 		else {	
 			foreach (GameObject o in musicObjects) {
-				if (!o.audio.isPlaying) {
+				if (!o.GetComponent<AudioSource>().isPlaying) {
 					GameObject.Destroy (o);
 				}
 			}

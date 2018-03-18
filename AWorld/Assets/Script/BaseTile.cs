@@ -58,6 +58,7 @@ public class BaseTile : MonoBehaviour {
 	private int? _distanceToHomeBase;
 	//Delegate used for different A* methods
 	public delegate List<BaseTile> GetLocalTiles(BaseTile Base, TeamInfo T);
+	public delegate int GetMoveCost(BaseTile currentTile, TeamInfo teamIn);
 	
 	private GameObject _qudBaseLayer;
 	private GameObject _qudFogLowerLayer;
@@ -93,7 +94,7 @@ public class BaseTile : MonoBehaviour {
 	public GameObject qudBaseLayer {
 		get {
 			if(_qudBaseLayer == null){
-				_qudBaseLayer = transform.FindChild("BaseLayer").gameObject;
+				_qudBaseLayer = transform.Find("BaseLayer").gameObject;
 			}
 			return _qudBaseLayer;
 		}
@@ -105,7 +106,7 @@ public class BaseTile : MonoBehaviour {
 	public GameObject qudFogUpperLayer {
 		get {
 			if(_qudFogUpperLayer == null){
-				_qudFogUpperLayer = transform.FindChild("FogUpperLayer").gameObject;
+				_qudFogUpperLayer = transform.Find("FogUpperLayer").gameObject;
 			}
 			return _qudFogUpperLayer;
 		}
@@ -117,7 +118,7 @@ public class BaseTile : MonoBehaviour {
 	public GameObject qudFogLowerLayer {
 		get {
 			if(_qudFogLowerLayer == null){
-				_qudFogLowerLayer = transform.FindChild("FogLowerLayer").gameObject;
+				_qudFogLowerLayer = transform.Find("FogLowerLayer").gameObject;
 			}
 			return _qudFogLowerLayer;
 		}
@@ -129,7 +130,7 @@ public class BaseTile : MonoBehaviour {
 	public GameObject qudNoBuildLayer {
 		get {
 			if(_qudNoBuildLayer == null){
-				_qudNoBuildLayer = transform.FindChild("NoBuildLayer").gameObject;
+				_qudNoBuildLayer = transform.Find("NoBuildLayer").gameObject;
 			}
 			return _qudNoBuildLayer;
 		}
@@ -141,7 +142,7 @@ public class BaseTile : MonoBehaviour {
 	public GameObject qudPulsingOwnedLayer {
 		get {
 			if(_qudPulsingOwnedLayer == null){
-				_qudPulsingOwnedLayer = transform.FindChild("PulsingOwnedLayer").gameObject;
+				_qudPulsingOwnedLayer = transform.Find("PulsingOwnedLayer").gameObject;
 			}
 			return _qudPulsingOwnedLayer;
 		}
@@ -153,7 +154,7 @@ public class BaseTile : MonoBehaviour {
 	public GameObject qudOwnedLayer {
 		get {
 			if(_qudOwnedLayer == null){
-				_qudOwnedLayer = transform.FindChild("OwnedLayer").gameObject;
+				_qudOwnedLayer = transform.Find("OwnedLayer").gameObject;
 			}
 			return _qudOwnedLayer;
 		}
@@ -165,7 +166,7 @@ public class BaseTile : MonoBehaviour {
 	public GameObject scoreBitTarget {
 		get {
 			if(_scoreBitTarget == null){
-				_scoreBitTarget = transform.FindChild("ScoreBitTarget").gameObject;
+				_scoreBitTarget = transform.Find("ScoreBitTarget").gameObject;
 			}
 			return _scoreBitTarget;
 		}
@@ -218,8 +219,8 @@ public class BaseTile : MonoBehaviour {
 		}
 		set {
 			_isRevealed = value;
-			qudFogUpperLayer.renderer.enabled = !value;
-			qudFogLowerLayer.renderer.enabled = !value;
+			qudFogUpperLayer.GetComponent<Renderer>().enabled = !value;
+			qudFogLowerLayer.GetComponent<Renderer>().enabled = !value;
 		}
 	}
 	
@@ -315,7 +316,7 @@ public class BaseTile : MonoBehaviour {
 		transform.Find("OwnedLayer").GetComponent<MeshRenderer>().enabled = false;
 		sRef = Settings.SettingsInstance;
 		influenceAdded = new float[6];
-		transform.Find("NoBuildLayer").renderer.material.color = new Color32 (200,200,200,255);
+		transform.Find("NoBuildLayer").GetComponent<Renderer>().material.color = new Color32 (200,200,200,255);
 	}
 	
 	public BaseTile GetDirection(DirectionEnum dir){
@@ -338,7 +339,7 @@ public class BaseTile : MonoBehaviour {
 			//controllingTeamColor.a = (byte) (255*(_percControlled/100f));
 
 
-			transform.Find("NoBuildLayer").renderer.material.color = controllingTeam.tileColor;
+			transform.Find("NoBuildLayer").GetComponent<Renderer>().material.color = controllingTeam.tileColor;
 			
 			if (owningTeam != null && owningTeam == controllingTeam) {
 				controllingTeamColor.a = (byte) (255-255*((1.0f-_percControlled/100f) * (1.0f - sRef.percMaxInfluenceColor)));
@@ -349,7 +350,7 @@ public class BaseTile : MonoBehaviour {
 			
 			if (_percControlled >= 100f) controllingTeamColor.a = (byte) 255;
 			
-			qudInfluenceLayer.renderer.material.color = controllingTeamColor;
+			qudInfluenceLayer.GetComponent<Renderer>().material.color = controllingTeamColor;
 //			qudInfluenceLayer.renderer.material.color = controllingTeam.tileColor;			
 			qudInfluenceLayer.GetComponent<MeshRenderer>().enabled = true;
 		}
@@ -382,7 +383,7 @@ public class BaseTile : MonoBehaviour {
 				if (indexVal <= 0) indexVal += sRef.marqueeCount;
 				//indexVal = (indexVal< 0) ? indexVal = 0 : indexVal;
 				if(indexVal  < owningTeam.marqueeColorList.Count && indexVal >=0){
-					qudPulsingOwnedLayer.renderer.material.color = owningTeam.marqueeColorList[indexVal];
+					qudPulsingOwnedLayer.GetComponent<Renderer>().material.color = owningTeam.marqueeColorList[indexVal];
 				}
 			}
 		}
@@ -425,7 +426,7 @@ public class BaseTile : MonoBehaviour {
 			qudOwnedLayer.transform.localEulerAngles = endRot;
 			
 			if (beacon != null) {
-				beacon.gameObject.transform.FindChild ("Platform").transform.localEulerAngles = endRot;
+				beacon.gameObject.transform.Find ("Platform").transform.localEulerAngles = endRot;
 			}
 		}
 	}
@@ -473,12 +474,12 @@ public class BaseTile : MonoBehaviour {
 		
 		switch (et){
 			case TileTypeEnum.regular:
-				currentTile.GetComponent<BaseTile>().qudBaseLayer.renderer.material = (Material)Resources.Load("Sprites/Materials/Regular");
+				currentTile.GetComponent<BaseTile>().qudBaseLayer.GetComponent<Renderer>().material = (Material)Resources.Load("Sprites/Materials/Regular");
 				currentTile.GetComponent<BaseTile>().currentType = TileTypeEnum.regular;
 			break;
 
 			case TileTypeEnum.water:
-				currentTile.GetComponent<BaseTile>().qudBaseLayer.renderer.material = (Material)Resources.Load("Sprites/Materials/Water");
+				currentTile.GetComponent<BaseTile>().qudBaseLayer.GetComponent<Renderer>().material = (Material)Resources.Load("Sprites/Materials/Water");
 				currentTile.GetComponent<BaseTile>().currentType = TileTypeEnum.water;
 			break;
 		}
@@ -489,12 +490,12 @@ public class BaseTile : MonoBehaviour {
 	public void setTileType(TileTypeEnum TT){
 		switch (TT){
 		case TileTypeEnum.regular:
-			gameObject.transform.FindChild ("BaseLayer").renderer.material = (Material)Resources.Load("Sprites/Materials/Regular");
+			gameObject.transform.Find ("BaseLayer").GetComponent<Renderer>().material = (Material)Resources.Load("Sprites/Materials/Regular");
 			currentType = TileTypeEnum.regular;
 			break;
 			
 		case TileTypeEnum.water:
-			gameObject.transform.FindChild ("BaseLayer").renderer.material = (Material)Resources.Load("Sprites/Materials/Water");
+			gameObject.transform.Find ("BaseLayer").GetComponent<Renderer>().material = (Material)Resources.Load("Sprites/Materials/Water");
 			currentType = TileTypeEnum.water;
 			break;
 		}
@@ -546,97 +547,9 @@ public class BaseTile : MonoBehaviour {
 		}
 		
 	}
-	#region oldCode
-	///Old section needs to be fixed
-	/// 
-	/*
-	public  List<BaseTile> getReachable(int currentAp){
-		Dictionary<int,  BaseTile> visited = new Dictionary<int, BaseTile>();
-		if(North!=null && North.Hero == null){
-			if(currentAp - North.MoveCost >=0){
-				getReachableBody(North, visited, currentAp-North.MoveCost);
-			}
-		}
-		if(South!=null && South.Hero == null){
-			if(currentAp - South.MoveCost >=0){
-				getReachableBody(South,visited, currentAp-South.MoveCost);
-			}
-		}
-		if(East!=null&& East.Hero == null){
-			if(currentAp - East.MoveCost >=0){
-				getReachableBody(East,visited, currentAp-East.MoveCost);
-			}
-		}
-		if(West !=null && West.Hero == null){
-			if(currentAp - West.MoveCost >=0){
-				getReachableBody(West,visited, currentAp-West.MoveCost);
-			}
-		}
-		
-		List<BaseTile> returnable = new List<BaseTile>();
-		foreach(KeyValuePair<int, BaseTile> entry in visited)
-		{
-		    returnable.Add(entry.Value);
-		}
-		
-		return returnable;
-	}
 	
-	public void getReachableBody(BaseTile Current, Dictionary<int, BaseTile> visited, int currentAp){
-		if(!visited.ContainsKey(Current.Ident)){
-			visited.Add(Current.Ident,Current);
-			if(Current.North!=null  && Current.North.Hero == null){
-				if(currentAp - Current.North.MoveCost >=0){
-					getReachableBody(Current.North, visited, currentAp-Current.North.MoveCost);
-				}
-			}
-			if(Current.South!=null && Current.South.Hero == null){
-				if(currentAp - Current.South.MoveCost >=0){
-					getReachableBody(Current.South,visited, currentAp-Current.South.MoveCost);
-				}
-			}
-			if(Current.East!=null  && Current.East.Hero == null){
-				if(currentAp - Current.East.MoveCost >=0){
-					getReachableBody(Current.East,visited, currentAp-Current.East.MoveCost);
-				}
-			}
-			if (Current.West!=null  && Current.West.Hero == null){
-				if(currentAp - Current.West.MoveCost >=0){
-					getReachableBody(Current.West,visited, currentAp-Current.West.MoveCost);
-				}
-			}
-		}
-	}
 	
-	public List<BaseTile> getLocalOpenTiles(int currentAp){
-		List<BaseTile> returnable = new List<BaseTile>();
-		if(North!=null && North.Hero == null){
-			if(currentAp - North.MoveCost >=0){
-				returnable.Add(North);
-			}
-		}
-		if(South!=null && South.Hero == null){
-			if(currentAp - South.MoveCost >=0){
-				returnable.Add(South);
-			}
-		}
-		if(East!=null&& East.Hero == null){
-			if(currentAp - East.MoveCost >=0){
-				returnable.Add(East);
-			}
-		}
-		if(West !=null && West.Hero == null){
-			if(currentAp - West.MoveCost >=0){
-				returnable.Add(West);
-			}
-		}
-			return returnable;
-	
-	}*/
-	
-	#endregion oldCode
-
-
+	#region A_Star
 	/// <summary>
 	///  STUB method
 	/// </summary>
@@ -660,6 +573,7 @@ public class BaseTile : MonoBehaviour {
 	public static List<BaseTile> getLocalNonTiles(BaseTile current, TeamInfo T){
 		return null;
 	}
+	
 
 	public List<BaseTile> getLocalTiles(){
 		List<BaseTile> returnable = new List<BaseTile>();
@@ -669,14 +583,17 @@ public class BaseTile : MonoBehaviour {
 		if(West!= null) returnable.Add(West);
 		return returnable;
 	}
-		
-	public static List<AStarholder> aStarSearch(BaseTile start, BaseTile end, int currentAp, GetLocalTiles LocalMethod, TeamInfo team){
+	
+	public static  List<AStarholder> aStarSearch(BaseTile start, BaseTile end, int currentAp, GetLocalTiles LocalMethod, TeamInfo team){
+		return aStarSearch( start,  end,  currentAp,  LocalMethod,  team, getBasicCost);
+	}
+	public static List<AStarholder> aStarSearch(BaseTile start, BaseTile end, int currentAp, GetLocalTiles LocalMethod, TeamInfo team, GetMoveCost costMethod){
 		Dictionary<int, AStarholder> closedSet  = new Dictionary<int, AStarholder>();		
 		Dictionary<int, AStarholder> openSet = new Dictionary<int, AStarholder>();
 		
 		AStarholder current = new AStarholder(start, null);
 		current.hurVal = current.current.calcHueristic(current.current, end);
-		//current.apAtThisTurn = currentAp;
+//		current.apAtThisTurn = currentAp;
 		current.pathCostToHere = 0;
 		
 		openSet.Add(current.current.Ident, current);
@@ -691,8 +608,9 @@ public class BaseTile : MonoBehaviour {
 			listies.ForEach(delegate (BaseTile bt){
 				if(!closedSet.ContainsKey(bt.Ident)){
 					AStarholder newOpen = new AStarholder(bt, current);
+					newOpen.current.MoveCost = costMethod(newOpen.current, team);
 					newOpen.hurVal = newOpen.current.calcHueristic(newOpen.current, end);
-					//newOpen.apAtThisTurn = current.apAtThisTurn - newOpen.current.MoveCost;
+//					newOpen.apAtThisTurn = current.apAtThisTurn - newOpen.current.MoveCost;
 					newOpen.pathCostToHere = newOpen.current.MoveCost + current.pathCostToHere;
 					if(openSet.ContainsKey(bt.Ident)){
 						if(openSet[bt.Ident].fVal > newOpen.fVal){
@@ -734,6 +652,7 @@ public class BaseTile : MonoBehaviour {
 		return returnable;
 	}
 	
+	
 	public static void reconstructPath (BaseTile start, AStarholder a, List<AStarholder> returnable){
 		if(a!= null){
 			if(a.current.Ident == start.Ident){
@@ -747,10 +666,30 @@ public class BaseTile : MonoBehaviour {
 		}
 	}
 	
+
+	
 	public int calcHueristic(BaseTile start, BaseTile end){
 		int manhattan = Mathf.Abs(end.brdXPos - start.brdXPos) + Mathf.Abs(end.brdYPos - start.brdYPos);
 		return manhattan*4; //Average tile cost;
 	}
+	
+	public static int getBasicCost(BaseTile currentTile, TeamInfo TeamIn){
+		return 1;
+	}
+	
+	public static int getAntCost(BaseTile currentTile, TeamInfo teamIn){
+		if(currentTile.owningTeam == teamIn){
+			return 1;
+		}
+		else{
+			return 5;
+		}
+	}
+
+	
+	
+	#endregion
+	
 	
 	public List<BaseTile> getDirections(){
 		List<BaseTile> returnable = new List<BaseTile>();
@@ -915,13 +854,13 @@ public class BaseTile : MonoBehaviour {
 			if(_percControlled > 100f){
 				_percControlled = 100f;
 				currentState = TileState.normal;
-				if(controllingTeam.teamNumber == 1)	audio.clip = sRef.InfluenceDoneLo;
-				if(controllingTeam.teamNumber == 2) audio.clip = sRef.InfluenceDoneHi;
+				if(controllingTeam.teamNumber == 1)	GetComponent<AudioSource>().clip = sRef.InfluenceDoneLo;
+				if(controllingTeam.teamNumber == 2) GetComponent<AudioSource>().clip = sRef.InfluenceDoneHi;
 
 
-				if (!audio.isPlaying) {
-					audio.volume = sRef.playerInfluenceDoneVolume;
-					audio.Play (); //activate this if we want every tile influenced to trigger a sound, including the ones influenced by beacons
+				if (!GetComponent<AudioSource>().isPlaying) {
+					GetComponent<AudioSource>().volume = sRef.playerInfluenceDoneVolume;
+					GetComponent<AudioSource>().Play (); //activate this if we want every tile influenced to trigger a sound, including the ones influenced by beacons
 				} 
 
 			}
@@ -989,8 +928,8 @@ public class BaseTile : MonoBehaviour {
 				if (tile != null) {
 					tile.GetComponent<BaseTile>().IsRevealed = true;
 					if (tile.GetComponent<BaseTile>().beacon != null){
-						tile.GetComponent<BaseTile>().beacon.transform.FindChild ("Arrow").GetComponent<MeshRenderer>().enabled = true;	
-						tile.GetComponent<BaseTile>().beacon.transform.FindChild ("Arrow").GetComponent<MeshRenderer>().enabled = true;	
+						tile.GetComponent<BaseTile>().beacon.transform.Find ("Arrow").GetComponent<MeshRenderer>().enabled = true;	
+						tile.GetComponent<BaseTile>().beacon.transform.Find ("Arrow").GetComponent<MeshRenderer>().enabled = true;	
 					}
 				}		
 			}
@@ -1028,10 +967,10 @@ public class BaseTile : MonoBehaviour {
 	public void setDistanceToHomeBase(){
 		_distanceToHomeBase = getDistanceToHomeBase();
 		if(_distanceToHomeBase ==0){
-			qudPulsingOwnedLayer.renderer.enabled = false;
+			qudPulsingOwnedLayer.GetComponent<Renderer>().enabled = false;
 		}
 		else{
-			qudPulsingOwnedLayer.renderer.enabled = true;
+			qudPulsingOwnedLayer.GetComponent<Renderer>().enabled = true;
 		}
 
 	}
@@ -1058,7 +997,7 @@ public class BaseTile : MonoBehaviour {
 					tile.GetComponent<BaseTile>().beacon.GetComponent<Beacon>().currentState != BeaconState.BuildingBasic) 
 				{
 					if(this.beacon == null && this.getLocalAltar() == null){
-						qudNoBuildLayer.renderer.enabled = true;
+						qudNoBuildLayer.GetComponent<Renderer>().enabled = true;
 					}
 					return true;
 				}

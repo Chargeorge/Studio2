@@ -28,7 +28,7 @@ public class Altar : MonoBehaviour {
 	public GameObject scoreBar {
 		get {
 			if(_scoreBar == null){
-				_scoreBar = gameObject.transform.FindChild("ScoreThingy").gameObject;
+				_scoreBar = gameObject.transform.Find("ScoreThingy").gameObject;
 			}
 			return _scoreBar;
 		}
@@ -41,7 +41,7 @@ public class Altar : MonoBehaviour {
 			return _isLocked;
 		}
 		set {
-			_lockedLayer.renderer.enabled = value;
+			_lockedLayer.GetComponent<Renderer>().enabled = value;
 			_isLocked = value;
 		}
 	}	
@@ -63,11 +63,17 @@ public class Altar : MonoBehaviour {
 			return _firstControllingTeam;
 		}
 	}
+	
+	public BaseTile currenTile{
+		get{
+			return gameObject.transform.parent.gameObject.GetComponent<BaseTile>();
+		}
+	}
 	#endregion
 	
 	// Use this for initialization
 	void Start () {
-		_lockedLayer = transform.FindChild("LockedLayer").gameObject;
+		_lockedLayer = transform.Find("LockedLayer").gameObject;
 		isLocked = false;
 		sRef = Settings.SettingsInstance;
 		//TODO OHH GOD THIS IS BAD I SHOULDN'T DO THIS
@@ -75,18 +81,18 @@ public class Altar : MonoBehaviour {
 //			Debug.Log("altar: " +altarType.ToString());
 		Material loaded =  (Material)Resources.Load(string.Format("Sprites/Materials/{0}", altarType.ToString()));
 		gm = GameManager.GameManagerInstance;
-		transform.FindChild("Quad").renderer.material = loaded;
-		symbol = transform.FindChild("Quad");
+		transform.Find("Quad").GetComponent<Renderer>().material = loaded;
+		symbol = transform.Find("Quad");
 		scoreLeft = sRef.valScorePerAltar;
-		renderer.material.color = new Color32(237, 20, 90, 255);
+		GetComponent<Renderer>().material.color = new Color32(237, 20, 90, 255);
 	}
 	
 	public void setScoreBarTeam(TeamInfo t ){
 		if(t != null){
-			scoreBar.renderer.material.color = t.teamColor;
+			scoreBar.GetComponent<Renderer>().material.color = t.teamColor;
 		}
 		else{
-			scoreBar.renderer.material.color =  new Color32(220, 30, 47, 255);
+			scoreBar.GetComponent<Renderer>().material.color =  new Color32(220, 30, 47, 255);
 		}
 		
 	}
@@ -108,8 +114,8 @@ public class Altar : MonoBehaviour {
 		//Am I controlled? 
 		if(gm.currentState == GameState.playing){
 			if(altarType != AltarType.MagicalMysteryScore){
-				scoreBar.renderer.enabled = false;
-				transform.FindChild("ScoreThingyBG").renderer.enabled = false;
+				scoreBar.GetComponent<Renderer>().enabled = false;
+				transform.Find("ScoreThingyBG").GetComponent<Renderer>().enabled = false;
 			}
 			
 			if(_currentControllingTeam != null){
@@ -150,11 +156,11 @@ public class Altar : MonoBehaviour {
 								//_currentControllingTeam.score += scoreToAdd;
 								
 								if (scoreLeft <= 0) {
-									gameObject.transform.renderer.material.shader = Shader.Find ("Transparent/Diffuse");
-									Color32 drainedColor = gameObject.renderer.material.color;
+									gameObject.transform.GetComponent<Renderer>().material.shader = Shader.Find ("Transparent/Diffuse");
+									Color32 drainedColor = gameObject.GetComponent<Renderer>().material.color;
 									drainedColor.a = (byte) (sRef.drainedAltarAlpha * 255f);
 									//Debug.Log (drainedColor.a);
-									gameObject.renderer.material.color = drainedColor;
+									gameObject.GetComponent<Renderer>().material.color = drainedColor;
 								}
 							}
 	
@@ -180,7 +186,7 @@ public class Altar : MonoBehaviour {
 				checkNetwork();
 //				StartCoroutine(AnimateTiles());
 				copy.a = 200;
-				symbol.renderer.material.color = copy;
+				symbol.GetComponent<Renderer>().material.color = copy;
 
 
 				//TODO - fix - not sure why this doesn't work...
@@ -209,9 +215,6 @@ public class Altar : MonoBehaviour {
 			List<AStarholder> As = 	BaseTile.aStarSearch(gameObject.transform.parent.gameObject.GetComponent<BaseTile>(),gm.getTeamBase(_currentControllingTeam),int.MaxValue, BaseTile.getLocalSameTeamTiles, _currentControllingTeam);
 			if(As.Count> 0){
 				networkToBase = As;
-
-
-
 
 				return true;
 				

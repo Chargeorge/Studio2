@@ -55,9 +55,9 @@ public class ScoreBit : MonoBehaviour {
 
 
 	//	renderer.material.color = scoreBitColor;
-		renderer.material.color = new Color32(237, 20, 90, 180);
+		GetComponent<Renderer>().material.color = new Color32(237, 20, 90, 180);
 		
-		finalTarget = T.ScoreBar.transform.FindChild ("ScoreBitFinalTarget").gameObject.GetComponent<FinalScoreTarget>();
+		finalTarget = T.ScoreBar.transform.Find ("ScoreBitFinalTarget").gameObject.GetComponent<FinalScoreTarget>();
 		
 
 	}
@@ -94,7 +94,7 @@ public class ScoreBit : MonoBehaviour {
 					}
 					if (targets.Count == 1) {
 						//Moving to final target
-						transform.renderer.material.color = team.teamColor;
+						transform.GetComponent<Renderer>().material.color = team.teamColor;
 						if (team.teamNumber == 1) GameObject.Find ("GameManager").GetComponent<GameManager>().home1.GetComponent<Home>().Jiggle (0.1f, 0.05f);
 						else GameObject.Find ("GameManager").GetComponent<GameManager>().home2.GetComponent<Home>().Jiggle (0.1f, 0.05f);
 					}

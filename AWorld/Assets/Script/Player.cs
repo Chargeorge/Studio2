@@ -107,9 +107,9 @@ public class Player : MonoBehaviour {
 		_prfbBeacon = (GameObject)Resources.Load("Prefabs/Beacon");
 		sRef = Settings.SettingsInstance;
 		gm = GameManager.GameManagerInstance;
-		qudProgessCircle = transform.parent.FindChild("ActionTimer").gameObject;
-		qudProgessCircle.renderer.material.color = team.beaconColor;
-		qudActionableGlow = transform.parent.FindChild("ActionableGlow").gameObject;
+		qudProgessCircle = transform.parent.Find("ActionTimer").gameObject;
+		qudProgessCircle.GetComponent<Renderer>().material.color = team.beaconColor;
+		qudActionableGlow = transform.parent.Find("ActionableGlow").gameObject;
 		jiggleHash = new Hashtable();
 		jiggleHash.Add ("x", _jiggleRange);
 		jiggleHash.Add ("y", _jiggleRange);
@@ -214,7 +214,7 @@ public class Player : MonoBehaviour {
 					
 					//If we are standing and we get an input, handle it.
 		//			Debug.Log (string.Format("Player number {0}, buld button down: {1}", PlayerNumber, buildButtonDown));
-						if (!Pause.paused) qudProgessCircle.renderer.enabled = false;
+						if (!Pause.paused) qudProgessCircle.GetComponent<Renderer>().enabled = false;
 						if(x.HasValue && !buildButtonDown) {
 							
 							setDirection(x.Value);	//Still need a 4-directional facing for building/rotating beacons
@@ -425,7 +425,7 @@ public class Player : MonoBehaviour {
 							} else { audioSourceInfluenceStart.Stop (); }
 						//audioLerp (audioSourceMove, sRef.moveVolume, sRef.moveVolumeLerpRate);
 			
-						qudProgessCircle.renderer.enabled = false;
+						qudProgessCircle.GetComponent<Renderer>().enabled = false;
 						currentTile.Reveal (_vision);
 					
 						//This lets you hit build button while moving to start doing stuff
@@ -812,7 +812,7 @@ public class Player : MonoBehaviour {
 						
 						
 						
-		    			qudProgessCircle.renderer.enabled = true;
+		    			qudProgessCircle.GetComponent<Renderer>().enabled = true;
 						if (currentTile.controllingTeam != null) {
 							setProgressCircle( currentTile.percControlled/100 , currentTile.controllingTeam.teamColor);
 						}
@@ -855,7 +855,7 @@ public class Player : MonoBehaviour {
 								
 								if(test > 0f || (currentTile.owningTeam != null && currentTile.owningTeam == team)){
 									//Debug.Log ("here");
-										if (currentTile.getLocalAltar () != null || currentTile.tooCloseToBeacon() || currentTile.gameObject.transform.FindChild ("Home(Clone)") != null) {
+										if (currentTile.getLocalAltar () != null || currentTile.tooCloseToBeacon() || currentTile.gameObject.transform.Find ("Home(Clone)") != null) {
 								
 											//_invalidAction = true;
 										
@@ -1102,7 +1102,7 @@ public class Player : MonoBehaviour {
 				
 				if (!Pause.paused) {		
 					if(_invalidAction && _invalidActionFrames >= 2){
-						qudActionableGlow.renderer.material.color = Color.red;	
+						qudActionableGlow.GetComponent<Renderer>().material.color = Color.red;	
 						Jiggle();
 						iTween.ShakeScale(qudActionableGlow,jiggleHash);
 						
@@ -1111,7 +1111,7 @@ public class Player : MonoBehaviour {
 						}
 					}
 					else{
-						qudActionableGlow.renderer.material.color = Color.white;	
+						qudActionableGlow.GetComponent<Renderer>().material.color = Color.white;	
 					}
 				}
 			}
@@ -1544,11 +1544,11 @@ public class Player : MonoBehaviour {
 	
 	public void setProgressCircle(float progress){
 		if (!Pause.paused) {
-			qudProgessCircle.renderer.enabled = true;
-			qudProgessCircle.renderer.material.color = team.beaconColor;
+			qudProgessCircle.GetComponent<Renderer>().enabled = true;
+			qudProgessCircle.GetComponent<Renderer>().material.color = team.beaconColor;
 			float val = 1.001f-progress;
 			if (val<= 0) {val =.001f;}
-			qudProgessCircle.renderer.material.SetFloat("_Cutoff",val);
+			qudProgessCircle.GetComponent<Renderer>().material.SetFloat("_Cutoff",val);
 			actionProgressTicker = (++actionProgressTicker) % actionProgress.Length;
 			actionProgress[actionProgressTicker] = progress;
 		}
@@ -1556,12 +1556,12 @@ public class Player : MonoBehaviour {
 	
 	public void setProgressCircle(float progress, Color32 barColor){
 		if (!Pause.paused) {
-			qudProgessCircle.renderer.enabled = true;
-			qudProgessCircle.renderer.material.color = barColor;
+			qudProgessCircle.GetComponent<Renderer>().enabled = true;
+			qudProgessCircle.GetComponent<Renderer>().material.color = barColor;
 			float val = 1.001f-progress;
 			if (val<= 0) { val =.001f; }
 			
-			qudProgessCircle.renderer.material.SetFloat("_Cutoff", val);
+			qudProgessCircle.GetComponent<Renderer>().material.SetFloat("_Cutoff", val);
 		
 			actionProgressTicker = (++actionProgressTicker) % actionProgress.Length;
 			actionProgress[actionProgressTicker] = progress;
@@ -1628,7 +1628,7 @@ public class Player : MonoBehaviour {
 //		BaseTile currentTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
 		List<Player> opponentsOnSameTile = new List<Player>();
 		foreach (GameObject o in gm.players) {
-			Player p = o.transform.FindChild ("PlayerInner").GetComponent<Player>();
+			Player p = o.transform.Find ("PlayerInner").GetComponent<Player>();
 			if (p.team.teamNumber != team.teamNumber && 
 				gm.tiles[(int) Mathf.Floor (p.transform.position.x + 0.5f), (int) Mathf.Floor (p.transform.position.y + 0.5f)].GetComponent<BaseTile>() == currentTile)
 			{ 
@@ -1642,7 +1642,7 @@ public class Player : MonoBehaviour {
 		//		BaseTile currentTile = gm.tiles[(int) Mathf.Floor (transform.parent.position.x + 0.5f), (int) Mathf.Floor (transform.parent.position.y + 0.5f)].GetComponent<BaseTile>();
 		List<Player> opponentsOnSameTile = new List<Player>();
 		foreach (GameObject o in gm.players) {
-			Player p = o.transform.FindChild ("PlayerInner").GetComponent<Player>();
+			Player p = o.transform.Find ("PlayerInner").GetComponent<Player>();
 			if (p.team.teamNumber != team.teamNumber && 
 			    gm.tiles[(int) Mathf.Floor (p.transform.position.x + 0.5f), (int) Mathf.Floor (p.transform.position.y + 0.5f)].GetComponent<BaseTile>() == bt)
 			{ 

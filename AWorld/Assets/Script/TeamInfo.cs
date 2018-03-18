@@ -28,11 +28,13 @@ public class TeamInfo
 	public GameObject finalTarget;
 	public AudioClip Scoring;
 	public Settings sRef;
+	public List<WorkerAnt> Ants;
 	
 	public TeamInfo ()
 	{
 		score = 0;
 		marqueeColorList = new List<Color32>();
+		Ants = new List<WorkerAnt>();	
 	}
 
 	public static TeamInfo GetTeamInfo(int teamNumber){

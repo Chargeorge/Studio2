@@ -49,6 +49,7 @@ public class GameManager : MonoBehaviour {
 	private GameObject prfbBeacon;
 	private GameObject prfbStartUp;
 	private GameObject prfbTutorial;
+	private GameObject _prfbAnt;
 	public VictoryCondition vIsForVendetta;	
 	public int currentMarquee;
 
@@ -72,7 +73,7 @@ public class GameManager : MonoBehaviour {
 
 	public int boardX;
 	public int boardY;	//Storing for Beacon.facingAdjacentWater; there's probably a better way
-
+	
 	// Use this for initializatio
 	void Start () {
 
@@ -99,11 +100,12 @@ public class GameManager : MonoBehaviour {
 		Camera.main.orthographicSize = sRef.cameraSize;
 		Camera.main.transform.position = sRef.cameraPosition;
 
-		audio.PlayOneShot(Game_Launch, sRef.startGameVolume);
+		GetComponent<AudioSource>().PlayOneShot(Game_Launch, sRef.startGameVolume);
 		qudTutorial1 = (GameObject)GameObject.Instantiate(prfbTutorial, new Vector3(100f,100f,10f), Quaternion.identity);
 		
 		qudTutorial2 = (GameObject)GameObject.Instantiate(prfbTutorial, new Vector3(101f,101f,10f), Quaternion.identity);
 			
+		_prfbAnt = (GameObject)Resources.Load("Prefabs/WorkerAnt");
 	}
 	/// <summary>
 	/// For the length of the script, every number of frames, u
@@ -264,14 +266,14 @@ public class GameManager : MonoBehaviour {
 			teams[0].ScoreBar = teamBar1;
 			teams[1].ScoreBar = teamBar2;
 			
-			teams[0].finalTarget = teamBar1.transform.FindChild ("ScoreBitFinalTarget").gameObject;
-			teams[1].finalTarget = teamBar2.transform.FindChild ("ScoreBitFinalTarget").gameObject;
+			teams[0].finalTarget = teamBar1.transform.Find ("ScoreBitFinalTarget").gameObject;
+			teams[1].finalTarget = teamBar2.transform.Find ("ScoreBitFinalTarget").gameObject;
 			
 			teams[0].sRef = sRef;
 			teams[1].sRef = sRef;
 			
 			ReadyUps.ForEach(delegate(GameObject g){
-				g.renderer.enabled = true;
+				g.GetComponent<Renderer>().enabled = true;
 			});
 			
 			
@@ -545,15 +547,15 @@ public class GameManager : MonoBehaviour {
 			setup = false;
 			//Debug.Log (GameManager.overrideTutorial);
 			if(sRef.tutorial){
-				qudTutorial1.renderer.enabled = true;
+				qudTutorial1.GetComponent<Renderer>().enabled = true;
 				qudTutorial1.transform.position = new Vector3((sRef.boardSize.x/2)-.5f, (sRef.boardSize.y/2)-.5f, -3);
 				qudTutorial1.transform.localScale = new Vector3(sRef.boardSize.x, sRef.boardSize.x*(3f/4f), 1);
-				qudTutorial1.renderer.material.mainTexture = tutorials[tutorialIndex];
+				qudTutorial1.GetComponent<Renderer>().material.mainTexture = tutorials[tutorialIndex];
 				
-				qudTutorial2.renderer.enabled = true;
+				qudTutorial2.GetComponent<Renderer>().enabled = true;
 				qudTutorial2.transform.position = new Vector3((sRef.boardSize.x/2)-.5f, -20, -3);
 				qudTutorial2.transform.localScale = new Vector3(sRef.boardSize.x, sRef.boardSize.x*(3f/4f), 1);
-				qudTutorial2.renderer.material.mainTexture = tutorials[tutorialIndex];
+				qudTutorial2.GetComponent<Renderer>().material.mainTexture = tutorials[tutorialIndex];
 				_currentState = GameState.tutorial;
 				ReadyUps.ForEach(delegate (GameObject g) {
 					g.SetActive(false);	
@@ -621,8 +623,8 @@ public class GameManager : MonoBehaviour {
 		}
 		if(_currentState == GameState.tutorial){
 			//Debug.Log ("Getting Here");
-			qudTutorial1.transform.FindChild("TutorialClock").renderer.material.SetFloat("_Cutoff",1.01f-(tutorialPerc /100f));
-			qudTutorial2.transform.FindChild("TutorialClock").renderer.material.SetFloat("_Cutoff",1.01f-(tutorialPerc /100f));
+			qudTutorial1.transform.Find("TutorialClock").GetComponent<Renderer>().material.SetFloat("_Cutoff",1.01f-(tutorialPerc /100f));
+			qudTutorial2.transform.Find("TutorialClock").GetComponent<Renderer>().material.SetFloat("_Cutoff",1.01f-(tutorialPerc /100f));
 			
 			if(InControl.InputManager.ActiveDevice.Action1 ){
 				tutorialPerc+= sRef.vpsBasePlayerInfluence*2f * Time.deltaTime;	
@@ -660,7 +662,7 @@ public class GameManager : MonoBehaviour {
 				//Debug.Log("checstate done");
 
 				if(v.isCompleted && !isPlaying){
-					audio.PlayOneShot(Victory_Gong, sRef.victoryVolume);
+					GetComponent<AudioSource>().PlayOneShot(Victory_Gong, sRef.victoryVolume);
 					isPlaying = true;
 					_currentState = GameState.gameWon;
 					_victoryString += v.getVictorySting();
@@ -707,7 +709,7 @@ public class GameManager : MonoBehaviour {
 		Hashtable qud2HT = new Hashtable();
 		
 		if(tutorials.Length > tutorialIndex+1){
-			qudTutorial1.renderer.material.mainTexture = tutorials[tutorialIndex+1];
+			qudTutorial1.GetComponent<Renderer>().material.mainTexture = tutorials[tutorialIndex+1];
 		}
 		else{
 			qudTutorial1.SetActive(false);
@@ -800,6 +802,8 @@ public Vector2 generateValidAltarPosition(Altar thisAltar, Vector2 startPos, boo
 		return minDistance;
 	}
 
+	public void spawnAnt(){
+	}
 	
 	public float getDistanceToNearestAltar(Vector2 position){
 		float minDistance = float.MaxValue;
@@ -876,7 +880,7 @@ public Vector2 generateValidAltarPosition(Altar thisAltar, Vector2 startPos, boo
 
 	public IEnumerator StopSFXCoroutine(){
 		yield return new WaitForSeconds(0.8f);
-		audio.Stop();
+		GetComponent<AudioSource>().Stop();
 	}
 
 	private GameObject setUpTeamHome(Player example){
@@ -885,7 +889,7 @@ public Vector2 generateValidAltarPosition(Altar thisAltar, Vector2 startPos, boo
 		tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].GetComponent<BaseTile>().controllingTeam = example.team;
 		tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].GetComponent<BaseTile>().owningTeam = example.team;
 		tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].GetComponent<BaseTile>().addInfluenceReturnOverflow(100f);
-		tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].transform.FindChild("NoBuildLayer").GetComponent<MeshRenderer>().enabled = true;
+		tiles[(int)example.team.startingLocation.x, (int)example.team.startingLocation.y].transform.Find("NoBuildLayer").GetComponent<MeshRenderer>().enabled = true;
 		teamHome.transform.localPosition = new Vector3(0,0,-.5f);
 		teamHome.GetComponent<Home>().team = example.team;
 //		teamHome.GetComponentInChildren<ParticleSystem>().startColor = example.team.highlightColor;
@@ -938,7 +942,11 @@ public Vector2 generateValidAltarPosition(Altar thisAltar, Vector2 startPos, boo
 		}
 	}
 
+
+
 	private static GameManager _instance;
+	
+	
 	
 	//This is the public reference that other classes will use
 	public static GameManager GameManagerInstance
@@ -951,6 +959,12 @@ public Vector2 generateValidAltarPosition(Altar thisAltar, Vector2 startPos, boo
 				_instance = GameObject.FindObjectOfType<GameManager>();
 			return _instance;
 		}
+	}
+	
+	public GameObject CreateAnt(TeamInfo teamIn){
+		Vector3 zOffset = -1.2f * Vector3.forward;
+		GameObject workerAnt = (GameObject)GameObject.Instantiate(_prfbAnt, teamIn.goGetHomeTile().transform.position, Quaternion.identity);
+		return workerAnt;
 	}
 	
 	/// <summary>
@@ -971,8 +985,8 @@ public Vector2 generateValidAltarPosition(Altar thisAltar, Vector2 startPos, boo
 			else {
 				beacons.Add(beacon);
 				if (BT.GetComponent<BaseTile>().IsRevealed && BT.GetComponent<BaseTile>().beacon != null){
-					BT.GetComponent<BaseTile>().beacon.transform.FindChild ("Arrow").GetComponent<MeshRenderer>().enabled = true;	
-					BT.GetComponent<BaseTile>().beacon.transform.FindChild ("ArrowShot").GetComponent<MeshRenderer>().enabled = true;	
+					BT.GetComponent<BaseTile>().beacon.transform.Find ("Arrow").GetComponent<MeshRenderer>().enabled = true;	
+					BT.GetComponent<BaseTile>().beacon.transform.Find ("ArrowShot").GetComponent<MeshRenderer>().enabled = true;	
 				}
 				return true;
 			}

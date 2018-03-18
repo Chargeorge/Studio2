@@ -160,10 +160,10 @@ public class CursorMenu : MonoBehaviour {
 		
 		if (menuScript.loadingNewScreen) {
 			transform.RotateAround (transform.position, Vector3.forward, loadingRotateSpeed * rotatingLeft * Time.deltaTime);
-			if (transform.renderer.material.color.a > 0f) { 
-				Color32 newColor = transform.renderer.material.color;
+			if (transform.GetComponent<Renderer>().material.color.a > 0f) { 
+				Color32 newColor = transform.GetComponent<Renderer>().material.color;
 				newColor.a -= (byte) (0.021f * 255f);
-				transform.renderer.material.color = newColor;
+				transform.GetComponent<Renderer>().material.color = newColor;
 			}
 		}
 		else if (!menuScript.quitting) {	//Freeze rotation if quitting

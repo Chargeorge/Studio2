@@ -273,7 +273,7 @@ public class Beacon : MonoBehaviour {
 		this.transform.localPosition = new Vector3(0f,0f,-.5f);
 		tileLocation.GetComponent<BaseTile>().beacon = this.gameObject;
 
-		this.transform.FindChild("Base").localPosition = new Vector3(0f,0f,-.1f);
+		this.transform.Find("Base").localPosition = new Vector3(0f,0f,-.1f);
 		//Debug.Log(this.transform.FindChild("Base").localPosition);
 		
 		buildingTargetVol = 0.5f;
@@ -356,11 +356,11 @@ public class Beacon : MonoBehaviour {
 			beaconUpgraded = Resources.Load("SFX/Beacon_Upgraded_Hi_2") as AudioClip;
 		}
 
-		transform.FindChild("Arrow").renderer.material.color = controllingTeamColor;
-		transform.FindChild("ArrowShot").renderer.material.color = controllingTeamColor;
-		transform.FindChild("Base").renderer.material.color = controllingTeamColor;
-		transform.FindChild("Anim").renderer.material.color = controllingTeamColor;
-		transform.FindChild("Platform").renderer.material.color = platformColor;
+		transform.Find("Arrow").GetComponent<Renderer>().material.color = controllingTeamColor;
+		transform.Find("ArrowShot").GetComponent<Renderer>().material.color = controllingTeamColor;
+		transform.Find("Base").GetComponent<Renderer>().material.color = controllingTeamColor;
+		transform.Find("Anim").GetComponent<Renderer>().material.color = controllingTeamColor;
+		transform.Find("Platform").GetComponent<Renderer>().material.color = platformColor;
 		
 		shootSetup ();
 //		Invoke ("StartShooting", 0.1f);
@@ -373,16 +373,16 @@ public class Beacon : MonoBehaviour {
 		Color32 controllingTeamColor = controllingTeam.beaconColor;	
 			Color32 platformColor = controllingTeam.tileColor;
 		//TODO: custom sprites and colors per team
-		controllingTeamColor.a = (byte)(transform.FindChild("Arrow").renderer.material.color.a * 255);
-		controllingTeamColor.a = (byte)(transform.FindChild("ArrowShot").renderer.material.color.a * 255);
-		controllingTeamColor.a = (byte)(transform.FindChild("Base").renderer.material.color.a * 255);
-			platformColor.a = (byte)(transform.FindChild("Platform").renderer.material.color.a * 255);
+		controllingTeamColor.a = (byte)(transform.Find("Arrow").GetComponent<Renderer>().material.color.a * 255);
+		controllingTeamColor.a = (byte)(transform.Find("ArrowShot").GetComponent<Renderer>().material.color.a * 255);
+		controllingTeamColor.a = (byte)(transform.Find("Base").GetComponent<Renderer>().material.color.a * 255);
+			platformColor.a = (byte)(transform.Find("Platform").GetComponent<Renderer>().material.color.a * 255);
 
-			transform.FindChild("Arrow").renderer.material.color = controllingTeamColor;	
-			transform.FindChild("ArrowShot").renderer.material.color = controllingTeamColor;
-			transform.FindChild("Base").renderer.material.color = controllingTeamColor;
-			transform.FindChild("Anim").renderer.material.color = controllingTeamColor;
-			transform.FindChild("Platform").renderer.material.color = platformColor;
+			transform.Find("Arrow").GetComponent<Renderer>().material.color = controllingTeamColor;	
+			transform.Find("ArrowShot").GetComponent<Renderer>().material.color = controllingTeamColor;
+			transform.Find("Base").GetComponent<Renderer>().material.color = controllingTeamColor;
+			transform.Find("Anim").GetComponent<Renderer>().material.color = controllingTeamColor;
+			transform.Find("Platform").GetComponent<Renderer>().material.color = platformColor;
 		}
 		else{
 
@@ -390,10 +390,10 @@ public class Beacon : MonoBehaviour {
 			neutralColorB = new Color32 (200, 200, 200, 255);
 
 			controllingTeam = null;
-			transform.FindChild("Arrow").renderer.material.color = neutralColor;
-			transform.FindChild("ArrowShot").renderer.material.color = neutralColor;
-			transform.FindChild("Base").renderer.material.color = neutralColor;
-			transform.FindChild("Platform").renderer.material.color = neutralColorB;
+			transform.Find("Arrow").GetComponent<Renderer>().material.color = neutralColor;
+			transform.Find("ArrowShot").GetComponent<Renderer>().material.color = neutralColor;
+			transform.Find("Base").GetComponent<Renderer>().material.color = neutralColor;
+			transform.Find("Platform").GetComponent<Renderer>().material.color = neutralColorB;
 		}	}
 	
 	/// <summary>
@@ -409,15 +409,15 @@ public class Beacon : MonoBehaviour {
 	
 		percBuildComplete += rate*Time.deltaTime;
 						
-		Color32 beaconColor = transform.FindChild("Arrow").renderer.material.color;
+		Color32 beaconColor = transform.Find("Arrow").GetComponent<Renderer>().material.color;
 		Color32 platformColor = controllingTeam.tileColor;
 		float newColor =  (255f * (percBuildComplete/100f)) ;
 		newColor = (newColor >= 255) ? 254 : newColor;		
 		beaconColor.a = (byte)newColor;
 
 		//successful attempt at rising platform
-		Transform beaconbase = transform.FindChild ("Base");
-		Transform platform = transform.FindChild ("Platform");
+		Transform beaconbase = transform.Find ("Base");
+		Transform platform = transform.Find ("Platform");
 		Vector3 platformPos = platform.localPosition;
 		Vector3 beaconPos = beaconbase.localPosition;
 		float newPos = (0.09f * (percBuildComplete/100f));
@@ -431,14 +431,14 @@ public class Beacon : MonoBehaviour {
 
 //		platform.Translate(Vector3.up * platformPos);
 
-		transform.FindChild("Arrow").renderer.material.color = beaconColor;	
+		transform.Find("Arrow").GetComponent<Renderer>().material.color = beaconColor;	
 		
-		transform.FindChild("ArrowShot").renderer.material.color = beaconColor;		
-		transform.FindChild("Platform").renderer.material.color = platformColor;
+		transform.Find("ArrowShot").GetComponent<Renderer>().material.color = beaconColor;		
+		transform.Find("Platform").GetComponent<Renderer>().material.color = platformColor;
 		
-		Color32 baseColor = transform.FindChild ("Arrow").renderer.material.color;
+		Color32 baseColor = transform.Find ("Arrow").GetComponent<Renderer>().material.color;
 		baseColor.a = 0;
-		transform.FindChild("Base").renderer.material.color = baseColor;	
+		transform.Find("Base").GetComponent<Renderer>().material.color = baseColor;	
 	}
 	
 	public void subtractBuildingProgress(float rate) {
@@ -452,19 +452,19 @@ public class Beacon : MonoBehaviour {
 		}
 		
 		else {
-			Color32 beaconColor = transform.FindChild("Arrow").renderer.material.color;
+			Color32 beaconColor = transform.Find("Arrow").GetComponent<Renderer>().material.color;
 			Color32 platformColor = controllingTeam.tileColor;
 			float newColor =  (255f * (percBuildComplete/100f)) ;
 			newColor = (newColor >= 255) ? 254 : newColor;		
 			beaconColor.a = (byte)newColor;
-			transform.FindChild("Arrow").renderer.material.color = beaconColor; 
+			transform.Find("Arrow").GetComponent<Renderer>().material.color = beaconColor; 
 			
-			transform.FindChild("ArrowShot").renderer.material.color = beaconColor; 
-			transform.FindChild("Platform").renderer.material.color = platformColor;
+			transform.Find("ArrowShot").GetComponent<Renderer>().material.color = beaconColor; 
+			transform.Find("Platform").GetComponent<Renderer>().material.color = platformColor;
 
-			Color32 baseColor = transform.FindChild ("Arrow").renderer.material.color;
+			Color32 baseColor = transform.Find ("Arrow").GetComponent<Renderer>().material.color;
 			baseColor.a = 0;
-			transform.FindChild("Base").renderer.material.color = baseColor;		
+			transform.Find("Base").GetComponent<Renderer>().material.color = baseColor;		
 		}
 	}
 		
@@ -489,9 +489,9 @@ public class Beacon : MonoBehaviour {
 		percUpgradeComplete += rate*Time.deltaTime;
 		updateUpgradeAnim ();
 		
-		Color32 baseColor = transform.FindChild ("Arrow").renderer.material.color;
+		Color32 baseColor = transform.Find ("Arrow").GetComponent<Renderer>().material.color;
 		baseColor.a = 255;
-		transform.FindChild("Base").renderer.material.color = baseColor;	
+		transform.Find("Base").GetComponent<Renderer>().material.color = baseColor;	
 		
 //		percSmaller -= rate*Time.deltaTime;
 
@@ -522,9 +522,9 @@ public class Beacon : MonoBehaviour {
 		if (percUpgradeComplete <= 0f) {
 			percUpgradeComplete = 0f;
 			_currentState = BeaconState.Basic;
-			Color32 animColor = transform.FindChild("Anim").renderer.material.color;
+			Color32 animColor = transform.Find("Anim").GetComponent<Renderer>().material.color;
 			animColor.a = (byte)0f;
-			transform.FindChild("Anim").renderer.material.color = animColor;
+			transform.Find("Anim").GetComponent<Renderer>().material.color = animColor;
 		}
 		
 		//We need some visual representation for this
@@ -924,15 +924,15 @@ public class Beacon : MonoBehaviour {
 		
 		facing = N;
 		dirRotatingToward = N;
-		transform.FindChild ("Arrow").RotateAround(transform.position, new Vector3(0,0,1), currentRotAngle);
-		transform.FindChild ("Arrow").RotateAround(transform.position, new Vector3(0,0,-1), rotAngle);
-		transform.FindChild ("ArrowShot").RotateAround(transform.position, new Vector3(0,0,1), currentRotAngle);
-		transform.FindChild ("ArrowShot").RotateAround(transform.position, new Vector3(0,0,-1), rotAngle);
+		transform.Find ("Arrow").RotateAround(transform.position, new Vector3(0,0,1), currentRotAngle);
+		transform.Find ("Arrow").RotateAround(transform.position, new Vector3(0,0,-1), rotAngle);
+		transform.Find ("ArrowShot").RotateAround(transform.position, new Vector3(0,0,1), currentRotAngle);
+		transform.Find ("ArrowShot").RotateAround(transform.position, new Vector3(0,0,-1), rotAngle);
 	}
 	
 	public void setVisualDirection(){
-		Transform arrow = transform.FindChild ("Arrow");
-		Transform arrowShot = transform.FindChild ("ArrowShot");
+		Transform arrow = transform.Find ("Arrow");
+		Transform arrowShot = transform.Find ("ArrowShot");
 
 		arrow.localEulerAngles = new Vector3(0,0,-1*getAngleForDir(facing));
 		arrowShot.localEulerAngles = new Vector3(0,0,-1*getAngleForDir(facing));
@@ -997,11 +997,11 @@ public class Beacon : MonoBehaviour {
 		if(percRotateComplete >= 100f){
 			//audioLerp(audioSourceBeacon, 0.01f, lerpRate);
 			//audio.PlayOneShot(beaconRotated, 1.0f);	
-			transform.FindChild("ArrowShot").renderer.enabled = false;
+			transform.Find("ArrowShot").GetComponent<Renderer>().enabled = false;
 		}
 		
 		else {
-			transform.FindChild("ArrowShot").renderer.enabled = !facingAdjacentWater();
+			transform.Find("ArrowShot").GetComponent<Renderer>().enabled = !facingAdjacentWater();
 		}
 	}
 	
@@ -1085,18 +1085,18 @@ public class Beacon : MonoBehaviour {
 			}
 		}
 
-		transform.FindChild ("Arrow").GetComponent<MeshRenderer>().enabled = true;
-		transform.FindChild ("ArrowShot").GetComponent<MeshRenderer>().enabled = true;
+		transform.Find ("Arrow").GetComponent<MeshRenderer>().enabled = true;
+		transform.Find ("ArrowShot").GetComponent<MeshRenderer>().enabled = true;
 		
-		Color32 baseColor = transform.FindChild ("Arrow").renderer.material.color;
+		Color32 baseColor = transform.Find ("Arrow").GetComponent<Renderer>().material.color;
 		baseColor.a = 255;
-		transform.FindChild("Base").renderer.material.color = baseColor;	
+		transform.Find("Base").GetComponent<Renderer>().material.color = baseColor;	
 		
-		Color32 animColor = transform.FindChild("Anim").renderer.material.color;
+		Color32 animColor = transform.Find("Anim").GetComponent<Renderer>().material.color;
 		animColor.a = 0;
-		transform.FindChild("Anim").renderer.material.color = animColor;
+		transform.Find("Anim").GetComponent<Renderer>().material.color = animColor;
 		
-		transform.FindChild("ArrowShot").renderer.enabled = !facingAdjacentWater();
+		transform.Find("ArrowShot").GetComponent<Renderer>().enabled = !facingAdjacentWater();
 		
 //		transform.FindChild("Point light").GetComponent<Light>().enabled = true;
 	}
@@ -1141,23 +1141,23 @@ public class Beacon : MonoBehaviour {
 		_patternList = createAdvancedInfluenceList(getAngleForDir(facing));
 		
 		_currentState = BeaconState.Advanced;
-		transform.FindChild("Base").renderer.material = matUpgraded;
-		transform.FindChild("Arrow").renderer.material = arrowUpgraded;
-		transform.FindChild("ArrowShot").renderer.material = arrowUpgraded;
+		transform.Find("Base").GetComponent<Renderer>().material = matUpgraded;
+		transform.Find("Arrow").GetComponent<Renderer>().material = arrowUpgraded;
+		transform.Find("ArrowShot").GetComponent<Renderer>().material = arrowUpgraded;
 		//transform.FindChild("Arrow").transform.localScale = new Vector3(17, 17, 0);
 		
 		//hax
 		setTeam ();
-		Color32 platformColor = transform.FindChild("Base").renderer.material.color;
-		Color32 beaconColor = transform.FindChild("Arrow").renderer.material.color;
-		Color32 animColor = transform.FindChild("Anim").renderer.material.color;
+		Color32 platformColor = transform.Find("Base").GetComponent<Renderer>().material.color;
+		Color32 beaconColor = transform.Find("Arrow").GetComponent<Renderer>().material.color;
+		Color32 animColor = transform.Find("Anim").GetComponent<Renderer>().material.color;
 		platformColor.a = 255;
 		beaconColor.a = 255;
 		animColor.a = 0;
-		transform.FindChild("Arrow").renderer.material.color = beaconColor;
-		transform.FindChild("ArrowShot").renderer.material.color = beaconColor;
-		transform.FindChild("Base").renderer.material.color = platformColor;
-		transform.FindChild("Anim").renderer.material.color = animColor;
+		transform.Find("Arrow").GetComponent<Renderer>().material.color = beaconColor;
+		transform.Find("ArrowShot").GetComponent<Renderer>().material.color = beaconColor;
+		transform.Find("Base").GetComponent<Renderer>().material.color = platformColor;
+		transform.Find("Anim").GetComponent<Renderer>().material.color = animColor;
 	}
 	
 	//Player stopped in the middle of an upgrade
@@ -1219,21 +1219,21 @@ public class Beacon : MonoBehaviour {
 	}
 	
 	private void updateBuildAnim () {
-		Color32 animColor = transform.FindChild("Anim").renderer.material.color;
+		Color32 animColor = transform.Find("Anim").GetComponent<Renderer>().material.color;
 		animColor.a = (byte) (255f * ((sRef.buildCircleFinishAlpha - sRef.buildCircleStartAlpha) * percBuildComplete/100f + sRef.buildCircleStartAlpha));
-		transform.FindChild("Anim").renderer.material.color = animColor;
+		transform.Find("Anim").GetComponent<Renderer>().material.color = animColor;
 		
-		Transform animTrans = transform.FindChild("Anim");
+		Transform animTrans = transform.Find("Anim");
 		float newScale = sRef.buildCircleStartScale - (sRef.buildCircleStartScale - sRef.buildCircleFinishScale) * percBuildComplete/100f;
 		animTrans.localScale = new Vector3 (newScale, newScale, animTrans.localScale.z);
 	}
 	
 	private void updateUpgradeAnim () {
-		Color32 animColor = transform.FindChild("Anim").renderer.material.color;
+		Color32 animColor = transform.Find("Anim").GetComponent<Renderer>().material.color;
 		animColor.a = (byte) (255f * ((sRef.upgradeCircleFinishAlpha - sRef.upgradeCircleStartAlpha) * percUpgradeComplete/100f + sRef.upgradeCircleStartAlpha));
-		transform.FindChild("Anim").renderer.material.color = animColor;
+		transform.Find("Anim").GetComponent<Renderer>().material.color = animColor;
 		
-		Transform animTrans = transform.FindChild("Anim");
+		Transform animTrans = transform.Find("Anim");
 		float newScale = sRef.upgradeCircleStartScale - (sRef.upgradeCircleStartScale - sRef.upgradeCircleFinishScale) * percUpgradeComplete/100f;
 		animTrans.localScale = new Vector3 (newScale, newScale, animTrans.localScale.z);
 	}
@@ -1296,9 +1296,9 @@ public class Beacon : MonoBehaviour {
 
 	public void shootSetup(){
 
-		Transform arrow = this.transform.FindChild("ArrowShot");
-		arrowStartPos = this.transform.FindChild("Base").position;
-		transform.FindChild("ArrowShot").renderer.enabled = !facingAdjacentWater();
+		Transform arrow = this.transform.Find("ArrowShot");
+		arrowStartPos = this.transform.Find("Base").position;
+		transform.Find("ArrowShot").GetComponent<Renderer>().enabled = !facingAdjacentWater();
 		arrow.position = arrowStartPos;
 		if(lastTileInfluenced != null){
 			tilePos = lastTileInfluenced.transform.position;
@@ -1309,7 +1309,7 @@ public class Beacon : MonoBehaviour {
 //		Debug.Log ("I happen");
 	//	destPos = Vector2(tilePos.x, tilePos.y);
 
-		arrow.renderer.material.color = controllingTeam.beaconColor;
+		arrow.GetComponent<Renderer>().material.color = controllingTeam.beaconColor;
 
 //		GameObject oldLastTile = lastTileInfluenced;
 	}
@@ -1319,7 +1319,7 @@ public class Beacon : MonoBehaviour {
 		//Weird hack, I dunno. Fixes neutral beacons shooting first arrow to 0,0
 		if (tilePos.x == 0 && tilePos.y == 0) tilePos = lastTileInfluenced.transform.position;	
 
-		Transform arrow = this.transform.FindChild("ArrowShot");
+		Transform arrow = this.transform.Find("ArrowShot");
 //		Vector3 tilePos = lastTileInfluenced.transform.position;
 	//	Vector3 arrowPos = this.transform.FindChild("Arros").position;
 
@@ -1337,11 +1337,11 @@ public class Beacon : MonoBehaviour {
 			float alpha = percAlpha * 255;
 			Color32 arrowAlpha = controllingTeam.beaconColor;
 			arrowAlpha.a = (byte)alpha;
-			arrow.renderer.material.color = arrowAlpha;
+			arrow.GetComponent<Renderer>().material.color = arrowAlpha;
 		}
 
 		if (distance < 0.5f) { 
-			arrow.renderer.enabled = false;
+			arrow.GetComponent<Renderer>().enabled = false;
 		}
 		
 		if (distance < 0.01f) {

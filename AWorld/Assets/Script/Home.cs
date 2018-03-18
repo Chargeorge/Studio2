@@ -18,7 +18,7 @@ public class Home : MonoBehaviour {
 		set{
 			_team = value;
 			Color32 copy = team.beaconColor;
-			renderer.material.color = copy;
+			GetComponent<Renderer>().material.color = copy;
 			
 		}
 	}

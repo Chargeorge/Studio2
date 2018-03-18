@@ -57,7 +57,7 @@ public class TileCreation : MonoBehaviour {
 				tilesGameBoard[x,y].GetComponent<BaseTile>().brdXPos = x;
 				tilesGameBoard[x,y].GetComponent<BaseTile>().brdYPos = y;
 				
-				tilesGameBoard[x,y].renderer.material = textureResources[1];
+				tilesGameBoard[x,y].GetComponent<Renderer>().material = textureResources[1];
 				//tilesGameBoard[x,y].renderer.material= matTest;
 				//tilesGameBoard[x,y].renderer.material =(Material)Resources.Load("Sprites/Materials/River");
 			}

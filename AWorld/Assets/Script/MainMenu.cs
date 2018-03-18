@@ -47,7 +47,7 @@ public class MainMenu : MonoBehaviour {
 		//Debug.Log(_musicObject);
 		if(_musicObject == null){
 			Instantiate(musicObject);
-			musicObject.audio.Play();
+			musicObject.GetComponent<AudioSource>().Play();
 		}
 	}
 	
@@ -119,19 +119,19 @@ public class MainMenu : MonoBehaviour {
 			if(startSelected){
 				//audioLerp(music, 0.0f, 0.2f);
 				turnOffMusic = true;
-				audio.PlayOneShot(launch, 0.8f);
+				GetComponent<AudioSource>().PlayOneShot(launch, 0.8f);
 				loadingNewScreen = true;
 				Invoke("launchGame", 1.5f);
 			}
 			if(optionsSelected){
-				audio.PlayOneShot(select, .9f);
+				GetComponent<AudioSource>().PlayOneShot(select, .9f);
 				loadingNewScreen = true;
 				Invoke ("launchOptions", 1.0f);
 			}
 			if(quitSelected){
 				turnOffMusic = true;
 				audioLerp(music, 0.0f, 0.2f);
-				audio.PlayOneShot (select, .9f);
+				GetComponent<AudioSource>().PlayOneShot (select, .9f);
 				if (!Application.isEditor) {
 					quitting = true;
 					Invoke ("quitApp", 1.0f);
