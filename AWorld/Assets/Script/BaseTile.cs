@@ -977,13 +977,13 @@ public class BaseTile : MonoBehaviour {
 
 	
 	public float getTileScore(){
-		List <AltarType> a = gm.getCapturedAltars(controllingTeam);
+		//List <AltarType> a = gm.getCapturedAltars(controllingTeam);
 		
-		if(a.Contains(AltarType.Khepru)){
-			return sRef.valTileConvertScore * sRef.coefKhepru;
-		}else{
+		//if(a.Contains(AltarType.Khepru)){
+		//	return sRef.valTileConvertScore * sRef.coefKhepru;
+		//}else{
 			return sRef.valTileConvertScore;
-		}
+		//}
 	}
 		
 	public bool tooCloseToBeacon() {
